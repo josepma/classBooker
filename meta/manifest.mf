@@ -1,0 +1,2 @@
+Main-Class: org.classBooker.main.Main
+Class-Path: lib/eclipselink.jar  lib/javax.persistence_2.0.5.v201212031355.jar lib/derbyclient.jar lib/derby.jar  lib/junit-4.10.jar   

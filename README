@@ -1,0 +1,7 @@
+Run tests: ant -f mybuild.xml test
+
+Create jar: ant -f mybuild.xml jar
+
+Clean generated artifacts: ant -f mybuild.xml clean
+
+......
