@@ -1,0 +1,7 @@
+build/
+dist/
+*~
+*.log
+nbproject/private/
+createDDL.jdbc
+dropDDL.jdbc

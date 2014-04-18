@@ -171,6 +171,45 @@
 
 
     <!-- =================================================================== -->
+    <!-- Performs integration tests                                                 -->
+    <!-- =================================================================== -->
+
+    <target name="integtest" depends="compile"> 
+
+        <junit printsummary="yes" haltonerror="yes" haltonfailure="yes"  
+            fork="yes"> 
+
+            <!-- fork="yes" would not force to include junit.jar in apache-ant/lib -->
+
+            <formatter type = "xml" />
+
+            <classpath>
+                <path refid="classpath"/>
+            </classpath>
+
+
+                      
+            <batchtest todir="${build.report.dir}" >
+                <fileset dir="${src.test.dir}">
+                    <include name="**/*IT.java"/>
+                </fileset>
+               
+            </batchtest>
+        </junit> 
+
+        <junitreport todir="${build.report.dir}">
+            <fileset dir="${build.report.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+
+            <report todir="${build.report.dir}/html"/>
+        </junitreport>
+
+    </target>
+
+
+
+    <!-- =================================================================== -->
     <!-- Cleans up DB. If the database is not in-memory                      -->
     <!-- =================================================================== -->
 
