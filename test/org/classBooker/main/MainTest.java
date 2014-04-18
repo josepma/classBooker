@@ -25,6 +25,7 @@ public class MainTest {
     public void testMain() throws Exception {
         System.out.println("this is a test");
 
+        fail();
     }
     
 }
