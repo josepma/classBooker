@@ -1,4 +1,6 @@
-Run tests: ant -f mybuild.xml test
+Run unit tests: ant -f mybuild.xml test
+
+Run integration tests: ant -f mybuild.xml integtest
 
 Create jar: ant -f mybuild.xml jar
 
