@@ -13,9 +13,9 @@ import static org.junit.Assert.*;
  *
  * @author josepma
  */
-public class MainIT {
+public class MainITest {
     
-    public MainIT() {
+    public MainITest() {
     }
 
      @Test
