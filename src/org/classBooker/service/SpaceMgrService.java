@@ -6,10 +6,18 @@
 
 package org.classBooker.service;
 
+import org.classBooker.entity.Building;
+import org.classBooker.entity.Room;
+
 /**
  *
  * @author josepma
  */
 public interface SpaceMgrService {
-    
+    public void addRoom(Room room);
+    public void addBuilding(Building building);
+    public void deleteRoom(Room room);
+    public void deleteBuilding(Building building);
+    public Room modifyRoom();
+    public Building modifyBuilding();
 }

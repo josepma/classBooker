@@ -6,10 +6,16 @@
 
 package org.classBooker.service;
 
+import org.classBooker.entity.Reservation;
+import org.classBooker.entity.User;
+
 /**
  *
  * @author josepma
  */
 public interface ReservationMgrService {
-    
+    public Reservation makeReservation(User user);
+    public Reservation makeReservationByPeriod(User user);
+    public void deleteReservation(Reservation r);
+    public void suggestionSpace();
 }
