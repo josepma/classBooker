@@ -44,4 +44,16 @@ public class Building {
     public void setBuildingName(String Name){
         this.name=name;
     }
+    
+    @Override
+    public boolean equals(Object obj){
+        return (obj instanceof Building) && 
+                ((Building) obj).name.equals(this.name) &&
+                ((Building) obj).rooms.size() == this.rooms.size();          
+    }
+    
+    @Override
+    public String toString(){
+        return "Club name="+name + "teams="+rooms;       
+    }
 }
