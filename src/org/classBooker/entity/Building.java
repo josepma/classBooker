@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class Building {
     
     @Id
-    @Column (name="nameBuild")
+    @Column (name="NAME")
     private String name;
 
     
