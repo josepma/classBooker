@@ -6,10 +6,18 @@
 
 package org.classBooker.entity;
 
+import java.util.List;
+import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+
 /**
  *
  * @author josepma
  */
-public class ReservationUser extends User{
-    
+@Entity
+public abstract class ReservationUser extends User{
+    @OneToMany(mappedBy="reservationId")
+    private List<Reservation> reservations;
+
 }

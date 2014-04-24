@@ -6,10 +6,15 @@
 
 package org.classBooker.entity;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
 /**
  *
  * @author josepma
  */
+@Entity
+@DiscriminatorValue(value="PPS_U")
 public class ProfessorPas extends ReservationUser{
     
 }

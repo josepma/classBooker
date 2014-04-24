@@ -6,10 +6,16 @@
 
 package org.classBooker.entity;
 
+import java.util.List;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
 /**
  *
  * @author josepma
  */
+@Entity
+@DiscriminatorValue(value="SPC_U")
 public class SpaceAdmin extends ReservationUser{
     
 }
