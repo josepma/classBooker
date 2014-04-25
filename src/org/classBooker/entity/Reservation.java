@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.*;
+import org.joda.time.DateTime;
 
 /**
  *
@@ -23,13 +24,10 @@ public class Reservation {
     @Column (name="IDENTIFIER")
     @GeneratedValue(strategy=GenerationType.SEQUENCE)
     private long reservationId;
-    
-    @Column (name="TIME")
-    private Time reservationTime;
-    
+        
     @Column (name="DATE")
     @Temporal(javax.persistence.TemporalType.DATE)
-    private Date reservationDate;
+    private DateTime reservationDate;
     
     @ManyToOne
     @JoinColumn(name = "USER", referencedColumnName = "name")
@@ -42,8 +40,7 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(Time reservationTime, Date reservationData, ReservationUser rUser, Room room) {
-        this.reservationTime = reservationTime;
+    public Reservation(DateTime reservationDate, ReservationUser rUser, Room room) {
         this.reservationDate = reservationDate;
         this.rUser = rUser;
         this.room = room;
@@ -53,19 +50,11 @@ public class Reservation {
         return reservationId;
     }
 
-    public Time getReservationTime() {
-        return reservationTime;
-    }
-
-    public void setReservationTime(Time reservationTime) {
-        this.reservationTime = reservationTime;
-    }
-
-    public Date getReservationDate() {
+    public DateTime getReservationDateTime() {
         return reservationDate;
     }
 
-    public void setReservationDate(Date reservationDate) {
+    public void setReservationDateTime(DateTime reservationDate) {
         this.reservationDate = reservationDate;
     }
 
@@ -89,7 +78,6 @@ public class Reservation {
     public int hashCode() {
         int hash = 5;
         hash = 31 * hash + (int) (this.reservationId ^ (this.reservationId >>> 32));
-        hash = 31 * hash + Objects.hashCode(this.reservationTime);
         hash = 31 * hash + Objects.hashCode(this.reservationDate);
         hash = 31 * hash + Objects.hashCode(this.rUser);
         hash = 31 * hash + Objects.hashCode(this.room);
@@ -108,9 +96,7 @@ public class Reservation {
         if (this.reservationId != other.reservationId) {
             return false;
         }
-        if (!Objects.equals(this.reservationTime, other.reservationTime)) {
-            return false;
-        }
+ 
         if (!Objects.equals(this.reservationDate, other.reservationDate)) {
             return false;
         }
