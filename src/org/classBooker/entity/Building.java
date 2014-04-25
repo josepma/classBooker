@@ -63,8 +63,7 @@ public class Building {
     @Override
     public boolean equals(Object obj){
         return (obj instanceof Building) && 
-                ((Building) obj).name.equals(this.name) &&
-                ((Building) obj).rooms.size() == this.rooms.size();          
+                ((Building) obj).name.equals(this.name);          
     }
     
     @Override
