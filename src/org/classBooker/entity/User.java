@@ -6,6 +6,7 @@
 
 package org.classBooker.entity;
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -28,5 +29,76 @@ public abstract class User {
     @Id
     @Column(name="NIF")
     private String nif;
+    
+    @Column(name="email")
+    private String email;
+    
+    @Column(name="name")
+    private String name;
+
+    @Override
+    public String toString() {
+        return "User{" + "nif=" + nif + ", email=" + email + ", name=" + name + '}';
+    }
+
+    public User(String nif, String email, String name) {
+        this.nif = nif;
+        this.email = email;
+        this.name = name;
+    }
+
+    public User() {
+        this.nif="";
+        this.email="";
+        this.name="";
+    }
+
+    
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final User other = (User) obj;
+        if (!Objects.equals(this.nif, other.nif)) {
+            return false;
+        }
+        if (!Objects.equals(this.email, other.email)) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        return true;
+    }
+    
+    public String getNif() {
+        return nif;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setNif(String nif) {
+        this.nif = nif;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
     
 }

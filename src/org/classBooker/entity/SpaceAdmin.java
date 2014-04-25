@@ -17,5 +17,14 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue(value="SPC_U")
 public class SpaceAdmin extends ReservationUser{
+
+    public SpaceAdmin() {
+        super();
+    }
+
+    public SpaceAdmin(String nif, String email, String name) {
+        super(nif, email, name);
+    }
+    
     
 }

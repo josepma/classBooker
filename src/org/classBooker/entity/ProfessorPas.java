@@ -16,5 +16,13 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue(value="PPS_U")
 public class ProfessorPas extends ReservationUser{
+
+    public ProfessorPas() {
+        super();
+    }
+
+    public ProfessorPas(String nif, String email, String name) {
+        super(nif, email, name);
+    }
     
 }

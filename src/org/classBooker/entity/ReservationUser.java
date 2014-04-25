@@ -16,8 +16,20 @@ import javax.persistence.OneToMany;
  * @author josepma
  */
 @Entity
-public abstract class ReservationUser extends User{
-    @OneToMany(mappedBy="reservationId")
-    private List<Reservation> reservations;
+    public abstract class ReservationUser extends User{
+        @OneToMany(mappedBy="rUser")
+        private List<Reservation> reservations;
 
+    public ReservationUser() {
+        super();
+    }
+
+    public ReservationUser(String nif, String email, String name) {
+        super(nif, email, name);
+    }
+    
+    
+
+    
+    
 }

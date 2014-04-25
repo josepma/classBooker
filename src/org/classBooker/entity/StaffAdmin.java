@@ -17,5 +17,15 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue(value="STF_U")
 public class StaffAdmin extends User{
+
+    public StaffAdmin(String nif, String email, String name) {
+        super(nif, email, name);
+    }
+
+    public StaffAdmin() {
+        super();
+    }
+    
+    
     
 }
