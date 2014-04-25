@@ -5,6 +5,7 @@
  */
 
 package org.classBooker.entity;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import javax.persistence.*;
@@ -14,32 +15,68 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "ROOM")
-
-public class Room {
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="ROOM_TYPE",
+        discriminatorType=DiscriminatorType.STRING,length=5)
+public abstract class Room {
     @Id
-    @Column(name = "ID")
-    private String id;
+    @Column(name = "ROOMID")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    private long roomId;
+    private String number;    
+    private int capacity;
     @ManyToOne
     @JoinColumn(name = "BUILDING_NAME", referencedColumnName = "NAME")
     private Building building;
-    @OneToMany (mappedBy="room", cascade=CascadeType.PERSIST, fetch=FetchType.EAGER)
+    @OneToMany (mappedBy="room", fetch=FetchType.EAGER)
     private List<Reservation> reservations;
-    
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public Room() {
-        this.id = UUID.randomUUID().toString(); 
+        this.capacity = 0;
+        this.building = null;
+        this.reservations=new ArrayList<>();
+    }
+    
+    public Room( Building building, String number, int capacity) {
+        this.number=number;
+        this.building = building;
+        this.capacity = capacity;
+        this.reservations=new ArrayList<>();
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+  
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+   
+    
+    public long getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(long roomId) {
+        this.roomId = roomId;
+    }
+    
     public Building getBuilding() {
         return building;
     }
+
+  
 
     public List<Reservation> getReservations() {
         return reservations;
@@ -56,15 +93,15 @@ public class Room {
     
     @Override
     public String toString() {
-        String result="Room id "+ id+ "building "+building.toString()+"reservations "+reservations;
+        String result="Room id "+ roomId + "Number"+ number +"building" +building.getBuildingName()+"reservations "+reservations;
         return result; 
     }
 
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof Room) && ((Room) obj).id.equals(this.id)
-                && ((((Room) obj).building == null && this.building == null)
-                || ((Room) obj).building.equals(this.building));
+        
+        return (obj instanceof Room) && ((Room)obj).roomId==(this.roomId);
+                
     }
     
 }
