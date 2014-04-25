@@ -54,6 +54,6 @@ public class Building {
     
     @Override
     public String toString(){
-        return "Club name="+name + "teams="+rooms;       
+        return "Building name="+name + "rooms="+rooms;       
     }
 }
