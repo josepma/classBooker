@@ -14,10 +14,10 @@ import org.classBooker.entity.Room;
  * @author josepma
  */
 public interface SpaceMgrService {
-    public void addRoom(Room room);
-    public void addBuilding(Building building);
-    public void deleteRoom(Room room);
-    public void deleteBuilding(Building building);
-    public Room modifyRoom();
-    public Building modifyBuilding();
+    public void addRoom(long id, String buildingName, int capacity, String type);
+    public void addBuilding(long id, String name);
+    public void deleteRoom(long id);
+    public void deleteBuilding(long id);
+    public Room modifyRoom(long id, String buildingName, int capacity, String type);
+    public Building modifyBuilding(long id, String name);
 }
