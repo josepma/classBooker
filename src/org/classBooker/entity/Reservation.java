@@ -10,13 +10,7 @@ import java.sql.Time;
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
+import javax.persistence.*;
 
 /**
  *
@@ -27,6 +21,7 @@ import javax.persistence.Temporal;
 public class Reservation {
     @Id
     @Column (name="IDENTIFIER")
+    @GeneratedValue(strategy=GenerationType.SEQUENCE)
     private long reservationId;
     
     @Column (name="TIME")
@@ -45,11 +40,9 @@ public class Reservation {
     private Room room;
 
     public Reservation() {
-        this.reservationId = UUID.randomUUID().timestamp();
     }
 
     public Reservation(Time reservationTime, Date reservationData, ReservationUser rUser, Room room) {
-        this.reservationId = UUID.randomUUID().timestamp();
         this.reservationTime = reservationTime;
         this.reservationDate = reservationDate;
         this.rUser = rUser;
