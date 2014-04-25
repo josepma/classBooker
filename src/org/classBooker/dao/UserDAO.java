@@ -38,6 +38,14 @@ public interface UserDAO {
      */
     List<User> getAllUsers();
     
+     /**
+     * 
+     * @param user
+     * @throws PersistException
+     * @throws IncorrectUserException
+     */
+    void modifyUser(User user) throws PersistException, IncorrectUserException;
+    
     /**
      *
      * @param user
