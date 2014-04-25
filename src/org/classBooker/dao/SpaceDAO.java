@@ -9,6 +9,7 @@ package org.classBooker.dao;
 import java.util.List;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectRoomException;
+import org.classBooker.dao.exception.IncorrectTypeException;
 import org.classBooker.dao.exception.PersistException;
 import org.classBooker.entity.Building;
 import org.classBooker.entity.Room;
@@ -97,5 +98,22 @@ public interface SpaceDAO {
     List<Room> getAllRoomsOfOneBuilding(Building building) 
                                         throws IncorrectBuildingException;
     
+    /**
+     *
+     * @param Type
+     * @return
+     * @throws IncorrectTypeException
+     */
+    List<Room> getAllRoomsOfOneType(String Type)throws IncorrectTypeException;
     
+    /**
+     *
+     * @param Type
+     * @param building
+     * @return
+     * @throws IncorrectBuildingException
+     */
+    List<Room> getAllRoomsOfOneTypeAndOneBuilding(String Type, 
+                                            Building building)
+                                            throws IncorrectBuildingException;
 }

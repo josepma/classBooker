@@ -40,20 +40,19 @@ public interface ReservationDAO {
      * @throws IncorrectReservationException
      * @throws IncorrectUserException
      * @throws IncorrectRoomException
-     */
+     *//*
     void modifyReservation(Reservation reservation)
                                            throws IncorrectReservationException,
                                            IncorrectUserException,
                                            IncorrectRoomException;
-    
+    */
     /**
      *
-     * @param reservation
+     * @param id
      * @throws IncorrectReservationException
      */
-    void removeReservation(Reservation reservation) 
-                                           throws IncorrectReservationException;
-    
+
+    void removeReservation(String id) throws IncorrectReservationException;
     /**
      *
      * @param id
@@ -69,30 +68,12 @@ public interface ReservationDAO {
     
     /**
      *
-     * @param user
-     * @return
-     * @throws IncorrectUserException
-     */
-    List<Reservation> getAllReservationByUser(User user)
-                                            throws IncorrectUserException;
-
-    /**
-     *
      * @param nif
      * @return
      * @throws IncorrectUserException
      */
-    List<Reservation> getAllReservationByUser(String nif)
+    List<Reservation> getAllReservationByUserNif(String nif)
                                             throws IncorrectUserException;
-
-    /**
-     *
-     * @param building
-     * @return
-     * @throws IncorrectBuildingException
-     */
-    List<Reservation> getAllReservationByBuilding(Building building) 
-                                            throws IncorrectBuildingException;
 
     /**
      *
@@ -102,15 +83,6 @@ public interface ReservationDAO {
      */
     List<Reservation> getAllReservationByBuilding(String name) 
                                             throws IncorrectBuildingException;
-
-    /**
-     *
-     * @param room
-     * @return
-     * @throws IncorrectRoomException
-     */
-    List<Reservation> getAllReservationByRoom(Room room) 
-                                            throws IncorrectRoomException;
 
     /**
      *
