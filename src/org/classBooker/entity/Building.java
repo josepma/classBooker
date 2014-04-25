@@ -31,10 +31,9 @@ public class Building {
         this.name="";
     }
     
-    public Building (String Name){
+    public Building (String name){
         this.rooms=new ArrayList<Room>();
-        this.name = name;
-       
+        this.name = name; 
     }
     
     public String getBuildingName(){
@@ -43,6 +42,22 @@ public class Building {
     
     public void setBuildingName(String Name){
         this.name=name;
+    }
+    
+    /**
+     *
+     * @return
+     */
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
+    /**
+     *
+     * @param rooms
+     */
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
     }
     
     @Override
