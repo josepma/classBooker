@@ -42,7 +42,7 @@ public class ReservationTest {
 
         dateTime = new DateTime(2014, 4, 25, 10, 25);
         rUser = new ProfessorPas();
-        room = new Room();
+        room = new MeetingRoom();
 
         instance = new Reservation(dateTime, rUser, room);
     }
@@ -123,7 +123,7 @@ public class ReservationTest {
      */
     @Test
     public void testSetRoom() {
-        Room expResult = new Room();
+        Room expResult = new MeetingRoom();
         instance.setRoom(expResult);
         assertEquals(expResult, instance.getRoom());
     }
