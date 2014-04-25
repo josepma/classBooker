@@ -67,12 +67,7 @@ public abstract class User {
         if (!Objects.equals(this.nif, other.nif)) {
             return false;
         }
-        if (!Objects.equals(this.email, other.email)) {
-            return false;
-        }
-        if (!Objects.equals(this.name, other.name)) {
-            return false;
-        }
+
         return true;
     }
     

@@ -68,6 +68,6 @@ public class Building {
     
     @Override
     public String toString(){
-        return "Building name="+name + "rooms="+rooms;       
+        return "Building{name="+name + "rooms="+rooms+"}";       
     }
 }

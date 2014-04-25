@@ -93,7 +93,8 @@ public abstract class Room {
     
     @Override
     public String toString() {
-        String result="Room id "+ roomId + "Number"+ number +"building" +building.getBuildingName()+"reservations "+reservations;
+        String result="Room{Type: "+this.getClass().getName()+ "Room id: "+ roomId + 
+                      "Number: "+ number +"building: " +building.getBuildingName()+"}";
         return result; 
     }
 

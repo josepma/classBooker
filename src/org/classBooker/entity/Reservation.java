@@ -97,15 +97,6 @@ public class Reservation {
             return false;
         }
  
-        if (!Objects.equals(this.reservationDate, other.reservationDate)) {
-            return false;
-        }
-        if (!Objects.equals(this.rUser, other.rUser)) {
-            return false;
-        }
-        if (!Objects.equals(this.room, other.room)) {
-            return false;
-        }
         return true;
     }
 }
