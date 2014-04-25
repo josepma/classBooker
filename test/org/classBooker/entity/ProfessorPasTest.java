@@ -13,9 +13,9 @@ import static org.junit.Assert.*;
  *
  * @author agl5
  */
-public class StaffAdminTest {
+public class ProfessorPasTest {
     
-    public StaffAdminTest() {
+    public ProfessorPasTest() {
     }
 
     @Test
@@ -26,4 +26,5 @@ public class StaffAdminTest {
         assertEquals("email@udl.cat",user.getEmail());
         assertEquals("manolito",user.getName());
     }
+    
 }

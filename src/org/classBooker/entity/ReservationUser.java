@@ -6,6 +6,7 @@
 
 package org.classBooker.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
@@ -22,10 +23,13 @@ import javax.persistence.OneToMany;
 
     public ReservationUser() {
         super();
+        this.reservations = new ArrayList<>();
     }
 
     public ReservationUser(String nif, String email, String name) {
         super(nif, email, name);
+        this.reservations = new ArrayList<>();
+        
     }
 
     public List<Reservation> getReservations() {

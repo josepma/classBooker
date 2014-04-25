@@ -13,11 +13,10 @@ import static org.junit.Assert.*;
  *
  * @author agl5
  */
-public class StaffAdminTest {
+public class SpaceAdminTest {
     
-    public StaffAdminTest() {
+    public SpaceAdminTest() {
     }
-
     @Test
     public void testCreateUser() {
         
