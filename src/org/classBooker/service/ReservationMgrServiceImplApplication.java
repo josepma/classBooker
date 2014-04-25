@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package org.classBooker.service;
 
 import java.util.HashMap;
@@ -11,14 +5,19 @@ import java.util.List;
 import org.classBooker.entity.Building;
 import org.classBooker.entity.Reservation;
 import org.classBooker.entity.Room;
-import org.classBooker.entity.User;
 import org.joda.time.DateTime;
+
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 
 /**
  *
- * @author abg7
+ * @author aba8
  */
-public class ReservationMgrServiceImplAcceptation implements ReservationMgrService{
+public class ReservationMgrServiceImplApplication implements ReservationMgrService{
 
     @Override
     public Reservation makeReservationById(String nif, String buildingName, String roomNumber, DateTime date) {
