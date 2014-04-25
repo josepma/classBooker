@@ -3,7 +3,17 @@
   xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
   version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
   <persistence-unit name="classBooker" transaction-type="RESOURCE_LOCAL">
-    <!--<class>org.classBooker.....</class> -->
+  <class>org.classBooker.entity.Building</class>
+  <class>org.classBooker.entity.ClassRoom</class>
+  <class>org.classBooker.entity.LaboratoryRoom</class>
+  <class>org.classBooker.entity.MeetingRoom</class>
+  <class>org.classBooker.entity.ProfessorPas</class>
+  <class>org.classBooker.entity.Reservation</class>
+  <class>org.classBooker.entity.ReservationUser</class>
+  <class>org.classBooker.entity.Room</class>
+  <class>org.classBooker.entity.SpaceAdmin</class>
+  <class>org.classBooker.entity.StaffAdmin</class>
+  <class>org.classBooker.entity.User</class>
     
     <properties>
       <property name="javax.persistence.jdbc.url" 
