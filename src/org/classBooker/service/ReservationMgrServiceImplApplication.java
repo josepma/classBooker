@@ -20,7 +20,7 @@ import org.joda.time.DateTime;
 public class ReservationMgrServiceImplApplication implements ReservationMgrService{
 
     @Override
-    public Reservation makeReservationById(String nif, String buildingName, String roomNumber, DateTime date) {
+        public Reservation makeReservationById(String nif, String buildingName, String roomNumber, DateTime date) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
