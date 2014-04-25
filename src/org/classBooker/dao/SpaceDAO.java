@@ -6,10 +6,96 @@
 
 package org.classBooker.dao;
 
+import java.util.List;
+import org.classBooker.dao.exception.IncorrectBuildingException;
+import org.classBooker.dao.exception.IncorrectRoomException;
+import org.classBooker.dao.exception.PersistException;
+import org.classBooker.entity.Building;
+import org.classBooker.entity.Room;
+
+
 /**
  *
- * @author josepma
+ * @author josepma, Marc Solé, Carles Mònico
  */
 public interface SpaceDAO {
+    
+    /**
+     * Add a new Room in a existing Buiding 
+     * @param room
+     * @throws PersistException
+     * @throws IncorrectRoomException
+     */
+    void addRoom (Room room) throws PersistException, IncorrectRoomException;
+
+    /**
+     * Remove a exisiting Room
+     * @param room
+     * @throws IncorrectRoomException
+     */
+    void removeRoom (Room room) throws IncorrectRoomException;
+
+    /**
+     * Get a room by identifier
+     * @param id
+     * @return
+     */
+    Room getRoomById(String id);
+
+    /**
+     * Get all rooms
+     * @return
+     */
+    List<Room> getAllRooms();
+    
+    /**
+     * Add a new building
+     * @param building
+     * @throws PersistException
+     * @throws IncorrectBuildingException
+     */
+    void addBuilding(Building building)throws PersistException, 
+                                                IncorrectBuildingException;
+    
+    /**
+     *
+     * @param building
+     * @throws PersistException
+     * @throws IncorrectBuildingException
+     */
+    void modifyBuilding(Building building) throws PersistException, 
+                                                IncorrectBuildingException;
+    
+    /**
+     * Remove a existing building
+     * @param building
+     * @throws IncorrectBuildingException
+     */
+    void removeBuilding(Building building)throws IncorrectBuildingException;
+    
+    /**
+     * Get building by name
+     * @param name
+     * @return
+     * @throws IncorrectBuildingException
+     */
+    Building getBuildingByName(String name)throws IncorrectBuildingException;
+    
+    /**
+     * Get a list of all buildings
+     * @return
+     */
+    List<Building> getAllBuildings();
+    
+    
+    /**
+     * Get all room of a building 
+     * @param building
+     * @return
+     * @throws IncorrectBuildingException
+     */
+    List<Room> getAllRoomsOfOneBuilding(Building building) 
+                                        throws IncorrectBuildingException;
+    
     
 }
