@@ -6,6 +6,7 @@
 
 package org.classBooker.dao;
 
+import java.sql.Time;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.classBooker.dao.exception.IncorrectBuildingException;
@@ -46,6 +47,10 @@ public class ReservationDAOImpl implements ReservationDAO{
         em.getTransaction().commit();
     }
 
+    @Override
+    public void addReservation(String userId, String roomNb, String buildingName, Time dateTime) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     @Override
     public Reservation getReservationById(String id) {

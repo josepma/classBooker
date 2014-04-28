@@ -6,6 +6,8 @@
 
 package org.classBooker.dao;
 
+import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.dateTime;
+import java.sql.Time;
 import java.util.List;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectReservationException;
@@ -15,6 +17,7 @@ import org.classBooker.entity.Building;
 import org.classBooker.entity.Reservation;
 import org.classBooker.entity.Room;
 import org.classBooker.entity.User;
+import static org.joda.time.format.ISODateTimeFormat.dateTime;
 
 /**
  *
@@ -30,6 +33,12 @@ public interface ReservationDAO {
      * @throws IncorrectRoomException
      */
     void addReservation(Reservation reservation)
+                                           throws IncorrectReservationException,
+                                           IncorrectUserException,
+                                           IncorrectRoomException;
+    
+    void addReservation (String userId, String roomNb, 
+                          String buildingName, Time dateTime)
                                            throws IncorrectReservationException,
                                            IncorrectUserException,
                                            IncorrectRoomException;
