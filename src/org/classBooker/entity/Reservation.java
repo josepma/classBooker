@@ -29,19 +29,6 @@ public class Reservation {
     @Temporal(javax.persistence.TemporalType.DATE)
     private DateTime reservationDate;
     //   ****I PROPOSE private Calendar reservationDate;  (Josepma)
-    /*
-    
-  
-     public DateTime getAttendanceDate() {
-        return new DateTime(this.attendanceDate);
-     }
-
-public void setAttendanceDate(DateTime attendanceDate) {
-    this.attendanceDate = attendanceDate.toCalendar(Locale.getDefault());
-}
-    
-    
-    */
     
     
     @ManyToOne
