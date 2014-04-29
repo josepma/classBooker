@@ -28,6 +28,21 @@ public class Reservation {
     @Column (name="DATE")
     @Temporal(javax.persistence.TemporalType.DATE)
     private DateTime reservationDate;
+    //   ****I PROPOSE private Calendar reservationDate;  (Josepma)
+    /*
+    
+  
+     public DateTime getAttendanceDate() {
+        return new DateTime(this.attendanceDate);
+     }
+
+public void setAttendanceDate(DateTime attendanceDate) {
+    this.attendanceDate = attendanceDate.toCalendar(Locale.getDefault());
+}
+    
+    
+    */
+    
     
     @ManyToOne
     @JoinColumn(name = "USER", referencedColumnName = "name")
@@ -52,10 +67,19 @@ public class Reservation {
 
     public DateTime getReservationDateTime() {
         return reservationDate;
+        
+      //  ****I PROPOSE:   return new DateTime(this.reservationDate); Josepma
+
     }
 
+    
     public void setReservationDateTime(DateTime reservationDate) {
         this.reservationDate = reservationDate;
+    
+        // **** I propose: this.reservationDate = reservationDate.toCalendar(Locale.getDefault()); Josepma
+
+        
+        
     }
 
     public ReservationUser getrUser() {
