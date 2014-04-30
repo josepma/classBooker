@@ -173,7 +173,7 @@ public class SpaceDAOImpl implements SpaceDAO{
     }
 
     @Override
-    public Room getAllRoomsByTypeAndCapacity(String type, int capacity, String buildingName) {
+    public List<Room> getAllRoomsByTypeAndCapacity(String type, int capacity, String buildingName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
