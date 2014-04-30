@@ -7,8 +7,8 @@
 package org.classBooker.dao;
 
 import java.util.List;
-import org.classBooker.dao.exception.AlreadyExistingBuilding;
-import org.classBooker.dao.exception.AlreadyExistingRoom;
+import org.classBooker.dao.exception.AlreadyExistingBuildingException;
+import org.classBooker.dao.exception.AlreadyExistingRoomException;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectTypeException;
@@ -28,10 +28,10 @@ public interface SpaceDAO {
      * @param room
      * @throws PersistException
      * @throws IncorrectRoomException
-     * @throws org.classBooker.dao.exception.AlreadyExistingRoom
+     * @throws org.classBooker.dao.exception.AlreadyExistingRoomException
      */
     void addRoom (Room room) throws PersistException, IncorrectRoomException,
-                                AlreadyExistingRoom, AlreadyExistingBuilding;
+                                AlreadyExistingRoomException, AlreadyExistingBuildingException;
     /**
      * Remove a exisiting Room
      * @param room
@@ -60,7 +60,7 @@ public interface SpaceDAO {
      */
     void addBuilding(Building building)throws PersistException, 
                                                 IncorrectBuildingException,
-                                                AlreadyExistingBuilding;
+                                                AlreadyExistingBuildingException;
     
     /**
      *

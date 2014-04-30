@@ -13,8 +13,8 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
-import org.classBooker.dao.exception.AlreadyExistingBuilding;
-import org.classBooker.dao.exception.AlreadyExistingRoom;
+import org.classBooker.dao.exception.AlreadyExistingBuildingException;
+import org.classBooker.dao.exception.AlreadyExistingRoomException;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectTypeException;
@@ -40,16 +40,16 @@ public class SpaceDAOImpl implements SpaceDAO{
 
 
     @Override
-    public void addRoom(Room room) throws PersistException, IncorrectRoomException, AlreadyExistingRoom,AlreadyExistingBuilding  {
+    public void addRoom(Room room) throws PersistException, IncorrectRoomException, AlreadyExistingRoomException,AlreadyExistingBuildingException  {
      
             em.getTransaction().begin();
           
             if(checkExistingBuilding(room.getBuilding())){              
-                    throw new AlreadyExistingBuilding();
+                    throw new AlreadyExistingBuildingException();
                 
             }
             if(checkExistingRoom(room)){              
-                    throw new AlreadyExistingRoom();
+                    throw new AlreadyExistingRoomException();
                 
             }
 
@@ -87,11 +87,11 @@ public class SpaceDAOImpl implements SpaceDAO{
     }
 
     @Override
-    public void addBuilding(Building building) throws PersistException, IncorrectBuildingException, AlreadyExistingBuilding {
+    public void addBuilding(Building building) throws PersistException, IncorrectBuildingException, AlreadyExistingBuildingException {
             em.getTransaction().begin();          
             if(checkExistingBuilding(building)){
               
-                    throw new AlreadyExistingBuilding();
+                    throw new AlreadyExistingBuildingException();
                 
             }
 
