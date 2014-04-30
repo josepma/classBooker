@@ -6,7 +6,6 @@
 
 package org.classBooker.dao;
 
-import java.sql.Time;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.classBooker.dao.exception.IncorrectBuildingException;
@@ -17,6 +16,7 @@ import org.classBooker.entity.Building;
 import org.classBooker.entity.Reservation;
 import org.classBooker.entity.Room;
 import org.classBooker.entity.User;
+import org.joda.time.DateTime;
 
 /**
  *
@@ -46,9 +46,9 @@ public class ReservationDAOImpl implements ReservationDAO{
         reservation.getrUser().getReservations().add(reservation);
         em.getTransaction().commit();
     }
-
+    
     @Override
-    public void addReservation(String userId, String roomNb, String buildingName, Time dateTime) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException {
+    public void addReservation(String userId, String roomNb, String buildingName, DateTime dateTime) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -57,6 +57,11 @@ public class ReservationDAOImpl implements ReservationDAO{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public Reservation getReservationByDateRoomBulding(DateTime dateTime, String roomNb, String buildingName) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
     @Override
     public List<Reservation> getAllReservation() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -126,5 +131,5 @@ public class ReservationDAOImpl implements ReservationDAO{
             throw new IncorrectBuildingException();
         
     }
-    
+
 }

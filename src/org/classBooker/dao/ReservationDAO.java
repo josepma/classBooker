@@ -17,6 +17,7 @@ import org.classBooker.entity.Building;
 import org.classBooker.entity.Reservation;
 import org.classBooker.entity.Room;
 import org.classBooker.entity.User;
+import org.joda.time.DateTime;
 import static org.joda.time.format.ISODateTimeFormat.dateTime;
 
 /**
@@ -37,8 +38,18 @@ public interface ReservationDAO {
                                            IncorrectUserException,
                                            IncorrectRoomException;
     
+    /**
+     *
+     * @param userId
+     * @param roomNb
+     * @param buildingName
+     * @param dateTime
+     * @throws IncorrectReservationException
+     * @throws IncorrectUserException
+     * @throws IncorrectRoomException
+     */
     void addReservation (String userId, String roomNb, 
-                          String buildingName, Time dateTime)
+                          String buildingName, DateTime dateTime)
                                            throws IncorrectReservationException,
                                            IncorrectUserException,
                                            IncorrectRoomException;
@@ -62,12 +73,24 @@ public interface ReservationDAO {
      */
 
     void removeReservation(String id) throws IncorrectReservationException;
+    
     /**
      *
      * @param id
      * @return
      */
     Reservation getReservationById(String id);
+    
+    /**
+     *
+     * @param dateTime
+     * @param roomNb
+     * @param buildingName
+     * @return
+     */
+    Reservation getReservationByDateRoomBulding(DateTime dateTime, 
+                                                    String roomNb, 
+                                                    String buildingName);
     
     /**
      *

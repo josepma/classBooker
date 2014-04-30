@@ -73,43 +73,15 @@ public class ReservationDAOImplTest {
     }
 
     /**
-     * Test of getEm method, of class ReservationDAOImpl.
-     */
-    @Test
-    public void testGetEm() {
-        System.out.println("getEm");
-        ReservationDAOImpl instance = new ReservationDAOImpl();
-        EntityManager expResult = null;
-        EntityManager result = instance.getEm();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setEm method, of class ReservationDAOImpl.
-     */
-    @Test
-    public void testSetEm() {
-        System.out.println("setEm");
-        EntityManager em = null;
-        ReservationDAOImpl instance = new ReservationDAOImpl();
-        instance.setEm(em);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
      * Test of addReservation method, of class ReservationDAOImpl.
      */
     @Test
     public void testAddReservation() throws Exception {
-        System.out.println("addReservation");
-        Reservation reservation = null;
-        ReservationDAOImpl instance = new ReservationDAOImpl();
-        instance.addReservation(reservation);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
+    }
+    
+    public void testSearchAndAddReservation() throws Exception {
+
     }
 
     /**
@@ -117,14 +89,7 @@ public class ReservationDAOImplTest {
      */
     @Test
     public void testGetReservationById() {
-        System.out.println("getReservationById");
-        String id = "";
-        ReservationDAOImpl instance = new ReservationDAOImpl();
-        Reservation expResult = null;
-        Reservation result = instance.getReservationById(id);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
     }
 
     /**
@@ -132,13 +97,7 @@ public class ReservationDAOImplTest {
      */
     @Test
     public void testGetAllReservation() {
-        System.out.println("getAllReservation");
-        ReservationDAOImpl instance = new ReservationDAOImpl();
-        List<Reservation> expResult = null;
-        List<Reservation> result = instance.getAllReservation();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
     }
 
     /**
@@ -146,14 +105,7 @@ public class ReservationDAOImplTest {
      */
     @Test
     public void testGetAllReservationByBuilding() throws Exception {
-        System.out.println("getAllReservationByBuilding");
-        String name = "";
-        ReservationDAOImpl instance = new ReservationDAOImpl();
-        List<Reservation> expResult = null;
-        List<Reservation> result = instance.getAllReservationByBuilding(name);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
     }
 
     /**
@@ -161,14 +113,7 @@ public class ReservationDAOImplTest {
      */
     @Test
     public void testGetAllReservationByRoom() throws Exception {
-        System.out.println("getAllReservationByRoom");
-        String id = "";
-        ReservationDAOImpl instance = new ReservationDAOImpl();
-        List<Reservation> expResult = null;
-        List<Reservation> result = instance.getAllReservationByRoom(id);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
     }
 
     /**
@@ -176,12 +121,7 @@ public class ReservationDAOImplTest {
      */
     @Test
     public void testRemoveReservation() throws Exception {
-        System.out.println("removeReservation");
-        String id = "";
-        ReservationDAOImpl instance = new ReservationDAOImpl();
-        instance.removeReservation(id);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
     }
 
     /**
@@ -189,14 +129,7 @@ public class ReservationDAOImplTest {
      */
     @Test
     public void testGetAllReservationByUserNif() throws Exception {
-        System.out.println("getAllReservationByUserNif");
-        String nif = "";
-        ReservationDAOImpl instance = new ReservationDAOImpl();
-        List<Reservation> expResult = null;
-        List<Reservation> result = instance.getAllReservationByUserNif(nif);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+
     }
     
 }
