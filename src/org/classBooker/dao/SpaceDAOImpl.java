@@ -171,4 +171,10 @@ public class SpaceDAOImpl implements SpaceDAO{
     private boolean checkExistingBuilding(Building building) {
         return em.find(Building.class, building.getBuildingName())!=null;
     }
+
+    @Override
+    public Room getAllRoomsByTypeAndCapacity(String type, int capacity, String buildingName) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }
