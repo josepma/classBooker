@@ -2,9 +2,15 @@ package org.classBooker.service;
 
 import java.util.HashMap;
 import java.util.List;
+import org.classBooker.dao.exception.IncorrectReservationException;
+import org.classBooker.dao.exception.IncorrectRoomException;
+import org.classBooker.dao.exception.IncorrectTypeException;
+import org.classBooker.dao.exception.IncorrectUserException;
 import org.classBooker.entity.Building;
 import org.classBooker.entity.Reservation;
+import org.classBooker.entity.ReservationUser;
 import org.classBooker.entity.Room;
+import org.classBooker.util.ReservationResult;
 import org.joda.time.DateTime;
 
 /*
@@ -69,8 +75,24 @@ public class ReservationMgrServiceImplApplication implements ReservationMgrServi
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+
     @Override
-    public HashMap<Building, Room> suggestionSpace(long id) {
+    public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Room> suggestionSpace(String roomNb, String building) throws IncorrectTypeException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }   
+
+    @Override
+    public void acceptReservation(Reservation reservation) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReservationUser getCurrentUserOfDemandedRoom(String roomNb, String building, DateTime datetime) throws IncorrectRoomException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

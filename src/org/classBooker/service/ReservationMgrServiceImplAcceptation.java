@@ -20,6 +20,7 @@ import org.classBooker.entity.Reservation;
 import org.classBooker.entity.ReservationUser;
 import org.classBooker.entity.Room;
 import org.classBooker.entity.User;
+import org.classBooker.util.ReservationResult;
 import org.joda.time.DateTime;
 
 /**
@@ -99,8 +100,8 @@ public class ReservationMgrServiceImplAcceptation implements ReservationMgrServi
     }
 
     @Override
-    public ReservationUser getCurrentUserOfDemandedRoom(long id, DateTime datetime) throws IncorrectRoomException {
-        Reservation res = reservationDao.getReservationByRoomAndDateTime(id, datetime);
+    public ReservationUser getCurrentUserOfDemandedRoom(String roomNb, String building, DateTime datetime) throws IncorrectRoomException {
+        Reservation res = reservationDao.getReservationByDateRoomBulding(datetime, roomNb, building);
         return res.getrUser();
     }
     
@@ -114,8 +115,9 @@ public class ReservationMgrServiceImplAcceptation implements ReservationMgrServi
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+
     @Override
-    public HashMap<Building, Room> suggestionSpace(long id) {
+    public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -39,7 +39,7 @@ public interface ReservationMgrService {
     public List<Reservation> getAllReservations();
     public void deleteReservation(long id);
     public List<Room> suggestionSpace(String roomNb, String building) throws IncorrectTypeException;
-    public ReservationUser getCurrentUserOfDemandedRoom(long id, DateTime datetime) throws IncorrectRoomException;
+    public ReservationUser getCurrentUserOfDemandedRoom(String roomNb, String building, DateTime datetime) throws IncorrectRoomException;
     public void acceptReservation(Reservation reservation) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException ;
    
 }
