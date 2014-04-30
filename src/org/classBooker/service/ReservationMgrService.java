@@ -20,8 +20,7 @@ import org.joda.time.DateTime;
  * @author josepma
  */
 public interface ReservationMgrService {
-    public Reservation makeReservationById(String nif, String buildingName, String roomNumber, DateTime date);
-    public Reservation makeReservationById(String nif, String buildingName, String roomNumber, DateTime date, List<Integer> times);
+    public Reservation makeReservationBySpace(long roomld, String nif, DateTime initialTime);
     //public Reservation makeReservationByType(String nif, String type, int capacity, DateTime date);
     //public Reservation makeReservationByType(String nif, String type, int capacity, DateTime date, List<Integer> times);
     public Reservation modifyReservation(long id);
