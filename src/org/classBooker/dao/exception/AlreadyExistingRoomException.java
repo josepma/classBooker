@@ -10,13 +10,13 @@ package org.classBooker.dao.exception;
  *
  * @author saida
  */
-public class AlreadyExistingRoom extends Exception {
+public class AlreadyExistingRoomException extends Exception {
 
     /**
      * Creates a new instance of <code>AlreadyExistingRoom</code> without detail
      * message.
      */
-    public AlreadyExistingRoom() {
+    public AlreadyExistingRoomException() {
     }
 
     /**
@@ -25,7 +25,7 @@ public class AlreadyExistingRoom extends Exception {
      *
      * @param msg the detail message.
      */
-    public AlreadyExistingRoom(String msg) {
+    public AlreadyExistingRoomException(String msg) {
         super(msg);
     }
 }
