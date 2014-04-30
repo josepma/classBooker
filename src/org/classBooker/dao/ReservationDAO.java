@@ -79,7 +79,7 @@ public interface ReservationDAO {
      * @param id
      * @return
      */
-    Reservation getReservationById(String id);
+    Reservation getReservationById(long id);
     
     /**
      *

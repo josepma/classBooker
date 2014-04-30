@@ -7,7 +7,9 @@
 package org.classBooker.entity;
 
 import java.sql.Time;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.*;
@@ -27,7 +29,7 @@ public class Reservation {
         
     @Column (name="DATE")
     @Temporal(javax.persistence.TemporalType.DATE)
-    private DateTime reservationDate;
+    private Calendar reservationDate;
     //   ****I PROPOSE private Calendar reservationDate;  (Josepma)
     
     
@@ -43,7 +45,7 @@ public class Reservation {
     }
 
     public Reservation(DateTime reservationDate, ReservationUser rUser, Room room) {
-        this.reservationDate = reservationDate;
+        this.reservationDate = reservationDate.toCalendar(Locale.getDefault());
         this.rUser = rUser;
         this.room = room;
     }
@@ -52,16 +54,16 @@ public class Reservation {
         return reservationId;
     }
 
-    public DateTime getReservationDateTime() {
-        return reservationDate;
+    public DateTime getReservationDate() {
+        return new DateTime(this.reservationDate);
         
       //  ****I PROPOSE:   return new DateTime(this.reservationDate); Josepma
 
     }
 
     
-    public void setReservationDateTime(DateTime reservationDate) {
-        this.reservationDate = reservationDate;
+    public void setReservationDate(DateTime reservationDate) {
+        this.reservationDate = reservationDate.toCalendar(Locale.getDefault());
     
         // **** I propose: this.reservationDate = reservationDate.toCalendar(Locale.getDefault()); Josepma
 

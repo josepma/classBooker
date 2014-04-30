@@ -53,7 +53,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     }
 
     @Override
-    public Reservation getReservationById(String id) {
+    public Reservation getReservationById(long id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

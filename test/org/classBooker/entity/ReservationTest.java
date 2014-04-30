@@ -68,7 +68,7 @@ public class ReservationTest {
     @Test
     public void testGetReservationDateTime() {
         DateTime expResult = dateTime;
-        DateTime result = instance.getReservationDateTime();
+        DateTime result = instance.getReservationDate();
         assertEquals(expResult, result);
 
     }
@@ -79,8 +79,8 @@ public class ReservationTest {
     @Test
     public void testSetReservationDateTime() {
         DateTime dt = new DateTime();
-        instance.setReservationDateTime(dt);
-        assertEquals(dt, instance.getReservationDateTime());
+        instance.setReservationDate(dt);
+        assertEquals(dt, instance.getReservationDate());
 
     }
 
