@@ -30,7 +30,14 @@ public interface UserDAO {
      * @param nif
      * @return
      */
-    User findUserByNif(String nif);
+    User getUserByNif(String nif);
+    
+    /**
+     * @param name
+     * @return
+     */
+    
+    User getUserByName(String name);
 
     /**
      *
