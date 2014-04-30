@@ -34,13 +34,13 @@ public class ReservationDAOImpl implements ReservationDAO{
         this.em = em;
     }
 
-    
-    
     @Override
-    public void addReservation(Reservation reservation) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException {
+    public void addReservation(Reservation reservation) 
+                                        throws IncorrectReservationException, 
+                                               IncorrectUserException, 
+                                               IncorrectRoomException {
         
-        em.getTransaction().begin();
-        
+        em.getTransaction().begin();       
         checkReservation(reservation);
         em.persist(reservation);
         reservation.getrUser().getReservations().add(reservation);
@@ -78,7 +78,6 @@ public class ReservationDAOImpl implements ReservationDAO{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-
     @Override
     public void removeReservation(String id) throws IncorrectReservationException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -88,7 +87,6 @@ public class ReservationDAOImpl implements ReservationDAO{
     public List<Reservation> getAllReservationByUserNif(String nif) throws IncorrectUserException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
     
     private void checkReservation(Reservation reservation) throws IncorrectReservationException, IncorrectRoomException, IncorrectUserException{
         
