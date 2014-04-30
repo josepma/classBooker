@@ -8,11 +8,16 @@ package org.classBooker.service;
 
 import java.util.HashMap;
 import java.util.List;
+import org.classBooker.dao.exception.IncorrectReservationException;
+import org.classBooker.dao.exception.IncorrectRoomException;
+import org.classBooker.dao.exception.IncorrectTypeException;
+import org.classBooker.dao.exception.IncorrectUserException;
 import org.classBooker.entity.Building;
 import org.classBooker.entity.Reservation;
 import org.classBooker.entity.ReservationUser;
 import org.classBooker.entity.Room;
 import org.classBooker.entity.User;
+import org.classBooker.util.ReservationResult;
 import org.joda.time.DateTime;
 
 /**
@@ -20,6 +25,7 @@ import org.joda.time.DateTime;
  * @author josepma
  */
 public interface ReservationMgrService {
+    public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate);
     public Reservation makeReservationBySpace(long roomld, String nif, DateTime initialTime);
     //public Reservation makeReservationByType(String nif, String type, int capacity, DateTime date);
     //public Reservation makeReservationByType(String nif, String type, int capacity, DateTime date, List<Integer> times);
@@ -32,5 +38,8 @@ public interface ReservationMgrService {
     public List<Reservation> findReservationByType(String type, DateTime date);
     public List<Reservation> getAllReservations();
     public void deleteReservation(long id);
-    public HashMap<Building,Room> suggestionSpace(long id);
+    public List<Room> suggestionSpace(String roomNb, String building) throws IncorrectTypeException;
+    public ReservationUser getCurrentUserOfDemandedRoom(long id, DateTime datetime) throws IncorrectRoomException;
+    public void acceptReservation(Reservation reservation) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException ;
+   
 }
