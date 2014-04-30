@@ -42,7 +42,7 @@ public class Building {
     
     public void setBuildingName(String Name){
         this.name=name;
-    }
+    }    
     
     /**
      *
