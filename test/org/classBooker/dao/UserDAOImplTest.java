@@ -6,6 +6,8 @@
 
 package org.classBooker.dao;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -28,29 +30,42 @@ public class UserDAOImplTest {
     EntityManager em;
     UserDAOImpl udao;
     User u;
+    List<User> expected; 
     
     public UserDAOImplTest() {
     }
     
     @Before
-    public void setUp2() throws Exception{
+    public void setUp() throws Exception{
+        expected = new ArrayList<>();
         udao = new UserDAOImpl("classBooker");
-        u = new ProfessorPas("nif","email","name");
+        u = new ProfessorPas("12345","pepito@gmail.com","Pepito");
+        User us = new ProfessorPas("98765","jaunito@gmail.com","Juanito");
         udao.addUser(u);
+        udao.addUser(us);
+        expected.add(u);
+        expected.add(us);
     }
     
     
     @Test
     public void testGetUserByNif() throws Exception {
-        User u2 = udao.getUserByNif("nif");
+        User u2 = udao.getUserByNif("12345");
         assertEquals("These two users should be equals",u,u2);
         
     }
     
     @Test
     public void testGetUserByName() throws Exception {
-        User u2 = udao.getUserByName("name");
+        User u2 = udao.getUserByName("Pepito");
         assertEquals("These two users should be equals",u,u2);
+        
+    }
+    
+    @Test
+    public void testGetAllUsers() throws Exception {
+        List<User> users = udao.getAllUsers();
+        assertEquals("These two users should be equals",users,expected);
         
     }
     

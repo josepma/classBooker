@@ -21,7 +21,7 @@ import javax.persistence.Table;
  * @author josepma
  */
 @Entity
-@Table(name="USER")
+@Table(name="USUARI")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="USER_TYPE",
         discriminatorType=DiscriminatorType.STRING,length=5)

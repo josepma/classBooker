@@ -83,12 +83,42 @@ public class UserDAOImpl implements UserDAO{
     
     @Override
     public User getUserByName(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        User u = null;
+        
+        EntityManager em = emf.createEntityManager();
+        
+        try{
+            em.getTransaction().begin();
+            Query q = em.createQuery
+                    ("SELECT u FROM User u WHERE u.name ='"+name+"'");
+            u = (User) q.getSingleResult();
+            em.getTransaction().commit();
+        }
+        finally{
+            if(em.isOpen())
+                em.close();
+        }
+        return u;
     }
 
     @Override
     public List<User> getAllUsers() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<User> users = null;
+        
+        EntityManager em = emf.createEntityManager();
+        
+        try{
+            em.getTransaction().begin();
+            Query q = em.createQuery
+                    ("SELECT u FROM User u ");
+            users = q.getResultList();
+            em.getTransaction().commit();
+        }
+        finally{
+            if(em.isOpen())
+                em.close();
+        }
+        return users;
     }
 
     @Override
