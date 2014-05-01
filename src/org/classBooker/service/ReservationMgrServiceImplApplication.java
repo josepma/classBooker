@@ -2,14 +2,19 @@ package org.classBooker.service;
 
 import java.util.HashMap;
 import java.util.List;
+import org.classBooker.dao.ReservationDAO;
+import org.classBooker.dao.SpaceDAO;
+import org.classBooker.dao.UserDAO;
 import org.classBooker.dao.exception.IncorrectReservationException;
 import org.classBooker.dao.exception.IncorrectRoomException;
+import org.classBooker.dao.exception.IncorrectTimeException;
 import org.classBooker.dao.exception.IncorrectTypeException;
 import org.classBooker.dao.exception.IncorrectUserException;
 import org.classBooker.entity.Building;
 import org.classBooker.entity.Reservation;
 import org.classBooker.entity.ReservationUser;
 import org.classBooker.entity.Room;
+import org.classBooker.entity.User;
 import org.classBooker.util.ReservationResult;
 import org.joda.time.DateTime;
 
@@ -24,10 +29,23 @@ import org.joda.time.DateTime;
  * @author aba8
  */
 public class ReservationMgrServiceImplApplication implements ReservationMgrService{
-
+    private SpaceDAO sDao;
+    private UserDAO uDao;
+    private ReservationDAO rDao;
+    private DateTime datetime;
     @Override
-        public Reservation makeReservationBySpace(long roomld, String nif, DateTime initialTime) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        public Reservation makeReservationBySpace(long roomId, String nif, DateTime initialTime)throws Exception {
+             Room room = sDao.getRoomById(roomId); 
+             User user = uDao.getUserByNif(nif);
+             datetime = initialTime;
+            if(room == null) throw new IncorrectRoomException();
+            if(user == null || !(user instanceof ReservationUser)) throw new IncorrectUserException();
+            //if(datetime.isBeforeNow())throw new IncorrectTimeException();
+            
+            Reservation reservation = rDao.getReservationByDateRoomBulding(datetime, room.getNumber(), room.getBuilding().getBuildingName());
+          
+            if(reservation != null) return null;
+            else return new Reservation(datetime, (ReservationUser)user, room);
     }
 
     @Override
@@ -95,5 +113,25 @@ public class ReservationMgrServiceImplApplication implements ReservationMgrServi
     public ReservationUser getCurrentUserOfDemandedRoom(String roomNb, String building, DateTime datetime) throws IncorrectRoomException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public void setUserDao(UserDAO uDao){
+        this.uDao = uDao;
+    }
+    public void setReservationDao(ReservationDAO rDao){
+        this.rDao = rDao;
+    }
+    
+    public void setSpaceDao(SpaceDAO sDao){
+        this.sDao = sDao;
+    }
+
+    private Room checkRoom(long roomId) {
+        return sDao.getRoomById(roomId);
+    }
+
+    public void setDatetime(DateTime datetime) {
+        this.datetime = datetime;
+    }
+    
     
 }

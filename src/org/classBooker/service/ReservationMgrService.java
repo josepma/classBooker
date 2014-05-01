@@ -26,7 +26,7 @@ import org.joda.time.DateTime;
  */
 public interface ReservationMgrService {
     public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate);
-    public Reservation makeReservationBySpace(long roomld, String nif, DateTime initialTime);
+    public Reservation makeReservationBySpace(long roomld, String nif, DateTime initialTime)throws Exception;
     //public Reservation makeReservationByType(String nif, String type, int capacity, DateTime date);
     //public Reservation makeReservationByType(String nif, String type, int capacity, DateTime date, List<Integer> times);
     public Reservation modifyReservation(long id);
