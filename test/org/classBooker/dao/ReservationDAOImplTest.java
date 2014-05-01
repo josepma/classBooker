@@ -68,12 +68,12 @@ public class ReservationDAOImplTest {
         room.setBuilding(building);
         room.setNumber("10");
         user = new ProfessorPas("47658245M", "random@professor.ly", "Manolo");
-        reservation = new Reservation(new DateTime(11, 05, 2014, 12, 00), user, room);
+        reservation = new Reservation(new DateTime(2014, 05, 11, 12, 00), user, room);
         
         em.getTransaction().begin();
-        em.persist(building);
-        em.persist(room);
         em.persist(user);
+        em.persist(room);
+        em.persist(building);
         em.getTransaction().commit();
         
     }
@@ -87,15 +87,15 @@ public class ReservationDAOImplTest {
         em = getEntityManager();
         em.getTransaction().begin();
         
-        Query query  = em.createQuery("DELETE FROM Reservation");
-        Query query2 = em.createQuery("DELETE FROM User");
-        Query query3 = em.createQuery("DELETE FROM Room");
-        Query query4 = em.createQuery("DELETE FROM Building");
+        Query query  = em.createQuery("DELETE FROM RESERVATION");
+        Query query2 = em.createQuery("DELETE FROM USER");
+        Query query3 = em.createQuery("DELETE FROM ROOM");
+        Query query4 = em.createQuery("DELETE FROM BUILDING");
         int deleteRecords = query.executeUpdate();
         deleteRecords = query2.executeUpdate();
         deleteRecords = query3.executeUpdate();
         deleteRecords = query4.executeUpdate();
-        
+              
         em.getTransaction().commit();
         em.close();
         System.out.println("All records have been deleted.");
@@ -120,7 +120,7 @@ public class ReservationDAOImplTest {
     public void testAddReservationByAttribute() throws Exception {
         
         rDao.addReservation("47658245M", "10", 
-                            "testBuilding", new DateTime(11, 05, 2014, 12, 00));
+                            "testBuilding", new DateTime(2014, 05, 11, 12, 00));
                 
         Reservation reservationDB = getReservationFromDB(
                                             reservation.getReservationId());

@@ -41,7 +41,7 @@ public class ReservationDAOImpl implements ReservationDAO{
                                                IncorrectRoomException {
         
         em.getTransaction().begin();       
-        checkReservation(reservation);
+        //checkReservation(reservation);
         em.persist(reservation);
         reservation.getrUser().getReservations().add(reservation);
         em.getTransaction().commit();
