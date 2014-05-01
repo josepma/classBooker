@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import org.classBooker.dao.exception.AlreadyExistingBuildingException;
@@ -19,12 +18,16 @@ import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.PersistException;
 import org.classBooker.entity.Building;
 import org.classBooker.entity.ClassRoom;
+import org.classBooker.entity.LaboratoryRoom;
+import org.classBooker.entity.MeetingRoom;
+import org.classBooker.entity.ProfessorPas;
+import org.classBooker.entity.ReservationUser;
 import org.classBooker.entity.Room;
+import org.classBooker.entity.User;
 import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
 import org.jmock.Expectations;
 import static org.jmock.Expectations.returnValue;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -34,10 +37,9 @@ import static org.junit.Assert.*;
  * @author saida
  */
 public class SpaceDAOImplTest {
-     Mockery context = new JUnit4Mockery();
-     EntityManager em;
+     
      EntityManager ema;
-     EntityTransaction transaction;
+     
      SpaceDAOImpl sdi;
      Room room;
      Building building;
@@ -49,52 +51,44 @@ public class SpaceDAOImplTest {
     }
     
     @Before
-    public void setUp() {
-        em  = context.mock(EntityManager.class);
-        transaction = context.mock(EntityTransaction.class);
-        //sdi.setEm(em);
+    public void setUp() {       
         building=new Building("EPS");
-        room=new ClassRoom(building, "2.01", 30);
-        query = context.mock(Query.class);
+        room=new ClassRoom(building, "2.01", 30);        
+      
         ema = getEntityManager();
+        
         ema.getTransaction().begin();
         ema.persist(room);
-        ema.persist(building);
+        ema.persist(building);    
         ema.getTransaction().commit();
+        
         sdi.setEm(ema);
+        
     }
 
     
  
      
-    //@Test
+    @Test 
     public void testAddRoom() throws Exception {
-        building=new Building("EPS");
-        room=new ClassRoom(building, "2.01", 30);
-        transactionExpectations();
-        context.checking(new Expectations() {{  
-                oneOf (em).find(Room.class, room.getRoomId());
-                will(returnValue(null));               
-                ignoring (em).find(Room.class, null);                
-                oneOf (em).persist(room);  
-                }});
-        // capacitat 0 o negativa
-        // ja existeix la room
-        //comprobar que existeixi el building
-        
-        sdi.addRoom(room);
+        Building building2=new Building("FDE");
+        Room room2 =new ClassRoom(building, "2.01", 30);
+        sdi.addBuilding(building2);        
+        sdi.addRoom(room2);
         
     }
     @Test(expected = AlreadyExistingRoomException.class)
     public void testAddExistingRoom() throws Exception{
-        sdi.addBuilding(building);
-        sdi.addRoom(room);
-        sdi.addRoom(room);
+        Building building2=new Building("FDE");
+        Room room2 =new ClassRoom(building, "2.01", 30);
+        sdi.addBuilding(building2);        
+        sdi.addRoom(room2);
+        sdi.addRoom(room2);
     }
     
     @Test(expected= AlreadyExistingBuildingException.class)
     public void testAddRoomNoneExistingBuilding()throws Exception{
-        Building building2=new Building("FDE");
+        Building building2=new Building("FDE");        
         Room room2= new ClassRoom (building2, "2.01", 30);
         sdi.addRoom(room2);
         
@@ -109,43 +103,22 @@ public class SpaceDAOImplTest {
     /**
      * Test of getRoomById method, of class SpaceDAOImpl.
      */
-   // @Test
+    @Test
     public void testGetRoomById() {
-        building=new Building("EPS");
-        room=new ClassRoom(building, "2.01", 30);
-        transactionExpectations();
-         context.checking(new Expectations() {{                 
-                oneOf (em).find(Room.class, room.getRoomId());
-                will(returnValue(room));                  
-                           
-        }});  
-         
+       
         assertEquals(room, sdi.getRoomById(room.getRoomId()));
     }
 
     /**
      * Test of getAllRooms method, of class SpaceDAOImpl.
      */
-  //  @Test
+    @Test
     public void testGetAllRooms() {
-        building=new Building("EPS");
-        room=new ClassRoom(building, "2.01", 30);
-        
         
         final List<Room> expected = new ArrayList<Room>();
-        expected.add(room);
+        expected.add(room);       
+      
         
-        transactionExpectations();
-
-        context.checking(new Expectations() {{                 
-                oneOf (em).createQuery("SELECT r FROM Room r");
-                will(returnValue(query));
-                
-                oneOf (query).getResultList();
-                will(returnValue(expected));
-                
-        }});
-
         List<Room> result = sdi.getAllRooms();
         
         assertEquals(expected,result);
@@ -156,21 +129,19 @@ public class SpaceDAOImplTest {
     /**
      * Test of addBuilding method, of class SpaceDAOImpl.
      */
- //   @Test
+    @Test
     public void testAddBuilding() throws Exception {
-        building=new Building("FDE");
-        
-        transactionExpectations();
-        context.checking(new Expectations() {{  
-                oneOf (em).find(Building.class, building.getBuildingName());
-                will(returnValue(null));                  
-                ignoring (em).find(Building.class, null);                
-                oneOf (em).persist(building);  
-                }});
-                 
-        sdi.addBuilding(building);
+         Building building2=new Building("FDE");              
+        sdi.addBuilding(building2);
     }
 
+    @Test(expected=AlreadyExistingBuildingException.class)
+    public void testAddExixtingBuilding() throws Exception {
+        Building building2=new Building("FDE"); 
+        sdi.addBuilding(building);               
+        sdi.addBuilding(building);
+    }
+    
     /**
      * Test of modifyBuilding method, of class SpaceDAOImpl.
      */
@@ -188,43 +159,26 @@ public class SpaceDAOImplTest {
     /**
      * Test of getBuildingByName method, of class SpaceDAOImpl.
      */
-   // @Test
+    @Test
     public void testGetBuildingByName() throws Exception {
          building=new Building("EPS");
-       
-        transactionExpectations();
-         context.checking(new Expectations() {{                 
-                oneOf (em).find(Building.class, building.getBuildingName());
-                will(returnValue(building));                  
-                           
-        }});  
-         
+               
         assertEquals(building, sdi.getBuildingByName("EPS"));
     }
 
     /**
      * Test of getAllBuildings method, of class SpaceDAOImpl.
      */
-   // @Test
+    @Test
     public void testGetAllBuildings() {
-         building=new Building("EPS");
+        
         
         final List<Building> expected = new ArrayList<Building>();
         expected.add(building);
         
-        transactionExpectations();
-
-        context.checking(new Expectations() {{                 
-                oneOf (em).createQuery("SELECT b FROM Building b");
-                will(returnValue(query));
-                
-                oneOf (query).getResultList();
-                will(returnValue(expected));
-                
-        }});
-
+       
         List<Building> result = sdi.getAllBuildings();
-        
+      
         assertEquals(expected,result);
         
         
@@ -236,12 +190,9 @@ public class SpaceDAOImplTest {
     @Test
     public void testGetAllRoomsOfOneBuilding() throws Exception {
         
-      //  building=new Building("EPS");
-       // room=new ClassRoom(building, "2.01", 30);
-        
+     
         List<Room> rooms = new ArrayList<Room>();
-        rooms.add(room);
-        sdi.addRoom(room);
+        rooms.add(room);       
         building.setRooms(rooms);
         assertEquals(rooms, sdi.getAllRoomsOfOneBuilding(building));
         
@@ -250,29 +201,53 @@ public class SpaceDAOImplTest {
     /**
      * Test of getAllRoomsOfOneType method, of class SpaceDAOImpl.
      */
-    //@Test
+    @Test
     public void testGetAllRoomsOfOneType() throws Exception {
+        Room room2 = new LaboratoryRoom(building, "2.1", 10);
+        Room room3 = new MeetingRoom(building, "1.08", 50);
+        Room room4 = new ClassRoom(building, "3.01", 100);
+        sdi.addRoom(room2);
+        sdi.addRoom(room3);
+        sdi.addRoom(room4);
+        List<Room> meetingRooms = new ArrayList<Room>();
+        meetingRooms.add(room3);
+        assertEquals(meetingRooms, sdi.getAllRoomsOfOneType("MeetingRoom"));
     }
 
     /**
      * Test of getAllRoomsOfOneTypeAndOneBuilding method, of class SpaceDAOImpl.
      */
-    //@Test
+    @Test
     public void testGetAllRoomsOfOneTypeAndOneBuilding() throws Exception {
     }
     
     
-    private void transactionExpectations(){
-        context.checking(new Expectations() {{
-                allowing (em).getTransaction(); will(returnValue(transaction));        
-                allowing (transaction).begin();
-                allowing (transaction).commit();
-
-        }});
-    }
+   
     private EntityManager getEntityManager() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("classBooker");
         return emf.createEntityManager();
     }
+
+
+     @After
+    public void tearDown() throws Exception{
+        
+        ema = sdi.getEm();
+        if (ema.isOpen()) ema.close();
+        
+        ema = getEntityManager();
+        ema.getTransaction().begin();
+   
+        Query query2=ema.createQuery("DELETE FROM Room");
+        Query query3=ema.createQuery("DELETE FROM Building");
+  
+        int deleteRecords=query2.executeUpdate();
+        deleteRecords=query3.executeUpdate();
+      
+        ema.getTransaction().commit();
+        ema.close();
+        System.out.println("All records have been deleted.");
+         
+    }
+
 }
-//delete reservation, room, building, user 

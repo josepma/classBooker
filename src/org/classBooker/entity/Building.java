@@ -59,7 +59,7 @@ public class Building {
     public void setRooms(List<Room> rooms) {
         this.rooms = rooms;
     }
-    
+      
     @Override
     public boolean equals(Object obj){
         return (obj instanceof Building) && 

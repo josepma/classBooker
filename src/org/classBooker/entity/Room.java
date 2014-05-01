@@ -19,10 +19,12 @@ import javax.persistence.*;
 @DiscriminatorColumn(name="ROOM_TYPE",
         discriminatorType=DiscriminatorType.STRING,length=5)
 public abstract class Room {
+    
+    
     @Id
     @Column(name = "ROOMID")
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
-    private long roomId;
+    long roomId;
+    
     private String number;    
     private int capacity;
     @ManyToOne
@@ -35,6 +37,7 @@ public abstract class Room {
         this.capacity = 0;
         this.building = null;
         this.reservations=new ArrayList<>();
+        this.roomId=(long)(Math.random()*10000 + 1);
     }
     
     public Room( Building building, String number, int capacity) {
@@ -42,12 +45,13 @@ public abstract class Room {
         this.building = building;
         this.capacity = capacity;
         this.reservations=new ArrayList<>();
+        this.roomId=(long)(Math.random()*10000 + 1);
     }
 
     public int getCapacity() {
         return capacity;
     }
-
+    
     public String getNumber() {
         return number;
     }
@@ -76,7 +80,9 @@ public abstract class Room {
         return building;
     }
 
-  
+    public void setReservation(Reservation r){
+        this.reservations.add(r);
+    }
 
     public List<Reservation> getReservations() {
         return reservations;

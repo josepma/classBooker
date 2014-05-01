@@ -41,21 +41,20 @@ public class SpaceDAOImpl implements SpaceDAO{
 
     @Override
     public void addRoom(Room room) throws PersistException, IncorrectRoomException, AlreadyExistingRoomException,AlreadyExistingBuildingException  {
-     
+       try{
             em.getTransaction().begin();
-          
-            if(checkExistingBuilding(room.getBuilding())){              
-                    throw new AlreadyExistingBuildingException();
-                
+            if (!buildingExist(room.getBuilding())){
+                throw new AlreadyExistingBuildingException();
             }
-            if(checkExistingRoom(room)){              
-                    throw new AlreadyExistingRoomException();
-                
+            if (roomExist(room)){
+                throw new AlreadyExistingRoomException();
             }
-
             em.persist(room);
             em.getTransaction().commit();
             
+           } catch (PersistenceException e) {
+            throw e;
+        } 
         
     }
 
@@ -63,11 +62,12 @@ public class SpaceDAOImpl implements SpaceDAO{
     @Override
     public Room getRoomById(long id) {
         Room room = null;
-       
+        try{
         em.getTransaction().begin();
-        room = (Room) em.find(Room.class, id);
+        room = (Room) em.find(Room.class, id);        
         em.getTransaction().commit();
-        
+        }catch (PersistenceException e) {
+            throw e;}
         return room;
     }
 
@@ -86,18 +86,18 @@ public class SpaceDAOImpl implements SpaceDAO{
     
     }
 
+  
     @Override
-    public void addBuilding(Building building) throws PersistException, IncorrectBuildingException, AlreadyExistingBuildingException {
-            em.getTransaction().begin();          
-            if(checkExistingBuilding(building)){
-              
-                    throw new AlreadyExistingBuildingException();
-                
-            }
-
+    public void addBuilding(Building building)  throws PersistException, 
+                                                IncorrectBuildingException,
+                                                AlreadyExistingBuildingException,
+                                                AlreadyExistingRoomException {
+            try{
+            em.getTransaction().begin();       
+            checkExistingBuildingOrRoom(building);
             em.persist(building);
             em.getTransaction().commit();
-            System.out.print(".");
+            }catch (PersistenceException e) {}
     } 
 
     @Override
@@ -136,12 +136,31 @@ public class SpaceDAOImpl implements SpaceDAO{
 
     @Override
     public List<Room> getAllRoomsOfOneType(String Type) throws IncorrectTypeException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Room> rooms = null;
+        Query query;
+        try{
+            em.getTransaction().begin();
+            query = em.createQuery("SELECT r FROM "+ Type+" r");
+            rooms = (List<Room>) query.getResultList();
+            em.getTransaction().commit();            
+        }catch(PersistenceException e){}
+        return rooms;
     }
 
     @Override
     public List<Room> getAllRoomsOfOneTypeAndOneBuilding(String Type, Building building) throws IncorrectBuildingException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Room> rooms = null;
+        Query query;
+        try{
+            em.getTransaction().begin();
+            query = em.createQuery("SELECT r FROM "+ Type+" r");
+            rooms = (List<Room>) query.getResultList();
+            em.getTransaction().commit();            
+        }catch(PersistenceException e){}
+         for(Room r:rooms){
+             if(r.getBuilding()!=building)rooms.remove(r);
+         }
+        return rooms;
     }
     
     @Override
@@ -176,5 +195,35 @@ public class SpaceDAOImpl implements SpaceDAO{
     public List<Room> getAllRoomsByTypeAndCapacity(String type, int capacity, String buildingName) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    private void checkExistingBuildingOrRoom(Building building) throws AlreadyExistingRoomException, AlreadyExistingBuildingException {
+        if(buildingExist(building))
+        {
+            
+            throw new AlreadyExistingBuildingException();
+            
+        }
+        if(roomsExist(building.getRooms()))
+            throw new AlreadyExistingRoomException();
+    }
+
+    private boolean roomsExist(List<Room> rooms) {
+       for(Room r : rooms){
+            Room room = (Room) em.find(Room.class, r.getRoomId());
+            if(room != null)
+                return true;
+        }
+        
+        return false;
+    }
+
+    private boolean buildingExist(Building building) {
+        
+        return em.find(Building.class, building.getBuildingName())!=null;}
+    
+
+   private boolean roomExist(Room room) {
+        
+        return em.find(Room.class, room.getRoomId())!=null;}
     
 }

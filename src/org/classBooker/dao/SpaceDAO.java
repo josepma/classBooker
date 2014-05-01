@@ -60,7 +60,8 @@ public interface SpaceDAO {
      */
     void addBuilding(Building building)throws PersistException, 
                                                 IncorrectBuildingException,
-                                                AlreadyExistingBuildingException;
+                                                AlreadyExistingBuildingException,
+                                                AlreadyExistingRoomException;
     
     /**
      *
