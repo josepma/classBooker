@@ -122,6 +122,6 @@ public interface SpaceDAO {
                                             Building building)
                                             throws IncorrectBuildingException;
    
-    Room getRoomByNbAndBuilding(String roomNb, String buildingName);
-    List<Room> getAllRoomsByTypeAndCapacity(String type, int capacity, String buildingName);
+    Room getRoomByNbAndBuilding(String roomNb, String buildingName)throws IncorrectBuildingException, IncorrectRoomException;
+    List<Room> getAllRoomsByTypeAndCapacity(String type, int capacity, String buildingName)throws IncorrectBuildingException;
 }
