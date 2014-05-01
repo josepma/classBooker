@@ -139,6 +139,9 @@ public class SpaceDAOImpl implements SpaceDAO{
     public List<Room> getAllRoomsOfOneType(String Type) throws IncorrectTypeException {
         List<Room> rooms = null;
         Query query;
+      
+        if(!"MeetingRoom".equals(Type)&&!"LaboratoryRoom".equals(Type)&&!"ClassRoom".equals(Type))
+            throw new IncorrectTypeException();
         try{
             em.getTransaction().begin();
             query = em.createQuery("SELECT r FROM "+ Type+" r");
@@ -152,6 +155,7 @@ public class SpaceDAOImpl implements SpaceDAO{
     public List<Room> getAllRoomsOfOneTypeAndOneBuilding(String Type, Building building) throws IncorrectBuildingException {
         List<Room> roomsOneType = null;
         List<Room> roomsOneTypeOneBuilding =new ArrayList();
+        
         Query query;
         try{
             em.getTransaction().begin();

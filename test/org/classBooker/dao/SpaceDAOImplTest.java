@@ -15,6 +15,8 @@ import javax.persistence.Query;
 import org.classBooker.dao.exception.AlreadyExistingBuildingException;
 import org.classBooker.dao.exception.AlreadyExistingRoomException;
 import org.classBooker.dao.exception.IncorrectRoomException;
+import org.classBooker.dao.exception.IncorrectTimeException;
+import org.classBooker.dao.exception.IncorrectTypeException;
 import org.classBooker.dao.exception.PersistException;
 import org.classBooker.entity.Building;
 import org.classBooker.entity.ClassRoom;
@@ -131,7 +133,7 @@ public class SpaceDAOImplTest {
      */
     @Test
     public void testAddBuilding() throws Exception {
-         Building building2=new Building("FDE");              
+        Building building2=new Building("FDE");              
         sdi.addBuilding(building2);
     }
 
@@ -175,7 +177,6 @@ public class SpaceDAOImplTest {
         
         final List<Building> expected = new ArrayList<Building>();
         expected.add(building);
-        
        
         List<Building> result = sdi.getAllBuildings();
       
@@ -213,7 +214,18 @@ public class SpaceDAOImplTest {
         meetingRooms.add(room3);
         assertEquals(meetingRooms, sdi.getAllRoomsOfOneType("MeetingRoom"));
     }
-
+    @Test(expected=IncorrectTypeException.class)
+    public void testGetAllRoomsOfOneIncorrectType() throws Exception {
+        Room room2 = new LaboratoryRoom(building, "2.1", 10);
+        Room room3 = new MeetingRoom(building, "1.08", 50);
+        Room room4 = new ClassRoom(building, "3.01", 100);
+        sdi.addRoom(room2);
+        sdi.addRoom(room3);
+        sdi.addRoom(room4);
+        List<Room> meetingRooms = new ArrayList<Room>();
+        meetingRooms.add(room3);
+        assertEquals(meetingRooms, sdi.getAllRoomsOfOneType("ComputerRoom"));
+    }
     /**
      * Test of getAllRoomsOfOneTypeAndOneBuilding method, of class SpaceDAOImpl.
      */
