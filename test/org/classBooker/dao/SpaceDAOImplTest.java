@@ -219,10 +219,54 @@ public class SpaceDAOImplTest {
      */
     @Test
     public void testGetAllRoomsOfOneTypeAndOneBuilding() throws Exception {
+        Room room2 = new LaboratoryRoom(building, "2.1", 10);
+        Room room3 = new MeetingRoom(building, "1.08", 50);
+        Room room4 = new ClassRoom(building, "3.01", 100);
+        Building building2=new Building("FDE");
+        Room room5 =new MeetingRoom(building2, "2.01", 30);
+        sdi.addBuilding(building2);
+        sdi.addRoom(room2);
+        sdi.addRoom(room3);
+        sdi.addRoom(room4);
+        sdi.addRoom(room5);
+        List<Room> meetingRooms = new ArrayList<Room>();
+        meetingRooms.add(room3);
+        assertEquals(meetingRooms, sdi.getAllRoomsOfOneTypeAndOneBuilding
+                                                    ("MeetingRoom", building));
     }
     
-    
-   
+       @Test
+        public void testGetAllRoomsOfOneTypeAndOneBuildingandcapacity() throws Exception {
+        Room room2 = new LaboratoryRoom(building, "2.1", 10);
+        Room room3 = new MeetingRoom(building, "1.08", 50);
+        Room room4 = new ClassRoom(building, "3.01", 100);
+        
+        Building building2=new Building("FDE");
+        Room room5 =new MeetingRoom(building2, "2.01", 30);
+        Room room6 = new MeetingRoom(building, "1.08", 70);
+        Room room7 = new MeetingRoom(building2, "1.08", 50);
+        sdi.addBuilding(building2);
+        sdi.addRoom(room2);
+        sdi.addRoom(room3);
+        sdi.addRoom(room4);
+        sdi.addRoom(room5);
+        sdi.addRoom(room6);
+        sdi.addRoom(room7);
+        List<Room> meetingRooms = new ArrayList<Room>();
+        meetingRooms.add(room3);
+        assertEquals(meetingRooms, sdi.getAllRoomsByTypeAndCapacity
+                                ("MeetingRoom", 50, building.getBuildingName())  );
+    }
+       
+   @Test
+    public void testgetRoomByNbAndBuilding() throws Exception {
+      Room room2 = new LaboratoryRoom(building, "2.1", 10);
+      
+      sdi.addRoom(room2);
+     
+      assertEquals(room2, sdi.getRoomByNbAndBuilding("2.1", "EPS"));
+        
+    }
     private EntityManager getEntityManager() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("classBooker");
         return emf.createEntityManager();
