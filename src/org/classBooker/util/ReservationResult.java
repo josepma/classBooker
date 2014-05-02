@@ -20,6 +20,15 @@ public class ReservationResult {
     private List<Room> suggestions;
     private ReservationUser rUser;
 
+    public ReservationResult(Reservation reservation, ReservationUser rUser) {
+        this.reservation = reservation;
+        this.rUser = rUser;
+    }
+
+    public ReservationResult(List<Room> suggestions) {
+        this.suggestions = suggestions;
+    }
+    
     public Reservation getReservation() {
         return reservation;
     }

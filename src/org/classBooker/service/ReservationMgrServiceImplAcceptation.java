@@ -11,6 +11,7 @@ import java.util.List;
 import org.classBooker.dao.ReservationDAO;
 import org.classBooker.dao.SpaceDAO;
 import org.classBooker.dao.UserDAO;
+import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectReservationException;
 import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectTypeException;
@@ -92,7 +93,7 @@ public class ReservationMgrServiceImplAcceptation implements ReservationMgrServi
     }
 
     @Override
-    public List<Room> suggestionSpace(String roomNb, String building) throws IncorrectTypeException {
+    public List<Room> suggestionSpace(String roomNb, String building) throws IncorrectTypeException, IncorrectBuildingException, IncorrectRoomException {
         Room room = spaceDao.getRoomByNbAndBuilding(roomNb, building);
         List<Room> suggestedRooms = spaceDao.getAllRoomsByTypeAndCapacity(room.getClass().toString(),room.getCapacity(), building);
 
@@ -117,8 +118,16 @@ public class ReservationMgrServiceImplAcceptation implements ReservationMgrServi
 
 
     @Override
-    public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws Exception{
+        Reservation reservation = makeReservationBySpace(roomNb, buildingName, nif, resDate);
+         
+        if(reservation != null){
+            ReservationUser reservationUser = (ReservationUser) userDao.getUserByNif(nif);
+            return new ReservationResult(reservation, reservationUser);
+        }
+         
+        List<Room> suggestedRooms = suggestionSpace(roomNb, buildingName);
+        return new ReservationResult(suggestedRooms);
     }
 
 }
