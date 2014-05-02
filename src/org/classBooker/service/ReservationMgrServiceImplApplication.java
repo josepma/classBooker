@@ -40,11 +40,8 @@ public class ReservationMgrServiceImplApplication implements ReservationMgrServi
              datetime = initialTime;
             if(room == null) throw new IncorrectRoomException();
             if(user == null || !(user instanceof ReservationUser)) throw new IncorrectUserException();
-            //if(datetime.isBeforeNow())throw new IncorrectTimeException();
-            
-            Reservation reservation = rDao.getReservationByDateRoomBulding(datetime, room.getNumber(), room.getBuilding().getBuildingName());
-          
-            if(reservation != null) return null;
+            //if(datetime.isBeforeNow())throw new IncorrectTimeException()
+            if(alreadyExistingReservation(datetime,room)) return null;
             else return new Reservation(datetime, (ReservationUser)user, room);
     }
 
@@ -111,7 +108,7 @@ public class ReservationMgrServiceImplApplication implements ReservationMgrServi
 
     @Override
     public ReservationUser getCurrentUserOfDemandedRoom(String roomNb, String building, DateTime datetime) throws IncorrectRoomException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
     
     public void setUserDao(UserDAO uDao){
@@ -125,12 +122,12 @@ public class ReservationMgrServiceImplApplication implements ReservationMgrServi
         this.sDao = sDao;
     }
 
-    private Room checkRoom(long roomId) {
-        return sDao.getRoomById(roomId);
-    }
-
     public void setDatetime(DateTime datetime) {
         this.datetime = datetime;
+    }
+
+    private boolean alreadyExistingReservation(DateTime datetime, Room room) {
+        return rDao.getReservationByDateRoomBulding(datetime, room.getNumber(), room.getBuilding().getBuildingName())!=null;
     }
     
     
