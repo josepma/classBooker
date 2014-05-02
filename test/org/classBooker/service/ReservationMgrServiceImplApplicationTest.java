@@ -69,19 +69,19 @@ public class ReservationMgrServiceImplApplicationTest {
     
     @Test(expected = IncorrectRoomException.class)
     public void testIncorrectRoomId() throws Exception {
-        makeReservationExpectations(null,null,null);
+         checkUserAndRoomExpetations(null,null);
         rmgr.makeReservationBySpace(roomId, nif, date);
     }
     
      @Test(expected = IncorrectUserException.class)
     public void testIncorrectUserDontExist() throws Exception {
-        makeReservationExpectations(room,null,null);
+         checkUserAndRoomExpetations(room,null);
         rmgr.makeReservationBySpace(roomId, nif, date);
     }
     
      @Test(expected = IncorrectUserException.class)
     public void testIncorrectUserIsNotReservationUser() throws Exception {
-        makeReservationExpectations(room,staff,null);
+        checkUserAndRoomExpetations(room,staff);
         rmgr.makeReservationBySpace(roomId, nif, date);
     }
     
@@ -115,13 +115,18 @@ public class ReservationMgrServiceImplApplicationTest {
 
     private void makeReservationExpectations(final Room room, final User user,final Reservation reservation) {
         context.checking(new Expectations(){{ 
-            allowing(sDao).getRoomById(roomId);will(returnValue(room));
-            allowing(uDao).getUserByNif(nif);will(returnValue(user));
-            allowing(rDao).getReservationByDateRoomBulding(date, "12345", "nameBuilding");will(returnValue(reservation));
+            oneOf(sDao).getRoomById(roomId);will(returnValue(room));
+            oneOf(uDao).getUserByNif(nif);will(returnValue(user));
+            oneOf(rDao).getReservationByDateRoomBulding(date, "12345", "nameBuilding");will(returnValue(reservation));
             
          }});    
     }
 
-   
+   private void checkUserAndRoomExpetations(final Room room,final User user){
+       context.checking(new Expectations(){{ 
+            oneOf(sDao).getRoomById(roomId);will(returnValue(room));
+            oneOf(uDao).getUserByNif(nif);will(returnValue(user)); 
+         }});    
+   }
     
 }
