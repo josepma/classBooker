@@ -90,7 +90,7 @@ public class ReservationMgrServiceImplAcceptationTest {
     }
     
     @Test(expected = IncorrectTypeException.class)
-    public void IncorrectTypeOfRoomThrowsException() throws IncorrectTypeException{
+    public void IncorrectTypeOfRoomThrowsException() throws IncorrectTypeException, IncorrectBuildingException, IncorrectRoomException{
         context.checking(new Expectations(
         ));
         List<Room> suggestedRooms = rms.suggestionSpace(room.getNumber(), building.getBuildingName());
