@@ -34,11 +34,11 @@ public class Reservation {
     
     
     @ManyToOne
-    @JoinColumn(name = "USERT", referencedColumnName = "name")
+    @JoinColumn(name = "USERT", referencedColumnName = "NIF")
     private ReservationUser rUser;
     
     @ManyToOne
-    @JoinColumn(name = "ROOM", referencedColumnName = "ID")
+    @JoinColumn(name = "ROOM", referencedColumnName = "ROOMID")
     private Room room;
 
     public Reservation() {

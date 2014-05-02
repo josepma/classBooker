@@ -43,14 +43,16 @@ public class SpaceDAOImpl implements SpaceDAO{
     public void addRoom(Room room) throws PersistException, IncorrectRoomException, AlreadyExistingRoomException,AlreadyExistingBuildingException  {
        try{
             em.getTransaction().begin();
-            if (!buildingExist(room.getBuilding())){
+            Building building = getBuildingByName(room.getBuilding().getBuildingName());
+            if (building==null){
                 throw new AlreadyExistingBuildingException();
             }
             if (roomExist(room)){
                 throw new AlreadyExistingRoomException();
             }
-            room.getBuilding().setRoom(room);
+            
             em.persist(room);
+            building.getRooms().add(room);
             em.getTransaction().commit();
             
            } catch (PersistenceException e) {

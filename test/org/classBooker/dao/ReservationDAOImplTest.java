@@ -72,7 +72,6 @@ public class ReservationDAOImplTest {
         
         em.getTransaction().begin();
         em.persist(user);
-        em.persist(room);
         em.persist(building);
         em.getTransaction().commit();
         
