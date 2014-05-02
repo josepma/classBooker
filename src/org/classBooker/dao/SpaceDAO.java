@@ -12,6 +12,7 @@ import org.classBooker.dao.exception.AlreadyExistingRoomException;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectTypeException;
+import org.classBooker.dao.exception.NonBuildingException;
 import org.classBooker.dao.exception.PersistException;
 import org.classBooker.entity.Building;
 import org.classBooker.entity.Room;
@@ -31,7 +32,8 @@ public interface SpaceDAO {
      * @throws org.classBooker.dao.exception.AlreadyExistingRoomException
      */
     void addRoom (Room room) throws PersistException, IncorrectRoomException,
-                                AlreadyExistingRoomException, AlreadyExistingBuildingException;
+                                AlreadyExistingRoomException, AlreadyExistingBuildingException,
+                                NonBuildingException;
     /**
      * Remove a exisiting Room
      * @param room

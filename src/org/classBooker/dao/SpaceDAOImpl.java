@@ -18,6 +18,7 @@ import org.classBooker.dao.exception.AlreadyExistingRoomException;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectTypeException;
+import org.classBooker.dao.exception.NonBuildingException;
 import org.classBooker.dao.exception.PersistException;
 import org.classBooker.entity.Building;
 import org.classBooker.entity.Room;
@@ -40,12 +41,12 @@ public class SpaceDAOImpl implements SpaceDAO{
 
 
     @Override
-    public void addRoom(Room room) throws PersistException, IncorrectRoomException, AlreadyExistingRoomException,AlreadyExistingBuildingException  {
+    public void addRoom(Room room) throws PersistException, IncorrectRoomException, AlreadyExistingRoomException,AlreadyExistingBuildingException, NonBuildingException  {
        try{
             em.getTransaction().begin();
             Building building = getBuildingByName(room.getBuilding().getBuildingName());
             if (building==null){
-                throw new AlreadyExistingBuildingException();
+                throw new NonBuildingException();
             }
             if (roomExist(room)){
                 throw new AlreadyExistingRoomException();
@@ -104,7 +105,7 @@ public class SpaceDAOImpl implements SpaceDAO{
     } 
 
     @Override
-    public Building getBuildingByName(String name) throws IncorrectBuildingException {
+    public Building getBuildingByName(String name)  {
        Building building = null;
        
         em.getTransaction().begin();
