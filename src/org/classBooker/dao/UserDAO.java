@@ -37,6 +37,7 @@ public interface UserDAO {
      * @return
      */
     
+    //TODO: return List<User>
     User getUserByName(String name);
 
     /**

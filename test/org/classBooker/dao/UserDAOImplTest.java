@@ -47,6 +47,8 @@ public class UserDAOImplTest {
         expected.add(us);
     }
     
+    //TODO: test addUser
+    //      add repeated user
     
     @Test
     public void testGetUserByNif() throws Exception {
@@ -61,6 +63,8 @@ public class UserDAOImplTest {
         assertEquals("These two users should be equals",u,u2);
         
     }
+    
+    //TODO: add a test returning more than one user by name
     
     @Test
     public void testGetAllUsers() throws Exception {
