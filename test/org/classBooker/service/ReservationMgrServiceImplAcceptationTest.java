@@ -12,6 +12,8 @@ import java.util.List;
 import org.classBooker.dao.ReservationDAO;
 import org.classBooker.dao.SpaceDAO;
 import org.classBooker.dao.UserDAO;
+import org.classBooker.dao.exception.IncorrectBuildingException;
+import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectTypeException;
 import org.classBooker.entity.Building;
 import org.classBooker.entity.ClassRoom;
@@ -68,7 +70,7 @@ public class ReservationMgrServiceImplAcceptationTest {
     }
 
     @Test
-    public void suggestedSpacesAssertRequirements() throws IncorrectTypeException{
+    public void suggestedSpacesAssertRequirements() throws IncorrectTypeException, IncorrectBuildingException, IncorrectRoomException{
         
         lRooms = new ArrayList<>();
         lRooms.add(room);

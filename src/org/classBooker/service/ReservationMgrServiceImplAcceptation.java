@@ -119,7 +119,8 @@ public class ReservationMgrServiceImplAcceptation implements ReservationMgrServi
 
     @Override
     public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws Exception{
-        Reservation reservation = makeReservationBySpace(roomNb, buildingName, nif, resDate);
+        Room room = spaceDao.getRoomByNbAndBuilding(roomNb, buildingName);
+        Reservation reservation = makeReservationBySpace(room.getRoomId(), nif, resDate);
          
         if(reservation != null){
             ReservationUser reservationUser = (ReservationUser) userDao.getUserByNif(nif);
