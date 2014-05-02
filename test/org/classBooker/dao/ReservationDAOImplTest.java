@@ -15,6 +15,8 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import org.classBooker.dao.exception.IncorrectReservationException;
+import org.classBooker.dao.exception.IncorrectRoomException;
+import org.classBooker.dao.exception.IncorrectUserException;
 import org.classBooker.entity.Building;
 import org.classBooker.entity.MeetingRoom;
 import org.classBooker.entity.ProfessorPas;
@@ -87,10 +89,10 @@ public class ReservationDAOImplTest {
         em = getEntityManager();
         em.getTransaction().begin();
         
-        Query query  = em.createQuery("DELETE FROM RESERVATION");
-        Query query2 = em.createQuery("DELETE FROM USER");
-        Query query3 = em.createQuery("DELETE FROM ROOM");
-        Query query4 = em.createQuery("DELETE FROM BUILDING");
+        Query query  = em.createQuery("DELETE FROM Reservation");
+        Query query2 = em.createQuery("DELETE FROM User");
+        Query query3 = em.createQuery("DELETE FROM Room");
+        Query query4 = em.createQuery("DELETE FROM Building");
         int deleteRecords = query.executeUpdate();
         deleteRecords = query2.executeUpdate();
         deleteRecords = query3.executeUpdate();
@@ -100,12 +102,10 @@ public class ReservationDAOImplTest {
         em.close();
         System.out.println("All records have been deleted.");
     }
-
-    /**
-     * Test of addReservation method, of class ReservationDAOImpl.
-     */
+    
+    
     @Test
-    public void testAddReservationOfReservation() throws Exception {
+    public void testAddReservationByReservation() throws Exception {
         
         rDao.addReservation(reservation);
         
@@ -114,6 +114,22 @@ public class ReservationDAOImplTest {
         
         assertEquals(reservation, reservationDB);
         
+    }
+    
+    @Test(expected = IncorrectUserException.class)
+    public void testAddReservationNotExistUser() throws Exception {
+        ReservationUser user1 = new ProfessorPas("4765665M", "random@professor.ly", "Manolo");
+        Reservation reservation1 = new Reservation(new DateTime(2014, 05, 11, 13, 00), user1, room);
+        rDao.addReservation(reservation1);
+    }
+    
+    @Test(expected = IncorrectRoomException.class)
+    public void testAddReservationNotExistRoom() throws Exception {
+        Room room1 = new MeetingRoom();
+        room1.setBuilding(building);
+        room1.setNumber("10");
+        Reservation reservation1 = new Reservation(new DateTime(2014, 05, 11, 13, 00), user, room1);
+        rDao.addReservation(reservation1);
     }
     
     //@Test

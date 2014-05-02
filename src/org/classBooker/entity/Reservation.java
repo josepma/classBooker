@@ -24,7 +24,7 @@ import org.joda.time.DateTime;
 public class Reservation {
     @Id
     @Column (name="IDENTIFIER")
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    //@GeneratedValue(generator ="reservationSeq" ,strategy=GenerationType.SEQUENCE)
     private long reservationId;
         
     @Column (name="DATE")
@@ -34,20 +34,22 @@ public class Reservation {
     
     
     @ManyToOne
-    @JoinColumn(name = "USERT", referencedColumnName = "name")
+    @JoinColumn(name = "USERT", referencedColumnName = "NIF")
     private ReservationUser rUser;
     
     @ManyToOne
-    @JoinColumn(name = "ROOM", referencedColumnName = "ID")
+    @JoinColumn(name = "ROOM", referencedColumnName = "ROOMID")
     private Room room;
 
     public Reservation() {
+        this.reservationId = (long)(Math.random()*10000 + 1);
     }
 
     public Reservation(DateTime reservationDate, ReservationUser rUser, Room room) {
         this.reservationDate = reservationDate.toCalendar(Locale.getDefault());
         this.rUser = rUser;
         this.room = room;
+        this.reservationId = (long)(Math.random()*10000 + 1);
     }
 
     public long getReservationId() {

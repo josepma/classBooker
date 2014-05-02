@@ -41,9 +41,10 @@ public class ReservationDAOImpl implements ReservationDAO{
                                                IncorrectRoomException {
         
         em.getTransaction().begin();       
-        //checkReservation(reservation);
+        checkReservation(reservation);
         em.persist(reservation);
         reservation.getrUser().getReservations().add(reservation);
+        reservation.getRoom().getReservations().add(reservation);
         em.getTransaction().commit();
     }
     
@@ -90,31 +91,29 @@ public class ReservationDAOImpl implements ReservationDAO{
     
     private void checkReservation(Reservation reservation) throws IncorrectReservationException, IncorrectRoomException, IncorrectUserException{
         
-        checkRoom(reservation);
-        checkUser(reservation);
+        checkRoom(reservation.getRoom());
+        checkUser(reservation.getrUser());
         
     }
 
-    private void checkRoom(Reservation reservation) throws IncorrectRoomException {
-        
-        Room room = reservation.getRoom();
+    private void checkRoom(Room room) throws IncorrectRoomException {
         //modify
         if(room == null || room.getNumber() == null) 
             throw new IncorrectRoomException();
         
-        if(em.find(Room.class, reservation)== null)
+        //System.err.println(em.find(Room.class, room));
+        if(!em.contains(room))
             throw new IncorrectRoomException();
         
         
     }
 
-    private void checkUser(Reservation reservation) throws IncorrectUserException {
-        User user = reservation.getrUser();
+    private void checkUser(User user) throws IncorrectUserException {
         
         if(user == null || user.getNif() == null) 
             throw new IncorrectUserException();
         
-        if(em.find(User.class, reservation)== null)
+        if(!em.contains(user))
             throw new IncorrectUserException();
         
     }
@@ -125,7 +124,7 @@ public class ReservationDAOImpl implements ReservationDAO{
         if(building == null || building.getBuildingName() == null) 
             throw new IncorrectBuildingException();
         
-        if(em.find(Room.class, building)== null)
+        if(!em.contains(building))
             throw new IncorrectBuildingException();
         
     }
