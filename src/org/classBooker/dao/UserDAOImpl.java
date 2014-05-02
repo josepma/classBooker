@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import org.classBooker.dao.exception.AlreadyExistingUserException;
 import org.classBooker.dao.exception.IncorrectUserException;
 import org.classBooker.dao.exception.PersistException;
 import org.classBooker.entity.User;
@@ -25,8 +26,8 @@ public class UserDAOImpl implements UserDAO{
     private String persistenceUnit;
     
     public UserDAOImpl(){
-        emf = null;
-        persistenceUnit = null;
+        emf = Persistence.createEntityManagerFactory("classBooker");
+        persistenceUnit = "classBooker";
     }
     
     public UserDAOImpl(String pu){
@@ -48,9 +49,11 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public void addUser(User user) throws PersistException, 
-            IncorrectUserException {
+    public void addUser(User user) throws AlreadyExistingUserException {
         EntityManager em = this.getEntityManager();
+        User u = getUserByNif(user.getNif());
+        if(u!=null)
+            throw new AlreadyExistingUserException();
         try{
             em.getTransaction().begin();
             em.persist(user);
@@ -82,8 +85,8 @@ public class UserDAOImpl implements UserDAO{
     }
     
     @Override
-    public User getUserByName(String name) {
-        User u = null;
+    public List<User> getUsersByName(String name) {
+        List<User> users = null;
         
         EntityManager em = emf.createEntityManager();
         
@@ -91,14 +94,14 @@ public class UserDAOImpl implements UserDAO{
             em.getTransaction().begin();
             Query q = em.createQuery
                     ("SELECT u FROM User u WHERE u.name ='"+name+"'");
-            u = (User) q.getSingleResult();
+            users = q.getResultList();
             em.getTransaction().commit();
         }
         finally{
             if(em.isOpen())
                 em.close();
         }
-        return u;
+        return users;
     }
 
     @Override
