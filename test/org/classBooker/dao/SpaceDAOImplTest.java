@@ -44,12 +44,10 @@ import static org.junit.Assert.*;
 public class SpaceDAOImplTest {
      EntityManager ema;
      SpaceDAOImpl sdi;
-     Room room;
-     Room room2;
-     Building building;
-     Building building2;
+     Room room, room2, labRoom, meetRoom, classRoom;
+     Building building, building2;
      private Query query;
-     
+
     public SpaceDAOImplTest() {
         this.sdi=new SpaceDAOImpl();   
     }
@@ -63,7 +61,7 @@ public class SpaceDAOImplTest {
         ema.persist(room);
         ema.persist(building);    
         ema.getTransaction().commit();
-        sdi.setEm(ema);
+        sdi.setEm(ema); 
     }
 
     
@@ -189,14 +187,14 @@ public class SpaceDAOImplTest {
      */
     @Test
     public void testGetAllRoomsOfOneType() throws Exception {
-        room2 = new LaboratoryRoom(building, "2.1", 10);
-        Room room3 = new MeetingRoom(building, "1.08", 50);
-        Room room4 = new ClassRoom(building, "3.01", 100);
-        sdi.addRoom(room2);
-        sdi.addRoom(room3);
-        sdi.addRoom(room4);
+        labRoom = new LaboratoryRoom(building, "2.1", 10);
+        meetRoom = new MeetingRoom(building, "1.08", 50);
+        classRoom = new ClassRoom(building, "3.01", 100);
+        sdi.addRoom(labRoom);
+        sdi.addRoom(meetRoom);
+        sdi.addRoom(classRoom);
         List<Room> meetingRooms = new ArrayList<Room>();
-        meetingRooms.add(room3);
+        meetingRooms.add(meetRoom);
         building.setRooms(meetingRooms);
         Set <Room> roomsSet = new HashSet<>(meetingRooms);
         Set <Room> result = new HashSet <>(sdi.getAllRoomsOfOneType("MeetingRoom"));
@@ -204,14 +202,14 @@ public class SpaceDAOImplTest {
     }
     @Test(expected=IncorrectTypeException.class)
     public void testGetAllRoomsOfOneIncorrectType() throws Exception {
-        Room room2 = new LaboratoryRoom(building, "2.1", 10);
-        Room room3 = new MeetingRoom(building, "1.08", 50);
-        Room room4 = new ClassRoom(building, "3.01", 100);
-        sdi.addRoom(room2);
-        sdi.addRoom(room3);
-        sdi.addRoom(room4);
+        labRoom = new LaboratoryRoom(building, "2.1", 10);
+        meetRoom = new MeetingRoom(building, "1.08", 50);
+        classRoom = new ClassRoom(building, "3.01", 100);
+        sdi.addRoom(labRoom);
+        sdi.addRoom(meetRoom);
+        sdi.addRoom(classRoom);
         List<Room> meetingRooms = new ArrayList<Room>();
-        meetingRooms.add(room3);
+        meetingRooms.add(meetRoom);
         assertEquals(meetingRooms, sdi.getAllRoomsOfOneType("ComputerRoom"));
     }
     /**
@@ -219,18 +217,18 @@ public class SpaceDAOImplTest {
      */
     @Test
     public void testGetAllRoomsOfOneTypeAndOneBuilding() throws Exception {
-        Room room2 = new LaboratoryRoom(building, "2.1", 10);
-        Room room3 = new MeetingRoom(building, "1.08", 50);
-        Room room4 = new ClassRoom(building, "3.01", 100);
         Building building2=new Building("FDE");
+        labRoom = new LaboratoryRoom(building, "2.1", 10);
+        meetRoom = new MeetingRoom(building, "1.08", 50);
+        classRoom = new ClassRoom(building, "3.01", 100);
         Room room5 =new MeetingRoom(building2, "2.01", 30);
         sdi.addBuilding(building2);
-        sdi.addRoom(room2);
-        sdi.addRoom(room3);
-        sdi.addRoom(room4);
+        sdi.addRoom(labRoom);
+        sdi.addRoom(meetRoom);
+        sdi.addRoom(classRoom);
         sdi.addRoom(room5);
         List<Room> meetingRooms = new ArrayList<Room>();
-        meetingRooms.add(room3);
+        meetingRooms.add(meetRoom);
         building.setRooms(meetingRooms);
         Set <Room> roomsSet = new HashSet<>(meetingRooms);
         Set <Room> result = new HashSet<>(sdi.getAllRoomsOfOneTypeAndOneBuilding("MeetingRoom", building));
@@ -239,23 +237,22 @@ public class SpaceDAOImplTest {
     
        @Test
         public void testGetAllRoomsOfOneTypeAndOneBuildingandcapacity() throws Exception {
-        Room room2 = new LaboratoryRoom(building, "2.1", 10);
-        Room room3 = new MeetingRoom(building, "1.08", 50);
-        Room room4 = new ClassRoom(building, "3.01", 100);
-        
+        labRoom = new LaboratoryRoom(building, "2.1", 10);
+        meetRoom = new MeetingRoom(building, "1.08", 50);
+        classRoom = new ClassRoom(building, "3.01", 100);
         Building building2=new Building("FDE");
         Room room5 =new MeetingRoom(building2, "2.01", 30);
         Room room6 = new MeetingRoom(building, "1.08", 70);
         Room room7 = new MeetingRoom(building2, "1.08", 50);
         sdi.addBuilding(building2);
-        sdi.addRoom(room2);
-        sdi.addRoom(room3);
-        sdi.addRoom(room4);
+        sdi.addRoom(labRoom);
+        sdi.addRoom(meetRoom);
+        sdi.addRoom(classRoom);
         sdi.addRoom(room5);
         sdi.addRoom(room6);
         sdi.addRoom(room7);
         List<Room> meetingRooms = new ArrayList<Room>();
-        meetingRooms.add(room3);
+        meetingRooms.add(meetRoom);
         building.setRooms(meetingRooms);
         Set <Room> roomsSet = new HashSet<>(meetingRooms);
         Set <Room> result = new HashSet<>(sdi.getAllRoomsByTypeAndCapacity("MeetingRoom", 50, building.getBuildingName()));
@@ -264,9 +261,9 @@ public class SpaceDAOImplTest {
        
    @Test
     public void testgetRoomByNbAndBuilding() throws Exception {
-      Room room2 = new LaboratoryRoom(building, "2.1", 10);
-      sdi.addRoom(room2);
-      assertEquals(room2, sdi.getRoomByNbAndBuilding("2.1", "EPS"));  
+      labRoom = new LaboratoryRoom(building, "2.1", 10);
+      sdi.addRoom(labRoom);
+      assertEquals(labRoom, sdi.getRoomByNbAndBuilding("2.1", "EPS"));  
     }
     
     private EntityManager getEntityManager() {
