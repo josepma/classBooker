@@ -62,6 +62,7 @@ public class ReservationMgrServiceImplQueryTest {
         oneOf(resDao).getReservationById(id);
         will(returnValue(null));
       }});
+      
      
     }
    
@@ -78,15 +79,17 @@ public class ReservationMgrServiceImplQueryTest {
     }
     
     @Test
-    public void oneReservationByDateRoomBuilding(){
+    public void oneReservationByDateRoomBuilding() throws Exception{
        
-       final String roomId = "2.04";
+       final String roomId = "2.4";
        final String building = "EPS";
        
        context.checking(new Expectations(){{
         oneOf(resDao).getReservationByDateRoomBulding(dateTime, roomId, building);
         will (returnValue(reser));
        }});
+       
+       rmsQ.getReservations(roomId);
        
     }
     
