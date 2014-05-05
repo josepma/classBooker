@@ -74,6 +74,7 @@ public class ReservationMgrServiceImplAcceptationTest {
         rUser = new ProfessorPas();
         reservation = new Reservation(dateTime, rUser, room);
         rResult = new ReservationResult(reservation, rUser);
+        room.setReservation(reservation);
         
         rms.setSpaceDao(sDao);
         rms.setReservationDao(rDao);
@@ -84,7 +85,7 @@ public class ReservationMgrServiceImplAcceptationTest {
     }
 
     @Test
-    public void suggestedSpacesAssertRequirements() throws IncorrectTypeException, IncorrectBuildingException, IncorrectRoomException {
+    public void suggestedSpacesAssertRequirements() throws Exception {
 
         lRooms = new ArrayList<>();
         lRooms.add(room);
@@ -97,39 +98,40 @@ public class ReservationMgrServiceImplAcceptationTest {
                 will(returnValue(lRooms));
             }
         });
-        List<Room> suggestedRooms = rms.suggestionSpace(room.getNumber(), building.getBuildingName());
-        System.out.println("ee" + suggestedRooms.size());
+        List<Room> suggestedRooms = rms.suggestionSpace(room.getNumber(), building.getBuildingName(), dateTime);
         for (Room r : suggestedRooms) {
             assertEquals("Different room types.", r.getClass(), room.getClass());
             assertTrue("Less capacity than room intended to reserve.",
                     r.getCapacity() >= room.getCapacity());
+            checkNotReservedRoom(r);
         }
     }
 
-    //@Test(expected = IncorrectTypeException.class)
-    public void IncorrectTypeOfRoomThrowsException() throws IncorrectTypeException, IncorrectBuildingException, IncorrectRoomException {
+    @Test
+    public void IncorrectTypeOfRoomReturnsNull() throws Exception {
         context.checking(new Expectations() {
             {
                 oneOf(sDao).getRoomByNbAndBuilding(room.getNumber(), building.getBuildingName());
                 will(returnValue(room));
                 oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().toString(), room.getCapacity(), building.getBuildingName());
-                will(throwException(new IncorrectTypeException()));
+                will(returnValue(null));
 
             }
         });
-        List<Room> suggestedRooms = rms.suggestionSpace(room.getNumber(), building.getBuildingName());
+        List<Room> suggestedRooms = rms.suggestionSpace(room.getNumber(), building.getBuildingName(), dateTime);
+        assertNull(suggestedRooms);
     }
     @Test
-    public void testAcceptReservation() throws IncorrectBuildingException, IncorrectRoomException, IncorrectTypeException, IncorrectReservationException, IncorrectUserException{
+    public void testAcceptReservation() throws Exception{
         context.checking(new Expectations() {
             {
-                oneOf(rDao).addReservation(with(any(Reservation.class)));
+                oneOf(rDao).addReservation(reservation);
             }
         });        
         rms.acceptReservation(reservation);
     }
     @Test
-    public void testGetCurrentUserOfDemandedRoom() throws IncorrectRoomException{
+    public void testGetCurrentUserOfDemandedRoom() throws Exception{
         context.checking(new Expectations() {
             {
                 oneOf(rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());
@@ -140,16 +142,16 @@ public class ReservationMgrServiceImplAcceptationTest {
         assertEquals(reservation.getrUser(), ru);
     }
     
-    //@Test (expected=IncorrectRoomException.class)
+    @Test 
     public void testGetCurrentUserOfIncorrectRoom() throws IncorrectRoomException{
         context.checking(new Expectations() {
             {
                 oneOf(rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());
-                will(throwException(new IncorrectRoomException()));
+                will(returnValue(null));
             }
         });
         ReservationUser ru = rms.getCurrentUserOfDemandedRoom(room.getNumber(), building.getBuildingName(), dateTime);
-        
+        assertNull(ru);
     }
     //@Test
     public void testCompleteReservation() throws Exception{
@@ -159,5 +161,13 @@ public class ReservationMgrServiceImplAcceptationTest {
             }
         });
         rms.makeCompleteReservationBySpace("", room.getNumber(), building.getBuildingName(), dateTime);
+    }
+
+    private void checkNotReservedRoom(Room room) {
+        List<Reservation> reservations = room.getReservations();
+        for(Reservation r: reservations){
+            assertFalse("Already reserved room in the dateTime.", 
+                    dateTime.equals(r.getReservationDate()));
+        }
     }
 }
