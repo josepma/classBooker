@@ -33,6 +33,15 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
         return resDao.getAllReservation();
     }
     
+    /**
+     * 
+     * 
+     * 
+     * @param resBy
+     * @return
+     * @throws Exception 
+     */
+    
     public List<Reservation> getReservations(String resBy) throws Exception {
         if(isBuilding(resBy)){
             System.out.println("My name is " + resBy);
