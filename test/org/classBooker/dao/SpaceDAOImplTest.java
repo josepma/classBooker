@@ -39,12 +39,10 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author saida
+ * @author saida, genis
  */
 public class SpaceDAOImplTest {
-     
      EntityManager ema;
-     
      SpaceDAOImpl sdi;
      Room room;
      Room room2;
@@ -53,24 +51,19 @@ public class SpaceDAOImplTest {
      private Query query;
      
     public SpaceDAOImplTest() {
-        this.sdi=new SpaceDAOImpl();
-        
+        this.sdi=new SpaceDAOImpl();   
     }
     
     @Before
     public void setUp() {       
         building=new Building("EPS");
         room=new ClassRoom(building, "2.01", 30);        
-      
         ema = getEntityManager();
-        
         ema.getTransaction().begin();
         ema.persist(room);
         ema.persist(building);    
         ema.getTransaction().commit();
-        
         sdi.setEm(ema);
-        
     }
 
     
@@ -78,14 +71,13 @@ public class SpaceDAOImplTest {
      
     @Test 
     public void testAddRoom() throws Exception {
-       
         room2 =new ClassRoom(building, "2.01", 30);
-          
         sdi.addRoom(room2);
         assertTrue(building.getRooms().contains(room2));
         assertEquals(room2.getBuilding(), building);
         assertTrue( sdi.getAllRooms().contains(room2));
     }
+    
     @Test(expected = AlreadyExistingRoomException.class)
     public void testAddExistingRoom() throws Exception{
         building2=new Building("FDE");
@@ -99,9 +91,9 @@ public class SpaceDAOImplTest {
     public void testAddRoomNoneExistingBuilding()throws Exception{
         building2=new Building("FDE");        
         room2= new ClassRoom (building2, "2.01", 30);
-        sdi.addRoom(room2);
-        
+        sdi.addRoom(room2);  
     }
+    
     /**
      * Test of removeRoom method, of class SpaceDAOImpl.
      */
@@ -114,7 +106,6 @@ public class SpaceDAOImplTest {
      */
     @Test
     public void testGetRoomById() {
-       
         assertEquals(room, sdi.getRoomById(room.getRoomId()));
     }
 
@@ -123,16 +114,10 @@ public class SpaceDAOImplTest {
      */
     @Test
     public void testGetAllRooms() {
-        
         final List<Room> expected = new ArrayList<Room>();
         expected.add(room);       
-      
-        
         List<Room> result = sdi.getAllRooms();
-        
-        assertEquals(expected,result);
-        
-        
+        assertEquals(expected,result);  
     }
 
     /**
@@ -170,9 +155,7 @@ public class SpaceDAOImplTest {
      * Test of getBuildingByName method, of class SpaceDAOImpl.
      */
     @Test
-    public void testGetBuildingByName() throws Exception {
-
-               
+    public void testGetBuildingByName() throws Exception {   
         assertEquals(building, sdi.getBuildingByName("EPS"));
     }
 
@@ -181,16 +164,11 @@ public class SpaceDAOImplTest {
      */
     @Test
     public void testGetAllBuildings() {
-        
-        
         final Set<Building> expected = new HashSet<>();
         expected.add(building);
-        
         List<Building> result = sdi.getAllBuildings();
         Set<Building> resultSet= new HashSet(result);
         assertEquals(expected,resultSet);
-        
-        
     }
 
     /**
@@ -198,15 +176,12 @@ public class SpaceDAOImplTest {
      */
     @Test
     public void testGetAllRoomsOfOneBuilding() throws Exception {
-        
-     
         List<Room> rooms = new ArrayList<Room>();
         rooms.add(room);       
         building.setRooms(rooms);
         Set <Room> roomsSet = new HashSet<>(rooms);
         Set <Room> result = new HashSet <>(sdi.getAllRoomsOfOneBuilding(building));
-        assertEquals(roomsSet, result);
-        
+        assertEquals(roomsSet, result);   
     }
 
     /**
@@ -222,7 +197,10 @@ public class SpaceDAOImplTest {
         sdi.addRoom(room4);
         List<Room> meetingRooms = new ArrayList<Room>();
         meetingRooms.add(room3);
-        assertEquals(meetingRooms, sdi.getAllRoomsOfOneType("MeetingRoom"));
+        building.setRooms(meetingRooms);
+        Set <Room> roomsSet = new HashSet<>(meetingRooms);
+        Set <Room> result = new HashSet <>(sdi.getAllRoomsOfOneType("MeetingRoom"));
+        assertEquals(roomsSet, result);
     }
     @Test(expected=IncorrectTypeException.class)
     public void testGetAllRoomsOfOneIncorrectType() throws Exception {
@@ -253,8 +231,10 @@ public class SpaceDAOImplTest {
         sdi.addRoom(room5);
         List<Room> meetingRooms = new ArrayList<Room>();
         meetingRooms.add(room3);
-        assertEquals(meetingRooms, sdi.getAllRoomsOfOneTypeAndOneBuilding
-                                                    ("MeetingRoom", building));
+        building.setRooms(meetingRooms);
+        Set <Room> roomsSet = new HashSet<>(meetingRooms);
+        Set <Room> result = new HashSet<>(sdi.getAllRoomsOfOneTypeAndOneBuilding("MeetingRoom", building));
+        assertEquals(roomsSet,result);
     }
     
        @Test
@@ -276,44 +256,36 @@ public class SpaceDAOImplTest {
         sdi.addRoom(room7);
         List<Room> meetingRooms = new ArrayList<Room>();
         meetingRooms.add(room3);
-        assertEquals(meetingRooms, sdi.getAllRoomsByTypeAndCapacity
-                                ("MeetingRoom", 50, building.getBuildingName())  );
+        building.setRooms(meetingRooms);
+        Set <Room> roomsSet = new HashSet<>(meetingRooms);
+        Set <Room> result = new HashSet<>(sdi.getAllRoomsByTypeAndCapacity("MeetingRoom", 50, building.getBuildingName()));
+        assertEquals(roomsSet, result );
     }
        
    @Test
     public void testgetRoomByNbAndBuilding() throws Exception {
       Room room2 = new LaboratoryRoom(building, "2.1", 10);
-      
       sdi.addRoom(room2);
-     
-      assertEquals(room2, sdi.getRoomByNbAndBuilding("2.1", "EPS"));
-        
+      assertEquals(room2, sdi.getRoomByNbAndBuilding("2.1", "EPS"));  
     }
+    
     private EntityManager getEntityManager() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("classBooker");
         return emf.createEntityManager();
     }
 
-
      @After
     public void tearDown() throws Exception{
-        
         ema = sdi.getEm();
         if (ema.isOpen()) ema.close();
-        
         ema = getEntityManager();
         ema.getTransaction().begin();
-   
         Query query2=ema.createQuery("DELETE FROM Room");
         Query query3=ema.createQuery("DELETE FROM Building");
-  
         int deleteRecords=query2.executeUpdate();
         deleteRecords=query3.executeUpdate();
-      
         ema.getTransaction().commit();
         ema.close();
-        System.out.println("All records have been deleted.");
-         
     }
 
 }
