@@ -7,6 +7,7 @@
 package org.classBooker.service;
 
 import java.util.List;
+import org.classBooker.dao.ReservationDAO;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectReservationException;
 import org.classBooker.dao.exception.IncorrectRoomException;
@@ -20,11 +21,75 @@ import org.joda.time.DateTime;
 
 /**
  *
- * @author sht1
+ * @author sht1, Xurat@
  */
 public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     
-    private Reservation reser;
+    private Reservation res;
+    private ReservationDAO resDao;
+    private ReservationUser resUser;
+    
+    public List<Reservation> getReservations() throws Exception {
+        return resDao.getAllReservation();
+    }
+    
+    public List<Reservation> getReservations(String resBy) throws Exception {
+        if(isBuilding(resBy)){
+            System.out.println("My name is " + resBy);
+            return resDao.getAllReservationByBuilding(resBy); 
+        } else if(isRoom(resBy)){
+            return resDao.getAllReservationByRoom(resBy);
+        } else if(isNif(resBy)){
+            return resDao.getAllReservationByUserNif(resBy);
+        } else {
+            return null;
+        }
+    }
+    
+    public Reservation getReservation(DateTime resDate, 
+            String roomNb, 
+            String buildingName) throws Exception {
+        return resDao.getReservationByDateRoomBulding(resDate, roomNb, buildingName);
+    }
+    
+    private boolean isBuilding (String resBy){
+        String pattern = "[a-zA-Z].*";
+        return resBy.matches(pattern);
+    }
+    
+    private boolean isRoom (String resBy){
+        String pattern = "[0-9]//.[0-9]";
+        return resBy.matches(pattern);
+    }
+    
+    private boolean isNif (String resBy){
+        String pattern = "(\\d{1,8})([a-zA-Z])";
+        return resBy.matches(pattern);
+    }
+
+    public void setRes(Reservation res) {
+        this.res = res;
+    }
+
+    public Reservation getRes() {
+        return res;
+    }
+
+    public void setResDao(ReservationDAO resDao) {
+        this.resDao = resDao;
+    }
+
+    public ReservationDAO getResDao() {
+        return resDao;
+    }
+
+    public void setResUser(ReservationUser resUser) {
+        this.resUser = resUser;
+    }
+
+    public ReservationUser getResUser() {
+        return resUser;
+    }
 
     @Override
     public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws Exception {
@@ -95,5 +160,6 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     public void acceptReservation(Reservation reservation) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
     
 }
