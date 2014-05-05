@@ -21,7 +21,9 @@ import org.jmock.Sequence;
 import java.util.List;
 import java.util.ArrayList;
 import org.classBooker.dao.exception.IncorrectUserException;
+import org.classBooker.entity.ReservationUser;
 import org.joda.time.DateTime;
+import org.junit.Before;
 
 /**
  *
@@ -32,28 +34,31 @@ import org.joda.time.DateTime;
 public class ReservationMgrServiceImplQueryTest {
     
     Mockery context = new JUnit4Mockery();
-    //ReservationUser Ruser;
+//    ReservationUser ser;
     ReservationDAO resDao;
     DateTime dateTime;
-    Reservation reser;
+    Reservation res;
     Sequence seq;
     ReservationMgrServiceImplQuery rmsQ;
    
    
    
-    //@Before
+    @Before
     public void setup(){
         //Ruser = context.mock(ReservationUser.class);
         rmsQ = new ReservationMgrServiceImplQuery();
         resDao = context.mock(ReservationDAO.class);
-        reser = context.mock(Reservation.class);
+        res = context.mock(Reservation.class);
         dateTime = new DateTime(1,2,3,4,5);
         seq = context.sequence("seq");
+        rmsQ = new ReservationMgrServiceImplQuery();
+        
+        rmsQ.setRes(res);
+        rmsQ.setResDao(resDao);
+//        rmsQ.setResUser(null);
     }
    
-    //@Test
-    
-    // Pendiente con ribo
+    //@Test // Pendiente con Ribó
     public void noReservationbyUserID() throws Exception{
      
       final long id = 123;  
@@ -66,14 +71,14 @@ public class ReservationMgrServiceImplQueryTest {
      
     }
    
-    //@Test
+    //@Test // Pendiente con Ribó
     public void oneReservationByUserID(){
        
        final long id = 123;
        
        context.checking(new Expectations(){{
         oneOf(resDao).getReservationById(id);
-        will (returnValue(reser));
+        will (returnValue(res));
        }});
        
     }
@@ -86,14 +91,14 @@ public class ReservationMgrServiceImplQueryTest {
        
        context.checking(new Expectations(){{
         oneOf(resDao).getReservationByDateRoomBulding(dateTime, roomId, building);
-        will (returnValue(reser));
+        will (returnValue(res));
        }});
        
        rmsQ.getReservations(roomId);
        
     }
     
-    @Test
+    //@Test
     public void noReservationByUserNif() throws Exception{
      
       final String id = "Josep";  
@@ -102,7 +107,9 @@ public class ReservationMgrServiceImplQueryTest {
         oneOf(resDao).getAllReservationByUserNif(id);
         will(returnValue(null));
       }});
+     rmsQ.getReservations(id);
      
+//     assertEquals("Error conversion", null, rmsQ.getReservations(id));
     }
            
     @Test
