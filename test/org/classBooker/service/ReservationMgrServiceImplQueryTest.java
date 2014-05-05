@@ -21,7 +21,11 @@ import org.jmock.Sequence;
 import java.util.List;
 import java.util.ArrayList;
 import org.classBooker.dao.exception.IncorrectUserException;
+import org.classBooker.entity.Building;
+import org.classBooker.entity.ClassRoom;
+import org.classBooker.entity.ProfessorPas;
 import org.classBooker.entity.ReservationUser;
+import org.classBooker.entity.Room;
 import org.joda.time.DateTime;
 import org.junit.Before;
 
@@ -34,10 +38,13 @@ import org.junit.Before;
 public class ReservationMgrServiceImplQueryTest {
     
     Mockery context = new JUnit4Mockery();
-//    ReservationUser ser;
+    ReservationUser rUser;
     ReservationDAO resDao;
-    DateTime dateTime;
+    DateTime dateIni;
+    DateTime dateFi;
     Reservation res;
+    Room roomNb;
+    Building buildingName;
     Sequence seq;
     ReservationMgrServiceImplQuery rmsQ;
    
@@ -45,31 +52,38 @@ public class ReservationMgrServiceImplQueryTest {
    
     @Before
     public void setup(){
-        //Ruser = context.mock(ReservationUser.class);
-        rmsQ = new ReservationMgrServiceImplQuery();
+        
         resDao = context.mock(ReservationDAO.class);
+        rUser = new ProfessorPas("12345678","Pepe@gmail.com","Pepe");
         res = new Reservation();
-        dateTime = new DateTime(1,2,3,4,5);
+        dateIni = new DateTime(1,2,3,4,5);
+        dateFi = new DateTime(1,2,3,4,5);
+        buildingName = new Building("EPS");
+        roomNb = new ClassRoom (buildingName,"2",50);
         seq = context.sequence("seq");
+        rmsQ = new ReservationMgrServiceImplQuery();
         
         rmsQ.setRes(res);
         rmsQ.setResDao(resDao);
-//        rmsQ.setResUser(null);
+        rmsQ.setBuildingName(buildingName);
+        rmsQ.setRoomNb(roomNb);
+        rmsQ.setResUser(rUser);
     }
-   
-    //@Test // Pendiente con Ribó
-    public void noReservationbyUserID() throws Exception{
-     
-      final long id = 123;  
+    
+    @Test 
+    public void noReservationbyUser() throws Exception{
+      
+      final List <Reservation> lreser = new ArrayList<Reservation>();
        
       context.checking(new Expectations(){{
-        oneOf(resDao).getReservationById(id);
-        will(returnValue(null));
+        oneOf(rUser).getReservations();
+        will(returnValue(lreser));
       }});
       
-     
+      List <Reservation> expected = rmsQ.getReservationsByNif(rUser.getNif());
+      assertEquals("The Same Reservations",lreser,expected);
     }
-   
+   /*
     //@Test // Pendiente con Ribó
     public void oneReservationByUserID(){
        
@@ -89,7 +103,7 @@ public class ReservationMgrServiceImplQueryTest {
        final String building = "EPS";
        
        context.checking(new Expectations(){{
-        oneOf(resDao).getReservationByDateRoomBulding(dateTime, roomId, building);
+        //oneOf(resDao).getReservationByDateRoomBulding(dateTime, roomId, building);
         will (returnValue(res));
        }});
        
@@ -123,5 +137,5 @@ public class ReservationMgrServiceImplQueryTest {
         List<Reservation> expected = rmsQ.getReservations(building);
         assertEquals("Reservation already done",expected,resList);
     }
-    
+    */
 }
