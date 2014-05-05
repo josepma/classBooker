@@ -43,8 +43,9 @@ public class SpaceDAOImpl implements SpaceDAO{
     @Override
     public void addRoom(Room room) throws PersistException, IncorrectRoomException, AlreadyExistingRoomException,AlreadyExistingBuildingException, NonBuildingException  {
        try{
-            em.getTransaction().begin();
             Building building = getBuildingByName(room.getBuilding().getBuildingName());
+            em.getTransaction().begin();
+           
             if (building==null){
                 throw new NonBuildingException();
             }
@@ -107,7 +108,7 @@ public class SpaceDAOImpl implements SpaceDAO{
     @Override
     public Building getBuildingByName(String name)  {
        Building building = null;
-       
+      
         em.getTransaction().begin();
         building = (Building) em.find(Building.class, name);
         em.getTransaction().commit();
