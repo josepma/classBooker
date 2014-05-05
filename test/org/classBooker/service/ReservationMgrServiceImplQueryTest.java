@@ -114,15 +114,14 @@ public class ReservationMgrServiceImplQueryTest {
     @Test
     public void MoreReservationByUserNif() throws Exception {
        
-        final List <Reservation> lreser = new ArrayList<Reservation>();
-//        lreser.add(res);
+        final List <Reservation> resList = new ArrayList<Reservation>();
         final String building = "EPS";
         context.checking(new Expectations(){{
             oneOf(resDao).getAllReservationByBuilding(building);
-            will(returnValue(lreser));
+            will(returnValue(resList));
         }});
         List<Reservation> expected = rmsQ.getReservations(building);
-        assertEquals("Reservation already done",expected,lreser);
+        assertEquals("Reservation already done",expected,resList);
     }
     
 }
