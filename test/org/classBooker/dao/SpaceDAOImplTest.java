@@ -7,7 +7,9 @@
 package org.classBooker.dao;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -17,6 +19,7 @@ import org.classBooker.dao.exception.AlreadyExistingRoomException;
 import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectTimeException;
 import org.classBooker.dao.exception.IncorrectTypeException;
+import org.classBooker.dao.exception.NonBuildingException;
 import org.classBooker.dao.exception.PersistException;
 import org.classBooker.entity.Building;
 import org.classBooker.entity.ClassRoom;
@@ -44,7 +47,9 @@ public class SpaceDAOImplTest {
      
      SpaceDAOImpl sdi;
      Room room;
+     Room room2;
      Building building;
+     Building building2;
      private Query query;
      
     public SpaceDAOImplTest() {
@@ -73,25 +78,27 @@ public class SpaceDAOImplTest {
      
     @Test 
     public void testAddRoom() throws Exception {
-        Building building2=new Building("FDE");
-        Room room2 =new ClassRoom(building, "2.01", 30);
-        sdi.addBuilding(building2);        
+       
+        room2 =new ClassRoom(building, "2.01", 30);
+          
         sdi.addRoom(room2);
-        
+        assertTrue(building.getRooms().contains(room2));
+        assertEquals(room2.getBuilding(), building);
+        assertTrue( sdi.getAllRooms().contains(room2));
     }
     @Test(expected = AlreadyExistingRoomException.class)
     public void testAddExistingRoom() throws Exception{
-        Building building2=new Building("FDE");
-        Room room2 =new ClassRoom(building, "2.01", 30);
+        building2=new Building("FDE");
+        room2 =new ClassRoom(building, "2.01", 30);
         sdi.addBuilding(building2);        
         sdi.addRoom(room2);
         sdi.addRoom(room2);
     }
     
-    @Test(expected= AlreadyExistingBuildingException.class)
+    @Test(expected=NonBuildingException.class)
     public void testAddRoomNoneExistingBuilding()throws Exception{
-        Building building2=new Building("FDE");        
-        Room room2= new ClassRoom (building2, "2.01", 30);
+        building2=new Building("FDE");        
+        room2= new ClassRoom (building2, "2.01", 30);
         sdi.addRoom(room2);
         
     }
@@ -133,13 +140,14 @@ public class SpaceDAOImplTest {
      */
     @Test
     public void testAddBuilding() throws Exception {
-        Building building2=new Building("FDE");              
+        building2=new Building("FDE");              
         sdi.addBuilding(building2);
+        assertTrue(sdi.getAllBuildings().contains(building));
     }
 
     @Test(expected=AlreadyExistingBuildingException.class)
     public void testAddExixtingBuilding() throws Exception {
-        Building building2=new Building("FDE"); 
+        building2=new Building("FDE"); 
         sdi.addBuilding(building);               
         sdi.addBuilding(building);
     }
@@ -163,7 +171,7 @@ public class SpaceDAOImplTest {
      */
     @Test
     public void testGetBuildingByName() throws Exception {
-         building=new Building("EPS");
+
                
         assertEquals(building, sdi.getBuildingByName("EPS"));
     }
@@ -175,12 +183,12 @@ public class SpaceDAOImplTest {
     public void testGetAllBuildings() {
         
         
-        final List<Building> expected = new ArrayList<Building>();
+        final Set<Building> expected = new HashSet<>();
         expected.add(building);
-       
+        
         List<Building> result = sdi.getAllBuildings();
-      
-        assertEquals(expected,result);
+        Set<Building> resultSet= new HashSet(result);
+        assertEquals(expected,resultSet);
         
         
     }
@@ -195,7 +203,9 @@ public class SpaceDAOImplTest {
         List<Room> rooms = new ArrayList<Room>();
         rooms.add(room);       
         building.setRooms(rooms);
-        assertEquals(rooms, sdi.getAllRoomsOfOneBuilding(building));
+        Set <Room> roomsSet = new HashSet<>(rooms);
+        Set <Room> result = new HashSet <>(sdi.getAllRoomsOfOneBuilding(building));
+        assertEquals(roomsSet, result);
         
     }
 
@@ -204,7 +214,7 @@ public class SpaceDAOImplTest {
      */
     @Test
     public void testGetAllRoomsOfOneType() throws Exception {
-        Room room2 = new LaboratoryRoom(building, "2.1", 10);
+        room2 = new LaboratoryRoom(building, "2.1", 10);
         Room room3 = new MeetingRoom(building, "1.08", 50);
         Room room4 = new ClassRoom(building, "3.01", 100);
         sdi.addRoom(room2);
