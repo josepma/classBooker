@@ -112,17 +112,17 @@ public class ReservationMgrServiceImplQueryTest {
     }
            
     @Test
-    public void MoreReservationByUserNif() throws IncorrectUserException {
+    public void MoreReservationByUserNif() throws Exception {
        
         final List <Reservation> lreser = new ArrayList<Reservation>();
-        final String name = "Pepe";
-        
+//        lreser.add(res);
+        final String building = "EPS";
         context.checking(new Expectations(){{
-            oneOf(resDao).getAllReservationByUserNif(name);
+            oneOf(resDao).getAllReservationByBuilding(building);
             will(returnValue(lreser));
-            
         }});
-        
+        List<Reservation> expected = rmsQ.getReservations(building);
+        assertEquals("Reservation already done",expected,lreser);
     }
     
 }

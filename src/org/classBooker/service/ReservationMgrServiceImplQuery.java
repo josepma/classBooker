@@ -35,7 +35,8 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     
     public List<Reservation> getReservations(String resBy) throws Exception {
         if(isBuilding(resBy)){
-            return resDao.getAllReservationByBuilding(resBy);
+            System.out.println("My name is " + resBy);
+            return resDao.getAllReservationByBuilding(resBy); 
         } else if(isRoom(resBy)){
             return resDao.getAllReservationByRoom(resBy);
         } else if(isNif(resBy)){
@@ -52,7 +53,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     }
     
     private boolean isBuilding (String resBy){
-        String pattern = "[a-zA-Z]+*";
+        String pattern = "[a-zA-Z].*";
         return resBy.matches(pattern);
     }
     
