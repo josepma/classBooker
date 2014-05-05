@@ -48,10 +48,9 @@ public class ReservationMgrServiceImplQueryTest {
         //Ruser = context.mock(ReservationUser.class);
         rmsQ = new ReservationMgrServiceImplQuery();
         resDao = context.mock(ReservationDAO.class);
-        res = context.mock(Reservation.class);
+        res = new Reservation();
         dateTime = new DateTime(1,2,3,4,5);
         seq = context.sequence("seq");
-        rmsQ = new ReservationMgrServiceImplQuery();
         
         rmsQ.setRes(res);
         rmsQ.setResDao(resDao);
@@ -94,8 +93,8 @@ public class ReservationMgrServiceImplQueryTest {
         will (returnValue(res));
        }});
        
-       rmsQ.getReservations(roomId);
-       
+       Reservation expected = rmsQ.getReservation(dateTime, roomId, building);
+       assertEquals("Reservation already done",expected,res);
     }
     
     //@Test
