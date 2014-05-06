@@ -38,9 +38,9 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     
     
     /**
-     * 
+     * Get a list of reservations for the user
      * @param nif
-     * @return
+     * @return 
      * @throws IncorrectUserException 
      */
     public List <Reservation> getReservationsByNif(String nif) 
@@ -51,7 +51,19 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
         
         return lfreser;
     }
-    
+    /**
+     * Get a list of reservation using different filtered
+     * @param nif
+     * @param dataIni
+     * @param dataFi
+     * @param buildingName
+     * @param roomNb
+     * @param capacity
+     * @param roomType
+     * @return
+     * @throws IncorrectUserException
+     * @throws IncorrectBuildingException 
+     */
     public List <Reservation> getFilteredReservation(String nif, 
                               DateTime dataIni,DateTime dataFi, 
                               String buildingName,long roomNb,int capacity,
@@ -100,10 +112,9 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                DateTime dataFi,List<Reservation>lfreser){
         
             for (Reservation res: lfreser){
-                    if(res.getReservationDate().isBefore(dataFi)){
-                            
-                    }else
-                        lfreser.remove(res);
+                    if(!(res.getReservationDate().isBefore(dataFi))){
+                           lfreser.remove(res); 
+                    }          
             }
         
         return lfreser;
@@ -112,29 +123,54 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                 ,List<Reservation>lfreser) 
                                 throws IncorrectBuildingException{
         
-        for ( Reservation res: lfreser){
-            if(!(res.getRoom().getBuilding().getBuildingName()).equals(buildingName)){
+        for (Reservation res: lfreser){
+            if((res.getRoom().getBuilding().getBuildingName())!=buildingName){
                 lfreser.remove(res);
             }
         }
         return lfreser;
     }
     private List <Reservation> getReservationAndRoom(String buildingName,
-                               long roomNb,List<Reservation>lfreser){
+                               String roomNb,List<Reservation>lfreser){
         
-        return null;
+        for(Reservation res: lfreser){
+            if((res.getRoom().getBuilding().getBuildingName()!=buildingName) &&
+                    (res.getRoom().getNumber()!=roomNb)){
+                lfreser.remove(res);
+            }
+        }
+        return lfreser;
     }
     private List <Reservation> getReservationAndRoom(long roomID,
                                List<Reservation>lfreser){
-        return null;
+        
+        for(Reservation res: lfreser){
+            if((res.getRoom().getRoomId()!=roomID)){
+                lfreser.remove(res);
+            }
+        }
+        return lfreser;
     }
     private List <Reservation> getReservationAndCapacity(int capacity,
                                List<Reservation>lfreser){
-        return null;
+        
+        for(Reservation res: lfreser){
+            if((res.getRoom().getCapacity()!=capacity)){
+                lfreser.remove(res);
+            }
+        }
+        return lfreser;
     }
     private List <Reservation> getReservationAndRoomType(String roomType,
                                List<Reservation>lfreser){
-        return null;
+        // ???? 
+        /*
+        for(Reservation res: lfreser){
+            if((res.getRoom().!=roomType)){
+                lfreser.remove(res);
+            }
+        }*/
+        return lfreser;
     }
   
     @Override
