@@ -6,19 +6,14 @@
 
 package org.classBooker.dao;
 
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.dateTime;
-import java.sql.Time;
 import java.util.List;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectReservationException;
 import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectUserException;
-import org.classBooker.entity.Building;
+import org.classBooker.dao.exception.AlreadyExistingBuildingException;
 import org.classBooker.entity.Reservation;
-import org.classBooker.entity.Room;
-import org.classBooker.entity.User;
 import org.joda.time.DateTime;
-import static org.joda.time.format.ISODateTimeFormat.dateTime;
 
 /**
  *
@@ -29,15 +24,23 @@ public interface ReservationDAO {
     /**
      *
      * @param reservation
+     * @return long
      * @throws IncorrectReservationException
      * @throws IncorrectUserException
      * @throws IncorrectRoomException
+     * @throws AlreadyExistingBuildingException
      */
     long addReservation(Reservation reservation)
                                            throws IncorrectReservationException,
                                            IncorrectUserException,
-                                           IncorrectRoomException;
+                                           IncorrectRoomException,
+                                            AlreadyExistingBuildingException;
     
+    
+    Reservation confirmAndAddReservation(Reservation reservation)
+                                            throws IncorrectReservationException,
+                                           IncorrectUserException,
+                                           IncorrectRoomException;
     /**
      *
      * @param userId
@@ -52,7 +55,8 @@ public interface ReservationDAO {
                           String buildingName, DateTime dateTime)
                                            throws IncorrectReservationException,
                                            IncorrectUserException,
-                                           IncorrectRoomException;
+                                           IncorrectRoomException,
+                                           AlreadyExistingBuildingException;
 
     /**
      *

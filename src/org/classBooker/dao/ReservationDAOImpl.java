@@ -6,8 +6,14 @@
 
 package org.classBooker.dao;
 
+
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import javax.persistence.EntityManager;
+import javax.persistence.TemporalType;
+import org.classBooker.dao.exception.AlreadyExistingBuildingException;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectReservationException;
 import org.classBooker.dao.exception.IncorrectRoomException;
@@ -17,6 +23,7 @@ import org.classBooker.entity.Reservation;
 import org.classBooker.entity.Room;
 import org.classBooker.entity.User;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
  *
@@ -35,10 +42,16 @@ public class ReservationDAOImpl implements ReservationDAO{
     }
 
     @Override
+    public Reservation confirmAndAddReservation(Reservation reservation) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    @Override
     public long addReservation(Reservation reservation) 
                                         throws IncorrectReservationException, 
                                                IncorrectUserException, 
-                                               IncorrectRoomException {
+                                               IncorrectRoomException,
+                                               AlreadyExistingBuildingException {
         
         em.getTransaction().begin();       
         checkReservation(reservation);
@@ -50,8 +63,19 @@ public class ReservationDAOImpl implements ReservationDAO{
     }
     
     @Override
-    public void addReservation(String userId, String roomNb, String buildingName, DateTime dateTime) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void addReservation( String userId, 
+                                String roomNb, 
+                                String buildingName, 
+                                DateTime dateTime) 
+                                throws  IncorrectReservationException, 
+                                        IncorrectUserException, 
+                                        IncorrectRoomException,
+                                        AlreadyExistingBuildingException{
+        
+         
+                
+        
+        
     }
 
     @Override
@@ -90,8 +114,13 @@ public class ReservationDAOImpl implements ReservationDAO{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    private void checkReservation(Reservation reservation) throws IncorrectReservationException, IncorrectRoomException, IncorrectUserException{
+    private void checkReservation(Reservation reservation) 
+                                        throws  IncorrectReservationException, 
+                                                IncorrectRoomException, 
+                                                IncorrectUserException, 
+                                                AlreadyExistingBuildingException{
         
+        checkExistingReservation(reservation);
         checkRoom(reservation);
         checkUser(reservation);
         
@@ -103,8 +132,8 @@ public class ReservationDAOImpl implements ReservationDAO{
         //modify
         if(room == null || room.getNumber() == null) 
             throw new IncorrectRoomException();
-        
-            if(em.find(Room.class, reservation)== null)
+       
+            if(em.find(Room.class, room.getRoomId())== null)
             throw new IncorrectRoomException();
         
         
@@ -116,7 +145,7 @@ public class ReservationDAOImpl implements ReservationDAO{
         if(user == null || user.getNif() == null) 
             throw new IncorrectUserException();
         
-        if(em.find(User.class, reservation)== null)
+        if(em.find(User.class, user.getNif())== null)
             throw new IncorrectUserException();
         
     }
@@ -131,5 +160,23 @@ public class ReservationDAOImpl implements ReservationDAO{
             throw new IncorrectBuildingException();
         
     }
+
+    private void checkExistingReservation(Reservation reservation) 
+                                        throws AlreadyExistingBuildingException{
+        
+        if(em.find(Reservation.class, reservation.getReservationId())!= null){
+            throw new AlreadyExistingBuildingException();
+        }
+        DateTime data = reservation.getReservationDate();
+        /*        String month = String.valueOf(data.monthOfYear().getAsShortText());
+        String year = String.valueOf(data.year().get());
+        String day = String.valueOf(data.dayOfMonth().get());
+        String firstDate = day+"-"+month+"-"+year;*/
+        String query = "SELECT r FROM RESERVATION r"
+                     + "WHERE r.DATE  = ?1";
+        //em.createQuery(query).setParameter(1, data.toCalendar(Locale.getDefault()),TemporalType.DATE);
+    }
+
+
 
 }
