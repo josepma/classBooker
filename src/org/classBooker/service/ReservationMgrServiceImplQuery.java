@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ArrayList;
 import org.classBooker.dao.ReservationDAO;
+import org.classBooker.dao.SpaceDAO;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectReservationException;
 import org.classBooker.dao.exception.IncorrectRoomException;
@@ -31,175 +32,111 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     private Reservation res;
     private ReservationDAO resDao;
     private ReservationUser resUser;
-    private Building buildingName;
-    private Room roomNb;
+    private SpaceDAO spaDao;
     private DateTime dateIni, dateFi;
+ 
     
     
-    public List<Reservation> getReservations() throws Exception {
-        return resDao.getAllReservation();
-    }
-    
+    /**
+     * 
+     * @param nif
+     * @return
+     * @throws IncorrectUserException 
+     */
     public List <Reservation> getReservationsByNif(String nif) 
                               throws IncorrectUserException{
-        return resDao.getAllReservationByUserNif(nif);
+        
+        List<Reservation> lfreser= new ArrayList<>();
+        lfreser=resDao.getAllReservationByUserNif(nif);
+        
+        return lfreser;
     }
     
-    public List <Reservation> getFilteredReservation(String nif, DateTime dataIni,
-                              DateTime dataFi, Building buildingName,Room RoomNb,
-                              long capa, String roomType){
+    public List <Reservation> getFilteredReservation(String nif, 
+                              DateTime dataIni,DateTime dataFi, 
+                              String buildingName,long roomNb,int capacity,
+                              String roomType) throws IncorrectUserException, IncorrectBuildingException{
         
-        List<Reservation> lFreser= new ArrayList<Reservation>();
-        return lFreser;
+        List<Reservation> lfreser= new ArrayList<Reservation>();
+        lfreser = getReservationsByNif(nif);
+        // Que pasa si no hay nada en la lista?
+        if(lfreser == null){
+            return null;
+        }else{
+            if(dataIni != null && dataFi !=null & lfreser.size()>0){
+                lfreser = getReservationAndDates(dataIni, dataFi,lfreser);
+            }
+            if(buildingName !=null & lfreser.size()>0){
+                lfreser = getReservationAndBuilding(buildingName,lfreser);
+            }
+            if(roomNb <0 & lfreser.size()>0){
+                lfreser = getReservationAndRoom(roomNb,lfreser);
+            }
+            if(capacity <0 & lfreser.size()>0){
+                lfreser = getReservationAndCapacity(capacity,lfreser);
+            }
+            if(roomType !=null & lfreser.size()>0){
+                lfreser = getReservationAndRoomType(roomType,lfreser);
+            }
+        }           
+        return lfreser;
     }
     
     public void setRes(Reservation res) {
         this.res = res;
     }
 
-    public Reservation getRes() {
-        return res;
-    }
-
     public void setResDao(ReservationDAO resDao) {
         this.resDao = resDao;
     }
 
-    public ReservationDAO getResDao() {
-        return resDao;
-    }
-
     public void setResUser(ReservationUser resUser) {
         this.resUser = resUser;
-    }
-
-    public ReservationUser getResUser() {
-        return resUser;
-    }
-    
-    public Building getBuildingName() {
-        return buildingName;
-    }
-    
-    public void setBuildingName(Building buildingName) {
-        this.buildingName = buildingName;
-    }
-    
-    public Room getRoomNb() {
-        return roomNb;
-    }
-    public void setRoomNb(Room roomNb) {
-        this.roomNb = roomNb;
-    }
-    
-    public DateTime getDateIni() {
-        return dateIni;
-    }
-    
-    public void setDateIni(DateTime dateIni) {
-        this.dateIni = dateIni;
-    }
-    
-    public DateTime getDateFi() {
-        return dateFi;
-    }
-    
-    public void setDateFi(DateTime dateFi) {
-        this.dateFi = dateFi;
     }
     
     //////// PRIVATE OPS //////
+    
     private List <Reservation> getReservationAndDates(DateTime dataIni,
-                               DateTime dataFi,List<Reservation>lFreser){
+                               DateTime dataFi,List<Reservation>lfreser){
+        
+            for (Reservation res: lfreser){
+                    if(res.getReservationDate().isBefore(dataFi)){
+                            
+                    }else
+                        lfreser.remove(res);
+            }
+        
+        return lfreser;
+    }
+    private List <Reservation> getReservationAndBuilding(String buildingName
+                                ,List<Reservation>lfreser) 
+                                throws IncorrectBuildingException{
+        
+        for ( Reservation res: lfreser){
+            if(!(res.getRoom().getBuilding().getBuildingName()).equals(buildingName)){
+                lfreser.remove(res);
+            }
+        }
+        return lfreser;
+    }
+    private List <Reservation> getReservationAndRoom(String buildingName,
+                               long roomNb,List<Reservation>lfreser){
+        
         return null;
     }
-    private List <Reservation> getReservationAndBuilding(Building buildingName
-                                ,List<Reservation>lFreser){
+    private List <Reservation> getReservationAndRoom(long roomID,
+                               List<Reservation>lfreser){
         return null;
     }
-    private List <Reservation> getReservationAndRoom(Building buildingName,
-                               Room roomNb,List<Reservation>lFreser){
-        return null;
-    }
-    private List <Reservation> getReservationAndRoom(Room roomID,
-                               List<Reservation>lFreser){
-        return null;
-    }
-    private List <Reservation> getReservationAndCapacity(long capacity,
-                               List<Reservation>lFreser){
+    private List <Reservation> getReservationAndCapacity(int capacity,
+                               List<Reservation>lfreser){
         return null;
     }
     private List <Reservation> getReservationAndRoomType(String roomType,
-                               List<Reservation>lFreser){
+                               List<Reservation>lfreser){
         return null;
     }
-    /**
-     * 
-     * 
-     * 
-     * @param resBy
-     * @return
-     * @throws Exception 
-     */
-    /*
-    public List<Reservation> getReservations(String resBy) throws Exception {
-        if(isBuilding(resBy)){
-            System.out.println("My name is " + resBy);
-            return resDao.getAllReservationByBuilding(resBy); 
-        } else if(isRoom(resBy)){
-            return resDao.getAllReservationByRoom(resBy);
-        } else if(isNif(resBy)){
-            return resDao.getAllReservationByUserNif(resBy);
-        } else {
-            return null;
-        }
-    }
-    
-    public Reservation getReservation(DateTime resDate, 
-            String roomNb, 
-            String buildingName) throws Exception {
-        return resDao.getReservationByDateRoomBulding(resDate, roomNb, buildingName);
-    }
-    
-    private boolean isBuilding (String resBy){
-        String pattern = "[a-zA-Z].*";
-        return resBy.matches(pattern);
-    }
-    
-    private boolean isRoom (String resBy){
-        String pattern = "[0-9]//.[0-9]";
-        return resBy.matches(pattern);
-    }
-    
-    private boolean isNif (String resBy){
-        String pattern = "(\\d{1,8})([a-zA-Z])";
-        return resBy.matches(pattern);
-    }
-    
-    public void setRes(Reservation res) {
-        this.res = res;
-    }
-
-    public Reservation getRes() {
-        return res;
-    }
-
-    public void setResDao(ReservationDAO resDao) {
-        this.resDao = resDao;
-    }
-
-    public ReservationDAO getResDao() {
-        return resDao;
-    }
-
-    public void setResUser(ReservationUser resUser) {
-        this.resUser = resUser;
-    }
-
-    public ReservationUser getResUser() {
-        return resUser;
-    }
-    */
+  
     @Override
     public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
