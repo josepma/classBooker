@@ -17,8 +17,8 @@
     
     <properties>
       <property name="javax.persistence.jdbc.url" 
-                value="jdbc:derby:memory:classBookerDB;create=true"/>
-      <property name="eclipselink.ddl-generation" value="create-tables"/>
+                value="jdbc:derby:memory:classBookerDB;create=true"/> 
+      <property name="eclipselink.ddl-generation" value="create-tables"/>  
       <property name="javax.persistence.jdbc.user" value="dbuser"/>
       <property name="javax.persistence.jdbc.driver" 
                 value="org.apache.derby.jdbc.EmbeddedDriver"/>

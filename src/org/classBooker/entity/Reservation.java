@@ -24,9 +24,9 @@ import org.joda.time.DateTime;
 public class Reservation {
     @Id
     @Column (name="IDENTIFIER")
-    @GeneratedValue(strategy=GenerationType.SEQUENCE)
+    @GeneratedValue //(strategy=GenerationType.SEQUENCE)
     private long reservationId;
-        
+  
     @Column (name="DATE")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Calendar reservationDate;

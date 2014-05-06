@@ -35,7 +35,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     }
 
     @Override
-    public void addReservation(Reservation reservation) 
+    public long addReservation(Reservation reservation) 
                                         throws IncorrectReservationException, 
                                                IncorrectUserException, 
                                                IncorrectRoomException {
@@ -46,6 +46,7 @@ public class ReservationDAOImpl implements ReservationDAO{
         reservation.getrUser().getReservations().add(reservation);
         
         em.getTransaction().commit();
+        return reservation.getReservationId();
     }
     
     @Override
@@ -103,7 +104,7 @@ public class ReservationDAOImpl implements ReservationDAO{
         if(room == null || room.getNumber() == null) 
             throw new IncorrectRoomException();
         
-        if(em.find(Room.class, reservation)== null)
+            if(em.find(Room.class, reservation)== null)
             throw new IncorrectRoomException();
         
         

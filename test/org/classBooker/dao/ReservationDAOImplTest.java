@@ -46,7 +46,7 @@ public class ReservationDAOImplTest {
     Room room;
     Building building;
     ReservationUser user;
-    Reservation reservation;
+    Reservation reservation, reservation2;
 
     
     
@@ -69,10 +69,12 @@ public class ReservationDAOImplTest {
         room.setNumber("10");
         user = new ProfessorPas("47658245M", "random@professor.ly", "Manolo");
         reservation = new Reservation(new DateTime(2014, 05, 11, 12, 00), user, room);
+        reservation2 = new Reservation(new DateTime(2014, 05, 11, 12, 00), user, room);
         
         em.getTransaction().begin();
         em.persist(user);
         em.persist(building);
+        em.persist(room);
         em.getTransaction().commit();
         
     }
@@ -86,10 +88,10 @@ public class ReservationDAOImplTest {
         em = getEntityManager();
         em.getTransaction().begin();
         
-        Query query  = em.createQuery("DELETE FROM RESERVATION");
-        Query query2 = em.createQuery("DELETE FROM USER");
-        Query query3 = em.createQuery("DELETE FROM ROOM");
-        Query query4 = em.createQuery("DELETE FROM BUILDING");
+        Query query  = em.createQuery("DELETE FROM Reservation");
+        Query query2 = em.createQuery("DELETE FROM User");
+        Query query3 = em.createQuery("DELETE FROM Room");
+        Query query4 = em.createQuery("DELETE FROM Building");
         int deleteRecords = query.executeUpdate();
         deleteRecords = query2.executeUpdate();
         deleteRecords = query3.executeUpdate();
@@ -144,10 +146,10 @@ public class ReservationDAOImplTest {
      * Test of getAllReservation method, of class ReservationDAOImpl.
      */
     //@Test
-    public void testGetAllReservation() {
+    public void testGetAllReservation() throws Exception {
         
         rDao.getAllReservation();
-    }
+     }
 
     /**
      * Test of getAllReservationByBuilding method, of class ReservationDAOImpl.

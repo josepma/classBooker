@@ -33,7 +33,7 @@ public interface ReservationDAO {
      * @throws IncorrectUserException
      * @throws IncorrectRoomException
      */
-    void addReservation(Reservation reservation)
+    long addReservation(Reservation reservation)
                                            throws IncorrectReservationException,
                                            IncorrectUserException,
                                            IncorrectRoomException;
