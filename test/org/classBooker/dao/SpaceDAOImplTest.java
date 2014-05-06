@@ -208,10 +208,13 @@ public class SpaceDAOImplTest {
         sdi.addRoom(labRoom);
         sdi.addRoom(meetRoom);
         sdi.addRoom(classRoom);
+       
         List<Room> meetingRooms = new ArrayList<Room>();
         meetingRooms.add(meetRoom);
-        assertEquals(meetingRooms, sdi.getAllRoomsOfOneType("ComputerRoom"));
-    }
+        Set <Room> roomsSet = new HashSet<>(meetingRooms);
+        Set <Room> result = new HashSet <>(sdi.getAllRoomsOfOneType("ComputerRoom"));
+        assertEquals(roomsSet, result);
+        }
     /**
      * Test of getAllRoomsOfOneTypeAndOneBuilding method, of class SpaceDAOImpl.
      */
