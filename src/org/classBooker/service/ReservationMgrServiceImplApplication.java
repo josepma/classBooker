@@ -18,32 +18,46 @@ import org.classBooker.entity.Room;
 import org.classBooker.entity.User;
 import org.classBooker.util.ReservationResult;
 import org.joda.time.DateTime;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  *
  * @author aba8
  */
+
+
+
 public class ReservationMgrServiceImplApplication implements ReservationMgrService{
     private SpaceDAO sDao;
     private UserDAO uDao;
     private ReservationDAO rDao;
     private DateTime datetime;
-    @Override
+ 
+    
+          /**
+           * Returns a reservation for the roomId, the date initialTime and the user nif.
+           * For making correctly the reservation, we should check that the user and the room exist in database
+           * also the format of time should be correct.
+           * This reservation should be accepted by the user before inserting it into the database
+           */
+        @Override
         public Reservation makeReservationBySpace(long roomId, String nif, DateTime initialTime)throws Exception {
              Room room = sDao.getRoomById(roomId); 
              User user = uDao.getUserByNif(nif);
              datetime = initialTime;
-            if(room == null) throw new IncorrectRoomException();
-            if(user == null || !(user instanceof ReservationUser)) throw new IncorrectUserException();
-            //if(datetime.isBeforeNow())throw new IncorrectTimeException()
-            if(alreadyExistingReservation(datetime,room)) return null;
-            else return new Reservation(datetime, (ReservationUser)user, room);
+            if(room == null){ 
+                throw new IncorrectRoomException();
+            }
+            if(user == null || !(user instanceof ReservationUser)){
+                throw new IncorrectUserException();
+            }
+            if(datetime.isBeforeNow() || datetime.getMinuteOfHour()!=0){
+                throw new IncorrectTimeException();
+            }
+            if(alreadyExistingReservation(datetime,room)){
+                return null;
+            }
+            else {
+                return new Reservation(datetime, (ReservationUser)user, room);
+            }
     }
 
     @Override
@@ -108,22 +122,44 @@ public class ReservationMgrServiceImplApplication implements ReservationMgrServi
         return null;
     }
     
+    
+     /**
+     * Set the UserDao.
+     */
     public void setUserDao(UserDAO uDao){
         this.uDao = uDao;
     }
+    
+     /**
+     * Set the ReservationDao.
+     */
     public void setReservationDao(ReservationDAO rDao){
         this.rDao = rDao;
     }
     
+     /**
+     * Set the SpaceDao.
+     */
     public void setSpaceDao(SpaceDAO sDao){
         this.sDao = sDao;
     }
-
+    
+    /**
+     * Set the DateTime.
+     */
     public void setDatetime(DateTime datetime) {
         this.datetime = datetime;
     }
-
-    private boolean alreadyExistingReservation(DateTime datetime, Room room) {
+    /**
+     * Returns a boolean which indicates if the reservation exists in the database.
+     * if the reservation exists in the database, it will return true, else will return false
+     */
+    
+    /**
+     * Returns a boolean which indicates if the reservation exists in the database.
+     * if the reservation exists in the database, it will return true, else will return false
+     */
+    public boolean alreadyExistingReservation(DateTime datetime, Room room) {
         return rDao.getReservationByDateRoomBulding(datetime, room.getNumber(), room.getBuilding().getBuildingName())!=null;
     }
 
