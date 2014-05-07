@@ -47,7 +47,7 @@ public class ReservationMgrServiceImplApplicationTest {
     UserDAO uDao;
     final String nif="12345";
     final long roomId = 111;
-    final DateTime date = new DateTime();
+    final DateTime date = new DateTime(2015,5,12,13,0);
     final Building b = new Building("nameBuilding");
     final Room room = new ClassRoom(b, nif, 30);
     final ReservationUser professor = new ProfessorPas();
@@ -69,35 +69,39 @@ public class ReservationMgrServiceImplApplicationTest {
     
     @Test(expected = IncorrectRoomException.class)
     public void testIncorrectRoomId() throws Exception {
-        makeReservationExpectations(null,null,null);
+        checkUserAndRoomExpetations(null,null);
         rmgr.makeReservationBySpace(roomId, nif, date);
     }
     
      @Test(expected = IncorrectUserException.class)
     public void testIncorrectUserDontExist() throws Exception {
-        makeReservationExpectations(room,null,null);
+        checkUserAndRoomExpetations(room,null);
         rmgr.makeReservationBySpace(roomId, nif, date);
     }
     
      @Test(expected = IncorrectUserException.class)
     public void testIncorrectUserIsNotReservationUser() throws Exception {
-        makeReservationExpectations(room,staff,null);
+        checkUserAndRoomExpetations(room,staff);
         rmgr.makeReservationBySpace(roomId, nif, date);
     }
     
-    //@Test(expected = IncorrectTimeException.class)
+    @Test(expected = IncorrectTimeException.class)
     public void testIncorrectTimeBeforeNow() throws Exception {
-       
-        context.checking(new Expectations(){{ 
-            allowing(sDao).getRoomById(roomId);will(returnValue(room));
-            allowing(uDao).getUserByNif(nif);will(returnValue(professor));
-            //oneOf(dTime).isBeforeNow();will(returnValue(true));
-            
-         }});    
+        final DateTime date = new DateTime(2014,3,2,12,0);
+        checkUserAndRoomExpetations(room,professor); 
         rmgr.makeReservationBySpace(roomId, nif, date);
+        
+        
     }
     
-    
+    @Test(expected = IncorrectTimeException.class)
+    public void testIncorrectFormatOfMinute() throws Exception {
+        final DateTime date = new DateTime(2015,3,2,12,12);
+        checkUserAndRoomExpetations(room,professor); 
+        rmgr.makeReservationBySpace(roomId, nif, date);
+        
+        
+    }
     
     @Test
     public void testReservationAlreadyDone() throws Exception {
@@ -113,15 +117,27 @@ public class ReservationMgrServiceImplApplicationTest {
         assertEquals("Make new Reservation",result,new Reservation(date,professor,room));
     }
 
+    @Test
+    public void testAlreadyExistingReservation() throws Exception {
+        makeReservationExpectations(room,professor,reservation);
+        Reservation result = rmgr.makeReservationBySpace(roomId, nif, date);
+        assertEquals("Make new Reservation",null,result);
+    }
+    
     private void makeReservationExpectations(final Room room, final User user,final Reservation reservation) {
         context.checking(new Expectations(){{ 
-            allowing(sDao).getRoomById(roomId);will(returnValue(room));
-            allowing(uDao).getUserByNif(nif);will(returnValue(user));
-            allowing(rDao).getReservationByDateRoomBulding(date, "12345", "nameBuilding");will(returnValue(reservation));
+            oneOf(sDao).getRoomById(roomId);will(returnValue(room));
+            oneOf(uDao).getUserByNif(nif);will(returnValue(user));
+            oneOf(rDao).getReservationByDateRoomBulding(date, "12345", "nameBuilding");will(returnValue(reservation));
             
          }});    
     }
 
-   
+   private void checkUserAndRoomExpetations(final Room room,final User user){
+       context.checking(new Expectations(){{ 
+            oneOf(sDao).getRoomById(roomId);will(returnValue(room));
+            oneOf(uDao).getUserByNif(nif);will(returnValue(user)); 
+         }});    
+   }
     
 }

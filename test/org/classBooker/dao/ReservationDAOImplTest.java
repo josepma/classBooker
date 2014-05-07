@@ -32,7 +32,7 @@ public class ReservationDAOImplTest {
     Room room;
     Building building;
     ReservationUser user;
-    Reservation reservation;
+    Reservation reservation, reservation2;
 
     
     
@@ -55,6 +55,7 @@ public class ReservationDAOImplTest {
         room.setNumber("10");
         user = new ProfessorPas("47658245M", "random@professor.ly", "Manolo");
         reservation = new Reservation(new DateTime(2014, 05, 11, 12, 00), user, room);
+        reservation2 = new Reservation(new DateTime(2014, 05, 11, 12, 00), user, room);
         
         addDB(user,room,building);
         
@@ -174,10 +175,10 @@ public class ReservationDAOImplTest {
      * Test of getAllReservation method, of class ReservationDAOImpl.
      */
     //@Test
-    public void testGetAllReservation() {
+    public void testGetAllReservation() throws Exception {
         
         rDao.getAllReservation();
-    }
+     }
 
     /**
      * Test of getAllReservationByBuilding method, of class ReservationDAOImpl.

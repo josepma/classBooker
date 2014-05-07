@@ -6,6 +6,9 @@
 
 package org.classBooker.dao;
 
+
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import javax.persistence.EntityManager;
@@ -13,6 +16,7 @@ import javax.persistence.NoResultException;
 import org.classBooker.dao.exception.*;
 import org.classBooker.entity.*;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
  *
@@ -171,5 +175,23 @@ public class ReservationDAOImpl implements ReservationDAO{
             throw new IncorrectBuildingException();
         
     }
+
+    private void checkExistingReservation(Reservation reservation) 
+                                        throws AlreadyExistingBuildingException{
+        
+        if(em.find(Reservation.class, reservation.getReservationId())!= null){
+            throw new AlreadyExistingBuildingException();
+        }
+        DateTime data = reservation.getReservationDate();
+        /*        String month = String.valueOf(data.monthOfYear().getAsShortText());
+        String year = String.valueOf(data.year().get());
+        String day = String.valueOf(data.dayOfMonth().get());
+        String firstDate = day+"-"+month+"-"+year;*/
+        String query = "SELECT r FROM RESERVATION r"
+                     + "WHERE r.DATE  = ?1";
+        //em.createQuery(query).setParameter(1, data.toCalendar(Locale.getDefault()),TemporalType.DATE);
+    }
+
+
 
 }

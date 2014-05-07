@@ -18,6 +18,7 @@ import org.classBooker.dao.exception.AlreadyExistingRoomException;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectTypeException;
+import org.classBooker.dao.exception.NonBuildingException;
 import org.classBooker.dao.exception.PersistException;
 import org.classBooker.entity.Building;
 import org.classBooker.entity.Room;
@@ -40,17 +41,21 @@ public class SpaceDAOImpl implements SpaceDAO{
 
 
     @Override
-    public void addRoom(Room room) throws PersistException, IncorrectRoomException, AlreadyExistingRoomException,AlreadyExistingBuildingException  {
+    public void addRoom(Room room) throws PersistException, 
+                            AlreadyExistingRoomException, NonBuildingException  {
        try{
+            Building building = getBuildingByName(room.getBuilding().getBuildingName());
             em.getTransaction().begin();
-            if (!buildingExist(room.getBuilding())){
-                throw new AlreadyExistingBuildingException();
+           
+            if (building==null){
+                throw new NonBuildingException();
             }
             if (roomExist(room)){
                 throw new AlreadyExistingRoomException();
             }
-            room.getBuilding().setRoom(room);
+            
             em.persist(room);
+            building.getRooms().add(room);
             em.getTransaction().commit();
             
            } catch (PersistenceException e) {
@@ -102,9 +107,9 @@ public class SpaceDAOImpl implements SpaceDAO{
     } 
 
     @Override
-    public Building getBuildingByName(String name) throws IncorrectBuildingException {
+    public Building getBuildingByName(String name)  {
        Building building = null;
-       
+      
         em.getTransaction().begin();
         building = (Building) em.find(Building.class, name);
         em.getTransaction().commit();
@@ -127,7 +132,7 @@ public class SpaceDAOImpl implements SpaceDAO{
     }
 
     @Override
-    public List<Room> getAllRoomsOfOneBuilding(Building building) throws IncorrectBuildingException {
+    public List<Room> getAllRoomsOfOneBuilding(Building building){
           
                
         return building.getRooms();
@@ -152,7 +157,7 @@ public class SpaceDAOImpl implements SpaceDAO{
     }
 
     @Override
-    public List<Room> getAllRoomsOfOneTypeAndOneBuilding(String Type, Building building) throws IncorrectBuildingException {
+    public List<Room> getAllRoomsOfOneTypeAndOneBuilding(String Type, Building building) {
         List<Room> roomsOneType = null;
         List<Room> roomsOneTypeOneBuilding =new ArrayList();
         
@@ -224,7 +229,9 @@ public class SpaceDAOImpl implements SpaceDAO{
     
     }
 
-    private void checkExistingBuildingOrRoom(Building building) throws AlreadyExistingRoomException, AlreadyExistingBuildingException {
+    private void checkExistingBuildingOrRoom(Building building) throws
+                                            AlreadyExistingRoomException, 
+                                            AlreadyExistingBuildingException {
         if(buildingExist(building))
         {
             

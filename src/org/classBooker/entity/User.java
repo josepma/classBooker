@@ -53,7 +53,14 @@ public abstract class User {
         this.name="";
     }
 
-    
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 67 * hash + Objects.hashCode(this.nif);
+        hash = 67 * hash + Objects.hashCode(this.email);
+        hash = 67 * hash + Objects.hashCode(this.name);
+        return hash;
+    }
     
     @Override
     public boolean equals(Object obj) {

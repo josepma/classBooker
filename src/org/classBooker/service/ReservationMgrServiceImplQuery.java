@@ -6,12 +6,17 @@
 
 package org.classBooker.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+import org.classBooker.dao.ReservationDAO;
+import org.classBooker.dao.SpaceDAO;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectReservationException;
 import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectTypeException;
 import org.classBooker.dao.exception.IncorrectUserException;
+import org.classBooker.entity.Building;
 import org.classBooker.entity.Reservation;
 import org.classBooker.entity.ReservationUser;
 import org.classBooker.entity.Room;
@@ -20,12 +25,145 @@ import org.joda.time.DateTime;
 
 /**
  *
- * @author sht1
+ * @author sht1, Xurat@
  */
 public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     
-    private Reservation reser;
+    private ReservationDAO resDao;
 
+    /**
+     * Get a list of reservations for the user
+     * @param nif
+     * @return 
+     * @throws IncorrectUserException 
+     */
+    public List <Reservation> getReservationsByNif(String nif) 
+                              throws IncorrectUserException{
+        
+        List<Reservation> lreser= new ArrayList<>();
+        lreser=resDao.getAllReservationByUserNif(nif);
+        
+        return lreser;
+    }
+    /**
+     * Get a list of reservation using different filtered
+     * @param nif
+     * @param startDate
+     * @param endDate
+     * @param buildingName
+     * @param roomNb
+     * @param capacity
+     * @param roomType
+     * @return
+     * @throws IncorrectUserException
+     * @throws IncorrectBuildingException 
+     */
+    public List <Reservation> getFilteredReservation(String nif, 
+                              DateTime startDate,DateTime endDate, 
+                              String buildingName,long roomNb,int capacity,
+                              String roomType) throws IncorrectUserException, IncorrectBuildingException{
+        
+        List<Reservation> lfreser= new ArrayList<Reservation>();
+        lfreser = getReservationsByNif(nif);
+        // Que pasa si no hay nada en la lista?
+        if(lfreser == null){
+            return null;
+        }else{
+            if(startDate != null && endDate !=null & lfreser.size()>0){
+                lfreser = getReservationAndDates(startDate, endDate,lfreser);
+            }
+            if(buildingName !=null & lfreser.size()>0){
+                lfreser = getReservationAndBuilding(buildingName,lfreser);
+            }
+            if(roomNb <0 & lfreser.size()>0){
+                lfreser = getReservationAndRoom(roomNb,lfreser);
+            }
+            if(capacity <0 & lfreser.size()>0){
+                lfreser = getReservationAndCapacity(capacity,lfreser);
+            }
+            if(roomType !=null & lfreser.size()>0){
+                lfreser = getReservationAndRoomType(roomType,lfreser);
+            }
+        }           
+        return lfreser;
+    }
+
+    public void setResDao(ReservationDAO resDao) {
+        this.resDao = resDao;
+    }
+
+    public ReservationDAO getResDao() {
+        return resDao;
+    }
+    
+    
+    //////// PRIVATE OPS //////
+    
+    private List <Reservation> getReservationAndDates(DateTime dataIni,
+                               DateTime dataFi,List<Reservation>lfreser){
+        
+            for (Reservation res: lfreser){
+                    if(!(res.getReservationDate().isBefore(dataFi))){
+                           lfreser.remove(res); 
+                    }          
+            }
+        
+        return lfreser;
+    }
+    private List <Reservation> getReservationAndBuilding(String buildingName
+                                ,List<Reservation>lfreser) 
+                                throws IncorrectBuildingException{
+        
+        for (Reservation res: lfreser){
+            if((res.getRoom().getBuilding().getBuildingName())!=buildingName){
+                lfreser.remove(res);
+            }
+        }
+        return lfreser;
+    }
+    private List <Reservation> getReservationAndRoom(String buildingName,
+                               String roomNb,List<Reservation>lfreser){
+        
+        for(Reservation res: lfreser){
+            if((res.getRoom().getBuilding().getBuildingName()!=buildingName) &&
+                    (res.getRoom().getNumber()!=roomNb)){
+                lfreser.remove(res);
+            }
+        }
+        return lfreser;
+    }
+    private List <Reservation> getReservationAndRoom(long roomID,
+                               List<Reservation>lfreser){
+        
+        for(Reservation res: lfreser){
+            if((res.getRoom().getRoomId()!=roomID)){
+                lfreser.remove(res);
+            }
+        }
+        return lfreser;
+    }
+    private List <Reservation> getReservationAndCapacity(int capacity,
+                               List<Reservation>lfreser){
+        
+        for(Reservation res: lfreser){
+            if((res.getRoom().getCapacity()!=capacity)){
+                lfreser.remove(res);
+            }
+        }
+        return lfreser;
+    }
+    private List <Reservation> getReservationAndRoomType(String roomType,
+                               List<Reservation>lfreser){
+        // ???? 
+        /*
+        for(Reservation res: lfreser){
+            if((res.getRoom().!=roomType)){
+                lfreser.remove(res);
+            }
+        }*/
+        return lfreser;
+    }
+  
     @Override
     public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -82,11 +220,6 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     }
 
     @Override
-    public List<Room> suggestionSpace(String roomNb, String building) throws IncorrectTypeException, IncorrectBuildingException, IncorrectRoomException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public ReservationUser getCurrentUserOfDemandedRoom(String roomNb, String building, DateTime datetime) throws IncorrectRoomException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -95,5 +228,11 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     public void acceptReservation(Reservation reservation) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public List<Room> suggestionSpace(String roomNb, String building, DateTime resDate) throws IncorrectTypeException, IncorrectBuildingException, IncorrectRoomException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     
 }

@@ -7,6 +7,7 @@
 package org.classBooker.dao;
 
 import java.util.List;
+import org.classBooker.dao.exception.AlreadyExistingUserException;
 import org.classBooker.dao.exception.IncorrectUserException;
 import org.classBooker.dao.exception.PersistException;
 import org.classBooker.entity.User;
@@ -23,7 +24,7 @@ public interface UserDAO {
      * @throws PersistException
      * @throws IncorrectUserException
      */
-    void addUser(User user) throws PersistException, IncorrectUserException;
+    void addUser(User user) throws AlreadyExistingUserException;
 
     /**
      *
@@ -37,7 +38,8 @@ public interface UserDAO {
      * @return
      */
     
-    User getUserByName(String name);
+    //TODO: return List<User>
+    List<User> getUsersByName(String name);
 
     /**
      *

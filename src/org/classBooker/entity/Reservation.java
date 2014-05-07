@@ -23,7 +23,7 @@ public class Reservation {
     @Column (name="IDENTIFIER")
     //@GeneratedValue(generator ="reservationSeq" ,strategy=GenerationType.SEQUENCE)
     private long reservationId;
-        
+  
     @Column (name="DATE")
     @Temporal(javax.persistence.TemporalType.DATE)
     private Calendar reservationDate;
