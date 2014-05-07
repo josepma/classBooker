@@ -118,7 +118,7 @@ public class ReservationMgrServiceImplApplication implements ReservationMgrServi
     }
 
     @Override
-    public ReservationUser getCurrentUserOfDemandedRoom(String roomNb, String building, DateTime datetime) throws IncorrectRoomException {
+    public ReservationUser getCurrentUserOfDemandedRoom(String roomNb, String building, DateTime datetime){
         return null;
     }
     

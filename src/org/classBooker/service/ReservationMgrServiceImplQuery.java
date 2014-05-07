@@ -233,7 +233,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     }
 
     @Override
-    public ReservationUser getCurrentUserOfDemandedRoom(String roomNb, String building, DateTime datetime) throws IncorrectRoomException {
+    public ReservationUser getCurrentUserOfDemandedRoom(String roomNb, String building, DateTime datetime){
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
