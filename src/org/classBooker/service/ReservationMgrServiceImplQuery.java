@@ -40,10 +40,10 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     public List <Reservation> getReservationsByNif(String nif) 
                               throws IncorrectUserException{
         
-        List<Reservation> lfreser= new ArrayList<>();
-        lfreser=resDao.getAllReservationByUserNif(nif);
+        List<Reservation> lreser= new ArrayList<>();
+        lreser=resDao.getAllReservationByUserNif(nif);
         
-        return lfreser;
+        return lreser;
     }
     /**
      * Get a list of reservation using different filtered

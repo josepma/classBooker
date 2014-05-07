@@ -52,7 +52,7 @@ public class ReservationMgrServiceImplQueryTest {
     @Before
     public void setup(){
         lres = new ArrayList<>();
-        lres.add(new Reservation());
+        
         resDao = context.mock(ReservationDAO.class);
         rUser = new ProfessorPas("12345678","Ralph@aus.com","Ralph");
         building = new Building("Tibbers Building");
@@ -66,11 +66,26 @@ public class ReservationMgrServiceImplQueryTest {
         
         rmsQ.setResDao(resDao);
         
-        lres.add(res);
+//        lres.add(res);
     }
-    
+ 
     @Test 
     public void noReservationExist() throws Exception{
+      
+      final List <Reservation> lreser = new ArrayList<>();
+      final String nif ="01234567";
+       
+      context.checking(new Expectations(){{
+        oneOf(resDao).getAllReservationByUserNif(nif);
+        will(returnValue(lreser));
+      }});
+      
+      List <Reservation> expected = rmsQ.getReservationsByNif(nif);
+      assertEquals("Error",expected,lres);
+    }
+    
+    //@Test 
+    public void noReservationExistBis() throws Exception{
       
       final List <Reservation> lreser = new ArrayList<>();
       lreser.add(new Reservation());
@@ -82,7 +97,7 @@ public class ReservationMgrServiceImplQueryTest {
       }});
       
       List <Reservation> expected = rmsQ.getReservationsByNif(nif);
-      assertEquals("Error",expected,lres.get(0));
+      assertEquals("Error",expected.get(0),lres.get(0));
     }
    /*
     //@Test // Pendiente con Ribó
