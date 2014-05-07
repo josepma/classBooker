@@ -51,32 +51,38 @@ public class ReservationMgrServiceImplQueryTest {
    
     @Before
     public void setup(){
-        
+        lres = new ArrayList<>();
+        lres.add(new Reservation());
         resDao = context.mock(ReservationDAO.class);
-        rUser = new ProfessorPas("12345678","Pepe@gmail.com","Pepe");
+        rUser = new ProfessorPas("12345678","Ralph@aus.com","Ralph");
         building = new Building("Tibbers Building");
-        room = new ClassRoom (building,"2",50);
+        room = new ClassRoom (building,"2.3",30);
         startDate = new DateTime(1,2,3,4,5);
         endDate = new DateTime(2,3,4,5,6);
         res = new Reservation(startDate, rUser, room);
+        
         seq = context.sequence("seq");
         rmsQ = new ReservationMgrServiceImplQuery();
         
         rmsQ.setResDao(resDao);
+        
+        lres.add(res);
     }
     
     @Test 
-    public void noReservationbyUser() throws Exception{
+    public void noReservationExist() throws Exception{
       
-      final List <Reservation> lreser = new ArrayList<Reservation>();
+      final List <Reservation> lreser = new ArrayList<>();
+      lreser.add(new Reservation());
+      final String nif ="01234567";
        
       context.checking(new Expectations(){{
-        oneOf(rUser).getReservations();
+        oneOf(resDao).getAllReservationByUserNif(nif);
         will(returnValue(lreser));
       }});
       
-      List <Reservation> expected = rmsQ.getReservationsByNif(rUser.getNif());
-      assertEquals("The Same Reservations",lreser,expected);
+      List <Reservation> expected = rmsQ.getReservationsByNif(nif);
+      assertEquals("Error",expected,lres.get(0));
     }
    /*
     //@Test // Pendiente con Ribó
