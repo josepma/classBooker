@@ -7,11 +7,7 @@
 package org.classBooker.dao;
 
 import java.util.List;
-import org.classBooker.dao.exception.IncorrectBuildingException;
-import org.classBooker.dao.exception.IncorrectReservationException;
-import org.classBooker.dao.exception.IncorrectRoomException;
-import org.classBooker.dao.exception.IncorrectUserException;
-import org.classBooker.dao.exception.AlreadyExistingBuildingException;
+import org.classBooker.dao.exception.*;
 import org.classBooker.entity.Reservation;
 import org.joda.time.DateTime;
 
@@ -28,35 +24,32 @@ public interface ReservationDAO {
      * @throws IncorrectReservationException
      * @throws IncorrectUserException
      * @throws IncorrectRoomException
-     * @throws AlreadyExistingBuildingException
+     * @throws AlredyExistReservationException
      */
     long addReservation(Reservation reservation)
                                            throws IncorrectReservationException,
                                            IncorrectUserException,
                                            IncorrectRoomException,
-                                            AlreadyExistingBuildingException;
+                                           AlredyExistReservationException ;
     
-    
-    Reservation confirmAndAddReservation(Reservation reservation)
-                                            throws IncorrectReservationException,
-                                           IncorrectUserException,
-                                           IncorrectRoomException;
     /**
      *
      * @param userId
      * @param roomNb
      * @param buildingName
      * @param dateTime
+     * @return 
      * @throws IncorrectReservationException
      * @throws IncorrectUserException
      * @throws IncorrectRoomException
+     * @throws AlredyExistReservationException
      */
-    void addReservation (String userId, String roomNb, 
+    long addReservation (String userId, String roomNb, 
                           String buildingName, DateTime dateTime)
                                            throws IncorrectReservationException,
                                            IncorrectUserException,
                                            IncorrectRoomException,
-                                           AlreadyExistingBuildingException;
+                                           AlredyExistReservationException;
 
     /**
      *

@@ -30,7 +30,7 @@ public abstract class Room {
     private String number;    
     private int capacity;
     @ManyToOne
-    @JoinColumn(name = "BUILDING_NAME", referencedColumnName = "NAME")
+    @JoinColumn(name = "BUILDING", referencedColumnName = "NAME")
     private Building building;
     @OneToMany (mappedBy="room", fetch=FetchType.EAGER)
     private List<Reservation> reservations;

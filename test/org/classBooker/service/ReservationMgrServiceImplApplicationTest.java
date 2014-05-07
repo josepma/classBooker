@@ -23,12 +23,9 @@ import org.classBooker.entity.User;
 import org.jmock.Expectations;
 import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
-import org.jmock.Sequence;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,15 +53,10 @@ public class ReservationMgrServiceImplApplicationTest {
     
     @Before
     public void setUp(){
-        rmgr = new ReservationMgrServiceImplApplication();
-        rDao = context.mock(ReservationDAO.class);
-        sDao = context.mock(SpaceDAO.class);
-        uDao = context.mock(UserDAO.class);
         
-        rmgr.setReservationDao(rDao);
-        rmgr.setSpaceDao(sDao);
-        rmgr.setUserDao(uDao);
-      
+        rmgr = new ReservationMgrServiceImplApplication();  
+        createAndSetMockObjects();
+        
     }
     
     @Test(expected = IncorrectRoomException.class)
@@ -104,17 +96,17 @@ public class ReservationMgrServiceImplApplicationTest {
     }
     
     @Test
-    public void testReservationAlreadyDone() throws Exception {
-        makeReservationExpectations(room,professor,reservation);
-        Reservation result = rmgr.makeReservationBySpace(roomId, nif, date);
-        assertEquals("Reservation already done",result,null);
-    }
-    
-    @Test
     public void testMakeNewReservation() throws Exception {
         makeReservationExpectations(room,professor,null);
         Reservation result = rmgr.makeReservationBySpace(roomId, nif, date);
-        assertEquals("Make new Reservation",result,new Reservation(date,professor,room));
+        assertEquals("Check hour of day",date.getHourOfDay(),result.getReservationDate().getHourOfDay());
+        assertEquals("Check year",date.getYear(),result.getReservationDate().getYear());
+        assertEquals("Check minute of hour",date.getMinuteOfHour(),result.getReservationDate().getMinuteOfHour());
+        assertEquals("Check month of year",date.getMonthOfYear(),result.getReservationDate().getMonthOfYear());
+        assertEquals("Check day of month",date.getDayOfMonth(),result.getReservationDate().getDayOfMonth());
+        assertEquals("Check user",professor,result.getrUser());
+        assertEquals("Check roomNumber",room.getNumber(),result.getRoom().getNumber());
+        assertEquals("Check nameBuilding",room.getBuilding(),result.getRoom().getBuilding());
     }
 
     @Test
@@ -139,5 +131,15 @@ public class ReservationMgrServiceImplApplicationTest {
             oneOf(uDao).getUserByNif(nif);will(returnValue(user)); 
          }});    
    }
+
+    private void createAndSetMockObjects() {
+        rDao = context.mock(ReservationDAO.class);
+        sDao = context.mock(SpaceDAO.class);
+        uDao = context.mock(UserDAO.class);
+        
+        rmgr.setReservationDao(rDao);
+        rmgr.setSpaceDao(sDao);
+        rmgr.setUserDao(uDao);
+    }
     
 }

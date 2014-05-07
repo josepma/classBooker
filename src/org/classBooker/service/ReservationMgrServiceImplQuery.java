@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.ArrayList;
 import org.classBooker.dao.ReservationDAO;
 import org.classBooker.dao.SpaceDAO;
+import org.classBooker.dao.SpaceDAOImpl;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectReservationException;
 import org.classBooker.dao.exception.IncorrectRoomException;
@@ -59,29 +60,33 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
      * @throws IncorrectBuildingException 
      */
     public List <Reservation> getFilteredReservation(String nif, 
-                              DateTime startDate,DateTime endDate, 
-                              String buildingName,long roomNb,int capacity,
-                              String roomType) throws IncorrectUserException, IncorrectBuildingException{
+                                                  DateTime startDate,
+                                                  DateTime endDate, 
+                                                  String buildingName,
+                                                  String roomNb,
+                                                  int capacity,
+                                                  String roomType) 
+            throws Exception{
         
         List<Reservation> lfreser= new ArrayList<Reservation>();
         lfreser = getReservationsByNif(nif);
-        // Que pasa si no hay nada en la lista?
+   
         if(lfreser == null){
-            return null;
+            return new ArrayList<Reservation>();
         }else{
-            if(startDate != null && endDate !=null & lfreser.size()>0){
+            if(startDate != null && endDate != null & lfreser.size()>0){
                 lfreser = getReservationAndDates(startDate, endDate,lfreser);
             }
             if(buildingName !=null & lfreser.size()>0){
                 lfreser = getReservationAndBuilding(buildingName,lfreser);
             }
-            if(roomNb <0 & lfreser.size()>0){
-                lfreser = getReservationAndRoom(roomNb,lfreser);
+            if(roomNb !=null & lfreser.size()>0){
+                lfreser = getReservationAndRoom(roomNb,buildingName,lfreser);
             }
-            if(capacity <0 & lfreser.size()>0){
+            if(capacity >0 & lfreser.size()>0){
                 lfreser = getReservationAndCapacity(capacity,lfreser);
             }
-            if(roomType !=null & lfreser.size()>0){
+            if(roomType != null & lfreser.size()>0){
                 lfreser = getReservationAndRoomType(roomType,lfreser);
             }
         }           
@@ -99,11 +104,11 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     
     //////// PRIVATE OPS //////
     
-    private List <Reservation> getReservationAndDates(DateTime dataIni,
-                               DateTime dataFi,List<Reservation>lfreser){
+    private List <Reservation> getReservationAndDates(DateTime startDate,
+                               DateTime endDate,List<Reservation>lfreser){
         
             for (Reservation res: lfreser){
-                    if(!(res.getReservationDate().isBefore(dataFi))){
+                    if(!(res.getReservationDate().isBefore(endDate))){
                            lfreser.remove(res); 
                     }          
             }
@@ -122,15 +127,17 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
         return lfreser;
     }
     private List <Reservation> getReservationAndRoom(String buildingName,
-                               String roomNb,List<Reservation>lfreser){
+                               String roomNb,List<Reservation>lfreser) throws IncorrectBuildingException, IncorrectRoomException{
         
-        for(Reservation res: lfreser){
-            if((res.getRoom().getBuilding().getBuildingName()!=buildingName) &&
-                    (res.getRoom().getNumber()!=roomNb)){
-                lfreser.remove(res);
-            }
-        }
-        return lfreser;
+//        for(Reservation res: lfreser){
+//            if((!res.getRoom().getBuilding().getBuildingName().equals(buildingName)) &&
+//                    (!res.getRoom().getNumber().equals(roomNb))){
+//                lfreser.remove(res);
+//            }
+//        }
+        SpaceDAOImpl spaceDao=new SpaceDAOImpl();
+        Room roomID = spaceDao.getRoomByNbAndBuilding(roomNb,buildingName);
+        return getReservationAndRoom(roomID.getRoomId(),lfreser);
     }
     private List <Reservation> getReservationAndRoom(long roomID,
                                List<Reservation>lfreser){
@@ -153,14 +160,20 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
         return lfreser;
     }
     private List <Reservation> getReservationAndRoomType(String roomType,
-                               List<Reservation>lfreser){
-        // ???? 
-        /*
+                               List<Reservation>lfreser) 
+            throws IncorrectTypeException{
+        
+        List<Room>rooms = new ArrayList<>();
+        SpaceDAOImpl spaceDao = new SpaceDAOImpl();
+        rooms = spaceDao.getAllRoomsOfOneType(roomType);
+        
         for(Reservation res: lfreser){
-            if((res.getRoom().!=roomType)){
-                lfreser.remove(res);
+            for (Room r : rooms){
+                if((res.getRoom().getRoomId()!=r.getRoomId())){
+                    lfreser.remove(res);
+                }
             }
-        }*/
+        }
         return lfreser;
     }
   
