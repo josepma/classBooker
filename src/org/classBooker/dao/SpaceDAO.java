@@ -30,6 +30,8 @@ public interface SpaceDAO {
      * @throws PersistException
      * @throws IncorrectRoomException
      * @throws org.classBooker.dao.exception.AlreadyExistingRoomException
+     * @throws org.classBooker.dao.exception.AlreadyExistingBuildingException
+     * @throws org.classBooker.dao.exception.NonBuildingException
      */
     void addRoom (Room room) throws PersistException, IncorrectRoomException,
                                 AlreadyExistingRoomException, AlreadyExistingBuildingException,
@@ -59,6 +61,8 @@ public interface SpaceDAO {
      * @param building
      * @throws PersistException
      * @throws IncorrectBuildingException
+     * @throws org.classBooker.dao.exception.AlreadyExistingBuildingException
+     * @throws org.classBooker.dao.exception.AlreadyExistingRoomException
      */
     void addBuilding(Building building)throws PersistException, 
                                                 IncorrectBuildingException,
@@ -124,6 +128,23 @@ public interface SpaceDAO {
                                             Building building)
                                             throws IncorrectBuildingException;
    
+    /**
+     *
+     * @param roomNb
+     * @param buildingName
+     * @return
+     * @throws IncorrectBuildingException
+     * @throws IncorrectRoomException
+     */
     Room getRoomByNbAndBuilding(String roomNb, String buildingName)throws IncorrectBuildingException, IncorrectRoomException;
+
+    /**
+     *
+     * @param type
+     * @param capacity
+     * @param buildingName
+     * @return
+     * @throws IncorrectBuildingException
+     */
     List<Room> getAllRoomsByTypeAndCapacity(String type, int capacity, String buildingName)throws IncorrectBuildingException;
 }

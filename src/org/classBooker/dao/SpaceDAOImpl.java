@@ -31,10 +31,18 @@ public class SpaceDAOImpl implements SpaceDAO{
     
     EntityManager em;
     
+    /**
+     *
+     * @return
+     */
     public EntityManager getEm() {
         return em;
     }
 
+    /**
+     *
+     * @param em
+     */
     public void setEm(EntityManager em) {
         this.em = em;
     }

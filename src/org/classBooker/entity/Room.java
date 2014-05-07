@@ -22,7 +22,9 @@ public abstract class Room {
     
     
     @Id
-    @Column(name = "ROOMID")
+    @GeneratedValue  
+    @Column(name = "ROOMID")    
+    
     long roomId;
     
     private String number;    
@@ -37,7 +39,7 @@ public abstract class Room {
         this.capacity = 0;
         this.building = null;
         this.reservations=new ArrayList<>();
-        this.roomId=(long)(Math.random()*10000 + 1);
+        
     }
     
     public Room( Building building, String number, int capacity) {
@@ -45,7 +47,7 @@ public abstract class Room {
         this.building = building;
         this.capacity = capacity;
         this.reservations=new ArrayList<>();
-        this.roomId=(long)(Math.random()*10000 + 1);
+       
     }
 
     public int getCapacity() {

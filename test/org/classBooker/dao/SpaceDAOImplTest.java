@@ -48,10 +48,16 @@ public class SpaceDAOImplTest {
      Building building, building2;
      private Query query;
 
+    /**
+     *
+     */
     public SpaceDAOImplTest() {
         this.sdi=new SpaceDAOImpl();   
     }
     
+    /**
+     *
+     */
     @Before
     public void setUp() {       
         building=new Building("EPS");
@@ -64,18 +70,24 @@ public class SpaceDAOImplTest {
         sdi.setEm(ema); 
     }
 
-    
- 
-     
+    /**
+     *
+     * @throws Exception
+     */
     @Test 
     public void testAddRoom() throws Exception {
         room2 =new ClassRoom(building, "2.01", 30);
         sdi.addRoom(room2);
+        System.out.println("Room id :  "+room2.getRoomId());
         assertTrue(building.getRooms().contains(room2));
         assertEquals(room2.getBuilding(), building);
         assertTrue( sdi.getAllRooms().contains(room2));
     }
     
+    /**
+     *
+     * @throws Exception
+     */
     @Test(expected = AlreadyExistingRoomException.class)
     public void testAddExistingRoom() throws Exception{
         building2=new Building("FDE");
@@ -85,15 +97,21 @@ public class SpaceDAOImplTest {
         sdi.addRoom(room2);
     }
     
+    /**
+     *
+     * @throws Exception
+     */
     @Test(expected=NonBuildingException.class)
     public void testAddRoomNoneExistingBuilding()throws Exception{
         building2=new Building("FDE");        
         room2= new ClassRoom (building2, "2.01", 30);
+        
         sdi.addRoom(room2);  
     }
     
     /**
      * Test of removeRoom method, of class SpaceDAOImpl.
+     * @throws java.lang.Exception
      */
 //    @Test
     public void testRemoveRoom() throws Exception {
@@ -120,6 +138,7 @@ public class SpaceDAOImplTest {
 
     /**
      * Test of addBuilding method, of class SpaceDAOImpl.
+     * @throws java.lang.Exception
      */
     @Test
     public void testAddBuilding() throws Exception {
@@ -128,6 +147,10 @@ public class SpaceDAOImplTest {
         assertTrue(sdi.getAllBuildings().contains(building));
     }
 
+    /**
+     *
+     * @throws Exception
+     */
     @Test(expected=AlreadyExistingBuildingException.class)
     public void testAddExixtingBuilding() throws Exception {
         building2=new Building("FDE"); 
@@ -137,6 +160,7 @@ public class SpaceDAOImplTest {
     
     /**
      * Test of modifyBuilding method, of class SpaceDAOImpl.
+     * @throws java.lang.Exception
      */
    // @Test
     public void testModifyBuilding() throws Exception {
@@ -144,6 +168,7 @@ public class SpaceDAOImplTest {
 
     /**
      * Test of removeBuilding method, of class SpaceDAOImpl.
+     * @throws java.lang.Exception
      */
     //@Test
     public void testRemoveBuilding() throws Exception {
@@ -151,6 +176,7 @@ public class SpaceDAOImplTest {
 
     /**
      * Test of getBuildingByName method, of class SpaceDAOImpl.
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetBuildingByName() throws Exception {   
@@ -171,6 +197,7 @@ public class SpaceDAOImplTest {
 
     /**
      * Test of getAllRoomsOfOneBuilding method, of class SpaceDAOImpl.
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetAllRoomsOfOneBuilding() throws Exception {
@@ -184,6 +211,7 @@ public class SpaceDAOImplTest {
 
     /**
      * Test of getAllRoomsOfOneType method, of class SpaceDAOImpl.
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetAllRoomsOfOneType() throws Exception {
@@ -200,6 +228,11 @@ public class SpaceDAOImplTest {
         Set <Room> result = new HashSet <>(sdi.getAllRoomsOfOneType("MeetingRoom"));
         assertEquals(roomsSet, result);
     }
+
+    /**
+     *
+     * @throws Exception
+     */
     @Test(expected=IncorrectTypeException.class)
     public void testGetAllRoomsOfOneIncorrectType() throws Exception {
         labRoom = new LaboratoryRoom(building, "2.1", 10);
@@ -217,6 +250,7 @@ public class SpaceDAOImplTest {
         }
     /**
      * Test of getAllRoomsOfOneTypeAndOneBuilding method, of class SpaceDAOImpl.
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetAllRoomsOfOneTypeAndOneBuilding() throws Exception {
@@ -237,8 +271,12 @@ public class SpaceDAOImplTest {
         Set <Room> result = new HashSet<>(sdi.getAllRoomsOfOneTypeAndOneBuilding("MeetingRoom", building));
         assertEquals(roomsSet,result);
     }
-    
-       @Test
+
+    /**
+     *
+     * @throws Exception
+     */
+    @Test
         public void testGetAllRoomsOfOneTypeAndOneBuildingandcapacity() throws Exception {
         labRoom = new LaboratoryRoom(building, "2.1", 10);
         meetRoom = new MeetingRoom(building, "1.08", 50);
@@ -261,8 +299,12 @@ public class SpaceDAOImplTest {
         Set <Room> result = new HashSet<>(sdi.getAllRoomsByTypeAndCapacity("MeetingRoom", 50, building.getBuildingName()));
         assertEquals(roomsSet, result );
     }
-       
-   @Test
+
+    /**
+     *
+     * @throws Exception
+     */
+    @Test
     public void testgetRoomByNbAndBuilding() throws Exception {
       labRoom = new LaboratoryRoom(building, "2.1", 10);
       sdi.addRoom(labRoom);
@@ -274,7 +316,11 @@ public class SpaceDAOImplTest {
         return emf.createEntityManager();
     }
 
-     @After
+    /**
+     *
+     * @throws Exception
+     */
+    @After
     public void tearDown() throws Exception{
         ema = sdi.getEm();
         if (ema.isOpen()) ema.close();
