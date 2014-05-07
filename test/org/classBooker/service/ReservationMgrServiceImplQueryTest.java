@@ -92,7 +92,7 @@ public class ReservationMgrServiceImplQueryTest {
       final DateTime startD = null;
       final DateTime endD = null;
       final String buildingName = null;
-      final long roomNb = 0;
+      final String roomNb = "0";
       final int capacity = 0;
       final String roomType = null;
        
