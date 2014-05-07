@@ -31,24 +31,24 @@ public class SpaceDAOImpl implements SpaceDAO{
     
     EntityManager em;
     
-    /**
-     *
-     * @return
-     */
+   
     public EntityManager getEm() {
         return em;
     }
 
-    /**
-     *
-     * @param em
-     */
+   
     public void setEm(EntityManager em) {
         this.em = em;
     }
-
-
-    @Override
+    
+   /**
+     * Add new room in database and add room in buiding 
+     * @param room
+     * @throws PersistException
+     * @throws AlreadyExistingRoomException
+     * @throws NonBuildingException
+     */
+   @Override
     public void addRoom(Room room) throws PersistException, 
                             AlreadyExistingRoomException, NonBuildingException  {
        try{
@@ -72,7 +72,11 @@ public class SpaceDAOImpl implements SpaceDAO{
         
     }
 
-   
+   /**
+     * Find Room by id 
+     * @param id      
+     * @return Room
+     */
     @Override
     public Room getRoomById(long id) {
         Room room = null;
@@ -84,7 +88,11 @@ public class SpaceDAOImpl implements SpaceDAO{
             throw e;}
         return room;
     }
-
+    /**
+     *Find all the rooms in the database
+     * @return List<Room> 
+     * 
+     */
     @Override
     public List<Room> getAllRooms() {
        List<Room> rooms = null;
@@ -100,10 +108,14 @@ public class SpaceDAOImpl implements SpaceDAO{
     
     }
 
-  
+  /**
+     * Add new building in database
+     * @param building
+     * @throws AlreadyExistingBuildingException
+     * @throws AlreadyExistingRoomException
+     */
     @Override
-    public void addBuilding(Building building)  throws PersistException, 
-                                                IncorrectBuildingException,
+    public void addBuilding(Building building)  throws 
                                                 AlreadyExistingBuildingException,
                                                 AlreadyExistingRoomException {
             try{
@@ -113,7 +125,12 @@ public class SpaceDAOImpl implements SpaceDAO{
             em.getTransaction().commit();
             }catch (PersistenceException e) {}
     } 
-
+     /**
+     *Find building about one name ex("EPS")
+     * @param name     
+     * @return building
+     * 
+     */
     @Override
     public Building getBuildingByName(String name)  {
        Building building = null;
@@ -124,7 +141,11 @@ public class SpaceDAOImpl implements SpaceDAO{
         
         return building;
     }
-
+/**
+     *Find all buildings in database
+     * @return List<Building>
+     * 
+     */
     @Override
     public List<Building> getAllBuildings() {
         List<Building> buildings = null;
@@ -138,7 +159,12 @@ public class SpaceDAOImpl implements SpaceDAO{
         
         return buildings; 
     }
-
+/**
+     * Find List rooms in one building
+     * @param building
+     * @return List<Room>
+     * 
+     */
     @Override
     public List<Room> getAllRoomsOfOneBuilding(Building building){
           
@@ -147,7 +173,13 @@ public class SpaceDAOImpl implements SpaceDAO{
         
     
     }
-
+/**
+     * Find all the rooms about one room type (MetingRoom, LaboratoryRoom or ClassRoom)
+     * @param Type
+     * @return List<Room>     * 
+     * @throws org.classBooker.dao.exception.IncorrectTypeException
+     * 
+     */
     @Override
     public List<Room> getAllRoomsOfOneType(String Type) throws IncorrectTypeException {
         List<Room> rooms = null;
@@ -163,7 +195,13 @@ public class SpaceDAOImpl implements SpaceDAO{
         }catch(PersistenceException e){}
         return rooms;
     }
-
+    /**
+     * Find list of Rooms about one room Type(MetingRoom, LaboratoryRoom or ClassRoom)
+     * and one Building.class
+     * @param Type, Building
+     * @return List<Room>
+     *  
+     */
     @Override
     public List<Room> getAllRoomsOfOneTypeAndOneBuilding(String Type, Building building) {
         List<Room> roomsOneType = null;
@@ -181,7 +219,14 @@ public class SpaceDAOImpl implements SpaceDAO{
          }
         return roomsOneTypeOneBuilding;
     }
-    
+    /**
+     *Find room about one building name and one room name/number
+     *@param buildingName  The building name Ex.("EPS")
+     *@param roomNb The number about room Ex.(2.01)
+     *@return Room 
+     * @throws org.classBooker.dao.exception.IncorrectBuildingException 
+     * @throws org.classBooker.dao.exception.IncorrectRoomException 
+     */
     @Override
     public Room getRoomByNbAndBuilding(String roomNb, String buildingName) throws IncorrectBuildingException, IncorrectRoomException {
       Building building=  getBuildingByName(buildingName);
@@ -192,12 +237,8 @@ public class SpaceDAOImpl implements SpaceDAO{
       }
       throw new IncorrectRoomException();
     }
-
-    private boolean checkExistingRoom(Room room) {
-        return em.find(Room.class, room.getRoomId())!=null;
-    }
-
     
+       
     @Override
     public void removeRoom(Room room) throws IncorrectRoomException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -212,12 +253,17 @@ public class SpaceDAOImpl implements SpaceDAO{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private boolean checkExistingBuilding(Building building) {
-        return em.find(Building.class, building.getBuildingName())!=null;
-    }
-
+    
+    /**
+     * Find all the rooms about one type, more than one capacity and one buiding
+     * @param buildingName 
+     * @param type 
+     * @param capacity  
+     * @throws org.classBooker.dao.exception.IncorrectBuildingException  
+     */
     @Override
-    public List<Room> getAllRoomsByTypeAndCapacity(String type, int capacity, String buildingName) throws IncorrectBuildingException {
+    public List<Room> getAllRoomsByTypeAndCapacity(String type, int capacity, String buildingName) 
+                                                    throws IncorrectBuildingException {
        
         List<Room> roomsOneType = null;
         List<Room> roomsOneTypeOneBuilding =new ArrayList();
@@ -225,7 +271,7 @@ public class SpaceDAOImpl implements SpaceDAO{
         Query query;
         try{
             em.getTransaction().begin();
-            query = em.createQuery("SELECT r FROM "+ type+" r" + " WHERE r.capacity=" +capacity );
+            query = em.createQuery("SELECT r FROM "+ type+" r" + " WHERE r.capacity<=" +capacity );
             roomsOneType = (List<Room>) query.getResultList();
             em.getTransaction().commit();            
         }catch(PersistenceException e){}
@@ -268,5 +314,6 @@ public class SpaceDAOImpl implements SpaceDAO{
    private boolean roomExist(Room room) {
         
         return em.find(Room.class, room.getRoomId())!=null;}
-    
+   
+  
 }

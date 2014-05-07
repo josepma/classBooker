@@ -284,7 +284,7 @@ public class SpaceDAOImplTest {
         Building building2=new Building("FDE");
         Room room5 =new MeetingRoom(building2, "2.01", 30);
         Room room6 = new MeetingRoom(building, "1.08", 70);
-        Room room7 = new MeetingRoom(building2, "1.08", 50);
+        Room room7 = new MeetingRoom(building2, "1.08", 20);
         sdi.addBuilding(building2);
         sdi.addRoom(labRoom);
         sdi.addRoom(meetRoom);
