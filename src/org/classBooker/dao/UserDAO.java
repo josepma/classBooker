@@ -42,7 +42,7 @@ public interface UserDAO {
      * 
      * @param name this is the name that we would use to search into the DB
      * @return a List filled with the users that match the name, if there's no
-     * users with that name, returns null
+     * users with that name, returns an empty list
      */
     
     List<User> getUsersByName(String name);
@@ -50,7 +50,8 @@ public interface UserDAO {
     /**
      * This function retrieves all the users from the database
      * 
-     * @return a List filled with all the users of the database
+     * @return a List filled with all the users of the database, if the Database
+     * is empty it would return an empty list
      */
     List<User> getAllUsers();
     
