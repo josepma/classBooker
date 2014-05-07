@@ -21,7 +21,7 @@ import org.joda.time.DateTime;
 public class Reservation {
     @Id
     @Column (name="IDENTIFIER")
-    //@GeneratedValue(generator ="reservationSeq" ,strategy=GenerationType.SEQUENCE)
+    @GeneratedValue
     private long reservationId;
   
     @Column (name="DATE")
