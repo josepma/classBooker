@@ -10,7 +10,7 @@ package org.classBooker.dao.exception;
  *
  * @author marc
  */
-class AlredyExistReservationException extends Exception {
+public class AlredyExistReservationException extends Exception {
 
     public AlredyExistReservationException() {
     }

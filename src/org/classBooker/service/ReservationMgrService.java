@@ -8,12 +8,7 @@ package org.classBooker.service;
 
 import java.util.HashMap;
 import java.util.List;
-import org.classBooker.dao.exception.AlreadyExistingBuildingException;
-import org.classBooker.dao.exception.IncorrectBuildingException;
-import org.classBooker.dao.exception.IncorrectReservationException;
-import org.classBooker.dao.exception.IncorrectRoomException;
-import org.classBooker.dao.exception.IncorrectTypeException;
-import org.classBooker.dao.exception.IncorrectUserException;
+import org.classBooker.dao.exception.*;
 import org.classBooker.entity.Building;
 import org.classBooker.entity.Reservation;
 import org.classBooker.entity.ReservationUser;
@@ -42,6 +37,6 @@ public interface ReservationMgrService {
     public void deleteReservation(long id);
     public List<Room> suggestionSpace(String roomNb, String building, DateTime resDate) throws IncorrectTypeException, IncorrectBuildingException, IncorrectRoomException;
     public ReservationUser getCurrentUserOfDemandedRoom(String roomNb, String building, DateTime datetime) throws IncorrectRoomException;
-    public void acceptReservation(Reservation reservation) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException,AlreadyExistingBuildingException;
+    public void acceptReservation(Reservation reservation) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException,AlredyExistReservationException;
    
 }
