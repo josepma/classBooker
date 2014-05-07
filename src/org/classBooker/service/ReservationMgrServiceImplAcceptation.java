@@ -11,6 +11,7 @@ import java.util.List;
 import org.classBooker.dao.ReservationDAO;
 import org.classBooker.dao.SpaceDAO;
 import org.classBooker.dao.UserDAO;
+import org.classBooker.dao.exception.AlreadyExistingBuildingException;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectReservationException;
 import org.classBooker.dao.exception.IncorrectRoomException;
@@ -108,7 +109,7 @@ public class ReservationMgrServiceImplAcceptation implements ReservationMgrServi
     }
     
     @Override
-    public void acceptReservation(Reservation reservation) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException {
+    public void acceptReservation(Reservation reservation) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException, AlreadyExistingBuildingException{
         reservationDao.addReservation(reservation);
     }
 
