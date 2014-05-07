@@ -7,8 +7,6 @@
 package org.classBooker.dao;
 
 
-import java.sql.Date;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import javax.persistence.EntityManager;
@@ -16,7 +14,6 @@ import javax.persistence.NoResultException;
 import org.classBooker.dao.exception.*;
 import org.classBooker.entity.*;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatter;
 
 /**
  *
@@ -35,23 +32,17 @@ public class ReservationDAOImpl implements ReservationDAO{
     }
 
     @Override
-    public Reservation addReservation(Reservation reservation) 
+    public long addReservation(Reservation reservation) 
                                         throws IncorrectReservationException, 
                                                IncorrectUserException, 
-                                               IncorrectRoomException {
+                                               IncorrectRoomException,
+                                               AlredyExistReservationException{
         
         em.getTransaction().begin();    
-        if(!checkReservation(reservation)){
-            em.persist(reservation);
-            reservation.getrUser().getReservations().add(reservation);
-            reservation.getRoom().getReservations().add(reservation);
-            em.getTransaction().commit();
-            return reservation;
-        }else{
-            System.err.println("The room is reserved for this Date");
-            em.getTransaction().rollback();
-        }
-        return null;
+        checkReservation(reservation);
+        persistReservation(reservation);
+        em.getTransaction().commit();
+        return reservation.getReservationId();
     }
     
     @Override
@@ -60,56 +51,80 @@ public class ReservationDAOImpl implements ReservationDAO{
                                         throws IncorrectReservationException, 
                                                IncorrectUserException, 
                                                IncorrectRoomException,
-                                               IncorrectBuildingException{
+                                               AlredyExistReservationException{
+        
         em.getTransaction().begin();
         ReservationUser user;
-        Building building;
         Room room;
         if((user = (ReservationUser) em.find(User.class, userId)) == null){
             throw new IncorrectUserException();
         }
-        if((building = (Building) em.find(Building.class, buildingName)) == null){
-            throw new IncorrectBuildingException();
-        }
         try{
-        room = (Room) em.createQuery("SELECT r "
-                + "FROM Room r "
-                + "WHERE r.building = :rbuilding AND "
-                + "r.number = :roomNb ")
-                .setParameter("rbuilding", building)
-                .setParameter("roomNb", roomNb).getSingleResult();
+            room = (Room) em.createQuery("SELECT r "
+                            + "FROM Room r "
+                            + "WHERE r.building.name = :buildingName AND "
+                            + "r.number = :roomNb ")
+                            .setParameter("buildingName", buildingName)
+                            .setParameter("roomNb", roomNb)
+                            .getSingleResult();
         }catch(NoResultException ex){
             throw new IncorrectRoomException();
         }
+        Reservation reservation = new Reservation(dateTime, user, room);
+        checkExistingReservation(reservation);
+        persistReservation(reservation);
         em.getTransaction().commit();
-        return addReservation(new Reservation(dateTime, user, room));
+        return reservation;
         
+    }
+    
+    private void persistReservation(Reservation reservation){
+            em.persist(reservation);
+            reservation.getrUser().getReservations().add(reservation);
+            reservation.getRoom().getReservations().add(reservation);
     }
 
     @Override
     public Reservation getReservationById(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.find(Reservation.class, id);
     }
 
     @Override
     public Reservation getReservationByDateRoomBulding(DateTime dateTime, String roomNb, String buildingName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return (Reservation) em.createQuery("SELECT r "
+                + "FROM Reservation r "
+                + "WHERE r.reservationDate = :rDate AND"
+                        + "r.room.number = :roomNb AND"
+                        + "r.room.building.name = :buildingName")
+                .setParameter("rDate", dateTime.toCalendar(Locale.getDefault()))
+                .setParameter("roomNb", roomNb)
+                .setParameter("buildingName", buildingName)
+                .getSingleResult();
     }
     
     @Override
     public List<Reservation> getAllReservation() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.createQuery("SELECT r "
+                            + "FROM Reservation r ").getResultList();
     }
 
 
     @Override
     public List<Reservation> getAllReservationByBuilding(String name) throws IncorrectBuildingException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.createQuery("SELECT r "
+                + "FROM Reservation r "
+                + "WHERE r.room.building.name = :buildingName ")
+                .setParameter("buildingName", name)
+                .getResultList();
     }
 
     @Override
     public List<Reservation> getAllReservationByRoom(String id) throws IncorrectRoomException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.createQuery("SELECT r "
+                + "FROM Reservation r "
+                + "WHERE r.room.roomId = :roomID ")
+                .setParameter("roomID", id)
+                .getResultList();
     }
 
     @Override
@@ -119,28 +134,29 @@ public class ReservationDAOImpl implements ReservationDAO{
 
     @Override
     public List<Reservation> getAllReservationByUserNif(String nif) throws IncorrectUserException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return em.createQuery("SELECT r "
+                + "FROM Reservation r "
+                + "WHERE r.rUser.nif = :nif ")
+                .setParameter("nif", nif)
+                .getResultList();
     }
     
     
     
-    private boolean checkReservation(Reservation reservation) throws IncorrectReservationException, IncorrectRoomException, IncorrectUserException{
+    private void checkReservation(Reservation reservation) 
+                                        throws IncorrectReservationException, 
+                                                IncorrectRoomException, 
+                                                IncorrectUserException, 
+                                                AlredyExistReservationException{
         
         if(reservation == null || reservation.getReservationDate() == null)
             throw new IncorrectReservationException();
         
         checkRoom(reservation.getRoom());
         checkUser(reservation.getrUser());
+        checkExistingReservation(reservation);
         
-        return !em.createQuery("SELECT r "
-                + "FROM Reservation r "
-                + "WHERE r.reservationDate = :reservationdDate AND "
-                + "r.room = :reservationRoom ")
-                .setParameter("reservationdDate", 
-                        reservation.getReservationDate().toCalendar(Locale.getDefault()))
-                .setParameter("reservationRoom",  
-                        reservation.getRoom())
-                .getResultList().isEmpty();
+
     }
 
     private void checkRoom(Room room) throws IncorrectRoomException {
@@ -148,7 +164,6 @@ public class ReservationDAOImpl implements ReservationDAO{
         if(room == null || room.getNumber() == null) 
             throw new IncorrectRoomException();
         
-        //System.err.println(em.find(Room.class, room));
         if(!em.contains(room))
             throw new IncorrectRoomException();
         
@@ -177,21 +192,19 @@ public class ReservationDAOImpl implements ReservationDAO{
     }
 
     private void checkExistingReservation(Reservation reservation) 
-                                        throws AlreadyExistingBuildingException{
+                                        throws AlredyExistReservationException{
         
-        if(em.find(Reservation.class, reservation.getReservationId())!= null){
-            throw new AlreadyExistingBuildingException();
+        if(!em.createQuery("SELECT r "
+                + "FROM Reservation r "
+                + "WHERE r.reservationDate = :reservationdDate AND "
+                + "r.room = :reservationRoom ")
+                .setParameter("reservationdDate", 
+                        reservation.getReservationDate().toCalendar(Locale.getDefault()))
+                .setParameter("reservationRoom",  
+                        reservation.getRoom())
+                .getResultList().isEmpty()){
+            throw new AlredyExistReservationException();
         }
-        DateTime data = reservation.getReservationDate();
-        /*        String month = String.valueOf(data.monthOfYear().getAsShortText());
-        String year = String.valueOf(data.year().get());
-        String day = String.valueOf(data.dayOfMonth().get());
-        String firstDate = day+"-"+month+"-"+year;*/
-        String query = "SELECT r FROM RESERVATION r"
-                     + "WHERE r.DATE  = ?1";
-        //em.createQuery(query).setParameter(1, data.toCalendar(Locale.getDefault()),TemporalType.DATE);
     }
-
-
 
 }
