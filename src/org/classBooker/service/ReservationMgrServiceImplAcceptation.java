@@ -97,9 +97,16 @@ public class ReservationMgrServiceImplAcceptation implements ReservationMgrServi
     @Override
     public List<Room> suggestionSpace(String roomNb, String building, DateTime date) throws IncorrectTypeException, IncorrectBuildingException, IncorrectRoomException {
         Room room = spaceDao.getRoomByNbAndBuilding(roomNb, building);
-        List<Room> suggestedRooms = spaceDao.getAllRoomsByTypeAndCapacity(room.getClass().toString(),room.getCapacity(), building);
-
-        return suggestedRooms;
+        List<Room> suggestedRoomsByTypeAndCapacity = spaceDao.getAllRoomsByTypeAndCapacity(room.getClass().toString(), room.getCapacity(), building);
+        List<Room> finalSuggestedRooms = new ArrayList<>();
+        Reservation res;
+        for (Room r : suggestedRoomsByTypeAndCapacity) {
+            res = reservationDao.getReservationByDateRoomBulding(date, roomNb, building);
+            if(res == null){
+                finalSuggestedRooms.add(r);
+            }
+        }
+        return finalSuggestedRooms;
     }
 
     @Override
