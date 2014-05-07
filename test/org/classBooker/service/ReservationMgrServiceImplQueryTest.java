@@ -40,34 +40,29 @@ public class ReservationMgrServiceImplQueryTest {
     Mockery context = new JUnit4Mockery();
     ReservationUser rUser;
     ReservationDAO resDao;
-    DateTime dateIni;
-    DateTime dateFi;
+    DateTime startDate;
+    DateTime endDate;
     Reservation res;
-    Room roomNb;
-    Building buildingName;
+    Room room;
+    Building building;
     Sequence seq;
     ReservationMgrServiceImplQuery rmsQ;
-   
-   
+    List<Reservation> lres;
    
     @Before
     public void setup(){
         
         resDao = context.mock(ReservationDAO.class);
         rUser = new ProfessorPas("12345678","Pepe@gmail.com","Pepe");
-        res = new Reservation();
-        dateIni = new DateTime(1,2,3,4,5);
-        dateFi = new DateTime(1,2,3,4,5);
-        buildingName = new Building("EPS");
-        roomNb = new ClassRoom (buildingName,"2",50);
+        building = new Building("Tibbers Building");
+        room = new ClassRoom (building,"2",50);
+        startDate = new DateTime(1,2,3,4,5);
+        endDate = new DateTime(2,3,4,5,6);
+        res = new Reservation(startDate, rUser, room);
         seq = context.sequence("seq");
         rmsQ = new ReservationMgrServiceImplQuery();
         
-        rmsQ.setRes(res);
         rmsQ.setResDao(resDao);
-        rmsQ.setBuildingName(buildingName);
-        rmsQ.setRoomNb(roomNb);
-        rmsQ.setResUser(rUser);
     }
     
     @Test 

@@ -29,14 +29,8 @@ import org.joda.time.DateTime;
  */
 public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     
-    private Reservation res;
     private ReservationDAO resDao;
-    private ReservationUser resUser;
-    private SpaceDAO spaDao;
-    private DateTime dateIni, dateFi;
- 
-    
-    
+
     /**
      * Get a list of reservations for the user
      * @param nif
@@ -54,8 +48,8 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     /**
      * Get a list of reservation using different filtered
      * @param nif
-     * @param dataIni
-     * @param dataFi
+     * @param startDate
+     * @param endDate
      * @param buildingName
      * @param roomNb
      * @param capacity
@@ -65,7 +59,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
      * @throws IncorrectBuildingException 
      */
     public List <Reservation> getFilteredReservation(String nif, 
-                              DateTime dataIni,DateTime dataFi, 
+                              DateTime startDate,DateTime endDate, 
                               String buildingName,long roomNb,int capacity,
                               String roomType) throws IncorrectUserException, IncorrectBuildingException{
         
@@ -75,8 +69,8 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
         if(lfreser == null){
             return null;
         }else{
-            if(dataIni != null && dataFi !=null & lfreser.size()>0){
-                lfreser = getReservationAndDates(dataIni, dataFi,lfreser);
+            if(startDate != null && endDate !=null & lfreser.size()>0){
+                lfreser = getReservationAndDates(startDate, endDate,lfreser);
             }
             if(buildingName !=null & lfreser.size()>0){
                 lfreser = getReservationAndBuilding(buildingName,lfreser);
@@ -93,18 +87,15 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
         }           
         return lfreser;
     }
-    
-    public void setRes(Reservation res) {
-        this.res = res;
-    }
 
     public void setResDao(ReservationDAO resDao) {
         this.resDao = resDao;
     }
 
-    public void setResUser(ReservationUser resUser) {
-        this.resUser = resUser;
+    public ReservationDAO getResDao() {
+        return resDao;
     }
+    
     
     //////// PRIVATE OPS //////
     
