@@ -8,6 +8,7 @@ package org.classBooker.dao;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -127,13 +128,13 @@ public class ReservationDAOImplTest {
     @Test
     public void testAddReservationByAttribute() throws Exception {
         
-        Reservation res = rDao.addReservation("47658245M", "10", 
+        long resId = rDao.addReservation("47658245M", "10", 
                             "testBuilding", new DateTime(2014, 05, 11, 12, 00));
                 
         Reservation reservationDB = getReservationFromDB(
-                                            res.getReservationId() );
+                                            resId );
         
-        checkReservation(res , reservationDB);
+        checkReservation(rDao.getReservationById(resId) , reservationDB);
         
     }
         
@@ -167,7 +168,7 @@ public class ReservationDAOImplTest {
     @Test
     public void testGetReservationById() throws Exception {
         
-        rDao.addReservation(reservation);
+        addDB(reservation);
         
         assertEquals(reservation,
                     rDao.getReservationById(reservation.getReservationId()));
@@ -176,10 +177,22 @@ public class ReservationDAOImplTest {
     /**
      * Test of getAllReservation method, of class ReservationDAOImpl.
      */
-    //@Test
+    @Test
     public void testGetAllReservation() throws Exception {
+        addDB(reservation);
+        Set <Reservation> allReservation = new HashSet<>(rDao.getAllReservation());
         
-        rDao.getAllReservation();
+        assertEquals(reservationsToSet(reservation), allReservation);
+        
+     }
+    
+     @Test
+     public void testGetAllReservationMultiReservations() throws Exception {
+        addDB(reservation);
+        Set <Reservation> allReservation = new HashSet<>(rDao.getAllReservation());
+        
+        assertEquals(reservationsToSet(reservation), allReservation);
+        
      }
 
     /**

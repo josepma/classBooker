@@ -46,7 +46,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     }
     
     @Override
-    public Reservation addReservation(String userId, String roomNb, 
+    public long addReservation(String userId, String roomNb, 
                                 String buildingName, DateTime dateTime) 
                                         throws IncorrectReservationException, 
                                                IncorrectUserException, 
@@ -74,7 +74,7 @@ public class ReservationDAOImpl implements ReservationDAO{
         checkExistingReservation(reservation);
         persistReservation(reservation);
         em.getTransaction().commit();
-        return reservation;
+        return reservation.getReservationId();
         
     }
     

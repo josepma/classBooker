@@ -44,7 +44,7 @@ public interface ReservationDAO {
      * @throws IncorrectRoomException
      * @throws AlredyExistReservationException
      */
-    Reservation addReservation (String userId, String roomNb, 
+    long addReservation (String userId, String roomNb, 
                           String buildingName, DateTime dateTime)
                                            throws IncorrectReservationException,
                                            IncorrectUserException,
