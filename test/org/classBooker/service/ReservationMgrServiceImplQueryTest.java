@@ -84,6 +84,33 @@ public class ReservationMgrServiceImplQueryTest {
       assertEquals("Error",expected,lres);
     }
     
+    @Test 
+    public void noReservationFilteredExist() throws Exception{
+      
+      final List <Reservation> lreser = new ArrayList<>();
+      final String nif ="01234567";
+      final DateTime startD = null;
+      final DateTime endD = null;
+      final String buildingName = null;
+      final long roomNb = 0;
+      final int capacity = 0;
+      final String roomType = null;
+       
+      context.checking(new Expectations(){{
+        oneOf(resDao).getAllReservationByUserNif(nif);
+        will(returnValue(lreser));
+      }});
+      
+      List <Reservation> expected = rmsQ.getFilteredReservation(nif,
+                                                                startD,
+                                                                endD,
+                                                                buildingName,
+                                                                roomNb,
+                                                                capacity,
+                                                                roomType);
+      assertEquals("Error",expected,lres);
+    }
+    
     //@Test 
     public void noReservationExistBis() throws Exception{
       

@@ -59,9 +59,13 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
      * @throws IncorrectBuildingException 
      */
     public List <Reservation> getFilteredReservation(String nif, 
-                              DateTime startDate,DateTime endDate, 
-                              String buildingName,long roomNb,int capacity,
-                              String roomType) throws IncorrectUserException, IncorrectBuildingException{
+                                                  DateTime startDate,
+                                                  DateTime endDate, 
+                                                  String buildingName,
+                                                  long roomNb,
+                                                  int capacity,
+                                                  String roomType) 
+            throws IncorrectUserException, IncorrectBuildingException{
         
         List<Reservation> lfreser= new ArrayList<Reservation>();
         lfreser = getReservationsByNif(nif);
@@ -69,19 +73,19 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
         if(lfreser == null){
             return null;
         }else{
-            if(startDate != null && endDate !=null & lfreser.size()>0){
+            if(startDate != null && endDate != null & lfreser.size()>0){
                 lfreser = getReservationAndDates(startDate, endDate,lfreser);
             }
             if(buildingName !=null & lfreser.size()>0){
                 lfreser = getReservationAndBuilding(buildingName,lfreser);
             }
-            if(roomNb <0 & lfreser.size()>0){
+            if(roomNb>0 & lfreser.size()>0){
                 lfreser = getReservationAndRoom(roomNb,lfreser);
             }
-            if(capacity <0 & lfreser.size()>0){
+            if(capacity>0 & lfreser.size()>0){
                 lfreser = getReservationAndCapacity(capacity,lfreser);
             }
-            if(roomType !=null & lfreser.size()>0){
+            if(roomType != null & lfreser.size()>0){
                 lfreser = getReservationAndRoomType(roomType,lfreser);
             }
         }           
@@ -125,8 +129,8 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                String roomNb,List<Reservation>lfreser){
         
         for(Reservation res: lfreser){
-            if((res.getRoom().getBuilding().getBuildingName()!=buildingName) &&
-                    (res.getRoom().getNumber()!=roomNb)){
+            if((!res.getRoom().getBuilding().getBuildingName().equals(buildingName)) &&
+                    (!res.getRoom().getNumber().equals(roomNb))){
                 lfreser.remove(res);
             }
         }
