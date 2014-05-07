@@ -33,7 +33,7 @@ public interface ReservationDAO {
      * @throws IncorrectUserException
      * @throws IncorrectRoomException
      */
-    void addReservation(Reservation reservation)
+    Reservation addReservation(Reservation reservation)
                                            throws IncorrectReservationException,
                                            IncorrectUserException,
                                            IncorrectRoomException;
@@ -48,11 +48,12 @@ public interface ReservationDAO {
      * @throws IncorrectUserException
      * @throws IncorrectRoomException
      */
-    void addReservation (String userId, String roomNb, 
+    Reservation addReservation (String userId, String roomNb, 
                           String buildingName, DateTime dateTime)
                                            throws IncorrectReservationException,
                                            IncorrectUserException,
-                                           IncorrectRoomException;
+                                           IncorrectRoomException,
+                                           IncorrectBuildingException;
 
     /**
      *
