@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import org.classBooker.dao.exception.AlreadyExistingBuildingException;
@@ -44,6 +45,7 @@ public class SpaceDAOImpl implements SpaceDAO{
    /**
      * Add new room in database and add room in buiding 
      * @param room
+     * @return RoomId
      * @throws PersistException
      * @throws AlreadyExistingRoomException
      * @throws NonBuildingException
@@ -314,17 +316,19 @@ public class SpaceDAOImpl implements SpaceDAO{
     
 
    private boolean roomExist(Room room) {
-       
-       return em.find(Room.class, room.getRoomId())!=null;}
-   /*List<Room> rooms = null;
-       Query query;
-       query = em.createQuery("SELECT r FROM Room r WHERE r.number = "+room.getNumber());
-       rooms = (List<Room>) query.getResultList();
-       if(rooms.size() == 0) return false;
-       for(Room r: rooms){
-           if(r.getBuilding().getBuildingName().equals(room.getBuilding().getBuildingName())) return true;
+      
+      try{
+          Room  room2 = (Room) em.createQuery("SELECT r "
+                            + "FROM Room r "
+                            + "WHERE r.building.name = :buildingName AND "
+                            + "r.number = :roomNb ")
+                            .setParameter("buildingName", room.getBuilding().getBuildingName())
+                            .setParameter("roomNb", room.getNumber())
+                            .getSingleResult();
+      }catch( NoResultException e){             
+             return false;            
        }
-//       
-       return false;
-   }      //&& buildingExist(room.getBuilding()) ;}*/
+       return true;
+   }
+    
 }

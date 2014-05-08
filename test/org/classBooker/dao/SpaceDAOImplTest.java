@@ -76,10 +76,9 @@ public class SpaceDAOImplTest {
      */
     @Test 
     public void testAddRoom() throws Exception {
-        room2 =new ClassRoom(building, "2.01", 30);
+        room2 =new ClassRoom(building, "2.08", 30);
         long rom = sdi.addRoom(room2);
-        System.out.println("Room id :  "+room2.getRoomId());
-        System.out.println("Room number ::  "+ room2.getNumber());
+        
         assertEquals(rom, room2.getRoomId());
         assertEquals(room2.getBuilding(), sdi.getBuildingByName(building.getBuildingName()));
         assertTrue( sdi.getAllRooms().contains(room2));
@@ -97,7 +96,7 @@ public class SpaceDAOImplTest {
     @Test(expected = AlreadyExistingRoomException.class)
     public void testAddExistingRoom() throws Exception{
         building2=new Building("FDE");
-        room2 =new ClassRoom(building, "2.01", 30);
+        room2 =new ClassRoom(building, "2.05", 30);
         
         sdi.addBuilding(building2);        
         sdi.addRoom(room2);
@@ -222,9 +221,9 @@ public class SpaceDAOImplTest {
      */
     @Test
     public void testGetAllRoomsOfOneType() throws Exception {
-        labRoom = new LaboratoryRoom(building, "2.1", 10);
-        meetRoom = new MeetingRoom(building, "1.08", 50);
-        classRoom = new ClassRoom(building, "3.01", 100);
+        labRoom = new LaboratoryRoom(building, "3.01", 10);
+        meetRoom = new MeetingRoom(building, "3.02", 50);
+        classRoom = new ClassRoom(building, "3.03", 100);
         sdi.addRoom(labRoom);
         sdi.addRoom(meetRoom);
         sdi.addRoom(classRoom);
@@ -242,9 +241,9 @@ public class SpaceDAOImplTest {
      */
     @Test(expected=IncorrectTypeException.class)
     public void testGetAllRoomsOfOneIncorrectType() throws Exception {
-        labRoom = new LaboratoryRoom(building, "2.1", 10);
-        meetRoom = new MeetingRoom(building, "1.08", 50);
-        classRoom = new ClassRoom(building, "3.01", 100);
+        labRoom = new LaboratoryRoom(building, "3.4", 10);
+        meetRoom = new MeetingRoom(building, "3.05", 50);
+        classRoom = new ClassRoom(building, "3.06", 100);
         sdi.addRoom(labRoom);
         sdi.addRoom(meetRoom);
         sdi.addRoom(classRoom);
@@ -262,10 +261,10 @@ public class SpaceDAOImplTest {
     @Test
     public void testGetAllRoomsOfOneTypeAndOneBuilding() throws Exception {
         Building building2=new Building("FDE");
-        labRoom = new LaboratoryRoom(building, "2.1", 10);
-        meetRoom = new MeetingRoom(building, "1.08", 50);
-        classRoom = new ClassRoom(building, "3.01", 100);
-        Room room5 =new MeetingRoom(building2, "2.01", 30);
+        labRoom = new LaboratoryRoom(building, "3.7", 10);
+        meetRoom = new MeetingRoom(building, "3.08", 50);
+        classRoom = new ClassRoom(building, "3.09", 100);
+        Room room5 =new MeetingRoom(building2, "3.10", 30);
         sdi.addBuilding(building2);
         sdi.addRoom(labRoom);
         sdi.addRoom(meetRoom);
@@ -285,12 +284,12 @@ public class SpaceDAOImplTest {
      */
     @Test
         public void testGetAllRoomsOfOneTypeAndOneBuildingandcapacity() throws Exception {
-        labRoom = new LaboratoryRoom(building, "2.1", 10);
+        labRoom = new LaboratoryRoom(building, "2.6", 10);
         meetRoom = new MeetingRoom(building, "1.08", 50);
         classRoom = new ClassRoom(building, "3.01", 100);
         Building building2=new Building("FDE");
-        Room room5 =new MeetingRoom(building2, "2.01", 30);
-        Room room6 = new MeetingRoom(building, "1.08", 70);
+        Room room5 =new MeetingRoom(building2, "2.09", 30);
+        Room room6 = new MeetingRoom(building, "1.07", 70);
         Room room7 = new MeetingRoom(building2, "1.08", 20);
         sdi.addBuilding(building2);
         sdi.addRoom(labRoom);
@@ -313,9 +312,9 @@ public class SpaceDAOImplTest {
      */
     @Test
     public void testgetRoomByNbAndBuilding() throws Exception {
-      labRoom = new LaboratoryRoom(building, "2.1", 10);
+      labRoom = new LaboratoryRoom(building, "2.21", 10);
       sdi.addRoom(labRoom);
-      assertEquals(labRoom, sdi.getRoomByNbAndBuilding("2.1", "EPS"));  
+      assertEquals(labRoom, sdi.getRoomByNbAndBuilding("2.21", "EPS"));  
     }
     
     private EntityManager getEntityManager() {
