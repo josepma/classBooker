@@ -133,6 +133,7 @@ public class ReservationMgrServiceImplAcceptation implements ReservationMgrServi
         Reservation reservation = makeReservationBySpace(room.getRoomId(), nif, resDate);
          
         if(reservation != null){
+            acceptReservation(reservation);
             ReservationUser reservationUser = (ReservationUser) userDao.getUserByNif(nif);
             return new ReservationResult(reservation, reservationUser);
         }
