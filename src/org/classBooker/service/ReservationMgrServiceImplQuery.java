@@ -81,7 +81,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
             if(buildingName !=null & lfreser.size()>0){
                 lfreser = getReservationAndBuilding(buildingName,lfreser);
             }
-            if(roomNb !=null & lfreser.size()>0){
+            if(roomNb !=null & buildingName !=null & lfreser.size()>0){
                 lfreser = getReservationAndRoom(roomNb,buildingName,lfreser);
             }
             if(capacity >0 & lfreser.size()>0){
@@ -112,7 +112,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                 throws IncorrectBuildingException{
         
         for (Reservation res: lfreser){
-            if((res.getRoom().getBuilding().getBuildingName())!=buildingName){
+            if(!(res.getRoom().getBuilding().getBuildingName()).equals(buildingName)){
                 lfreser.remove(res);
             }
         }
