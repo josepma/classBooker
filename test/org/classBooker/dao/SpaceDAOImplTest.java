@@ -77,12 +77,18 @@ public class SpaceDAOImplTest {
     @Test 
     public void testAddRoom() throws Exception {
         room2 =new ClassRoom(building, "2.01", 30);
-        sdi.addRoom(room2);
+        long rom = sdi.addRoom(room2);
         System.out.println("Room id :  "+room2.getRoomId());
-        assertTrue(building.getRooms().contains(room2));
-        assertEquals(room2.getBuilding(), building);
+        System.out.println("Room number ::  "+ room2.getNumber());
+        assertEquals(rom, room2.getRoomId());
+        assertEquals(room2.getBuilding(), sdi.getBuildingByName(building.getBuildingName()));
         assertTrue( sdi.getAllRooms().contains(room2));
+        assertTrue(sdi.getBuildingByName(building.getBuildingName()).getRooms().contains(room2));
+               
+                
     }
+    
+    
     
     /**
      *
@@ -92,6 +98,7 @@ public class SpaceDAOImplTest {
     public void testAddExistingRoom() throws Exception{
         building2=new Building("FDE");
         room2 =new ClassRoom(building, "2.01", 30);
+        
         sdi.addBuilding(building2);        
         sdi.addRoom(room2);
         sdi.addRoom(room2);
