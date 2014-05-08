@@ -31,7 +31,7 @@ import org.junit.Before;
 
 /**
  *
- * @author Santiago Hijazo i Mauro Churata
+ * @author SantiH & Xurata
  */
 
 @RunWith(JMock.class)

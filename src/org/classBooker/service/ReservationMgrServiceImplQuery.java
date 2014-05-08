@@ -26,7 +26,7 @@ import org.joda.time.DateTime;
 
 /**
  *
- * @author sht1, Xurat@
+ * @author SantiH & Xurata
  */
 public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     
