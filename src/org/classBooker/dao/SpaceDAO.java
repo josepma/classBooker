@@ -33,7 +33,7 @@ public interface SpaceDAO {
      * @throws org.classBooker.dao.exception.AlreadyExistingBuildingException
      * @throws org.classBooker.dao.exception.NonBuildingException
      */
-    void addRoom (Room room) throws PersistException, IncorrectRoomException,
+    long addRoom (Room room) throws PersistException, IncorrectRoomException,
                                 AlreadyExistingRoomException, AlreadyExistingBuildingException,
                                 NonBuildingException;
     /**
