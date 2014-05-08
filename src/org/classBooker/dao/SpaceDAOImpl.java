@@ -25,7 +25,7 @@ import org.classBooker.entity.Room;
 
 /**
  *
- * @author saida
+ * @author saida, genis
  */
 public class SpaceDAOImpl implements SpaceDAO{
     
@@ -49,7 +49,7 @@ public class SpaceDAOImpl implements SpaceDAO{
      * @throws NonBuildingException
      */
    @Override
-    public void addRoom(Room room) throws PersistException, 
+    public long addRoom(Room room) throws PersistException, 
                             AlreadyExistingRoomException, NonBuildingException  {
        try{
             Building building = getBuildingByName(room.getBuilding().getBuildingName());
@@ -68,7 +68,9 @@ public class SpaceDAOImpl implements SpaceDAO{
             
            } catch (PersistenceException e) {
             throw e;
+            
         } 
+       return room.getRoomId();
         
     }
 
@@ -312,8 +314,17 @@ public class SpaceDAOImpl implements SpaceDAO{
     
 
    private boolean roomExist(Room room) {
-        
-        return em.find(Room.class, room.getRoomId())!=null;}
-   
-  
+       
+       return em.find(Room.class, room.getRoomId())!=null;}
+   /*List<Room> rooms = null;
+       Query query;
+       query = em.createQuery("SELECT r FROM Room r WHERE r.number = "+room.getNumber());
+       rooms = (List<Room>) query.getResultList();
+       if(rooms.size() == 0) return false;
+       for(Room r: rooms){
+           if(r.getBuilding().getBuildingName().equals(room.getBuilding().getBuildingName())) return true;
+       }
+//       
+       return false;
+   }      //&& buildingExist(room.getBuilding()) ;}*/
 }
