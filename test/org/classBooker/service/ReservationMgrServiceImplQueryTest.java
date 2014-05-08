@@ -42,59 +42,71 @@ public class ReservationMgrServiceImplQueryTest {
     ReservationDAO resDao;
     DateTime startDate;
     DateTime endDate;
-    Reservation res;
+    Reservation res1,res2,res3,res4,res5;
     Room room;
     Building building;
     Sequence seq;
     ReservationMgrServiceImplQuery rmsQ;
-    List<Reservation> lres;
+    List<Reservation> lres, lreser;
+    
+    private String nif;
+    private DateTime startD;
+    private DateTime endD;
+    private String buildingName;
+    private String roomNb;
+    private int capacity;
+    private String roomType;
    
     @Before
     public void setup(){
         lres = new ArrayList<>();
-        
-        resDao = context.mock(ReservationDAO.class);
-        rUser = new ProfessorPas("12345678","Ralph@aus.com","Ralph");
-        building = new Building("Tibbers Building");
-        room = new ClassRoom (building,"2.3",30);
-        startDate = new DateTime(1,2,3,4,5);
-        endDate = new DateTime(2,3,4,5,6);
-        res = new Reservation(startDate, rUser, room);
-        
-        seq = context.sequence("seq");
+        lreser = new ArrayList<>();
         rmsQ = new ReservationMgrServiceImplQuery();
-        
+        resDao = context.mock(ReservationDAO.class);
         rmsQ.setResDao(resDao);
-        
-//        lres.add(res);
+        seq = context.sequence("seq");       
+        makingSomeReservations();
+    }
+    
+    @Test 
+    public void noReservationsWithoutFiltered() throws Exception{
+      
+      context.checking(new Expectations(){{
+        oneOf(resDao).getAllReservationByUserNif("12345678");
+        will(returnValue(lres));
+      }});
+      List <Reservation> tested = rmsQ.getReservationsByNif("12345678");
+      
+      assertEquals("Error",0,tested.size());
     }
  
     @Test 
-    public void noReservationExist() throws Exception{
+    public void allReservationsWithoutFiltered() throws Exception{
+      lres.add(res1);
+      lres.add(res2);
+      lres.add(res3);
+      lres.add(res4);
+      lres.add(res5);
       
-      final List <Reservation> lreser = new ArrayList<>();
-      final String nif ="01234567";
-       
       context.checking(new Expectations(){{
-        oneOf(resDao).getAllReservationByUserNif(nif);
-        will(returnValue(lreser));
+        oneOf(resDao).getAllReservationByUserNif("12345678");
+        will(returnValue(lres));
       }});
+      List <Reservation> tested = rmsQ.getReservationsByNif("12345678");
       
-      List <Reservation> expected = rmsQ.getReservationsByNif(nif);
-      assertEquals("Error",expected,lres);
+      assertEquals("Error",res1,tested.get(0));
+      assertEquals("Error",res2,tested.get(1));
+      assertEquals("Error",res3,tested.get(2));
+      assertEquals("Error",res4,tested.get(3));
+      assertEquals("Error",res5,tested.get(4));
     }
     
     @Test 
     public void noReservationFilteredExist() throws Exception{
       
       final List <Reservation> lreser = new ArrayList<>();
-      final String nif ="01234567";
-      final DateTime startD = null;
-      final DateTime endD = null;
-      final String buildingName = null;
-      final String roomNb = "0";
-      final int capacity = 0;
-      final String roomType = null;
+      
+      searchReservationsByFields("01234567",null,null,null,"0",0,null);
        
       context.checking(new Expectations(){{
         oneOf(resDao).getAllReservationByUserNif(nif);
@@ -126,59 +138,41 @@ public class ReservationMgrServiceImplQueryTest {
       List <Reservation> expected = rmsQ.getReservationsByNif(nif);
       assertEquals("Error",expected.get(0),lres.get(0));
     }
-   /*
-    //@Test // Pendiente con Ribó
-    public void oneReservationByUserID(){
-       
-       final long id = 123;
-       
-       context.checking(new Expectations(){{
-        oneOf(resDao).getReservationById(id);
-        will (returnValue(res));
-       }});
-       
+
+    private void makingSomeReservations(){
+        rUser = new ProfessorPas("12345678","Ralph@aus.com","Ralph");
+        building = new Building("Rectorate Building");
+        room = new ClassRoom (building,"2.3",30);
+        startDate = new DateTime(1,2,3,4,0);
+        endDate = new DateTime(1,2,3,5,0);
+        res1 = new Reservation(startDate, rUser, room);
+        building = new Building("Main Library");
+        room = new ClassRoom (building,"2.3",40);
+        res2 = new Reservation(startDate, rUser, room);
+        building = new Building("Faculty of Arctic Engineering");
+        room = new ClassRoom (building,"3.2",25);
+        res3 = new Reservation(startDate, rUser, room);
+        building = new Building("Faculty of Arctic Engineering");
+        room = new ClassRoom (building,"2.3",45);
+        res4 = new Reservation(startDate, rUser, room);
+        building = new Building("Main Library");
+        room = new ClassRoom (building,"4.4",50);
+        res5 = new Reservation(startDate, rUser, room);
     }
     
-    @Test
-    public void oneReservationByDateRoomBuilding() throws Exception{
-       
-       final String roomId = "2.4";
-       final String building = "EPS";
-       
-       context.checking(new Expectations(){{
-        //oneOf(resDao).getReservationByDateRoomBulding(dateTime, roomId, building);
-        will (returnValue(res));
-       }});
-       
-       Reservation expected = rmsQ.getReservation(dateTime, roomId, building);
-       assertEquals("Reservation already done",expected,res);
+    private void searchReservationsByFields(String nif, 
+                                          DateTime startDate,
+                                          DateTime endDate, 
+                                          String buildingName,
+                                          String roomNb,
+                                          int capacity,
+                                          String roomType){
+        this.nif = nif;
+        this.startD = startDate;
+        this.endD = endDate;
+        this.buildingName = buildingName;
+        this.roomNb = roomNb;
+        this.capacity = capacity;
+        this.roomType = roomType;    
     }
-    
-    //@Test
-    public void noReservationByUserNif() throws Exception{
-     
-      final String id = "Josep";  
-       
-      context.checking(new Expectations(){{
-        oneOf(resDao).getAllReservationByUserNif(id);
-        will(returnValue(null));
-      }});
-     rmsQ.getReservations(id);
-     
-//     assertEquals("Error conversion", null, rmsQ.getReservations(id));
-    }
-           
-    @Test
-    public void MoreReservationByUserNif() throws Exception {
-       
-        final List <Reservation> resList = new ArrayList<Reservation>();
-        final String building = "EPS";
-        context.checking(new Expectations(){{
-            oneOf(resDao).getAllReservationByBuilding(building);
-            will(returnValue(resList));
-        }});
-        List<Reservation> expected = rmsQ.getReservations(building);
-        assertEquals("Reservation already done",expected,resList);
-    }
-    */
 }

@@ -31,6 +31,7 @@ import org.joda.time.DateTime;
 public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     
     private ReservationDAO resDao;
+    private SpaceDAO spaDao;
 
     /**
      * Get a list of reservations for the user
@@ -92,15 +93,6 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
         }           
         return lfreser;
     }
-
-    public void setResDao(ReservationDAO resDao) {
-        this.resDao = resDao;
-    }
-
-    public ReservationDAO getResDao() {
-        return resDao;
-    }
-    
     
     //////// PRIVATE OPS //////
     
@@ -135,8 +127,8 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
 //                lfreser.remove(res);
 //            }
 //        }
-        SpaceDAOImpl spaceDao=new SpaceDAOImpl();
-        Room roomID = spaceDao.getRoomByNbAndBuilding(roomNb,buildingName);
+//        SpaceDAOImpl spaceDao=new SpaceDAOImpl();
+        Room roomID = spaDao.getRoomByNbAndBuilding(roomNb,buildingName);
         return getReservationAndRoom(roomID.getRoomId(),lfreser);
     }
     private List <Reservation> getReservationAndRoom(long roomID,
@@ -175,6 +167,22 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
             }
         }
         return lfreser;
+    }
+    
+    public void setResDao(ReservationDAO resDao) {
+        this.resDao = resDao;
+    }
+
+    public ReservationDAO getResDao() {
+        return resDao;
+    }
+
+    public SpaceDAO getSpaDao() {
+        return spaDao;
+    }
+
+    public void setSpaDao(SpaceDAO spaDao) {
+        this.spaDao = spaDao;
     }
   
     @Override
