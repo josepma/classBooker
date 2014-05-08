@@ -79,6 +79,14 @@ public class UserDAOImplTest {
     }
     
     @Test
+    public void testGetUsersByNameWithEmptyDatabase() throws Exception {
+        clear();
+        List<User> users = udao.getUsersByName("Pepito");
+        assertEquals(new ArrayList(),users);
+        
+    }
+    
+    @Test
     public void testGetMoreThanOneUserByName() throws Exception {
         User u1 = new ProfessorPas("44444","manganito1@gmail.com","Manganito");
         User u2 = new ProfessorPas("66666","manganito2@gmail.com","Manganito");
@@ -101,6 +109,14 @@ public class UserDAOImplTest {
         assertEquals("These two users should be equals",userSet,expectedSet);
         
     }
+    
+    @Test
+    public void testGetAllUsersWithEmptyDatabase() throws Exception {
+        clear();
+        List<User> users = udao.getAllUsers();
+        assertEquals(new ArrayList(),users);
+    }
+    
     
     @After
     public void clear(){
