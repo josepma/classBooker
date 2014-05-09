@@ -26,11 +26,12 @@ import org.joda.time.DateTime;
 
 /**
  *
- * @author sht1, Xurat@
+ * @author SantiH & Xurata
  */
 public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     
     private ReservationDAO resDao;
+    private SpaceDAO spaDao;
 
     /**
      * Get a list of reservations for the user
@@ -80,7 +81,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
             if(buildingName !=null & lfreser.size()>0){
                 lfreser = getReservationAndBuilding(buildingName,lfreser);
             }
-            if(roomNb !=null & lfreser.size()>0){
+            if(roomNb !=null & buildingName !=null & lfreser.size()>0){
                 lfreser = getReservationAndRoom(roomNb,buildingName,lfreser);
             }
             if(capacity >0 & lfreser.size()>0){
@@ -92,15 +93,6 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
         }           
         return lfreser;
     }
-
-    public void setResDao(ReservationDAO resDao) {
-        this.resDao = resDao;
-    }
-
-    public ReservationDAO getResDao() {
-        return resDao;
-    }
-    
     
     //////// PRIVATE OPS //////
     
@@ -120,14 +112,15 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                 throws IncorrectBuildingException{
         
         for (Reservation res: lfreser){
-            if((res.getRoom().getBuilding().getBuildingName())!=buildingName){
+            if(!(res.getRoom().getBuilding().getBuildingName()).equals(buildingName)){
                 lfreser.remove(res);
             }
         }
         return lfreser;
     }
     private List <Reservation> getReservationAndRoom(String buildingName,
-                               String roomNb,List<Reservation>lfreser) throws IncorrectBuildingException, IncorrectRoomException{
+                               String roomNb,List<Reservation>lfreser) 
+            throws IncorrectBuildingException, IncorrectRoomException{
         
 //        for(Reservation res: lfreser){
 //            if((!res.getRoom().getBuilding().getBuildingName().equals(buildingName)) &&
@@ -135,8 +128,8 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
 //                lfreser.remove(res);
 //            }
 //        }
-        SpaceDAOImpl spaceDao=new SpaceDAOImpl();
-        Room roomID = spaceDao.getRoomByNbAndBuilding(roomNb,buildingName);
+//        SpaceDAOImpl spaceDao=new SpaceDAOImpl();
+        Room roomID = spaDao.getRoomByNbAndBuilding(roomNb,buildingName);
         return getReservationAndRoom(roomID.getRoomId(),lfreser);
     }
     private List <Reservation> getReservationAndRoom(long roomID,
@@ -153,7 +146,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                List<Reservation>lfreser){
         
         for(Reservation res: lfreser){
-            if((res.getRoom().getCapacity()!=capacity)){
+            if((res.getRoom().getCapacity()>=capacity)){
                 lfreser.remove(res);
             }
         }
@@ -163,18 +156,37 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                List<Reservation>lfreser) 
             throws IncorrectTypeException{
         
-        List<Room>rooms = new ArrayList<>();
-        SpaceDAOImpl spaceDao = new SpaceDAOImpl();
-        rooms = spaceDao.getAllRoomsOfOneType(roomType);
+        List<Room> rooms;
+        List<Reservation> result;
+        rooms = new ArrayList<Room>();
+        result = new ArrayList<Reservation>();
+//        SpaceDAOImpl spaceDao = new SpaceDAOImpl();
+        rooms = spaDao.getAllRoomsOfOneType(roomType);
         
         for(Reservation res: lfreser){
             for (Room r : rooms){
-                if((res.getRoom().getRoomId()!=r.getRoomId())){
-                    lfreser.remove(res);
+                if((res.getRoom().getRoomId()== r.getRoomId())){
+                    result.add(res);
                 }
             }
         }
-        return lfreser;
+        return result;
+    }
+    
+    public void setResDao(ReservationDAO resDao) {
+        this.resDao = resDao;
+    }
+
+    public ReservationDAO getResDao() {
+        return resDao;
+    }
+
+    public SpaceDAO getSpaDao() {
+        return spaDao;
+    }
+
+    public void setSpaDao(SpaceDAO spaDao) {
+        this.spaDao = spaDao;
     }
   
     @Override

@@ -58,6 +58,7 @@ public class ReservationMgrServiceImplAcceptationTest {
     Reservation reservation;
     List<Room> lRooms;
     ReservationResult rResult;
+    String nif;
 
     public ReservationMgrServiceImplAcceptationTest() {
     }
@@ -69,6 +70,7 @@ public class ReservationMgrServiceImplAcceptationTest {
         uDao = context.mock(UserDAO.class, "uDao");
         rDao = context.mock(ReservationDAO.class, "rDao");
 
+        nif = "123";
         building = new Building("B1");
         room = new ClassRoom(building, "2.10", 100);
         dateTime = new DateTime(1, 2, 3, 4, 5);
@@ -182,12 +184,48 @@ public class ReservationMgrServiceImplAcceptationTest {
     public void testCompleteReservation() throws Exception{
         context.checking(new Expectations() {
             {
-                
+                oneOf (sDao).getRoomByNbAndBuilding(room.getNumber(), building.getBuildingName());
+                will(returnValue(room));
+                oneOf (sDao).getRoomById(room.getRoomId());
+                will(returnValue(room));
+                allowing (uDao).getUserByNif(nif);
+                will(returnValue(rUser));   
+                oneOf (rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());
+                will(returnValue(null));
+                oneOf (rDao).addReservation(reservation);             
             }
         });
-        rms.makeCompleteReservationBySpace("", room.getNumber(), building.getBuildingName(), dateTime);
+        ReservationResult rr = rms.makeCompleteReservationBySpace(nif, room.getNumber(), building.getBuildingName(), dateTime);
+        assertEquals("Not same reservation", reservation, rr.getReservation());
+        assertEquals("Not same user", rUser, rr.getrUser());
+        assertNull("Incorrect reservation result", rr.getSuggestions());
     }
 
+    //@Test
+    public void testCompleteReservationOfReservedRoom() throws Exception{
+        context.checking(new Expectations() {
+            {
+                oneOf (sDao).getRoomByNbAndBuilding(room.getNumber(), building.getBuildingName());
+                will(returnValue(room));
+                oneOf (sDao).getRoomById(room.getRoomId());
+                will(returnValue(room));
+                allowing (uDao).getUserByNif(nif);
+                will(returnValue(rUser));    
+                oneOf (rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());
+                will(returnValue(reservation));    
+                oneOf(sDao).getRoomByNbAndBuilding(room.getNumber(), building.getBuildingName());
+                will(returnValue(room));
+                oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().toString(), room.getCapacity(), building.getBuildingName());
+                will(returnValue(lRooms));
+                allowing (rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());
+                will(returnValue(null));
+            }
+        });
+        ReservationResult rr = rms.makeCompleteReservationBySpace(nif, room.getNumber(), building.getBuildingName(), dateTime);
+        assertNull("Incorrect reservation result", rr.getReservation());
+        assertNull("Incorrect reservation result", rr.getrUser());
+        assertSuggestedSpacesRequirements(rr.getSuggestions());
+    }
     private void checkNotReservedRoom(Room room) {
         List<Reservation> reservations = room.getReservations();
         for(Reservation r: reservations){
