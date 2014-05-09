@@ -75,7 +75,7 @@ public interface SpaceDAO {
      * @throws PersistException
      * @throws IncorrectBuildingException
      */
-    void modifyBuilding(Building building) throws PersistException, 
+    void modifyBuilding(Building building, String newName) throws PersistException, 
                                                 IncorrectBuildingException;
     
     /**
@@ -110,41 +110,44 @@ public interface SpaceDAO {
                                         throws IncorrectBuildingException;
     
     /**
-     *
+     * Find all the rooms about one room type (MetingRoom, LaboratoryRoom or ClassRoom)
      * @param Type
-     * @return
-     * @throws IncorrectTypeException
+     * @return List<Room>     
+     * @throws org.classBooker.dao.exception.IncorrectTypeException
+     * 
      */
     List<Room> getAllRoomsOfOneType(String Type)throws IncorrectTypeException;
     
     /**
-     *
-     * @param Type
+     * Find list of Rooms about one room Type(MetingRoom, LaboratoryRoom or ClassRoom)
+     * and one Building.class
+     * @param Type, Building
      * @param building
-     * @return
-     * @throws IncorrectBuildingException
+     * @return List<Room>
+     * @throws org.classBooker.dao.exception.IncorrectBuildingException
+     *  
      */
     List<Room> getAllRoomsOfOneTypeAndOneBuilding(String Type, 
                                             Building building)
                                             throws IncorrectBuildingException;
    
-    /**
-     *
-     * @param roomNb
-     * @param buildingName
-     * @return
-     * @throws IncorrectBuildingException
-     * @throws IncorrectRoomException
+   /**
+     *Find room about one building name and one room name/number
+     *@param buildingName  The building name Ex.("EPS")
+     *@param roomNb The number about room Ex.(2.01)
+     *@return Room 
+     * @throws org.classBooker.dao.exception.IncorrectBuildingException 
+     * @throws org.classBooker.dao.exception.IncorrectRoomException 
      */
     Room getRoomByNbAndBuilding(String roomNb, String buildingName)throws IncorrectBuildingException, IncorrectRoomException;
 
     /**
-     *
-     * @param type
-     * @param capacity
-     * @param buildingName
-     * @return
-     * @throws IncorrectBuildingException
+     * Find all the rooms about one type, more than one capacity and one buiding
+     * @param buildingName 
+     * @param type 
+     * @param capacity  
+     * @return List rooms  
+     * @throws org.classBooker.dao.exception.IncorrectBuildingException  
      */
     List<Room> getAllRoomsByTypeAndCapacity(String type, int capacity, String buildingName)throws IncorrectBuildingException;
 }
