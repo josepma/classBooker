@@ -119,7 +119,8 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
         return lfreser;
     }
     private List <Reservation> getReservationAndRoom(String buildingName,
-                               String roomNb,List<Reservation>lfreser) throws IncorrectBuildingException, IncorrectRoomException{
+                               String roomNb,List<Reservation>lfreser) 
+            throws IncorrectBuildingException, IncorrectRoomException{
         
 //        for(Reservation res: lfreser){
 //            if((!res.getRoom().getBuilding().getBuildingName().equals(buildingName)) &&
@@ -145,7 +146,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                List<Reservation>lfreser){
         
         for(Reservation res: lfreser){
-            if((res.getRoom().getCapacity()!=capacity)){
+            if((res.getRoom().getCapacity()>=capacity)){
                 lfreser.remove(res);
             }
         }
@@ -155,18 +156,21 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                List<Reservation>lfreser) 
             throws IncorrectTypeException{
         
-        List<Room>rooms = new ArrayList<>();
-        SpaceDAOImpl spaceDao = new SpaceDAOImpl();
-        rooms = spaceDao.getAllRoomsOfOneType(roomType);
+        List<Room> rooms;
+        List<Reservation> result;
+        rooms = new ArrayList<Room>();
+        result = new ArrayList<Reservation>();
+//        SpaceDAOImpl spaceDao = new SpaceDAOImpl();
+        rooms = spaDao.getAllRoomsOfOneType(roomType);
         
         for(Reservation res: lfreser){
             for (Room r : rooms){
-                if((res.getRoom().getRoomId()!=r.getRoomId())){
-                    lfreser.remove(res);
+                if((res.getRoom().getRoomId()== r.getRoomId())){
+                    result.add(res);
                 }
             }
         }
-        return lfreser;
+        return result;
     }
     
     public void setResDao(ReservationDAO resDao) {
