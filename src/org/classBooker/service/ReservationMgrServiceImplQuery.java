@@ -69,6 +69,10 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                                   String roomType) 
             throws Exception{
         
+        if(validation(nif,startDate,endDate,buildingName,
+                               roomNb,capacity,roomType)){
+            return new ArrayList<Reservation>();
+        }
         List<Reservation> lfreser= new ArrayList<Reservation>();
         lfreser = getReservationsByNif(nif);
    
@@ -173,6 +177,23 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
         System.out.println(result);
         return result;
     }
+    private boolean validation(String nif, 
+                                          DateTime startDate,
+                                          DateTime endDate, 
+                                          String buildingName,
+                                          String roomNb,
+                                          int capacity,
+                                          String roomType){
+        
+        if(!(nif.matches("\\d{1,8}")) || 
+           !(buildingName.matches("[A-Za-z]") ||
+           !(roomNb.matches("[\\d[.]\\d]")) ||
+           !(capacity>0)) ||
+           !(roomType.matches("[A-Za-z]"))){
+            return false;
+        }
+        return true;
+    }
     
     public void setResDao(ReservationDAO resDao) {
         this.resDao = resDao;
@@ -189,6 +210,8 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     public void setSpaDao(SpaceDAO spaDao) {
         this.spaDao = spaDao;
     }
+    
+    
   
     @Override
     public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws Exception {
