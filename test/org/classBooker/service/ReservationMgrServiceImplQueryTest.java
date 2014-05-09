@@ -129,7 +129,7 @@ public class ReservationMgrServiceImplQueryTest {
       assertEquals("Fifth reservation",res5,tested.get(4));
     }
     
-//    @Test 
+    @Test 
     public void ReservationFilteredByBuildingName() throws Exception{
       searchReservationsByFields("12345678",null,null,"Rectorate Building",null,0,null); 
       getExpectations(lres);
@@ -148,7 +148,7 @@ public class ReservationMgrServiceImplQueryTest {
 //      assertEquals("Fifth reservation",res5,tested.get(4));
     }
     
-//    @Test 
+    @Test 
     public void ReservationFilteredByRoomNb() throws Exception{
       searchReservationsByFields("12345678",null,null,"Rectorate Building","2.3",0,null);
       getExpectationsWithRoomNbAndBuilding(lres, 
@@ -195,7 +195,6 @@ public class ReservationMgrServiceImplQueryTest {
       List<Room> rooms = new ArrayList<>();
       rooms.add(res1.getRoom());
       getExpectationsWithRoomType(lres,"MeetingRoom",rooms);
-      
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
@@ -203,7 +202,7 @@ public class ReservationMgrServiceImplQueryTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-//      assertEquals("Same size",lres.size(),tested.size());
+      assertEquals("Same size",1,tested.size());
       assertEquals("First reservation",res1,tested.get(0));
 //      assertEquals("Second reservation",res2,tested.get(1));
 //      assertEquals("Third reservation",res3,tested.get(2));
@@ -229,10 +228,10 @@ public class ReservationMgrServiceImplQueryTest {
         building = new Building("Main Library");
         room = new ClassRoom (building,"2.3",40);
         res2 = new Reservation(startDate, rUser, room);
-        building = new Building("Faculty of Arctic Engineering");
+        building = new Building("Faculty");
         room = new LaboratoryRoom (building,"3.2",25);
         res3 = new Reservation(startDate, rUser, room);
-        building = new Building("Faculty of Arctic Engineering");
+        building = new Building("Faculty");
         room = new LaboratoryRoom (building,"2.3",45);
         res4 = new Reservation(startDate, rUser, room);
         building = new Building("Main Library");
@@ -262,13 +261,12 @@ public class ReservationMgrServiceImplQueryTest {
         this.roomType = roomType;    
     }
     
-    private void getExpectations(
-                                                final List<Reservation> lRes) 
+    private void getExpectations(final List<Reservation> lRes) 
             throws IncorrectUserException{
         context.checking(new Expectations(){{
             oneOf(resDao).getAllReservationByUserNif("12345678");
             will(returnValue(lRes));
-      }});
+        }});
     }
     
     private void getExpectationsWithRoomNbAndBuilding(
@@ -282,10 +280,10 @@ public class ReservationMgrServiceImplQueryTest {
         context.checking(new Expectations(){{
             oneOf(resDao).getAllReservationByUserNif("12345678");
             will(returnValue(lRes));
-            oneOf(spaDao).getRoomByNbAndBuilding(roomNb,building);
+            oneOf(spaDao).getRoomByNbAndBuilding(with(equal(roomNb)),with(equal(building)));
             will(returnValue(roomId));
             inSequence(seq);
-      }});
+        }});
     }
     
     private void getExpectationsWithRoomType(final List<Reservation> lRes, 
@@ -300,7 +298,7 @@ public class ReservationMgrServiceImplQueryTest {
             oneOf(spaDao).getAllRoomsOfOneType(roomType);
             will(returnValue(rooms));
             inSequence(seq);
-      }});
+        }});
     }
     
 }

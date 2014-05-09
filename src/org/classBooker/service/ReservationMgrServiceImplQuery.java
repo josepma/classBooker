@@ -111,15 +111,17 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                 ,List<Reservation>lfreser) 
                                 throws IncorrectBuildingException{
         
+        List<Reservation> result = new ArrayList<Reservation>();
         for (Reservation res: lfreser){
-            if(!(res.getRoom().getBuilding().getBuildingName()).equals(buildingName)){
-                lfreser.remove(res);
+            if((res.getRoom().getBuilding().getBuildingName()).equals(buildingName)){
+                result.add(res);
             }
         }
-        return lfreser;
+        return result;
     }
-    private List <Reservation> getReservationAndRoom(String buildingName,
-                               String roomNb,List<Reservation>lfreser) 
+    private List <Reservation> getReservationAndRoom(String roomNb,
+                                                    String buildingName,
+                                                    List<Reservation>lfreser) 
             throws IncorrectBuildingException, IncorrectRoomException{
         
 //        for(Reservation res: lfreser){
@@ -156,20 +158,19 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                List<Reservation>lfreser) 
             throws IncorrectTypeException{
         
-        List<Room> rooms;
-        List<Reservation> result;
-        rooms = new ArrayList<Room>();
-        result = new ArrayList<Reservation>();
+        List<Room> rooms = new ArrayList<Room>();
+        List<Reservation> result = new ArrayList<Reservation>();
 //        SpaceDAOImpl spaceDao = new SpaceDAOImpl();
         rooms = spaDao.getAllRoomsOfOneType(roomType);
-        
+        System.out.println(rooms);
         for(Reservation res: lfreser){
-            for (Room r : rooms){
-                if((res.getRoom().getRoomId()== r.getRoomId())){
+            for (Room room : rooms){
+                if((res.getRoom()== room)){
                     result.add(res);
                 }
             }
         }
+        System.out.println(result);
         return result;
     }
     
