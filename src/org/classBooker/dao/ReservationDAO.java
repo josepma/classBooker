@@ -77,7 +77,7 @@ public interface ReservationDAO {
      * when the Room is null or the number of the room is null
      */
 
-    void removeReservation(String id) throws IncorrectReservationException;
+    void removeReservation(long id) throws IncorrectReservationException;
     
     /**
      * Get a reservation by id.

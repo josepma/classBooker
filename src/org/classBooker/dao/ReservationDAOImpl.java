@@ -127,7 +127,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     }
 
     @Override
-    public void removeReservation(String id) throws IncorrectReservationException {
+    public void removeReservation(long id) throws IncorrectReservationException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
