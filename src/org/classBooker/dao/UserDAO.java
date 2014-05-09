@@ -19,7 +19,7 @@ import org.classBooker.entity.User;
 public interface UserDAO {
     
     /**
-     * This function adds a User into the Database, if this user is already in
+     * This function adds a User into the Database, if this user is already in, 
      * the function throws an AlreadyExistingUserException
      * 
      * @param user, is the user that would be inserted in the database

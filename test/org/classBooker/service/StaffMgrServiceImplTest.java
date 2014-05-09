@@ -30,7 +30,7 @@ public class StaffMgrServiceImplTest {
     @Test
     public void addMassiveUser() throws Exception {
         StaffMgrService staff = new StaffMgrServiceImpl();
-        staff.addMassiveUser("users.csv");
+        staff.addMassiveUser("users.xml");
     }
     
     @Test(expected = InexistentFileException.class)

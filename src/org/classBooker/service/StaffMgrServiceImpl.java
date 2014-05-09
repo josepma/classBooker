@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.classBooker.dao.UserDAO;
 import org.classBooker.dao.UserDAOImpl;
 import org.classBooker.dao.exception.AlreadyExistingUserException;
@@ -20,6 +22,10 @@ import org.classBooker.entity.ProfessorPas;
 import org.classBooker.entity.User;
 import org.classBooker.service.exception.InexistentFileException;
 import org.classBooker.service.exception.UnexpectedFormatFileException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -27,10 +33,14 @@ import org.classBooker.service.exception.UnexpectedFormatFileException;
  */
 public class StaffMgrServiceImpl implements StaffMgrService{
 
+    UserDAO u;
+    
+    public StaffMgrServiceImpl(){
+        u =new UserDAOImpl();
+    }
+    
     @Override
     public void addUser(User user) {
-
-        UserDAO u =new UserDAOImpl();
         try {
             u.addUser(user);
         } catch (AlreadyExistingUserException ex) {
@@ -45,8 +55,8 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         
         List<User> lUsers = parseFile(filename);
         
-        for (User u : lUsers){
-            addUser(u);
+        for (User us : lUsers){
+            addUser(us);
         }
     }
 
@@ -109,8 +119,38 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         return lUsers;
     }
 
-    private List<User> parseXml(String filename) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private List<User> parseXml(String filename) throws InexistentFileException {
+        List<User> lUsers = new ArrayList();
+        File f = new File(filename);
+        if(!f.exists()){
+            throw new InexistentFileException();
+        }
+        try{
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbFactory.newDocumentBuilder();
+            Document doc = db.parse(f);
+            
+            doc.getDocumentElement().normalize();
+            
+            NodeList nList = doc.getElementsByTagName("user");
+            
+            for(int temp = 0; temp<nList.getLength(); temp++){
+                Node nNode = nList.item(temp);
+                if(nNode.getNodeType() == Node.ELEMENT_NODE){
+                    Element eElement = (Element) nNode;
+                    String nif = eElement.getElementsByTagName("nif").item(0).getTextContent();
+                    String name = eElement.getElementsByTagName("name").item(0).getTextContent();
+                    String email = eElement.getElementsByTagName("email").item(0).getTextContent();
+                    User u = new ProfessorPas(nif, email, name);
+                    lUsers.add(u);
+                    System.out.println(u.toString());
+                }
+            }
+        }
+        catch(Exception e){
+            
+        }
+        return lUsers;
     }
     
 }

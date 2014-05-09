@@ -1,0 +1,22 @@
+<users>
+    <user> 
+        <name>name1</name> 
+        <nif>nif1</nif> 
+        <email>email1</email> 
+    </user>
+    <user> 
+        <name>name2</name> 
+        <nif>nif2</nif> 
+        <email>email2</email> 
+    </user>
+    <user> 
+        <name>name3</name> 
+        <nif>nif3</nif> 
+        <email>email3</email> 
+    </user> 
+    <user> 
+        <name>Pepito</name> 
+        <nif>55555</nif> 
+        <email>pepito@pepe.com</email> 
+    </user>  
+</users>
