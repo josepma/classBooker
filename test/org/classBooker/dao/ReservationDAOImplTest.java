@@ -8,44 +8,56 @@ package org.classBooker.dao;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.Vector;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import org.classBooker.dao.exception.*;
 import org.classBooker.entity.*;
+import org.jmock.Expectations;
+import static org.jmock.Expectations.returnIterator;
+import static org.jmock.Expectations.returnValue;
+import static org.jmock.Expectations.throwException;
 import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.joda.time.DateTime;
 import org.junit.After;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
+import org.junit.runner.RunWith;
 
 /**
  *
  * @author msf7
  */
+
 public class ReservationDAOImplTest {
     
-    Mockery context = new JUnit4Mockery();
+
     ReservationDAOImpl rDao;
+
     EntityManager em;
-    Room room;
-    Building building;
-    ReservationUser user;
-    Reservation reservation, reservation2;
+    Room room1, room2;
+    Building building1, building2;
+    ReservationUser user1, user2, user3;
+    Reservation reservation1, reservation2, reservation3, actualReservation, 
+                expectsReservation;
+    Vector <Reservation> allReservation;
+    DateTime dataRes1, dataRes2, dataRes3;
 
     
     
     public ReservationDAOImplTest() {
+        
     }
-    
-    
     @Before
     public void setUp() throws Exception {
+
+        
         rDao = new ReservationDAOImpl();
         
         // data base
@@ -53,15 +65,23 @@ public class ReservationDAOImplTest {
         rDao.setEm(em);   
         
         // entity objects
-        building = new Building("testBuilding");
-        room = new MeetingRoom();
-        room.setBuilding(building);
-        room.setNumber("10");
-        user = new ProfessorPas("47658245M", "random@professor.ly", "Manolo");
-        reservation = new Reservation(new DateTime(2014, 05, 11, 12, 00), user, room);
-        reservation2 = new Reservation(new DateTime(2014, 05, 11, 12, 00), user, room);
+        building1 = new Building("testBuilding1");
+        building2 = new Building("testBuilding2");
+        room1 = new MeetingRoom(building1, "10", 10);
+        room2 = new MeetingRoom(building2, "11", 11);
+        user1 = new ProfessorPas("47658245M", "random@professor.ly", "Manolo");
+        user2 = new ProfessorPas("47658246M", "random@professor.ly", "Lily");
+        user3 = new ProfessorPas("47656546M", "random@professor.ly", "Ramon");
+        dataRes1 = new DateTime(2014, 05, 11, 12, 00);
+        dataRes2 = new DateTime(2014, 06, 12, 10, 00);
+        dataRes3 = new DateTime(2014, 07, 12, 10, 00);
+        reservation1 = new Reservation(dataRes1, user1, room1);
+        reservation2 = new Reservation(dataRes2, user2, room2);
+        reservation3 = new Reservation(dataRes3, user3, room1);
         
-        addDB(user,room,building);
+        allReservation = new Vector();
+        
+        addDB(user1, user2, user3, room1, room2, building1, building2);
         
     }
     
@@ -70,19 +90,9 @@ public class ReservationDAOImplTest {
         
         em = rDao.getEm();
         if (em.isOpen()) em.close();
-        
         em = getEntityManager();
         em.getTransaction().begin();
-        
-        Query query  = em.createQuery("DELETE FROM Reservation");
-        Query query2 = em.createQuery("DELETE FROM User");
-        Query query3 = em.createQuery("DELETE FROM Room");
-        Query query4 = em.createQuery("DELETE FROM Building");
-        int deleteRecords = query.executeUpdate();
-        deleteRecords = query2.executeUpdate();
-        deleteRecords = query3.executeUpdate();
-        deleteRecords = query4.executeUpdate();
-              
+        deleteAllRowsOfAllTables();
         em.getTransaction().commit();
         em.close();
     }
@@ -91,124 +101,134 @@ public class ReservationDAOImplTest {
     @Test
     public void testAddReservationByReservation() throws Exception {
         
-        rDao.addReservation(reservation);
-        
-        Reservation reservationDB = getReservationFromDB(
-                                            reservation.getReservationId());
-        
-        checkReservation(reservation, reservationDB);
+        rDao.addReservation(reservation1);
+        actualReservation = getReservationFromDB(reservation1.getReservationId());
+        checkReservation(reservation1, actualReservation);
         
     }
     
+    @Test
+    public void  testReservationIdGenerationIsNotTheSame() throws Exception{
+    
+
+        long id1, id2, id3;
+        id1 = rDao.addReservation(reservation1);
+        id2 = rDao.addReservation(reservation2);
+        id3 = rDao.addReservation(reservation3);
+        
+        assertNotSame(id1, id2);
+        assertNotSame(id1, id3);
+        assertNotSame(id3, id2);
+    }
+    
+    
+    
     @Test(expected = IncorrectUserException.class)
     public void testAddReservationNotExistUser() throws Exception {
-        ReservationUser user1 = new ProfessorPas("4765665M", "random@professor.ly", "Manolo");
-        Reservation reservation1 = new Reservation(new DateTime(2014, 05, 11, 13, 00), user1, room);
+        ProfessorPas nonExistUser = new ProfessorPas("4765665M", 
+                                                     "random@professor.ly", 
+                                                     "Manolo");
+        reservation1.setrUser(nonExistUser);
         rDao.addReservation(reservation1);
     }
     
     @Test(expected = IncorrectRoomException.class)
     public void testAddReservationNotExistRoom() throws Exception {
-        Room room1 = new MeetingRoom();
-        room1.setBuilding(building);
-        room1.setNumber("10");
-        Reservation reservation1 = new Reservation(new DateTime(2014, 05, 11, 13, 00), user, room1);
-        rDao.addReservation(reservation1);
+        Room notExistRoom = new MeetingRoom(building1, "20", 10);
+        Reservation res = new Reservation(dataRes1, user1, notExistRoom);
+        rDao.addReservation(res);
     }
     
     @Test(expected = AlredyExistReservationException.class)
-    public void testAddReservationRoomAndDateIsReservet() throws Exception {
-        ReservationUser user1 = new ProfessorPas("4765665M", "random@professor.ly", "Manolo");
-        Reservation reservation1 = new Reservation(new DateTime(2014, 05, 11, 12, 00), user1, room);
-        addDB(user1);
-        rDao.addReservation(reservation);
+    public void testAddReservationSameTimeAndRoomButDifferentUser() throws Exception {  
+        Reservation res = new Reservation(dataRes1, user2, room1);
         rDao.addReservation(reservation1);
+        rDao.addReservation(res);
     }
     
     @Test
-    public void testAddReservationByAttribute() throws Exception {
-        
+    public void testAddReservationByAttribute() throws Exception {     
         long resId = rDao.addReservation("47658245M", "10", 
-                            "testBuilding", new DateTime(2014, 05, 11, 12, 00));
-                
-        Reservation reservationDB = getReservationFromDB(
-                                            resId );
-        
-        checkReservation(rDao.getReservationById(resId) , reservationDB);
+                                         "testBuilding1", dataRes1);
+        actualReservation = getReservationFromDB(resId);
+        expectsReservation = rDao.getReservationById(resId);
+        checkReservation( expectsReservation , actualReservation);
         
     }
         
     @Test(expected = IncorrectRoomException.class)
-    public void testAddReservationByAttributeNotExistRoom() throws Exception {
-        
-        rDao.addReservation("47658245M", "11", 
-                            "testBuilding", new DateTime(2014, 05, 11, 12, 00));
-
+    public void testAddReservationByAttributeNotExistRoom() throws Exception { 
+        rDao.addReservation("47658245M", "11", "testBuilding", dataRes1);
     }
     
     @Test(expected = IncorrectRoomException.class)
     public void testAddReservationByAttributeNotExistBuilding() throws Exception {
-        
-        rDao.addReservation("47658245M", "10", 
-                            "NotExistBuilding", new DateTime(2014, 05, 11, 12, 00));
-        
+
+        rDao.addReservation("47658245M", "10","NotExistBuilding", dataRes1);
     }
     
     @Test(expected = IncorrectUserException.class)
     public void testAddReservationByAttributeNotExistUser() throws Exception {
-        
-        rDao.addReservation("47658205M", "10", 
-                            "testBuilding", new DateTime(2014, 05, 11, 12, 00));
-        
+        rDao.addReservation("47658205M", "10", "testBuilding", dataRes1);
     }
 
     /**
      * Test of getReservationById method, of class ReservationDAOImpl.
      */
     @Test
-    public void testGetReservationById() throws Exception {
-        
-        addDB(reservation);
-        
-        assertEquals(reservation,
-                    rDao.getReservationById(reservation.getReservationId()));
+    public void testGetReservationById()throws Exception{
+        long resId = rDao.addReservation(reservation1);
+        actualReservation = rDao.getReservationById(resId);
+        assertEquals(reservation1,actualReservation);
     }
 
     /**
      * Test of getAllReservation method, of class ReservationDAOImpl.
      */
     @Test
-    public void testGetAllReservation() throws Exception {
-        addDB(reservation);
+    public void testGetAllReservation() throws Exception{
+        rDao.addReservation(reservation1);
         Set <Reservation> allReservation = new HashSet<>(rDao.getAllReservation());
-        
-        assertEquals(reservationsToSet(reservation), allReservation);
-        
+        assertEquals(reservationsToSet(reservation1), allReservation);
      }
     
      @Test
      public void testGetAllReservationMultiReservations() throws Exception {
-        addDB(reservation);
-        Set <Reservation> allReservation = new HashSet<>(rDao.getAllReservation());
+        allReservation.add(reservation1);
+        allReservation.add(reservation2);
+        allReservation.add(reservation3);
         
-        assertEquals(reservationsToSet(reservation), allReservation);
-        
+        addAllReservations();
+
+        assertEquals(allReservation, rDao.getAllReservation());
      }
 
     /**
      * Test of getAllReservationByBuilding method, of class ReservationDAOImpl.
      */
-    //@Test
+    @Test
     public void testGetAllReservationByBuilding() throws Exception {
-
+        allReservation.add(reservation1);
+        allReservation.add(reservation3);
+       
+        addAllReservations();
+        
+        assertEquals(allReservation, 
+                     rDao.getAllReservationByBuilding("testBuilding1"));
+        
     }
 
     /**
      * Test of getAllReservationByRoom method, of class ReservationDAOImpl.
      */
-    //@Test
+    @Test
     public void testGetAllReservationByRoom() throws Exception {
-
+        allReservation.add(reservation1);
+        allReservation.add(reservation3);
+        long idRoom = room1.getRoomId();
+        addAllReservations();
+        
+        assertEquals(allReservation,rDao.getAllReservationByRoom(idRoom));
     }
 
     /**
@@ -222,8 +242,16 @@ public class ReservationDAOImplTest {
     /**
      * Test of getAllReservationByUserNif method, of class ReservationDAOImpl.
      */
-    //@Test
+    @Test
     public void testGetAllReservationByUserNif() throws Exception {
+        reservation2.setrUser(user1);
+        addAllReservations();
+        
+        allReservation.add(reservation1);
+        allReservation.add(reservation2);
+        
+        assertEquals(allReservation,
+                     rDao.getAllReservationByUserNif(user1.getNif()));
 
     }
     
@@ -253,13 +281,30 @@ public class ReservationDAOImplTest {
     }
     
     private void checkReservation(Reservation expected,Reservation actual){
-        assertEquals(null, expected, actual);
+        assertEquals("Reservations are not equals", expected, actual);
         assertTrue(actual.getRoom().getReservations().contains(expected));
         assertTrue(actual.getrUser().getReservations().contains(expected));
     }
     
     private Set<Reservation> reservationsToSet(Reservation... res){
         return new HashSet<>(Arrays.asList(res));
+    }
+
+    private void deleteAllRowsOfAllTables() {
+        Query query  = em.createQuery("DELETE FROM Reservation");
+        Query query2 = em.createQuery("DELETE FROM User");
+        Query query3 = em.createQuery("DELETE FROM Room");
+        Query query4 = em.createQuery("DELETE FROM Building");
+        int deleteRecords = query.executeUpdate();
+        deleteRecords = query2.executeUpdate();
+        deleteRecords = query3.executeUpdate();
+        deleteRecords = query4.executeUpdate();
+    }
+
+    private void addAllReservations() throws Exception{
+        rDao.addReservation(reservation1);
+        rDao.addReservation(reservation2);
+        rDao.addReservation(reservation3);
     }
     
 }

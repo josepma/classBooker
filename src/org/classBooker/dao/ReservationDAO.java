@@ -38,8 +38,8 @@ public interface ReservationDAO {
     
     /**
      * Add a reservation in the database by params
-     * @param userId identifier of the user
-     * @param roomNb identifier of the room
+     * @param nif
+     * @param roomId
      * @param buildingName name of the building
      * @param dateTime the time of reservation
      * @return an identifier of the reservation added.
@@ -51,7 +51,7 @@ public interface ReservationDAO {
      * when the Room is null or the number of the room is null
      * @throws AlredyExistReservationException
      */
-    long addReservation (String userId, String roomNb, 
+    long addReservation (String nif, String roomId, 
                           String buildingName, DateTime dateTime)
                                            throws IncorrectReservationException,
                                            IncorrectUserException,
@@ -134,7 +134,7 @@ public interface ReservationDAO {
      * @throws IncorrectRoomException
      * when the Room doesn't exist.
      */
-    List<Reservation> getAllReservationByRoom(String id) 
+    List<Reservation> getAllReservationByRoom(long id) 
                                             throws IncorrectRoomException;
                                             
 }
