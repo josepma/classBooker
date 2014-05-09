@@ -93,21 +93,14 @@ public class ReservationMgrServiceImplAcceptationTest {
         lRooms = new ArrayList<>();
         lRooms.add(room);
 
-        context.checking(new Expectations() {
-            {
-                oneOf(sDao).getRoomByNbAndBuilding(room.getNumber(), building.getBuildingName());
-                will(returnValue(room));
-                oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().toString(), room.getCapacity(), building.getBuildingName());
-                will(returnValue(lRooms));
-                allowing (rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());
-                will(returnValue(null));
-            }
-        });
+        checkSuggestionSpacesExpectations(room, lRooms, null);
+        
         List<Room> suggestedRooms = rms.suggestionSpace(room.getNumber(), building.getBuildingName(), dateTime);
         System.out.println(suggestedRooms);
         if(suggestedRooms.isEmpty()) fail("No spaces suggested.");
         assertSuggestedSpacesRequirements(suggestedRooms);
     }
+    
     
     @Test
     public void notSuggestedSpacesIfRoomsWhichAssertRequirementsAreReserved() throws Exception {
@@ -115,16 +108,8 @@ public class ReservationMgrServiceImplAcceptationTest {
         lRooms = new ArrayList<>();
         lRooms.add(room);
 
-        context.checking(new Expectations() {
-            {
-                oneOf(sDao).getRoomByNbAndBuilding(room.getNumber(), building.getBuildingName());
-                will(returnValue(room));
-                oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().toString(), room.getCapacity(), building.getBuildingName());
-                will(returnValue(lRooms));
-                allowing (rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());
-                will(returnValue(reservation));
-            }
-        });
+        checkSuggestionSpacesExpectations(room, lRooms, reservation);        
+        
         List<Room> suggestedRooms = rms.suggestionSpace(room.getNumber(), building.getBuildingName(), dateTime);
         assertTrue(suggestedRooms.isEmpty());
     }
@@ -135,14 +120,8 @@ public class ReservationMgrServiceImplAcceptationTest {
         lRooms = new ArrayList<>();
         lRooms.add(room);
 
-        context.checking(new Expectations() {
-            {
-                oneOf(sDao).getRoomByNbAndBuilding(room.getNumber(), building.getBuildingName());
-                will(returnValue(room));
-                oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().toString(), room.getCapacity(), building.getBuildingName());
-                will(returnValue(new ArrayList<Room>()));
-            }
-        });
+        checkSuggestionSpacesExpectations(room, new ArrayList<Room>(), null);
+        
         List<Room> suggestedRooms = rms.suggestionSpace(room.getNumber(), building.getBuildingName(), dateTime);
         assertTrue(suggestedRooms.isEmpty());
     }
@@ -225,6 +204,18 @@ public class ReservationMgrServiceImplAcceptationTest {
         assertNull("Incorrect reservation result", rr.getReservation());
         assertNull("Incorrect reservation result", rr.getrUser());
         assertSuggestedSpacesRequirements(rr.getSuggestions());
+    }
+    private void checkSuggestionSpacesExpectations(final Room room, final List<Room> lRooms, final Reservation r) throws Exception{
+        context.checking(new Expectations() {
+            {
+                oneOf(sDao).getRoomByNbAndBuilding(room.getNumber(), building.getBuildingName());
+                will(returnValue(room));
+                oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().toString(), room.getCapacity(), building.getBuildingName());
+                will(returnValue(lRooms));
+                allowing (rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());
+                will(returnValue(r));
+            }
+        });
     }
     private void checkNotReservedRoom(Room room) {
         List<Reservation> reservations = room.getReservations();
