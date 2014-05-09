@@ -9,6 +9,7 @@ package org.classBooker.service;
 import org.classBooker.dao.ReservationDAO;
 import org.classBooker.dao.SpaceDAO;
 import org.classBooker.dao.UserDAO;
+import org.classBooker.dao.exception.IncorrectReservationException;
 import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectTimeException;
 import org.classBooker.dao.exception.IncorrectUserException;
@@ -38,10 +39,11 @@ import org.junit.runner.RunWith;
 @RunWith(JMock.class)
 public class ReservationMgrServiceImplApplicationTest {
     Mockery context = new JUnit4Mockery();
-    ReservationMgrServiceImplApplication rmgr;
+    ReservationMgrServiceImpl rmgr;
     ReservationDAO rDao;
     SpaceDAO sDao;
     UserDAO uDao;
+    
     final String nif="12345";
     final long roomId = 111;
     final DateTime date = new DateTime(2015,5,12,13,0);
@@ -51,36 +53,37 @@ public class ReservationMgrServiceImplApplicationTest {
     final User staff = new StaffAdmin();
     final Reservation reservation = new Reservation();
     
+    final long reservationId = 123;
     @Before
     public void setUp(){
         
-        rmgr = new ReservationMgrServiceImplApplication();  
+        rmgr = new ReservationMgrServiceImpl();  
         createAndSetMockObjects();
         
     }
-    
+    //Tests makeReservationBySpace
     @Test(expected = IncorrectRoomException.class)
     public void testIncorrectRoomId() throws Exception {
-        checkUserAndRoomExpetations(null,null);
+        checkUserAndRoomExpectations(null,null);
         rmgr.makeReservationBySpace(roomId, nif, date);
     }
     
      @Test(expected = IncorrectUserException.class)
     public void testIncorrectUserDontExist() throws Exception {
-        checkUserAndRoomExpetations(room,null);
+        checkUserAndRoomExpectations(room,null);
         rmgr.makeReservationBySpace(roomId, nif, date);
     }
     
      @Test(expected = IncorrectUserException.class)
     public void testIncorrectUserIsNotReservationUser() throws Exception {
-        checkUserAndRoomExpetations(room,staff);
+        checkUserAndRoomExpectations(room,staff);
         rmgr.makeReservationBySpace(roomId, nif, date);
     }
     
     @Test(expected = IncorrectTimeException.class)
     public void testIncorrectTimeBeforeNow() throws Exception {
         final DateTime date = new DateTime(2014,3,2,12,0);
-        checkUserAndRoomExpetations(room,professor); 
+        checkUserAndRoomExpectations(room,professor); 
         rmgr.makeReservationBySpace(roomId, nif, date);
         
         
@@ -89,7 +92,7 @@ public class ReservationMgrServiceImplApplicationTest {
     @Test(expected = IncorrectTimeException.class)
     public void testIncorrectFormatOfMinute() throws Exception {
         final DateTime date = new DateTime(2015,3,2,12,12);
-        checkUserAndRoomExpetations(room,professor); 
+        checkUserAndRoomExpectations(room,professor); 
         rmgr.makeReservationBySpace(roomId, nif, date);
         
         
@@ -116,6 +119,22 @@ public class ReservationMgrServiceImplApplicationTest {
         assertEquals("Make new Reservation",null,result);
     }
     
+    //Test deleteReservation
+    
+    @Test(expected = IncorrectReservationException.class)
+    public void testNoExitingReservationDelete()throws Exception{
+        checkDeleteReservationExpectations(null);
+        rmgr.deleteReservation(reservationId);
+    }
+    
+    @Test
+    public void testDeleteExistingReservation()throws Exception{
+        checkDeleteReservationExpectations(reservation);
+        rmgr.deleteReservation(reservationId);
+    }
+    
+    
+    
     private void makeReservationExpectations(final Room room, final User user,final Reservation reservation) {
         context.checking(new Expectations(){{ 
             oneOf(sDao).getRoomById(roomId);will(returnValue(room));
@@ -125,13 +144,24 @@ public class ReservationMgrServiceImplApplicationTest {
          }});    
     }
 
-   private void checkUserAndRoomExpetations(final Room room,final User user){
+    
+   
+   private void checkUserAndRoomExpectations(final Room room,final User user){
        context.checking(new Expectations(){{ 
             oneOf(sDao).getRoomById(roomId);will(returnValue(room));
             oneOf(uDao).getUserByNif(nif);will(returnValue(user)); 
          }});    
    }
+   
+   private void checkDeleteReservationExpectations(final Reservation reser) 
+                                                    throws IncorrectReservationException{
+       context.checking(new Expectations(){{ 
+            oneOf(rDao).getReservationById(reservationId);will(returnValue(reser));
+            allowing(rDao).removeReservation(reservationId);
+         }});    
+   }
 
+   
     private void createAndSetMockObjects() {
         rDao = context.mock(ReservationDAO.class);
         sDao = context.mock(SpaceDAO.class);

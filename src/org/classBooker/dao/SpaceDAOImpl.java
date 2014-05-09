@@ -26,7 +26,7 @@ import org.classBooker.entity.Room;
 
 /**
  *
- * @author saida, genis
+ * @author saida
  */
 public class SpaceDAOImpl implements SpaceDAO{
     
@@ -245,16 +245,17 @@ public class SpaceDAOImpl implements SpaceDAO{
        
     @Override
     public void removeRoom(Room room) throws IncorrectRoomException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       em.remove(room);
     }
     @Override
-    public void modifyBuilding(Building building) throws PersistException, IncorrectBuildingException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void modifyBuilding(Building building, String newName) throws PersistException, IncorrectBuildingException {
+       em.createQuery("UPDATE Building b SET b.name="+newName+
+                            "WHERE"+building.getBuildingName()+"= b.name");
     }
 
     @Override
     public void removeBuilding(Building building) throws IncorrectBuildingException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       em.remove(building);
     }
 
     

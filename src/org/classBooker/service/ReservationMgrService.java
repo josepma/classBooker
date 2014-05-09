@@ -109,7 +109,7 @@ public interface ReservationMgrService {
      *
      * @param id
      */
-    public void deleteReservation(long id);
+    public void deleteReservation(long id) throws IncorrectReservationException;
 
     /**
      * Suggests alternative similar rooms when the specified Room is reserved in the date given.

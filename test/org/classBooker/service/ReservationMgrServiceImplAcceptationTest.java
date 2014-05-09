@@ -47,7 +47,7 @@ import org.junit.runner.RunWith;
 public class ReservationMgrServiceImplAcceptationTest {
 
     Mockery context = new JUnit4Mockery();
-    ReservationMgrServiceImplAcceptation rms;
+    ReservationMgrServiceImpl rms;
     SpaceDAO sDao;
     UserDAO uDao;
     ReservationDAO rDao;
@@ -65,7 +65,7 @@ public class ReservationMgrServiceImplAcceptationTest {
 
     @Before
     public void setUp() {
-        rms = new ReservationMgrServiceImplAcceptation();
+        rms = new ReservationMgrServiceImpl();
         sDao = context.mock(SpaceDAO.class, "sDao");
         uDao = context.mock(UserDAO.class, "uDao");
         rDao = context.mock(ReservationDAO.class, "rDao");
@@ -73,7 +73,7 @@ public class ReservationMgrServiceImplAcceptationTest {
         nif = "123";
         building = new Building("B1");
         room = new ClassRoom(building, "2.10", 100);
-        dateTime = new DateTime(1, 2, 3, 4, 5);
+        dateTime = new DateTime(2015, 2, 3, 4, 0);
         rUser = new ProfessorPas();
         reservation = new Reservation(dateTime, rUser, room);
         rResult = new ReservationResult(reservation, rUser);
@@ -81,6 +81,10 @@ public class ReservationMgrServiceImplAcceptationTest {
         
         rms.setSpaceDao(sDao);
         rms.setReservationDao(rDao);
+        rms.setUserDao(uDao);
+        
+        lRooms = new ArrayList<>();
+        lRooms.add(room);
     }
 
     @After
@@ -90,41 +94,22 @@ public class ReservationMgrServiceImplAcceptationTest {
     @Test
     public void suggestedSpacesAssertRequirements() throws Exception {
 
-        lRooms = new ArrayList<>();
-        lRooms.add(room);
 
-        context.checking(new Expectations() {
-            {
-                oneOf(sDao).getRoomByNbAndBuilding(room.getNumber(), building.getBuildingName());
-                will(returnValue(room));
-                oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().toString(), room.getCapacity(), building.getBuildingName());
-                will(returnValue(lRooms));
-                allowing (rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());
-                will(returnValue(null));
-            }
-        });
+        checkSuggestionSpacesExpectations(room, lRooms, null);
+        
         List<Room> suggestedRooms = rms.suggestionSpace(room.getNumber(), building.getBuildingName(), dateTime);
         System.out.println(suggestedRooms);
         if(suggestedRooms.isEmpty()) fail("No spaces suggested.");
         assertSuggestedSpacesRequirements(suggestedRooms);
     }
     
+    
     @Test
     public void notSuggestedSpacesIfRoomsWhichAssertRequirementsAreReserved() throws Exception {
 
-        lRooms = new ArrayList<>();
-        lRooms.add(room);
 
-        context.checking(new Expectations() {
-            {
-                oneOf(sDao).getRoomByNbAndBuilding(room.getNumber(), building.getBuildingName());
-                will(returnValue(room));
-                oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().toString(), room.getCapacity(), building.getBuildingName());
-                will(returnValue(lRooms));
-                allowing (rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());
-                will(returnValue(reservation));
-            }
-        });
+        checkSuggestionSpacesExpectations(room, lRooms, reservation);        
+        
         List<Room> suggestedRooms = rms.suggestionSpace(room.getNumber(), building.getBuildingName(), dateTime);
         assertTrue(suggestedRooms.isEmpty());
     }
@@ -132,17 +117,9 @@ public class ReservationMgrServiceImplAcceptationTest {
     @Test
     public void notSuggestedSpacesIfNoRoomsAssertRequirements() throws Exception {
 
-        lRooms = new ArrayList<>();
-        lRooms.add(room);
 
-        context.checking(new Expectations() {
-            {
-                oneOf(sDao).getRoomByNbAndBuilding(room.getNumber(), building.getBuildingName());
-                will(returnValue(room));
-                oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().toString(), room.getCapacity(), building.getBuildingName());
-                will(returnValue(new ArrayList<Room>()));
-            }
-        });
+        checkSuggestionSpacesExpectations(room, new ArrayList<Room>(), null);
+        
         List<Room> suggestedRooms = rms.suggestionSpace(room.getNumber(), building.getBuildingName(), dateTime);
         assertTrue(suggestedRooms.isEmpty());
     }
@@ -180,7 +157,7 @@ public class ReservationMgrServiceImplAcceptationTest {
         ReservationUser ru = rms.getCurrentUserOfDemandedRoom(room.getNumber(), building.getBuildingName(), dateTime);
         assertNull(ru);
     }
-    //@Test
+    @Test
     public void testCompleteReservation() throws Exception{
         context.checking(new Expectations() {
             {
@@ -192,16 +169,19 @@ public class ReservationMgrServiceImplAcceptationTest {
                 will(returnValue(rUser));   
                 oneOf (rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());
                 will(returnValue(null));
-                oneOf (rDao).addReservation(reservation);             
+                oneOf (rDao).addReservation(with(any(Reservation.class)));             
             }
         });
         ReservationResult rr = rms.makeCompleteReservationBySpace(nif, room.getNumber(), building.getBuildingName(), dateTime);
-        assertEquals("Not same reservation", reservation, rr.getReservation());
+        
+        assertEquals(reservation.getReservationDate(), rr.getReservation().getReservationDate());
+        assertEquals(reservation.getRoom(), rr.getReservation().getRoom());
+        assertEquals(reservation.getrUser(), rr.getReservation().getrUser());
         assertEquals("Not same user", rUser, rr.getrUser());
         assertNull("Incorrect reservation result", rr.getSuggestions());
     }
 
-    //@Test
+    @Test
     public void testCompleteReservationOfReservedRoom() throws Exception{
         context.checking(new Expectations() {
             {
@@ -225,6 +205,18 @@ public class ReservationMgrServiceImplAcceptationTest {
         assertNull("Incorrect reservation result", rr.getReservation());
         assertNull("Incorrect reservation result", rr.getrUser());
         assertSuggestedSpacesRequirements(rr.getSuggestions());
+    }
+    private void checkSuggestionSpacesExpectations(final Room room, final List<Room> lRooms, final Reservation r) throws Exception{
+        context.checking(new Expectations() {
+            {
+                oneOf(sDao).getRoomByNbAndBuilding(room.getNumber(), building.getBuildingName());
+                will(returnValue(room));
+                oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().toString(), room.getCapacity(), building.getBuildingName());
+                will(returnValue(lRooms));
+                allowing (rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());
+                will(returnValue(r));
+            }
+        });
     }
     private void checkNotReservedRoom(Room room) {
         List<Reservation> reservations = room.getReservations();
