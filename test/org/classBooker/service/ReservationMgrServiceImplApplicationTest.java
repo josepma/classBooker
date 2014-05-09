@@ -39,7 +39,7 @@ import org.junit.runner.RunWith;
 @RunWith(JMock.class)
 public class ReservationMgrServiceImplApplicationTest {
     Mockery context = new JUnit4Mockery();
-    ReservationMgrServiceImplApplication rmgr;
+    ReservationMgrServiceImpl rmgr;
     ReservationDAO rDao;
     SpaceDAO sDao;
     UserDAO uDao;
@@ -57,7 +57,7 @@ public class ReservationMgrServiceImplApplicationTest {
     @Before
     public void setUp(){
         
-        rmgr = new ReservationMgrServiceImplApplication();  
+        rmgr = new ReservationMgrServiceImpl();  
         createAndSetMockObjects();
         
     }

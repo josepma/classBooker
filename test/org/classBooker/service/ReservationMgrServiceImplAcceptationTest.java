@@ -47,7 +47,7 @@ import org.junit.runner.RunWith;
 public class ReservationMgrServiceImplAcceptationTest {
 
     Mockery context = new JUnit4Mockery();
-    ReservationMgrServiceImplAcceptation rms;
+    ReservationMgrServiceImpl rms;
     SpaceDAO sDao;
     UserDAO uDao;
     ReservationDAO rDao;
@@ -65,7 +65,7 @@ public class ReservationMgrServiceImplAcceptationTest {
 
     @Before
     public void setUp() {
-        rms = new ReservationMgrServiceImplAcceptation();
+        rms = new ReservationMgrServiceImpl();
         sDao = context.mock(SpaceDAO.class, "sDao");
         uDao = context.mock(UserDAO.class, "uDao");
         rDao = context.mock(ReservationDAO.class, "rDao");
