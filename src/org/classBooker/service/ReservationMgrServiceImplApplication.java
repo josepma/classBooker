@@ -100,6 +100,9 @@ public class ReservationMgrServiceImplApplication implements ReservationMgrServi
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+           * Delete an existing reservation if not found will throw IncorrectReservationException.
+           */
     @Override
     public void deleteReservation(long id) throws IncorrectReservationException{
         Reservation reser = rDao.getReservationById(id);
