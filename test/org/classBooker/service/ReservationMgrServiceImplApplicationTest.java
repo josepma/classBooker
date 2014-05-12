@@ -52,8 +52,8 @@ public class ReservationMgrServiceImplApplicationTest {
     final ReservationUser professor = new ProfessorPas();
     final User staff = new StaffAdmin();
     final Reservation reservation = new Reservation();
-    
     final long reservationId = 123;
+    
     @Before
     public void setUp(){
         
@@ -133,7 +133,18 @@ public class ReservationMgrServiceImplApplicationTest {
         rmgr.deleteReservation(reservationId);
     }
     
+    //find reservationById
+    @Test(expected = IncorrectReservationException.class)
+    public void testCannotFindReservationById()throws Exception{
+        findReservationExpectations(null);
+        rmgr.findReservationById(reservationId);
+    }
     
+    @Test
+    public void testFindReservationById()throws Exception{
+        findReservationExpectations(reservation);
+        rmgr.findReservationById(reservationId);
+    }
     
     private void makeReservationExpectations(final Room room, final User user,final Reservation reservation) {
         context.checking(new Expectations(){{ 
@@ -143,8 +154,6 @@ public class ReservationMgrServiceImplApplicationTest {
             
          }});    
     }
-
-    
    
    private void checkUserAndRoomExpectations(final Room room,final User user){
        context.checking(new Expectations(){{ 
@@ -161,6 +170,12 @@ public class ReservationMgrServiceImplApplicationTest {
          }});    
    }
 
+   private void findReservationExpectations(final Reservation reser) {
+        context.checking(new Expectations(){{ 
+            oneOf(rDao).getReservationById(reservationId);will(returnValue(reser));
+         }});  
+    }
+   
    
     private void createAndSetMockObjects() {
         rDao = context.mock(ReservationDAO.class);
@@ -171,5 +186,6 @@ public class ReservationMgrServiceImplApplicationTest {
         rmgr.setSpaceDao(sDao);
         rmgr.setUserDao(uDao);
     }
+
     
 }
