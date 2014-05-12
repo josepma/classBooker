@@ -44,9 +44,6 @@ public class ReservationMgrServiceImplQueryTest {
     DateTime endDate;
     Reservation res1,res2,res3,res4,res5;
     Room room;
-//    ClassRoom claRoom;
-//    LaboratoryRoom labRoom;
-//    MeetingRoom meetRoom;
     Building building;
     Sequence seq;
     ReservationMgrServiceImplQuery rmsQ;
@@ -145,12 +142,11 @@ public class ReservationMgrServiceImplQueryTest {
     
     @Test 
     public void ReservationFilteredByRoomNb() throws Exception{
-      searchReservationsByFields("12345678",null,null,"Rectorate Building","2.3",0,null);
+      searchReservationsByFields("12345678",null,null,"Rectorate Building",
+                                 "2.3",0,null);
       getStartExpectations("12345678",lres);
-      getExpectationsWithRoomNbAndBuilding(lres, 
-                                            "2.3", 
-                                            "Rectorate Building",
-                                            lres.get(0).getRoom());
+      getExpectationsWithRoomNbAndBuilding("2.3","Rectorate Building",
+                                            res1.getRoom());
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
@@ -181,9 +177,7 @@ public class ReservationMgrServiceImplQueryTest {
     public void ReservationFilteredByRoomType() throws Exception{
       searchReservationsByFields("12345678",null,null,null,null,0,"MeetingRoom");
       getStartExpectations("12345678",lres);
-      List<Room> rooms = new ArrayList<>();
-      rooms.add(res1.getRoom());
-      getExpectationsWithRoomType(lres,"MeetingRoom",rooms);
+      getExpectationsWithRoomType("MeetingRoom",res1);
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
@@ -197,15 +191,16 @@ public class ReservationMgrServiceImplQueryTest {
     
     @Test 
     public void ReservationFilteredByAllFields() throws Exception{
-      searchReservationsByFields("12345678",new DateTime(2014,5,9,12,0),new DateTime(2014,5,9,13,0),"Main Library","4.4",50,"ClassRoom");
+      searchReservationsByFields("12345678",
+                                  new DateTime(2014,5,9,12,0),
+                                  new DateTime(2014,5,9,13,0),
+                                  "Main Library","4.4",
+                                  50,
+                                  "ClassRoom");
       getStartExpectations("12345678",lres);
-      getExpectationsWithRoomNbAndBuilding(lres, 
-                                            "4.4", 
-                                            "Main Library",
-                                            lres.get(0).getRoom());
-      List<Room> rooms = new ArrayList<>();
-      rooms.add(res5.getRoom());
-      getExpectationsWithRoomType(lres,"ClassRoom",rooms);
+      getExpectationsWithRoomNbAndBuilding("4.4","Main Library",
+                                            res5.getRoom());
+      getExpectationsWithRoomType("ClassRoom",res5);
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
@@ -277,7 +272,6 @@ public class ReservationMgrServiceImplQueryTest {
     }
     
     private void getExpectationsWithRoomNbAndBuilding(
-                                                final List<Reservation> lRes, 
                                                 final String roomNb, 
                                                 final String building, 
                                                 final Room roomId) 
@@ -285,17 +279,18 @@ public class ReservationMgrServiceImplQueryTest {
                 IncorrectBuildingException, 
                 IncorrectRoomException{
         context.checking(new Expectations(){{
-            oneOf(spaDao).getRoomByNbAndBuilding(with(equal(roomNb)),with(equal(building)));
+            oneOf(spaDao).getRoomByNbAndBuilding(with(equal(roomNb)),
+                                                 with(equal(building)));
             will(returnValue(roomId));
         }});
     }
     
-    private void getExpectationsWithRoomType(final List<Reservation> lRes, 
-                                             final String roomType,  
-                                             final List<Room> rooms) 
+    private void getExpectationsWithRoomType(final String roomType,Reservation res) 
                 throws IncorrectUserException,
                 IncorrectRoomException,
                 IncorrectTypeException{
+        final List<Room> rooms = new ArrayList<>();
+        rooms.add(res.getRoom());
         context.checking(new Expectations(){{
             oneOf(spaDao).getAllRoomsOfOneType(roomType);
             will(returnValue(rooms));
