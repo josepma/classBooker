@@ -123,8 +123,12 @@ public class SpaceDAOImplTest {
      * Test of removeRoom method, of class SpaceDAOImpl.
      * @throws java.lang.Exception
      */
-//    @Test
+    @Test
     public void testRemoveRoom() throws Exception {
+        room2 =new ClassRoom(building, "2.08", 30);
+        long rom = sdi.addRoom(room2);
+        sdi.removeRoom(room2);
+        assertFalse(sdi.getAllRooms().contains(room2));
     }
 
     /**
@@ -137,13 +141,19 @@ public class SpaceDAOImplTest {
 
     /**
      * Test of getAllRooms method, of class SpaceDAOImpl.
+     * @throws java.lang.Exception
      */
     @Test
-    public void testGetAllRooms() {
-        final List<Room> expected = new ArrayList<Room>();
-        expected.add(room);       
+    public void testGetAllRooms() throws Exception {
+        room2 =new ClassRoom(building, "2.08", 30);
+        sdi.addRoom(room2);
+        final Set<Room> expected = new HashSet<>();
+        expected.add(room);
+        expected.add(room2);
         List<Room> result = sdi.getAllRooms();
-        assertEquals(expected,result);  
+        Set<Room> resultSet= new HashSet(result);
+        assertEquals(expected,resultSet);
+        
     }
 
     /**
@@ -173,15 +183,19 @@ public class SpaceDAOImplTest {
      * @throws java.lang.Exception
      */
    // @Test
-    public void testModifyBuilding() throws Exception {
+    public void testModifyRoom() throws Exception {
     }
 
     /**
      * Test of removeBuilding method, of class SpaceDAOImpl.
      * @throws java.lang.Exception
      */
-    //@Test
+   @Test
     public void testRemoveBuilding() throws Exception {
+        building2 =new Building("FDE");
+         sdi.addBuilding(building2);
+        sdi.removeBuilding(building2);
+        assertFalse(sdi.getAllBuildings().contains(building2));
     }
 
     /**
@@ -195,11 +209,15 @@ public class SpaceDAOImplTest {
 
     /**
      * Test of getAllBuildings method, of class SpaceDAOImpl.
+     * @throws java.lang.Exception
      */
     @Test
-    public void testGetAllBuildings() {
+    public void testGetAllBuildings() throws Exception{
+        building2=new Building("FDE"); 
+        sdi.addBuilding(building2);  
         final Set<Building> expected = new HashSet<>();
         expected.add(building);
+        expected.add(building2);
         List<Building> result = sdi.getAllBuildings();
         Set<Building> resultSet= new HashSet(result);
         assertEquals(expected,resultSet);
@@ -215,7 +233,7 @@ public class SpaceDAOImplTest {
         rooms.add(room);       
         building.setRooms(rooms);
         Set <Room> roomsSet = new HashSet<>(rooms);
-        Set <Room> result = new HashSet <>(sdi.getAllRoomsOfOneBuilding(building));
+        Set <Room> result = new HashSet <>(sdi.getAllRoomsOfOneBuilding(building.getBuildingName()));
         assertEquals(roomsSet, result);   
     }
 
@@ -293,8 +311,9 @@ public class SpaceDAOImplTest {
         classRoom = new ClassRoom(building, "3.01", 100);
         Building building2=new Building("FDE");
         Room room5 =new MeetingRoom(building2, "2.09", 30);
-        Room room6 = new MeetingRoom(building, "1.07", 70);
+        Room room6 = new MeetingRoom(building, "1.07", 30);
         Room room7 = new MeetingRoom(building2, "1.08", 20);
+        Room room8 = new MeetingRoom(building, "3.08", 70);
         sdi.addBuilding(building2);
         sdi.addRoom(labRoom);
         sdi.addRoom(meetRoom);
@@ -302,8 +321,10 @@ public class SpaceDAOImplTest {
         sdi.addRoom(room5);
         sdi.addRoom(room6);
         sdi.addRoom(room7);
+        sdi.addRoom(room8);
         List<Room> meetingRooms = new ArrayList<Room>();
         meetingRooms.add(meetRoom);
+        meetingRooms.add(room8);
         building.setRooms(meetingRooms);
         Set <Room> roomsSet = new HashSet<>(meetingRooms);
         Set <Room> result = new HashSet<>(sdi.getAllRoomsByTypeAndCapacity("MeetingRoom", 50, building.getBuildingName()));
