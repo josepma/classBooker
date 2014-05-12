@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.ArrayList;
 import org.classBooker.dao.ReservationDAO;
 import org.classBooker.dao.SpaceDAO;
-import org.classBooker.dao.SpaceDAOImpl;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectReservationException;
 import org.classBooker.dao.exception.IncorrectRoomException;
@@ -42,8 +41,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     public List <Reservation> getReservationsByNif(String nif) 
                               throws IncorrectUserException{
         
-        List<Reservation> lreser= new ArrayList<>();
-        lreser=resDao.getAllReservationByUserNif(nif);
+        List<Reservation> lreser = resDao.getAllReservationByUserNif(nif);
         
         return lreser;
     }
@@ -71,13 +69,12 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
         
         if(validation(nif,startDate,endDate,buildingName,
                                roomNb,capacity,roomType)){
-            return new ArrayList<Reservation>();
+            return new ArrayList<>();
         }
-        List<Reservation> lfreser= new ArrayList<Reservation>();
-        lfreser = getReservationsByNif(nif);
+        List<Reservation> lfreser= getReservationsByNif(nif);
    
         if(lfreser == null){
-            return new ArrayList<Reservation>();
+            return new ArrayList<>();
         }else{
             if(startDate != null && endDate != null & lfreser.size()>0){
                 lfreser = getReservationAndDates(startDate, endDate,lfreser);
@@ -85,7 +82,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
             if(buildingName !=null & lfreser.size()>0){
                 lfreser = getReservationAndBuilding(buildingName,lfreser);
             }
-            if(roomNb !=null & buildingName !=null & lfreser.size()>0){
+            if(roomNb !=null & buildingName != null & lfreser.size()>0){
                 lfreser = getReservationAndRoom(roomNb,buildingName,lfreser);
             }
             if(capacity >0 & lfreser.size()>0){
@@ -115,7 +112,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                 ,List<Reservation>lfreser) 
                                 throws IncorrectBuildingException{
         
-        List<Reservation> result = new ArrayList<Reservation>();
+        List<Reservation> result = new ArrayList<>();
         for (Reservation res: lfreser){
             if((res.getRoom().getBuilding().getBuildingName()).equals(buildingName)){
                 result.add(res);
@@ -162,11 +159,9 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                List<Reservation>lfreser) 
             throws IncorrectTypeException{
         
-        List<Room> rooms = new ArrayList<Room>();
-        List<Reservation> result = new ArrayList<Reservation>();
+        List<Room> rooms = spaDao.getAllRoomsOfOneType(roomType);
+        List<Reservation> result = new ArrayList<>();
 //        SpaceDAOImpl spaceDao = new SpaceDAOImpl();
-        rooms = spaDao.getAllRoomsOfOneType(roomType);
-        System.out.println(rooms);
         for(Reservation res: lfreser){
             for (Room room : rooms){
                 if((res.getRoom()== room)){
@@ -174,25 +169,20 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                 }
             }
         }
-        System.out.println(result);
         return result;
     }
     private boolean validation(String nif, 
-                                          DateTime startDate,
-                                          DateTime endDate, 
-                                          String buildingName,
-                                          String roomNb,
-                                          int capacity,
-                                          String roomType){
+                              DateTime startDate,
+                              DateTime endDate, 
+                              String buildingName,
+                              String roomNb,
+                              int capacity,
+                              String roomType){
         
-        if(!(nif.matches("\\d{1,8}")) || 
-           !(buildingName.matches("[A-Za-z]") ||
-           !(roomNb.matches("[\\d[.]\\d]")) ||
-           !(capacity>0)) ||
-           !(roomType.matches("[A-Za-z]"))){
-            return false;
-        }
-        return true;
+//        return !((nif.matches("\\d{1,8}"))&(buildingName.matches("[A-Za-z]"))&
+//                (roomNb.matches("[\\d\\.\\d]"))&(capacity>0)&
+//                (roomType.matches("[A-Za-z]")));
+        return !(nif.matches("\\d{1,8}"));
     }
     
     public void setResDao(ReservationDAO resDao) {

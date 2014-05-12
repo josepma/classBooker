@@ -11,7 +11,6 @@ import org.classBooker.entity.Reservation;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.jmock.Expectations;
-import static org.jmock.Expectations.any;
 import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -280,6 +279,7 @@ public class ReservationMgrServiceImplQueryTest {
         context.checking(new Expectations(){{
             oneOf(resDao).getAllReservationByUserNif("12345678");
             will(returnValue(lRes));
+            inSequence(seq);
             oneOf(spaDao).getRoomByNbAndBuilding(with(equal(roomNb)),with(equal(building)));
             will(returnValue(roomId));
             inSequence(seq);
@@ -295,6 +295,7 @@ public class ReservationMgrServiceImplQueryTest {
         context.checking(new Expectations(){{
             oneOf(resDao).getAllReservationByUserNif("12345678");
             will(returnValue(lRes));
+            inSequence(seq);
             oneOf(spaDao).getAllRoomsOfOneType(roomType);
             will(returnValue(rooms));
             inSequence(seq);
