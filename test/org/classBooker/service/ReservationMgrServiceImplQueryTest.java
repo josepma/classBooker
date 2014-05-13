@@ -211,6 +211,20 @@ public class ReservationMgrServiceImplQueryTest {
       assertEquals("Same size",1,tested.size());
       assertEquals("First reservation",res5,tested.get(0));
     }
+    @Test 
+    public void ReservationById() throws IncorrectBuildingException{
+      context.checking(new Expectations(){{
+            oneOf(resDao).getAllReservationByBuilding("Rectorate Building");
+            will(returnValue(lres));
+        }});
+      List <Reservation> tested = rmsQ.findReservationById("Rectorate Building","2.3");
+      assertEquals("Same Size",1,tested.size());
+      assertEquals("First reservation",res1,tested.get(0));
+//      assertEquals("Second reservation",res2,tested.get(1));
+//      assertEquals("Third reservation",res3,tested.get(2));
+//      assertEquals("Fourth reservation",res4,tested.get(3));
+//      assertEquals("Fifth reservation",res5,tested.get(4));
+    }
 
     private void startingMockObjects(){
         resDao = context.mock(ReservationDAO.class);

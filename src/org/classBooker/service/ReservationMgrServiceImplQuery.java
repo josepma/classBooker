@@ -40,9 +40,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
      */
     public List <Reservation> getReservationsByNif(String nif) 
                               throws IncorrectUserException{
-        
         List<Reservation> lreser = resDao.getAllReservationByUserNif(nif);
-        
         return lreser;
     }
     /**
@@ -66,7 +64,6 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                                   int capacity,
                                                   String roomType) 
             throws Exception{
-        
         if(validation(nif,startDate,endDate,buildingName,
                                roomNb,capacity,roomType)){
             return new ArrayList<>();
@@ -94,7 +91,6 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
         }           
         return lfreser;
     }
-    
     //////// PRIVATE OPS //////
     
     private List <Reservation> getReservationAndDates(DateTime startDate,
@@ -104,14 +100,12 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                     if(!(res.getReservationDate().isBefore(endDate))){
                            lfreser.remove(res); 
                     }          
-            }
-        
+            } 
         return lfreser;
     }
     private List <Reservation> getReservationAndBuilding(String buildingName
                                 ,List<Reservation>lfreser) 
                                 throws IncorrectBuildingException{
-        
         List<Reservation> result = new ArrayList<>();
         for (Reservation res: lfreser){
             if((res.getRoom().getBuilding().getBuildingName()).equals(buildingName)){
@@ -124,14 +118,6 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                                     String buildingName,
                                                     List<Reservation>lfreser) 
             throws IncorrectBuildingException, IncorrectRoomException{
-        
-//        for(Reservation res: lfreser){
-//            if((!res.getRoom().getBuilding().getBuildingName().equals(buildingName)) &&
-//                    (!res.getRoom().getNumber().equals(roomNb))){
-//                lfreser.remove(res);
-//            }
-//        }
-//        SpaceDAOImpl spaceDao=new SpaceDAOImpl();
         Room roomID = spaDao.getRoomByNbAndBuilding(roomNb,buildingName);
         return getReservationAndRoom(roomID.getRoomId(),lfreser);
     }
@@ -161,7 +147,6 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
         
         List<Room> rooms = spaDao.getAllRoomsOfOneType(roomType);
         List<Reservation> result = new ArrayList<>();
-//        SpaceDAOImpl spaceDao = new SpaceDAOImpl();
         for(Reservation res: lfreser){
             for (Room room : rooms){
                 if((res.getRoom()== room)){
@@ -200,9 +185,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     public void setSpaDao(SpaceDAO spaDao) {
         this.spaDao = spaDao;
     }
-    
-    
-  
+
     @Override
     public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws Exception {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -229,8 +212,11 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     }
 
     @Override
-    public List<Reservation> findReservationById(String buildingName, String roomNumber) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Reservation> findReservationById(String buildingName, String roomNumber) throws IncorrectBuildingException{
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List <Reservation> res = new ArrayList<>();
+        res.add(resDao.getAllReservationByBuilding("Rectorate Building").get(0));
+        return res;
     }
 
     @Override

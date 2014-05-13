@@ -73,7 +73,7 @@ public interface ReservationMgrService {
      * @param roomNumber
      * @return
      */
-    public List<Reservation> findReservationById(String buildingName, String roomNumber);
+    public List<Reservation> findReservationById(String buildingName, String roomNumber) throws IncorrectBuildingException;
 
     /**
      *
