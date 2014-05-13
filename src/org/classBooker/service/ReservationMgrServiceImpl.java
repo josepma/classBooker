@@ -193,6 +193,11 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public Reservation makeReservationByType(String nif, String type, int capacity, DateTime date) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
     
 
 }

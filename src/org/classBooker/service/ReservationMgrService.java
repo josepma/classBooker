@@ -43,8 +43,15 @@ public interface ReservationMgrService {
      * @throws Exception
      */
     public Reservation makeReservationBySpace(long roomld, String nif, DateTime initialTime)throws Exception;
-    //public Reservation makeReservationByType(String nif, String type, int capacity, DateTime date);
-    //public Reservation makeReservationByType(String nif, String type, int capacity, DateTime date, List<Integer> times);
+    /**
+     * Makes a reservation by type of space.
+     * @param nif Nif of the user who makes the reservation.
+     * @param type Type of room.
+     * @param capacity Capacity of the room.
+     * @param date Date of the reservation.
+     * @return The reservation done.
+     */
+    public Reservation makeReservationByType(String nif, String type, int capacity, DateTime date);
 
     /**
      *
