@@ -71,14 +71,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     public List<Room> suggestionSpace(String roomNb, String building, DateTime date) throws IncorrectBuildingException, IncorrectRoomException {
         Room room = spaceDao.getRoomByNbAndBuilding(roomNb, building);
         List<Room> suggestedRoomsByTypeAndCapacity = spaceDao.getAllRoomsByTypeAndCapacity(room.getClass().toString(), room.getCapacity(), building);
-        List<Room> finalSuggestedRooms = new ArrayList<>();
-        Reservation res;
-        for (Room r : suggestedRoomsByTypeAndCapacity) {
-            res = reservationDao.getReservationByDateRoomBulding(date, roomNb, building);
-            if (res == null) {
-                finalSuggestedRooms.add(r);
-            }
-        }
+        List<Room> finalSuggestedRooms = getNonReservedRooms(suggestedRoomsByTypeAndCapacity, date);
         return finalSuggestedRooms;
     }
 
@@ -204,10 +197,31 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     }
 
     @Override
-    public Reservation makeReservationByType(String nif, String type, int capacity, DateTime date) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws IncorrectBuildingException{
+        List<Room> sameTypeRooms = spaceDao.getAllRoomsByTypeAndCapacity(type, capacity, buildingName);
+        List<Room> nonReservedRooms = getNonReservedRooms(sameTypeRooms, date);
+        if(nonReservedRooms.isEmpty()){
+            return null;
+        }
+        User reservationUser = userDao.getUserByNif(nif);
+        if(reservationUser instanceof ReservationUser){
+            return new Reservation(date, (ReservationUser)reservationUser, nonReservedRooms.get(0));
+        }
+        return null;
+        
     }
 
+    private List<Room> getNonReservedRooms(List<Room> rooms, DateTime date){
+        Reservation res;
+        List<Room> nonReservedRooms = new ArrayList<>();
+        for (Room r : rooms) {
+            res = reservationDao.getReservationByDateRoomBulding(date, r.getNumber(), r.getBuilding().getBuildingName());
+            if (res == null) {
+                nonReservedRooms.add(r);
+            }
+        }
+        return nonReservedRooms;
+    }
     
 
 }

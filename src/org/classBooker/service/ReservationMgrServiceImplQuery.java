@@ -260,7 +260,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     }
 
     @Override
-    public Reservation makeReservationByType(String nif, String type, int capacity, DateTime date) {
+    public Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws IncorrectBuildingException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
