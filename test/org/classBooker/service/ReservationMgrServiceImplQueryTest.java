@@ -226,11 +226,10 @@ public class ReservationMgrServiceImplQueryTest {
 //      assertEquals("Fifth reservation",res5,tested.get(4));
     }
     @Test
-    public void nifIncorrect() throws Exception{
+    public void IncorrectFields() throws Exception{
        
-       searchReservationsByFields("12345678h",null,null,null,null,50,null); 
-       getStartExpectations("12345678h",lreser); 
-       
+       searchReservationsByFields("12345678h",null,null,null,null,0,null); 
+       getStartExpectations("12345678h",lreser);
        List<Reservation> tested = rmsQ.getFilteredReservation(nif, 
                                                               startDate, 
                                                               endDate, 
@@ -238,8 +237,7 @@ public class ReservationMgrServiceImplQueryTest {
                                                               roomNb, 
                                                               capacity, 
                                                               roomType);
-       System.out.println("++++++ lreser size: "+lreser.size());
-       System.out.println("++++++ tested size: "+tested.size());
+       
        assertEquals("Non rerserves, nif incorrect",lreser,tested);
     }
     private void startingMockObjects(){

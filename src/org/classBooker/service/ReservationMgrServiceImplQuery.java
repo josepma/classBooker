@@ -163,28 +163,12 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                               String roomNb,
                               int capacity,
                               String roomType){
-       
-       if(nif==null || !nif.matches("\\d{1,8}")){
-            return false;
-       }
-       else if(buildingName==null || buildingName.matches("[A-Za-z]")){
-           return false;
-       }
-       else if(roomNb==null || roomNb.matches("[\\d\\.\\d]")){
-           return false;
-       }
-       else if(capacity<0){
-           return false;
-       }
-       else if(roomType==null || roomType.matches("[A-Za-z]")){
-           return false;
-       }
-       return true;
-       
-//        return !((nif.matches("\\d{1,8}"))&(buildingName.matches("[A-Za-z]"))&
-//                (roomNb.matches("[\\d\\.\\d]"))&(capacity>0)&
-//                (roomType.matches("[A-Za-z]")));
-        //return (nif.matches("\\d{1,8}"));
+      
+      return (nif==null || nif.matches("\\d{1,8}")) &&
+              (buildingName==null || buildingName.matches("[A-Z][a-z]+\\s.*")) &&
+              (roomNb==null || roomNb.matches("\\d\\.\\d")) &&
+              capacity>=0 &&
+              (roomType==null || roomType.matches("[A-Z][a-z]+[A-z][a-z]+"));
     }
     
     public void setResDao(ReservationDAO resDao) {
