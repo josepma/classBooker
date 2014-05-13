@@ -165,10 +165,10 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                               String roomType){
       
       return (nif==null || nif.matches("\\d{1,8}")) &&
-              (buildingName==null || buildingName.matches("[A-Z][a-z]+\\s.*")) &&
-              (roomNb==null || roomNb.matches("\\d\\.\\d")) &&
+             (buildingName==null || buildingName.matches("[A-Z][a-z]+\\s.*")) &&
+             (roomNb==null || roomNb.matches("\\d\\.\\d")) &&
               capacity>=0 &&
-              (roomType==null || roomType.matches("[A-Z][a-z]+[A-z][a-z]+"));
+             (roomType==null || roomType.matches("[A-Z][a-z]+[A-z][a-z]+"));
     }
     
     public void setResDao(ReservationDAO resDao) {
@@ -213,11 +213,26 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     }
 
     @Override
-    public List<Reservation> findReservationById(String buildingName, String roomNumber) throws IncorrectBuildingException{
+    public List<Reservation> findReservationById(String buildingName, 
+                                                 String roomNumber) 
+                             throws IncorrectBuildingException{
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        List <Reservation> res = new ArrayList<>();
-        res.add(resDao.getAllReservationByBuilding("Rectorate Building").get(0));
-        return res;
+        
+        List <Reservation> res = resDao.getAllReservationByBuilding(buildingName);
+        List <Reservation> result = new ArrayList<>();
+        List <Reservation> resultfinal = new ArrayList<>();
+        for(Reservation r : res){
+            if((r.getRoom().getBuilding().getBuildingName()==buildingName)){
+                result.add(r);
+            }
+        }
+        for(Reservation finalres : result ){
+            if(finalres.getRoom().getNumber()==roomNumber){
+                resultfinal.add(finalres);
+            }
+        }
+        //res.add(resDao.getAllReservationByBuilding(buildingName));
+        return resultfinal;
     }
 
     @Override

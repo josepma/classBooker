@@ -225,18 +225,30 @@ public class ReservationMgrServiceImplQueryTest {
 //      assertEquals("Fourth reservation",res4,tested.get(3));
 //      assertEquals("Fifth reservation",res5,tested.get(4));
     }
+    @Test 
+    public void ReservationByIdBis() throws IncorrectBuildingException{
+      context.checking(new Expectations(){{
+            oneOf(resDao).getAllReservationByBuilding("Faculty");
+            will(returnValue(lres));
+        }});
+      List <Reservation> tested = rmsQ.findReservationById("Faculty","2.3");
+      assertEquals("Same Size",1,tested.size());
+      assertEquals("Only one reservation",res4,tested.get(0));
+//      assertEquals("Second reservation",res2,tested.get(1));
+//      assertEquals("Third reservation",res3,tested.get(2));
+//      assertEquals("Fourth reservation",res4,tested.get(3));
+//      assertEquals("Fifth reservation",res5,tested.get(4));
+    }
     @Test
     public void IncorrectFields() throws Exception{
        
-       searchReservationsByFields("12345678h",null,null,null,null,0,null); 
-       getStartExpectations("12345678h",lreser);
-       List<Reservation> tested = rmsQ.getFilteredReservation(nif, 
-                                                              startDate, 
-                                                              endDate, 
-                                                              buildingName, 
-                                                              roomNb, 
-                                                              capacity, 
-                                                              roomType);
+       searchReservationsByFields("12345678",null,null,"2.04",null,0,null); 
+       //getStartExpectations("12345678h",lreser);
+       context.checking(new Expectations(){{
+            oneOf(resDao).getAllReservationByUserNif(nif);
+            will(returnValue(lreser));
+        }});
+       List<Reservation> tested = rmsQ.getReservationsByNif(nif);
        
        assertEquals("Non rerserves, nif incorrect",lreser,tested);
     }
