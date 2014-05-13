@@ -64,7 +64,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                                   int capacity,
                                                   String roomType) 
             throws Exception{
-        if(validation(nif,startDate,endDate,buildingName,
+        if(!validation(nif,startDate,endDate,buildingName,
                                roomNb,capacity,roomType)){
             return new ArrayList<>();
         }
@@ -163,11 +163,28 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                               String roomNb,
                               int capacity,
                               String roomType){
-        
+       
+       if(nif==null || !nif.matches("\\d{1,8}")){
+            return false;
+       }
+       else if(buildingName==null || buildingName.matches("[A-Za-z]")){
+           return false;
+       }
+       else if(roomNb==null || roomNb.matches("[\\d\\.\\d]")){
+           return false;
+       }
+       else if(capacity<0){
+           return false;
+       }
+       else if(roomType==null || roomType.matches("[A-Za-z]")){
+           return false;
+       }
+       return true;
+       
 //        return !((nif.matches("\\d{1,8}"))&(buildingName.matches("[A-Za-z]"))&
 //                (roomNb.matches("[\\d\\.\\d]"))&(capacity>0)&
 //                (roomType.matches("[A-Za-z]")));
-        return !(nif.matches("\\d{1,8}"));
+        //return (nif.matches("\\d{1,8}"));
     }
     
     public void setResDao(ReservationDAO resDao) {

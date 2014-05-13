@@ -225,7 +225,23 @@ public class ReservationMgrServiceImplQueryTest {
 //      assertEquals("Fourth reservation",res4,tested.get(3));
 //      assertEquals("Fifth reservation",res5,tested.get(4));
     }
-
+    @Test
+    public void nifIncorrect() throws Exception{
+       
+       searchReservationsByFields("12345678h",null,null,null,null,50,null); 
+       getStartExpectations("12345678h",lreser); 
+       
+       List<Reservation> tested = rmsQ.getFilteredReservation(nif, 
+                                                              startDate, 
+                                                              endDate, 
+                                                              buildingName, 
+                                                              roomNb, 
+                                                              capacity, 
+                                                              roomType);
+       System.out.println("++++++ lreser size: "+lreser.size());
+       System.out.println("++++++ tested size: "+tested.size());
+       assertEquals("Non rerserves, nif incorrect",lreser,tested);
+    }
     private void startingMockObjects(){
         resDao = context.mock(ReservationDAO.class);
         spaDao = context.mock(SpaceDAO.class);
