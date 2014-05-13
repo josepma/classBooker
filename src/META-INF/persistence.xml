@@ -26,4 +26,32 @@
       <property name="eclipselink.ddl-generation.output-mode" value="database" />
     </properties>
   </persistence-unit>
+  
+  
+   <persistence-unit name="classBookerIntegration">
+     <class>org.classBooker.entity.Building</class>
+     <class>org.classBooker.entity.ClassRoom</class>
+     <class>org.classBooker.entity.LaboratoryRoom</class>
+     <class>org.classBooker.entity.MeetingRoom</class>
+     <class>org.classBooker.entity.ProfessorPas</class>
+     <class>org.classBooker.entity.Reservation</class>
+     <class>org.classBooker.entity.ReservationUser</class>
+     <class>org.classBooker.entity.Room</class>
+     <class>org.classBooker.entity.SpaceAdmin</class>
+     <class>org.classBooker.entity.StaffAdmin</class>
+     <class>org.classBooker.entity.User</class>
+
+     <properties>
+      <property name="javax.persistence.jdbc.url" 
+                value="jdbc:mysql://sql3.freemysqlhosting.net:3306/sql339811"/> 
+      <property name="eclipselink.ddl-generation" value="create-tables"/>  
+      <property name="javax.persistence.jdbc.user" value="sql339811"/>
+      <property name="javax.persistence.jdbc.driver" 
+                value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="gT8*gJ3*"/>
+      <property name="eclipselink.ddl-generation.output-mode" value="database" />
+      </properties>
+   </persistence-unit>
+  
+  
 </persistence>

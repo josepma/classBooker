@@ -11,7 +11,6 @@ import org.classBooker.entity.Reservation;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.jmock.Expectations;
-import static org.jmock.Expectations.any;
 import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -45,9 +44,6 @@ public class ReservationMgrServiceImplQueryTest {
     DateTime endDate;
     Reservation res1,res2,res3,res4,res5;
     Room room;
-//    ClassRoom claRoom;
-//    LaboratoryRoom labRoom;
-//    MeetingRoom meetRoom;
     Building building;
     Sequence seq;
     ReservationMgrServiceImplQuery rmsQ;
@@ -72,14 +68,14 @@ public class ReservationMgrServiceImplQueryTest {
     
     @Test 
     public void zeroReservationsByNif() throws Exception{    
-      getExpectations(lreser);
+      getStartExpectations("12345678",lreser);
       List <Reservation> tested = rmsQ.getReservationsByNif("12345678");
       assertEquals("0 reservations",0,tested.size());
     }
  
     @Test 
     public void ReservationsByNif() throws Exception{
-      getExpectations(lres);
+      getStartExpectations("12345678",lres);
       List <Reservation> tested = rmsQ.getReservationsByNif("12345678");
       assertEquals("5 reservations",5,tested.size());
       assertEquals("First reservation",res1,tested.get(0));
@@ -92,7 +88,7 @@ public class ReservationMgrServiceImplQueryTest {
     @Test 
     public void ReservationWithoutFieldsForFiltering() throws Exception{
       searchReservationsByFields("12345678",null,null,null,null,0,null);     
-      getExpectations(lres);    
+      getStartExpectations("12345678",lres);    
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
@@ -100,7 +96,7 @@ public class ReservationMgrServiceImplQueryTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-      assertEquals("Same size",lres.size(),tested.size());
+      assertEquals("Same size",5,tested.size());
       assertEquals("First reservation",res1,tested.get(0));
       assertEquals("Second reservation",res2,tested.get(1));
       assertEquals("Third reservation",res3,tested.get(2));
@@ -113,7 +109,7 @@ public class ReservationMgrServiceImplQueryTest {
      
       searchReservationsByFields("12345678",new DateTime(2014,5,9,12,0),
               new DateTime(2014,5,9,13,0),null,null,0,null);       
-      getExpectations(lres);     
+      getStartExpectations("12345678",lres);     
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
@@ -121,7 +117,7 @@ public class ReservationMgrServiceImplQueryTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-//      assertEquals("Same size",lres.size(),tested.size());
+      assertEquals("Same size",5,tested.size());
       assertEquals("First reservation",res1,tested.get(0));
       assertEquals("Second reservation",res2,tested.get(1));
       assertEquals("Third reservation",res3,tested.get(2));
@@ -129,10 +125,10 @@ public class ReservationMgrServiceImplQueryTest {
       assertEquals("Fifth reservation",res5,tested.get(4));
     }
     
-//    @Test 
+    @Test 
     public void ReservationFilteredByBuildingName() throws Exception{
       searchReservationsByFields("12345678",null,null,"Rectorate Building",null,0,null); 
-      getExpectations(lres);
+      getStartExpectations("12345678",lres);
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
@@ -140,21 +136,17 @@ public class ReservationMgrServiceImplQueryTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-//      assertEquals("Same size",lres.size(),tested.size());
+      assertEquals("Same size",1,tested.size());
       assertEquals("First reservation",res1,tested.get(0));
-//      assertEquals("Second reservation",res2,tested.get(1));
-//      assertEquals("Third reservation",res3,tested.get(2));
-//      assertEquals("Fourth reservation",res4,tested.get(3));
-//      assertEquals("Fifth reservation",res5,tested.get(4));
     }
     
-//    @Test 
+    @Test 
     public void ReservationFilteredByRoomNb() throws Exception{
-      searchReservationsByFields("12345678",null,null,"Rectorate Building","2.3",0,null);
-      getExpectationsWithRoomNbAndBuilding(lres, 
-                                            "2.3", 
-                                            "Rectorate Building",
-                                            lres.get(0).getRoom());
+      searchReservationsByFields("12345678",null,null,"Rectorate Building",
+                                 "2.3",0,null);
+      getStartExpectations("12345678",lres);
+      getExpectationsWithRoomNbAndBuilding("2.3","Rectorate Building",
+                                            res1.getRoom());
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
@@ -162,18 +154,14 @@ public class ReservationMgrServiceImplQueryTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-//      assertEquals("Same size",5,tested.size());
+      assertEquals("Same size",1,tested.size());
       assertEquals("First reservation",res1,tested.get(0));
-//      assertEquals("Second reservation",res1,tested.get(1));
-//      assertEquals("Third reservation",res1,tested.get(2));
-//      assertEquals("Fourth reservation",res1,tested.get(3));
-//      assertEquals("Fifth reservation",res1,tested.get(4));
     }
     
     @Test 
     public void ReservationFilteredByCapacity() throws Exception{
-      searchReservationsByFields("12345678",null,null,null,null,0,null);
-      getExpectations(lres);
+      searchReservationsByFields("12345678",null,null,null,null,50,null);
+      getStartExpectations("12345678",lres);
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
@@ -181,21 +169,15 @@ public class ReservationMgrServiceImplQueryTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-//      assertEquals("Same size",lres.size(),tested.size());
-//      assertEquals("First reservation",res1,tested.get(0));
-//      assertEquals("Second reservation",res2,tested.get(1));
-//      assertEquals("Third reservation",res3,tested.get(2));
-//      assertEquals("Fourth reservation",res4,tested.get(3));
-      assertEquals("Fifth reservation",res5,tested.get(4));
+      assertEquals("Same size",1,tested.size());
+      assertEquals("Fifth reservation",res5,tested.get(0));
     }
     
     @Test 
     public void ReservationFilteredByRoomType() throws Exception{
       searchReservationsByFields("12345678",null,null,null,null,0,"MeetingRoom");
-      List<Room> rooms = new ArrayList<>();
-      rooms.add(res1.getRoom());
-      getExpectationsWithRoomType(lres,"MeetingRoom",rooms);
-      
+      getStartExpectations("12345678",lres);
+      getExpectationsWithRoomType("MeetingRoom",res1);
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
@@ -203,7 +185,40 @@ public class ReservationMgrServiceImplQueryTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-//      assertEquals("Same size",lres.size(),tested.size());
+      assertEquals("Same size",1,tested.size());
+      assertEquals("First reservation",res1,tested.get(0));
+    }
+    
+    @Test 
+    public void ReservationFilteredByAllFields() throws Exception{
+      searchReservationsByFields("12345678",
+                                  new DateTime(2014,5,9,12,0),
+                                  new DateTime(2014,5,9,13,0),
+                                  "Main Library","4.4",
+                                  50,
+                                  "ClassRoom");
+      getStartExpectations("12345678",lres);
+      getExpectationsWithRoomNbAndBuilding("4.4","Main Library",
+                                            res5.getRoom());
+      getExpectationsWithRoomType("ClassRoom",res5);
+      List <Reservation> tested = rmsQ.getFilteredReservation(nif,
+                                                              startD,
+                                                              endD,
+                                                              buildingName,
+                                                              roomNb,
+                                                              capacity,
+                                                              roomType);
+      assertEquals("Same size",1,tested.size());
+      assertEquals("First reservation",res5,tested.get(0));
+    }
+    @Test 
+    public void ReservationById() throws IncorrectBuildingException{
+      context.checking(new Expectations(){{
+            oneOf(resDao).getAllReservationByBuilding("Rectorate Building");
+            will(returnValue(lres));
+        }});
+      List <Reservation> tested = rmsQ.findReservationById("Rectorate Building","2.3");
+      assertEquals("Same Size",1,tested.size());
       assertEquals("First reservation",res1,tested.get(0));
 //      assertEquals("Second reservation",res2,tested.get(1));
 //      assertEquals("Third reservation",res3,tested.get(2));
@@ -229,10 +244,10 @@ public class ReservationMgrServiceImplQueryTest {
         building = new Building("Main Library");
         room = new ClassRoom (building,"2.3",40);
         res2 = new Reservation(startDate, rUser, room);
-        building = new Building("Faculty of Arctic Engineering");
+        building = new Building("Faculty");
         room = new LaboratoryRoom (building,"3.2",25);
         res3 = new Reservation(startDate, rUser, room);
-        building = new Building("Faculty of Arctic Engineering");
+        building = new Building("Faculty");
         room = new LaboratoryRoom (building,"2.3",45);
         res4 = new Reservation(startDate, rUser, room);
         building = new Building("Main Library");
@@ -262,17 +277,15 @@ public class ReservationMgrServiceImplQueryTest {
         this.roomType = roomType;    
     }
     
-    private void getExpectations(
-                                                final List<Reservation> lRes) 
+    private void getStartExpectations(final String nif, final List<Reservation> lRes) 
             throws IncorrectUserException{
         context.checking(new Expectations(){{
-            oneOf(resDao).getAllReservationByUserNif("12345678");
+            oneOf(resDao).getAllReservationByUserNif(nif);
             will(returnValue(lRes));
-      }});
+        }});
     }
     
     private void getExpectationsWithRoomNbAndBuilding(
-                                                final List<Reservation> lRes, 
                                                 final String roomNb, 
                                                 final String building, 
                                                 final Room roomId) 
@@ -280,27 +293,22 @@ public class ReservationMgrServiceImplQueryTest {
                 IncorrectBuildingException, 
                 IncorrectRoomException{
         context.checking(new Expectations(){{
-            oneOf(resDao).getAllReservationByUserNif("12345678");
-            will(returnValue(lRes));
-            oneOf(spaDao).getRoomByNbAndBuilding(roomNb,building);
+            oneOf(spaDao).getRoomByNbAndBuilding(with(equal(roomNb)),
+                                                 with(equal(building)));
             will(returnValue(roomId));
-            inSequence(seq);
-      }});
+        }});
     }
     
-    private void getExpectationsWithRoomType(final List<Reservation> lRes, 
-                                             final String roomType,  
-                                             final List<Room> rooms) 
+    private void getExpectationsWithRoomType(final String roomType,Reservation res) 
                 throws IncorrectUserException,
                 IncorrectRoomException,
                 IncorrectTypeException{
+        final List<Room> rooms = new ArrayList<>();
+        rooms.add(res.getRoom());
         context.checking(new Expectations(){{
-            oneOf(resDao).getAllReservationByUserNif("12345678");
-            will(returnValue(lRes));
             oneOf(spaDao).getAllRoomsOfOneType(roomType);
             will(returnValue(rooms));
-            inSequence(seq);
-      }});
+        }});
     }
     
 }

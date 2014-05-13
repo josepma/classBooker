@@ -72,7 +72,7 @@ public interface ReservationMgrService {
      * @param id
      * @return
      */
-    public Reservation findReservationById(long id); //???? És el id d'una reserva?
+    public Reservation findReservationById(long id)throws IncorrectReservationException; //???? És el id d'una reserva?
 
     /**
      *
@@ -80,7 +80,7 @@ public interface ReservationMgrService {
      * @param roomNumber
      * @return
      */
-    public List<Reservation> findReservationById(String buildingName, String roomNumber);
+    public List<Reservation> findReservationById(String buildingName, String roomNumber) throws IncorrectBuildingException;
 
     /**
      *

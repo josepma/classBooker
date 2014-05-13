@@ -147,7 +147,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     public void deleteReservation(long id) throws IncorrectReservationException {
         Reservation reser = reservationDao.getReservationById(id);
         if (reser == null) {
-            throw new IncorrectReservationException();
+            throw new IncorrectReservationException("Can not find the reservation");
         } else {
             reservationDao.removeReservation(id);
         }
@@ -162,10 +162,17 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     public List<Reservation> findReservationByNif(String nif) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    /**
+     * Return an particular reservation by a concrete ReservationId
+     * If not exists, will throwIncorrectReservationException.
+     */
     @Override
-    public Reservation findReservationById(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Reservation findReservationById(long id)throws IncorrectReservationException {
+        Reservation reser = reservationDao.getReservationById(id);
+        if(reser == null){
+            throw new IncorrectReservationException("Can not find the reservation");   
+        }
+        return reser;
     }
 
     @Override
@@ -187,10 +194,13 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     public List<Reservation> findReservationByType(String type, DateTime date) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
+    
+    /**
+     * Return a List of all reservations of Database
+     */
     @Override
     public List<Reservation> getAllReservations() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return reservationDao.getAllReservation();
     }
 
     @Override

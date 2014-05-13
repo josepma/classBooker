@@ -141,7 +141,7 @@ public class ReservationDAOImplTest {
     
     @Test(expected = AlredyExistReservationException.class)
     public void testAddReservationSameTimeAndRoomButDifferentUser() throws Exception {  
-        Reservation res = new Reservation(dataRes1, user2, room1);
+        Reservation res = new Reservation(dataRes1, user1, room1);  //user2
         rDao.addReservation(reservation1);
         rDao.addReservation(res);
     }

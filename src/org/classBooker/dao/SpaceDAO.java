@@ -69,15 +69,7 @@ public interface SpaceDAO {
                                                 AlreadyExistingBuildingException,
                                                 AlreadyExistingRoomException;
     
-    /**
-     *
-     * @param building
-     * @throws PersistException
-     * @throws IncorrectBuildingException
-     */
-    void modifyBuilding(Building building, String newName) throws PersistException, 
-                                                IncorrectBuildingException;
-    
+        
     /**
      * Remove a existing building
      * @param building
@@ -106,7 +98,7 @@ public interface SpaceDAO {
      * @return
      * @throws IncorrectBuildingException
      */
-    List<Room> getAllRoomsOfOneBuilding(Building building) 
+    List<Room> getAllRoomsOfOneBuilding(String building) 
                                         throws IncorrectBuildingException;
     
     /**

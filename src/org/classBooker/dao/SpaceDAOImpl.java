@@ -165,14 +165,14 @@ public class SpaceDAOImpl implements SpaceDAO{
     }
 /**
      * Find List rooms in one building
-     * @param building
+     * @param buildingName
      * @return List<Room>
      * 
      */
     @Override
-    public List<Room> getAllRoomsOfOneBuilding(Building building){
+    public List<Room> getAllRoomsOfOneBuilding(String buildingName){
           
-               
+        Building building = getBuildingByName(buildingName);        
         return building.getRooms();
         
     
@@ -247,12 +247,8 @@ public class SpaceDAOImpl implements SpaceDAO{
     public void removeRoom(Room room) throws IncorrectRoomException {
        em.remove(room);
     }
-    @Override
-    public void modifyBuilding(Building building, String newName) throws PersistException, IncorrectBuildingException {
-       em.createQuery("UPDATE Building b SET b.name="+newName+
-                            "WHERE"+building.getBuildingName()+"= b.name");
-    }
-
+    
+    
     @Override
     public void removeBuilding(Building building) throws IncorrectBuildingException {
        em.remove(building);
@@ -276,7 +272,7 @@ public class SpaceDAOImpl implements SpaceDAO{
         Query query;
         try{
             em.getTransaction().begin();
-            query = em.createQuery("SELECT r FROM "+ type+" r" + " WHERE r.capacity<=" +capacity );
+            query = em.createQuery("SELECT r FROM "+ type+" r" + " WHERE r.capacity>=" +capacity );
             roomsOneType = (List<Room>) query.getResultList();
             em.getTransaction().commit();            
         }catch(PersistenceException e){}
