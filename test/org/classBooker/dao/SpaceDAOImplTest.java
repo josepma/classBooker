@@ -16,6 +16,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import org.classBooker.dao.exception.AlreadyExistingBuildingException;
 import org.classBooker.dao.exception.AlreadyExistingRoomException;
+import org.classBooker.dao.exception.AlredyExistReservationException;
 import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectTimeException;
 import org.classBooker.dao.exception.IncorrectTypeException;
@@ -26,12 +27,14 @@ import org.classBooker.entity.ClassRoom;
 import org.classBooker.entity.LaboratoryRoom;
 import org.classBooker.entity.MeetingRoom;
 import org.classBooker.entity.ProfessorPas;
+import org.classBooker.entity.Reservation;
 import org.classBooker.entity.ReservationUser;
 import org.classBooker.entity.Room;
 import org.classBooker.entity.User;
 import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
 import org.jmock.Expectations;
 import static org.jmock.Expectations.returnValue;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,6 +49,10 @@ public class SpaceDAOImplTest {
      SpaceDAOImpl sdi;
      Room room, room2, labRoom, meetRoom, classRoom;
      Building building, building2;
+     //ReseReservationrvationDAOImpl reservation;
+     DateTime dataRes1;
+     ReservationUser user1;
+     Reservation reserv;
      private Query query;
 
     /**
@@ -61,13 +68,19 @@ public class SpaceDAOImplTest {
     @Before
     public void setUp() {       
         building=new Building("EPS");
-        room=new ClassRoom(building, "2.01", 30);        
+        room=new ClassRoom(building, "2.01", 30); 
+        user1 = new ProfessorPas("55555","manganito@gmail.com","Manganito");
+        dataRes1 = new DateTime(2014, 05, 11, 12, 00);
         ema = getEntityManager();
+        reserv = new Reservation(dataRes1, user1, room2); 
         ema.getTransaction().begin();
+        ema.persist(user1);
         ema.persist(room);
-        ema.persist(building);    
+        ema.persist(building); 
+        ema.persist(reserv);
         ema.getTransaction().commit();
         sdi.setEm(ema); 
+       // reservation.setEm(ema);
     }
 
     /**
@@ -78,7 +91,7 @@ public class SpaceDAOImplTest {
     public void testAddRoom() throws Exception {
         room2 =new ClassRoom(building, "2.08", 30);
         long rom = sdi.addRoom(room2);
-
+        
         Room roomdb = sdi.getRoomByNbAndBuilding("2.08", building.getBuildingName());
         
              
@@ -127,8 +140,10 @@ public class SpaceDAOImplTest {
     public void testRemoveRoom() throws Exception {
         room2 =new ClassRoom(building, "2.08", 30);
         long rom = sdi.addRoom(room2);
+       
         sdi.removeRoom(room2);
         assertFalse(sdi.getAllRooms().contains(room2));
+        assertFalse(sdi.getAllRoomsOfOneBuilding(building.getBuildingName()).contains(room2));
     }
 
     /**
@@ -179,14 +194,50 @@ public class SpaceDAOImplTest {
     }
     
     /**
-     * Test of modifyBuilding method, of class SpaceDAOImpl.
+     * Test of modifyRoom method, of class SpaceDAOImpl.
      * @throws java.lang.Exception
      */
-   // @Test
-    public void testModifyRoom() throws Exception {
+    @Test
+    public void testModifyCapacityRoom() throws Exception {
+        room2 =new ClassRoom(building, "2.08", 30);
+        long id=sdi.addRoom(room2);
+        sdi.ModifyRoom(room2,null, 20);
+        
+        assertEquals(20, sdi.getRoomByNbAndBuilding("2.08","EPS").getCapacity());       
     }
-
-    /**
+     
+    @Test
+    public void testModifyTypeRoom() throws Exception {
+        room2 =new ClassRoom(building, "2.19", 30);        
+        long id=sdi.addRoom(room2);
+        sdi.ModifyRoom(room2, "MeetingRoom", 0);     
+       
+        Room expected = sdi.getRoomByNbAndBuilding("2.19", "EPS");
+              
+        assertTrue( expected instanceof MeetingRoom);       
+    }
+    
+    @Test
+    public void testModifyTypeAndCapacityRoom() throws Exception {
+        room2 =new ClassRoom(building, "2.19", 30);        
+        long id=sdi.addRoom(room2);
+        sdi.ModifyRoom(room2, "MeetingRoom", 50);     
+       
+        Room expected = sdi.getRoomByNbAndBuilding("2.19", "EPS");
+        assertEquals(50, sdi.getRoomByNbAndBuilding("2.19","EPS").getCapacity());       
+        assertTrue( expected instanceof MeetingRoom);       
+    }
+    
+    @Test(expected=AlredyExistReservationException.class)
+    public void testModifyRoomWithExistingReservation()throws Exception {
+        room2 =new ClassRoom(building, "2.19", 30);        
+        long id=sdi.addRoom(room2);
+        List<Reservation> reservations= new ArrayList<Reservation>();
+        reservations.add(reserv);
+        room2.setReservations(reservations);        
+        sdi.ModifyRoom(room2, "MeetingRoom", 50); 
+    }
+     /**
      * Test of removeBuilding method, of class SpaceDAOImpl.
      * @throws java.lang.Exception
      */
@@ -359,8 +410,13 @@ public class SpaceDAOImplTest {
         ema.getTransaction().begin();
         Query query2=ema.createQuery("DELETE FROM Room");
         Query query3=ema.createQuery("DELETE FROM Building");
+        Query query5 = ema.createQuery("DELETE FROM Reservation");
+        Query query4=ema.createQuery("DELETE FROM User");
+        
         int deleteRecords=query2.executeUpdate();
         deleteRecords=query3.executeUpdate();
+        deleteRecords=query5.executeUpdate();
+        deleteRecords=query4.executeUpdate();
         ema.getTransaction().commit();
         ema.close();
     }
