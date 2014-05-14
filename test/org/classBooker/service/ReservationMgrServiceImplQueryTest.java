@@ -286,7 +286,26 @@ public class ReservationMgrServiceImplQueryTest {
                                                               capacity,
                                                               roomType);
         
-        assertEquals("Non reserves,StartDate incorrect",lreser,tested);
+        assertEquals("Non reserves,EndDate incorrect",lreser,tested);
+    }
+    
+    @Test 
+    public void validateDateEndBeforeInit() throws Exception{
+     
+      searchReservationsByFields("12345678",new DateTime(2014,5,9,12,0),
+                                  new DateTime(2014,5,9,11,0),
+                                 null,null,0,null);
+      
+      List <Reservation> tested = rmsQ.getFilteredReservation(nif,
+                                                              startD,
+                                                              endD,
+                                                              buildingName,
+                                                              roomNb,
+                                                              capacity,
+                                                              roomType);
+        
+        assertEquals("Non reserves,EndDate is before than startDate",
+                                                                lreser,tested);
     }
     private void startingMockObjects(){
         resDao = context.mock(ReservationDAO.class);
