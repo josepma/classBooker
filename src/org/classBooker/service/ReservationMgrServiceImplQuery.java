@@ -94,13 +94,13 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     
     private List <Reservation> getReservationAndDates(DateTime startDate,
                                DateTime endDate,List<Reservation>lfreser){
-        
-            for (Reservation res: lfreser){
-                    if(!(res.getReservationDate().isBefore(endDate))){
-                           lfreser.remove(res); 
-                    }          
-            } 
-        return lfreser;
+        List<Reservation> result = new ArrayList<>();
+        for (Reservation res: lfreser){
+                if((res.getReservationDate().isBefore(endDate))){
+                       result.add(res); 
+                }          
+        } 
+        return result;
     }
     private List <Reservation> getReservationAndBuilding(String buildingName
                                 ,List<Reservation>lfreser) 
@@ -122,13 +122,13 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     }
     private List <Reservation> getReservationAndRoom(long roomID,
                                List<Reservation>lfreser){
-        
+        List<Reservation> result = new ArrayList<>();
         for(Reservation res: lfreser){
-            if((res.getRoom().getRoomId()!=roomID)){
-                lfreser.remove(res);
+            if((res.getRoom().getRoomId()==roomID)){
+                result.add(res);
             }
         }
-        return lfreser;
+        return result;
     }
     private List <Reservation> getReservationAndCapacity(int capacity,
                                List<Reservation>lfreser){
