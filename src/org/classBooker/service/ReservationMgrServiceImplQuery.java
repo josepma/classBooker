@@ -122,13 +122,13 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     }
     private List <Reservation> getReservationAndRoom(long roomID,
                                List<Reservation>lfreser){
-        
+        List<Reservation> result = new ArrayList<>();
         for(Reservation res: lfreser){
-            if((res.getRoom().getRoomId()!=roomID)){
-                lfreser.remove(res);
+            if((res.getRoom().getRoomId()==roomID)){
+                result.add(res);
             }
         }
-        return lfreser;
+        return result;
     }
     private List <Reservation> getReservationAndCapacity(int capacity,
                                List<Reservation>lfreser){
