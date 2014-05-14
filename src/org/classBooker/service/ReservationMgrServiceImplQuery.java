@@ -165,7 +165,8 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                               String roomType){
       
       return (nif==null || nif.matches("\\d{1,8}")) &&
-             (buildingName==null || buildingName.matches("[A-Z][a-z]+\\s.*")) &&
+             (!(startDate==null & endDate ==null) || startDate.isBefore(endDate)) &&
+             (buildingName==null || buildingName.matches("[A-Z][a-z].*")) &&
              (roomNb==null || roomNb.matches("\\d\\.\\d")) &&
               capacity>=0 &&
              (roomType==null || roomType.matches("[A-Z][a-z]+[A-z][a-z]+"));
