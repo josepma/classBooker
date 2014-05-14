@@ -223,26 +223,17 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     }
 
     @Override
-    public List<Reservation> findReservationById(String buildingName, 
+    public List<Reservation> findReservationByBuildingAndRoomNb(String buildingName, 
                                                  String roomNumber) 
                              throws IncorrectBuildingException{
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        
-        List <Reservation> res = resDao.getAllReservation();
+        List <Reservation> res = resDao.getAllReservationByBuilding(buildingName);
         List <Reservation> result = new ArrayList<>();
-        List <Reservation> resultfinal = new ArrayList<>();
-        for(Reservation r : res){
-            if((r.getRoom().getBuilding().getBuildingName()==buildingName)){
-                result.add(r);
+        for(Reservation reser : res){
+            if(reser.getRoom().getNumber().equals(roomNumber)){
+                result.add(reser);
             }
         }
-        for(Reservation finalres : result ){
-            if(finalres.getRoom().getNumber()==roomNumber){
-                resultfinal.add(finalres);
-            }
-        }
-        //res.add(resDao.getAllReservationByBuilding(buildingName));
-        return resultfinal;
+        return result;
     }
 
     @Override

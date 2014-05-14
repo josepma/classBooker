@@ -170,7 +170,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     }
 
     @Override
-    public List<Reservation> findReservationById(String buildingName, String roomNumber) {
+    public List<Reservation> findReservationByBuildingAndRoomNb(String buildingName, String roomNumber) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
