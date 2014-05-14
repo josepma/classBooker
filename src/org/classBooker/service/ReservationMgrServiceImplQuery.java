@@ -64,10 +64,9 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                                   int capacity,
                                                   String roomType) 
             throws Exception{
-        if(!validation(nif,startDate,endDate,buildingName,
-                               roomNb,capacity,roomType)){
-            return new ArrayList<>();
-        }
+        if(validation(nif,startDate,endDate,buildingName,roomNb,capacity,roomType)){
+            return new ArrayList<>(); 
+        } 
         List<Reservation> lfreser= getReservationsByNif(nif);
    
         if(lfreser == null){
@@ -164,12 +163,22 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                               int capacity,
                               String roomType){
       
-      return (nif==null || nif.matches("\\d{1,8}")) &&
-             (!(startDate==null & endDate ==null) || startDate.isBefore(endDate)) &&
+      if ((startDate == null & endDate != null) || 
+             (startDate != null & endDate == null) ){
+          return true;
+      }  
+      
+      if (startDate != null & endDate != null){
+          if (startDate.isAfter(endDate)){
+              return true;
+          }
+      }
+        
+      return !((nif==null || nif.matches("\\d{1,8}")) &&
              (buildingName==null || buildingName.matches("[A-Z][a-z].*")) &&
              (roomNb==null || roomNb.matches("\\d\\.\\d")) &&
               capacity>=0 &&
-             (roomType==null || roomType.matches("[A-Z][a-z]+[A-z][a-z]+"));
+             (roomType==null || roomType.matches("[A-Z][a-z]+[A-z][a-z]+")));
     }
     
     public void setResDao(ReservationDAO resDao) {

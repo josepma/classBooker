@@ -281,7 +281,7 @@ public class ReservationMgrServiceImplQueryTest {
     @Test 
     public void validateDatesNoEnd() throws Exception{
      
-      searchReservationsByFields("12345678",new DateTime(2014,5,9,13,0),null
+      searchReservationsByFields("12345678",new DateTime(2014,5,9,12,0),null
                                  ,null,null,0,null);
       
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
