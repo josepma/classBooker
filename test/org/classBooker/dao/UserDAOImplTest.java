@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 import org.classBooker.dao.exception.AlreadyExistingUserException;
 import org.classBooker.entity.User;
 import org.classBooker.entity.ProfessorPas;
@@ -36,6 +37,7 @@ public class UserDAOImplTest {
     public void setUp() throws Exception{
         expected = new ArrayList<>();
         udao = new UserDAOImpl();
+        udao.setEntityManager(Persistence.createEntityManagerFactory("classBooker").createEntityManager());
         u = new ProfessorPas("12345","pepito@gmail.com","Pepito");
         User us = new ProfessorPas("98765","jaunito@gmail.com","Juanito");
         addUser(u);
@@ -81,6 +83,7 @@ public class UserDAOImplTest {
     @Test
     public void testGetUsersByNameWithEmptyDatabase() throws Exception {
         clear();
+        udao.setEntityManager(Persistence.createEntityManagerFactory("classBooker").createEntityManager());
         List<User> users = udao.getUsersByName("Pepito");
         assertEquals(new ArrayList(),users);
         
@@ -113,6 +116,7 @@ public class UserDAOImplTest {
     @Test
     public void testGetAllUsersWithEmptyDatabase() throws Exception {
         clear();
+        udao.setEntityManager(Persistence.createEntityManagerFactory("classBooker").createEntityManager());
         List<User> users = udao.getAllUsers();
         assertEquals(new ArrayList(),users);
     }
@@ -131,8 +135,7 @@ public class UserDAOImplTest {
             em.getTransaction().commit();
         }
         finally{
-            if(em.isOpen())
-                em.close();
+            
         }
     }
     
@@ -147,8 +150,7 @@ public class UserDAOImplTest {
             em.getTransaction().commit();
         }
         finally{
-            if(em.isOpen())
-                em.close();
+            
         }
         return u;
     }
