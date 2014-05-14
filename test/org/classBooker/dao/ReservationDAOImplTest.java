@@ -234,9 +234,16 @@ public class ReservationDAOImplTest {
     /**
      * Test of removeReservation method, of class ReservationDAOImpl.
      */
-    //@Test
+    @Test
     public void testRemoveReservation() throws Exception {
-
+        long resId = rDao.addReservation(reservation1);
+        actualReservation = rDao.getReservationById(resId);
+        rDao.removeReservation(resId);
+        
+        assertEquals(null, getReservationFromDB(resId));
+        assertFalse(actualReservation.getRoom().getReservations().contains(reservation1));
+        assertFalse(actualReservation.getrUser().getReservations().contains(reservation1));
+        
     }
 
     /**

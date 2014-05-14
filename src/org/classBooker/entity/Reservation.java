@@ -39,14 +39,12 @@ public class Reservation {
     private Room room;
 
     public Reservation() {
-        this.reservationId = (long)(Math.random()*10000 + 1);
     }
 
     public Reservation(DateTime reservationDate, ReservationUser rUser, Room room) {
         this.reservationDate = reservationDate.toCalendar(Locale.getDefault());
         this.rUser = rUser;
         this.room = room;
-        this.reservationId = (long)(Math.random()*10000 + 1);
     }
 
     public long getReservationId() {

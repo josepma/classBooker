@@ -52,9 +52,9 @@ public class ReservationDAOImpl implements ReservationDAO{
                                                AlredyExistReservationException{
         
         em.getTransaction().begin();
-        ReservationUser user;
+        ReservationUser user = (ReservationUser) em.find(User.class, userId);
         Room room;
-        if((user = (ReservationUser) em.find(User.class, userId)) == null){
+        if(user == null){
             throw new IncorrectUserException();
         }
         try{
@@ -128,7 +128,12 @@ public class ReservationDAOImpl implements ReservationDAO{
 
     @Override
     public void removeReservation(long id) throws IncorrectReservationException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        em.getTransaction().begin();
+        Reservation reservation = getReservationById(id);
+        reservation.getrUser().getReservations().remove(reservation);
+        reservation.getRoom().getReservations().remove(reservation);
+        em.remove(reservation);
+        em.getTransaction().commit();
     }
 
     @Override
