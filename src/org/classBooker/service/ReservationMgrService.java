@@ -91,7 +91,11 @@ public interface ReservationMgrService {
      * @param date
      * @return
      */
-    public Reservation findReservationById(String buildingName, String roomNumber, DateTime date);
+   
+    public Reservation findReservationById(String buildingName, String roomNumber, DateTime date) throws IncorrectBuildingException,
+                                                                                                           IncorrectRoomException,
+                                                                                                           IncorrectTimeException ;
+
 
     /**
      *
