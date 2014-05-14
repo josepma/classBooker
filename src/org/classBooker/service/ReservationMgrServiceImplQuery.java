@@ -218,7 +218,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                              throws IncorrectBuildingException{
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         
-        List <Reservation> res = resDao.getAllReservationByBuilding(buildingName);
+        List <Reservation> res = resDao.getAllReservation();
         List <Reservation> result = new ArrayList<>();
         List <Reservation> resultfinal = new ArrayList<>();
         for(Reservation r : res){

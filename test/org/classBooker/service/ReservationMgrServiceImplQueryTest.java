@@ -214,7 +214,7 @@ public class ReservationMgrServiceImplQueryTest {
     @Test 
     public void ReservationById() throws IncorrectBuildingException{
       context.checking(new Expectations(){{
-            oneOf(resDao).getAllReservationByBuilding("Rectorate Building");
+            oneOf(resDao).getAllReservation();
             will(returnValue(lres));
         }});
       List <Reservation> tested = rmsQ.findReservationById("Rectorate Building","2.3");
@@ -228,7 +228,7 @@ public class ReservationMgrServiceImplQueryTest {
     @Test 
     public void ReservationByIdBis() throws IncorrectBuildingException{
       context.checking(new Expectations(){{
-            oneOf(resDao).getAllReservationByBuilding("Faculty");
+            oneOf(resDao).getAllReservation();
             will(returnValue(lres));
         }});
       List <Reservation> tested = rmsQ.findReservationById("Faculty","2.3");
