@@ -199,6 +199,10 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     @Override
     public Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws IncorrectBuildingException{
         List<Room> sameTypeRooms = spaceDao.getAllRoomsByTypeAndCapacity(type, capacity, buildingName);
+        if(sameTypeRooms.isEmpty()){
+            return null;
+        }
+              
         List<Room> nonReservedRooms = getNonReservedRooms(sameTypeRooms, date);
         if(nonReservedRooms.isEmpty()){
             return null;
