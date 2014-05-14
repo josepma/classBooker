@@ -5,9 +5,12 @@
 package org.classBooker.service;
 
 
+import org.classBooker.service.exception.BadFormatFileException;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -51,7 +54,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
 
     @Override
     public void addMassiveUser(String filename) 
-            throws UnexpectedFormatFileException, InexistentFileException{
+            throws UnexpectedFormatFileException, InexistentFileException, BadFormatFileException{
         
         List<User> lUsers = parseFile(filename);
         
@@ -71,7 +74,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
     }
 
     private List<User> parseFile(String filename) 
-            throws UnexpectedFormatFileException, InexistentFileException {
+            throws UnexpectedFormatFileException, InexistentFileException, BadFormatFileException {
         
         List<User> lUsers = new ArrayList<>();
         if(isCSV(filename)){
@@ -94,7 +97,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         return filename.endsWith(".xml");
     }
 
-    private List<User> parseCsv(String filename) throws InexistentFileException {
+    private List<User> parseCsv(String filename) throws InexistentFileException, BadFormatFileException {
         List<User> lUsers = new ArrayList();
         File f = new File(filename);
         if(!f.exists()){
@@ -106,14 +109,31 @@ public class StaffMgrServiceImpl implements StaffMgrService{
             String line;
             while((line=br.readLine())!=null){
                 StringTokenizer strTok = new StringTokenizer(line,";");
+                if(strTok.countTokens()!=3){
+                    throw new BadFormatFileException();
+                }
                 String nif = strTok.nextToken();
+                if(nif.replaceAll(" ", "").isEmpty()){
+                    
+                }
                 String name = strTok.nextToken();
+                if(name.replaceAll(" ", "").isEmpty()){
+                    
+                }
                 String mail = strTok.nextToken();
-                User u = new ProfessorPas(nif, mail, name);
-                lUsers.add(u);
+                if(mail.replaceAll(" ", "").isEmpty()){
+                  
+                }
+                
+                
+                User us = new ProfessorPas(nif, mail, name);
+                lUsers.add(us);
             }
         }
-        catch(Exception e){
+        catch(FileNotFoundException e){
+                
+        }
+        catch(IOException e){
             
         }
         return lUsers;
@@ -141,9 +161,8 @@ public class StaffMgrServiceImpl implements StaffMgrService{
                     String nif = eElement.getElementsByTagName("nif").item(0).getTextContent();
                     String name = eElement.getElementsByTagName("name").item(0).getTextContent();
                     String email = eElement.getElementsByTagName("email").item(0).getTextContent();
-                    User u = new ProfessorPas(nif, email, name);
-                    lUsers.add(u);
-                    System.out.println(u.toString());
+                    User us = new ProfessorPas(nif, email, name);
+                    lUsers.add(us);
                 }
             }
         }

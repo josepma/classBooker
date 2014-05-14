@@ -7,6 +7,7 @@
 package org.classBooker.service;
 
 import org.classBooker.entity.User;
+import org.classBooker.service.exception.BadFormatFileException;
 import org.classBooker.service.exception.InexistentFileException;
 import org.classBooker.service.exception.UnexpectedFormatFileException;
 
@@ -17,7 +18,7 @@ import org.classBooker.service.exception.UnexpectedFormatFileException;
 public interface StaffMgrService {
     public void addUser(User user);
     public void addMassiveUser(String filename) 
-            throws UnexpectedFormatFileException, InexistentFileException;
+            throws UnexpectedFormatFileException, InexistentFileException, BadFormatFileException;
     public void deleteUser(User user);
     public void modifyUserInformation(User user);
 }
