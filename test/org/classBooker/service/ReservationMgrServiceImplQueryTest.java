@@ -213,7 +213,7 @@ public class ReservationMgrServiceImplQueryTest {
     }
     
     @Test 
-    public void ReservationById() throws IncorrectBuildingException{
+    public void findReservationBySpace() throws IncorrectBuildingException{
       final List<Reservation> returnlres = new ArrayList<>();
       returnlres.add(res1);
       context.checking(new Expectations(){{
@@ -226,7 +226,7 @@ public class ReservationMgrServiceImplQueryTest {
     }
     
     @Test 
-    public void ReservationByIdBis() throws IncorrectBuildingException{
+    public void finsReservationBySpaceBis() throws IncorrectBuildingException{
       final List<Reservation> returnlres = new ArrayList<>();
       returnlres.add(res3);
       returnlres.add(res4);
