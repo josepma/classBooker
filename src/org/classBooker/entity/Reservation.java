@@ -87,10 +87,9 @@ public class Reservation {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 31 * hash + (int) (this.reservationId ^ (this.reservationId >>> 32));
-        hash = 31 * hash + Objects.hashCode(this.reservationDate);
-        hash = 31 * hash + Objects.hashCode(this.rUser);
-        hash = 31 * hash + Objects.hashCode(this.room);
+        hash = 79 * hash + Objects.hashCode(this.reservationDate);
+        hash = 79 * hash + Objects.hashCode(this.rUser);
+        hash = 79 * hash + Objects.hashCode(this.room);
         return hash;
     }
 
@@ -103,10 +102,17 @@ public class Reservation {
             return false;
         }
         final Reservation other = (Reservation) obj;
-        if (this.reservationId != other.reservationId) {
+        if (!Objects.equals(this.reservationDate, other.reservationDate)) {
             return false;
         }
- 
+        if (!Objects.equals(this.rUser, other.rUser)) {
+            return false;
+        }
+        if (!Objects.equals(this.room, other.room)) {
+            return false;
+        }
         return true;
     }
+
+
 }

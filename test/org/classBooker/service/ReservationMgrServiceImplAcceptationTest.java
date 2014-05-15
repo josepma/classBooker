@@ -246,7 +246,7 @@ public class ReservationMgrServiceImplAcceptationTest {
         assertNull(r);
     }
 
-    private void checkReservationByTypeExpectations(final List<Room> rooms, final Reservation res, final User user) throws IncorrectBuildingException {
+    private void checkReservationByTypeExpectations(final List<Room> rooms, final Reservation res, final User user) throws IncorrectBuildingException, IncorrectRoomException {
         context.checking(new Expectations() {
             {
                 oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().getName(), capacity, building.getBuildingName());

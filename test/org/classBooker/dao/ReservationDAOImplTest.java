@@ -17,7 +17,6 @@ import javax.persistence.Query;
 import org.classBooker.dao.exception.*;
 import org.classBooker.entity.*;
 import org.jmock.Expectations;
-import static org.jmock.Expectations.returnIterator;
 import static org.jmock.Expectations.returnValue;
 import static org.jmock.Expectations.throwException;
 import org.jmock.Mockery;
@@ -34,11 +33,14 @@ import org.junit.runner.RunWith;
  *
  * @author msf7
  */
-
+@RunWith(JMock.class)
 public class ReservationDAOImplTest {
     
-
+    Mockery context = new JUnit4Mockery();
     ReservationDAOImpl rDao;
+    UserDAO uDao;
+    SpaceDAO sDao;
+    
 
     EntityManager em;
     Room room1, room2;
@@ -58,7 +60,13 @@ public class ReservationDAOImplTest {
     public void setUp() throws Exception {
 
         
+        
         rDao = new ReservationDAOImpl();
+        uDao = context.mock(UserDAO.class, "uDao");
+        sDao = context.mock(SpaceDAO.class, "sDao");
+        
+        rDao.setsDao(sDao);
+        rDao.setuDao(uDao);
         
         // data base
         em = getEntityManager();
@@ -147,28 +155,56 @@ public class ReservationDAOImplTest {
     }
     
     @Test
-    public void testAddReservationByAttribute() throws Exception {     
-        long resId = rDao.addReservation("47658245M", "10", 
-                                         "testBuilding1", dataRes1);
-        actualReservation = getReservationFromDB(resId);
-        expectsReservation = rDao.getReservationById(resId);
-        checkReservation( expectsReservation , actualReservation);
+    public void testAddReservationByAttribute() throws Exception {  
+        
+        context.checking(new Expectations(){{
+            oneOf(uDao).getUserByNif(user1.getNif());
+            will(returnValue(user1));
+            oneOf(sDao).getRoomByNbAndBuilding(room1.getNumber(), 
+                                               room1.getBuilding().getBuildingName());
+            will(returnValue(room1));
+        }});
+        
+        long resId = rDao.addReservation(user1.getNif(), room1.getNumber(), 
+                                         room1.getBuilding().getBuildingName(),
+                                         dataRes1);
+        expectsReservation = reservation1;
+        actualReservation = rDao.getReservationById(resId);
+        checkReservation(expectsReservation , actualReservation);
         
     }
         
     @Test(expected = IncorrectRoomException.class)
-    public void testAddReservationByAttributeNotExistRoom() throws Exception { 
+    public void testAddReservationByAttributeNotExistRoom() throws Exception {
+        context.checking(new Expectations(){{
+            oneOf(uDao).getUserByNif(user1.getNif());
+            will(returnValue(user1));
+            oneOf(sDao).getRoomByNbAndBuilding("11","testBuilding");
+            will(throwException(new IncorrectRoomException()));
+        }});
+        
         rDao.addReservation("47658245M", "11", "testBuilding", dataRes1);
     }
     
-    @Test(expected = IncorrectRoomException.class)
+    @Test(expected = IncorrectBuildingException.class)
     public void testAddReservationByAttributeNotExistBuilding() throws Exception {
-
+        context.checking(new Expectations(){{
+            oneOf(uDao).getUserByNif(user1.getNif());
+            will(returnValue(user1));
+            oneOf(sDao).getRoomByNbAndBuilding("10", 
+                                               "NotExistBuilding");
+            will(throwException(new IncorrectBuildingException()));
+        }});
+        
         rDao.addReservation("47658245M", "10","NotExistBuilding", dataRes1);
     }
     
     @Test(expected = IncorrectUserException.class)
     public void testAddReservationByAttributeNotExistUser() throws Exception {
+        context.checking(new Expectations(){{
+            oneOf(uDao).getUserByNif("47658205M");
+            will(returnValue(null));
+        }});
         rDao.addReservation("47658205M", "10", "testBuilding", dataRes1);
     }
 

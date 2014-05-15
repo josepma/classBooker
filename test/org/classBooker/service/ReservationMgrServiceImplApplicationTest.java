@@ -181,7 +181,7 @@ public class ReservationMgrServiceImplApplicationTest {
     }
 
     
-    private void makeReservationExpectations(final Room room, final User user,final Reservation reservation) {
+    private void makeReservationExpectations(final Room room, final User user,final Reservation reservation) throws IncorrectBuildingException, IncorrectRoomException {
         context.checking(new Expectations(){{ 
             oneOf(sDao).getRoomById(roomId);will(returnValue(room));
             oneOf(uDao).getUserByNif(nif);will(returnValue(user));

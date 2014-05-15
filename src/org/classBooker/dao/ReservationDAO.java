@@ -56,6 +56,7 @@ public interface ReservationDAO {
                                            throws IncorrectReservationException,
                                            IncorrectUserException,
                                            IncorrectRoomException,
+                                           IncorrectBuildingException,
                                            AlredyExistReservationException;
 
     /**
@@ -95,7 +96,11 @@ public interface ReservationDAO {
      */
     Reservation getReservationByDateRoomBulding(DateTime dateTime, 
                                                     String roomNb, 
-                                                    String buildingName);
+                                                    String buildingName)
+                                                    throws IncorrectBuildingException,
+                                                            IncorrectRoomException;
+                                                           
+                                                            
     
     /**
      * Get all Reservation

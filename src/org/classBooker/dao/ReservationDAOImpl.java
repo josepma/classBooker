@@ -21,6 +21,8 @@ import org.joda.time.DateTime;
 public class ReservationDAOImpl implements ReservationDAO{
 
     private EntityManager em;
+    private UserDAO uDao;
+    private SpaceDAO sDao;
     
     public EntityManager getEm() {
         return em;
@@ -28,6 +30,22 @@ public class ReservationDAOImpl implements ReservationDAO{
 
     public void setEm(EntityManager em) {
         this.em = em;
+    }
+    
+        public UserDAO getuDao() {
+        return uDao;
+    }
+
+    public void setuDao(UserDAO uDao) {
+        this.uDao = uDao;
+    }
+
+    public SpaceDAO getsDao() {
+        return sDao;
+    }
+
+    public void setsDao(SpaceDAO sDao) {
+        this.sDao = sDao;
     }
 
     @Override
@@ -49,25 +67,12 @@ public class ReservationDAOImpl implements ReservationDAO{
                                         throws IncorrectReservationException, 
                                                IncorrectUserException, 
                                                IncorrectRoomException,
-                                               AlredyExistReservationException{
+                                               AlredyExistReservationException,
+                                               IncorrectBuildingException{
         
         em.getTransaction().begin();
-        ReservationUser user = (ReservationUser) em.find(User.class, userId);
-        Room room;
-        if(user == null){
-            throw new IncorrectUserException();
-        }
-        try{
-            room = (Room) em.createQuery("SELECT r "
-                            + "FROM Room r "
-                            + "WHERE r.building.name = :buildingName AND "
-                            + "r.number = :roomNb ")
-                            .setParameter("buildingName", buildingName)
-                            .setParameter("roomNb", roomNb)
-                            .getSingleResult();
-        }catch(NoResultException ex){
-            throw new IncorrectRoomException();
-        }
+        ReservationUser user= getUser(userId);
+        Room room = getRoom(roomNb,buildingName);
         Reservation reservation = new Reservation(dateTime, user, room);
         checkExistingReservation(reservation);
         persistReservation(reservation);
@@ -88,16 +93,20 @@ public class ReservationDAOImpl implements ReservationDAO{
     }
 
     @Override
-    public Reservation getReservationByDateRoomBulding(DateTime dateTime, String roomNb, String buildingName) {
-        return (Reservation) em.createQuery("SELECT r "
-                + "FROM Reservation r "
-                + "WHERE r.reservationDate = :rDate AND"
-                        + "r.room.number = :roomNb AND"
-                        + "r.room.building.name = :buildingName")
-                .setParameter("rDate", dateTime.toCalendar(Locale.getDefault()))
-                .setParameter("roomNb", roomNb)
-                .setParameter("buildingName", buildingName)
-                .getSingleResult();
+    public Reservation getReservationByDateRoomBulding(DateTime dateTime, 
+                                                            String roomNb, 
+                                                            String buildingName) 
+                                              throws IncorrectBuildingException, 
+                                                     IncorrectRoomException {
+        
+        Room room =  sDao.getRoomByNbAndBuilding(roomNb, buildingName);
+        List<Reservation> reservations = room.getReservations();
+        for (Reservation res : reservations) {
+            if (res.getReservationDate().equals(dateTime)) {
+                return res;
+            }
+        }
+        return null;
     }
     
     @Override
@@ -203,6 +212,27 @@ public class ReservationDAOImpl implements ReservationDAO{
                 .getResultList().isEmpty()){
             throw new AlredyExistReservationException();
         }
+    }
+
+    private ReservationUser getUser(String userId) throws IncorrectUserException {
+        User user = uDao.getUserByNif(userId);
+        if(user == null){
+            throw new IncorrectUserException();
+        }else if (user instanceof ReservationUser) {
+            return (ReservationUser) user;
+        }else{
+            throw new IncorrectUserException();
+        }
+        
+    }
+
+    private Room getRoom(String roomNb, String buildingName) 
+                                                throws IncorrectRoomException, 
+                                                IncorrectBuildingException {
+        return sDao.getRoomByNbAndBuilding(roomNb, buildingName);
+        
+        
+        
     }
 
 }

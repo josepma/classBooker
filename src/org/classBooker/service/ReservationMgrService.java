@@ -53,7 +53,7 @@ public interface ReservationMgrService {
      * @throws IncorrectBuildingException If the building name is incorrect.
      * @return The reservation done.
      */
-    public Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws IncorrectBuildingException;
+    public Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws IncorrectBuildingException, IncorrectRoomException;
 
     /**
      *
