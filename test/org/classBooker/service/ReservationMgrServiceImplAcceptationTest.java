@@ -147,7 +147,7 @@ public class ReservationMgrServiceImplAcceptationTest {
     }
     
     @Test 
-    public void testGetCurrentUserOfIncorrectRoom() throws IncorrectRoomException{
+    public void testGetCurrentUserOfIncorrectRoom() throws IncorrectRoomException, IncorrectBuildingException{
         context.checking(new Expectations() {
             {
                 oneOf(rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());

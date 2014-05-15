@@ -9,6 +9,7 @@ package org.classBooker.service;
 import org.classBooker.dao.ReservationDAO;
 import org.classBooker.dao.SpaceDAO;
 import org.classBooker.dao.UserDAO;
+import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectReservationException;
 import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectTimeException;
@@ -146,7 +147,7 @@ public class ReservationMgrServiceImplApplicationTest {
         rmgr.findReservationById(reservationId);
     }
     
-    private void makeReservationExpectations(final Room room, final User user,final Reservation reservation) {
+    private void makeReservationExpectations(final Room room, final User user,final Reservation reservation) throws IncorrectBuildingException, IncorrectRoomException {
         context.checking(new Expectations(){{ 
             oneOf(sDao).getRoomById(roomId);will(returnValue(room));
             oneOf(uDao).getUserByNif(nif);will(returnValue(user));

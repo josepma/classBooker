@@ -7,6 +7,8 @@ package org.classBooker.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.classBooker.dao.ReservationDAO;
 import org.classBooker.dao.SpaceDAO;
 import org.classBooker.dao.UserDAO;
@@ -63,9 +65,9 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
      * Returns a boolean which indicates if the reservation exists in the database.
      * if the reservation exists in the database, it will return true, else will return false
      */
-    public boolean alreadyExistingReservation(DateTime datetime, Room room) {
+    public boolean alreadyExistingReservation(DateTime datetime, Room room) throws IncorrectBuildingException, IncorrectRoomException {
         return reservationDao.getReservationByDateRoomBulding(datetime, room.getNumber(), room.getBuilding().getBuildingName())!=null;
-    }
+    }   
 
     @Override
     public List<Room> suggestionSpace(String roomNb, String building, DateTime date) throws IncorrectBuildingException, IncorrectRoomException {
@@ -76,8 +78,17 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     }
 
     @Override
-    public ReservationUser getCurrentUserOfDemandedRoom(String roomNb, String building, DateTime datetime) {
-        Reservation res = reservationDao.getReservationByDateRoomBulding(datetime, roomNb, building);
+    public ReservationUser getCurrentUserOfDemandedRoom(String roomNb, String building, DateTime datetime){
+        Reservation res = null;
+        try{
+            res = reservationDao.getReservationByDateRoomBulding(datetime, roomNb, building);
+        }catch(IncorrectRoomException e ){
+            
+        } catch (IncorrectBuildingException ex) {
+            Logger.getLogger(ReservationMgrServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
         if (res == null) {
             return null;
         }
@@ -199,7 +210,12 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     @Override
     public Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws IncorrectBuildingException{
         List<Room> sameTypeRooms = spaceDao.getAllRoomsByTypeAndCapacity(type, capacity, buildingName);
-        List<Room> nonReservedRooms = getNonReservedRooms(sameTypeRooms, date);
+        List<Room> nonReservedRooms = null;
+        try {
+            nonReservedRooms = getNonReservedRooms(sameTypeRooms, date);
+        } catch (IncorrectRoomException ex) {
+            Logger.getLogger(ReservationMgrServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
         if(nonReservedRooms.isEmpty()){
             return null;
         }
@@ -211,7 +227,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
         
     }
 
-    private List<Room> getNonReservedRooms(List<Room> rooms, DateTime date){
+    private List<Room> getNonReservedRooms(List<Room> rooms, DateTime date) throws IncorrectBuildingException, IncorrectRoomException{
         Reservation res;
         List<Room> nonReservedRooms = new ArrayList<>();
         for (Room r : rooms) {

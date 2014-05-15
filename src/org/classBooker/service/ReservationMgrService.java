@@ -138,6 +138,8 @@ public interface ReservationMgrService {
      * @param building The building where the room is.
      * @param datetime The date and time of the reserve we are finding.
      * @return The user who have the reservation of that room.
+     * @throws org.classBooker.dao.exception.IncorrectBuildingException
+     * @throws org.classBooker.dao.exception.IncorrectRoomException
      */
     public ReservationUser getCurrentUserOfDemandedRoom(String roomNb, String building, DateTime datetime);
 
