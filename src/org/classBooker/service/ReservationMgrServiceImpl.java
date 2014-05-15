@@ -18,6 +18,7 @@ import org.classBooker.dao.exception.IncorrectReservationException;
 import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectTimeException;
 import org.classBooker.dao.exception.IncorrectUserException;
+import org.classBooker.entity.Building;
 import org.classBooker.entity.Reservation;
 import org.classBooker.entity.ReservationUser;
 import org.classBooker.entity.Room;
@@ -180,14 +181,31 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     }
 
     @Override
-    public List<Reservation> findReservationById(String buildingName, String roomNumber) {
+    public List<Reservation> findReservationByBuildingAndRoomNb(String buildingName, String roomNumber) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    
+
     @Override
-    public Reservation findReservationById(String buildingName, String roomNumber, DateTime date) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Reservation findReservationById(String buildingName, String roomNumber, DateTime date) throws IncorrectBuildingException,
+                                                                                                           IncorrectRoomException,
+                                                                                                           IncorrectTimeException {
+        Building building = spaceDao.getBuildingByName(buildingName);
+        Room room = spaceDao.getRoomByNbAndBuilding(roomNumber, buildingName);
+        datetime = date;
+        if (room == null) {
+            throw new IncorrectRoomException();
+        }
+        if (building == null) {
+            throw new IncorrectBuildingException();
+        }
+        if (datetime.isBeforeNow() || datetime.getMinuteOfHour() != 0) {
+            throw new IncorrectTimeException();
+        }
+        return reservationDao.getReservationByDateRoomBulding(datetime, roomNumber, buildingName);
     }
+
 
     @Override
     public List<Reservation> findReservationByType(String type) {
@@ -210,12 +228,11 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     @Override
     public Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws IncorrectBuildingException{
         List<Room> sameTypeRooms = spaceDao.getAllRoomsByTypeAndCapacity(type, capacity, buildingName);
-        List<Room> nonReservedRooms = null;
-        try {
-            nonReservedRooms = getNonReservedRooms(sameTypeRooms, date);
-        } catch (IncorrectRoomException ex) {
-            Logger.getLogger(ReservationMgrServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        if(sameTypeRooms.isEmpty()){
+            return null;
         }
+              
+        List<Room> nonReservedRooms = getNonReservedRooms(sameTypeRooms, date);
         if(nonReservedRooms.isEmpty()){
             return null;
         }

@@ -211,43 +211,39 @@ public class ReservationMgrServiceImplQueryTest {
       assertEquals("Same size",1,tested.size());
       assertEquals("First reservation",res5,tested.get(0));
     }
+    
     @Test 
-    public void ReservationById() throws IncorrectBuildingException{
+    public void findReservationBySpace() throws IncorrectBuildingException{
+      final List<Reservation> returnlres = new ArrayList<>();
+      returnlres.add(res1);
       context.checking(new Expectations(){{
-            oneOf(resDao).getAllReservation();
-            will(returnValue(lres));
+            oneOf(resDao).getAllReservationByBuilding("Rectorate Building");
+            will(returnValue(returnlres));
         }});
-      List <Reservation> tested = rmsQ.findReservationById("Rectorate Building","2.3");
+      List <Reservation> tested = rmsQ.findReservationByBuildingAndRoomNb("Rectorate Building","2.3");
       assertEquals("Same Size",1,tested.size());
       assertEquals("First reservation",res1,tested.get(0));
-//      assertEquals("Second reservation",res2,tested.get(1));
-//      assertEquals("Third reservation",res3,tested.get(2));
-//      assertEquals("Fourth reservation",res4,tested.get(3));
-//      assertEquals("Fifth reservation",res5,tested.get(4));
     }
+    
     @Test 
-    public void ReservationByIdBis() throws IncorrectBuildingException{
+    public void finsReservationBySpaceBis() throws IncorrectBuildingException{
+      final List<Reservation> returnlres = new ArrayList<>();
+      returnlres.add(res3);
+      returnlres.add(res4);
       context.checking(new Expectations(){{
-            oneOf(resDao).getAllReservation();
-            will(returnValue(lres));
+            oneOf(resDao).getAllReservationByBuilding("Faculty");
+            will(returnValue(returnlres));
         }});
-      List <Reservation> tested = rmsQ.findReservationById("Faculty","2.3");
+      List <Reservation> tested = rmsQ.findReservationByBuildingAndRoomNb("Faculty","2.3");
       assertEquals("Same Size",1,tested.size());
       assertEquals("Only one reservation",res4,tested.get(0));
-//      assertEquals("Second reservation",res2,tested.get(1));
-//      assertEquals("Third reservation",res3,tested.get(2));
-//      assertEquals("Fourth reservation",res4,tested.get(3));
-//      assertEquals("Fifth reservation",res5,tested.get(4));
     }
-    //@Test
+    
+    @Test
     public void IncorrectFields() throws Exception{
        
        searchReservationsByFields("12345678",null,null,"2.04",null,0,null); 
-       //getStartExpectations("12345678h",lreser);
-       context.checking(new Expectations(){{
-            oneOf(resDao).getAllReservationByUserNif(nif);
-            will(returnValue(lreser));
-        }});
+       
        List<Reservation> tested = rmsQ.getFilteredReservation(nif, 
                                                               startDate, 
                                                               endDate, 
@@ -256,7 +252,60 @@ public class ReservationMgrServiceImplQueryTest {
                                                               capacity, 
                                                               roomType);
        
-       assertEquals("Non rerserves, nif incorrect",lreser,tested);
+       assertEquals("Non rerserves, building is incorrect",lreser,tested);
+    }
+    
+    @Test 
+    public void validateDatesNoInit() throws Exception{
+     
+      searchReservationsByFields("12345678",null,new DateTime(2014,5,9,13,0)
+                                 ,null,null,0,null);
+      
+      List <Reservation> tested = rmsQ.getFilteredReservation(nif,
+                                                              startD,
+                                                              endD,
+                                                              buildingName,
+                                                              roomNb,
+                                                              capacity,
+                                                              roomType);
+        
+        assertEquals("Non reserves,StartDate incorrect",lreser,tested);
+    }
+    
+    @Test 
+    public void validateDatesNoEnd() throws Exception{
+     
+      searchReservationsByFields("12345678",new DateTime(2014,5,9,12,0),null
+                                 ,null,null,0,null);
+      
+      List <Reservation> tested = rmsQ.getFilteredReservation(nif,
+                                                              startD,
+                                                              endD,
+                                                              buildingName,
+                                                              roomNb,
+                                                              capacity,
+                                                              roomType);
+        
+        assertEquals("Non reserves,EndDate incorrect",lreser,tested);
+    }
+    
+    @Test 
+    public void validateDateEndBeforeInit() throws Exception{
+     
+      searchReservationsByFields("12345678",new DateTime(2014,5,9,12,0),
+                                  new DateTime(2014,5,9,11,0),
+                                 null,null,0,null);
+      
+      List <Reservation> tested = rmsQ.getFilteredReservation(nif,
+                                                              startD,
+                                                              endD,
+                                                              buildingName,
+                                                              roomNb,
+                                                              capacity,
+                                                              roomType);
+        
+        assertEquals("Non reserves,EndDate is before than startDate",
+                                                                lreser,tested);
     }
     private void startingMockObjects(){
         resDao = context.mock(ReservationDAO.class);
@@ -285,7 +334,6 @@ public class ReservationMgrServiceImplQueryTest {
         building = new Building("Main Library");
         room = new ClassRoom (building,"4.4",50);
         res5 = new Reservation(startDate, rUser, room);
-        
         lres.add(res1);
         lres.add(res2);
         lres.add(res3);

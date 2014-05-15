@@ -21,36 +21,21 @@ import org.classBooker.entity.User;
  * @author jpb3
  */
 public class UserDAOImpl implements UserDAO{
-    
-    private EntityManagerFactory emf;
-    private String persistenceUnit;
+    private EntityManager em;
     
     public UserDAOImpl(){
-        emf = Persistence.createEntityManagerFactory("classBooker");
-        persistenceUnit = "classBooker";
     }
     
-    public UserDAOImpl(String pu){
-        persistenceUnit = pu;
-        emf = Persistence.createEntityManagerFactory(pu);
-    }
-    
-    public void setPersistenceUnit(String pu){
-        persistenceUnit = pu;
-        emf = Persistence.createEntityManagerFactory(pu);
-    }
-    
-    public String getPersistenceUnit(){
-        return persistenceUnit;
+    public void setEntityManager(EntityManager em){
+        this.em = em;
     }
     
     public EntityManager getEntityManager(){
-        return emf.createEntityManager();
+        return em;
     }
 
     @Override
     public void addUser(User user) throws AlreadyExistingUserException {
-        EntityManager em = this.getEntityManager();
         User u = getUserByNif(user.getNif());
         if(u!=null)
             throw new AlreadyExistingUserException();
@@ -60,8 +45,7 @@ public class UserDAOImpl implements UserDAO{
             em.getTransaction().commit();
         }
         finally{
-            if(em.isOpen())
-                em.close();
+            
         }
     }
 
@@ -70,16 +54,13 @@ public class UserDAOImpl implements UserDAO{
         
         User u = null;
         
-        EntityManager em = emf.createEntityManager();
-        
         try{
             em.getTransaction().begin();
             u = em.find(User.class, nif);
             em.getTransaction().commit();
         }
         finally{
-            if(em.isOpen())
-                em.close();
+            
         }
         return u;
     }
@@ -87,8 +68,6 @@ public class UserDAOImpl implements UserDAO{
     @Override
     public List<User> getUsersByName(String name) {
         List<User> users = null;
-        
-        EntityManager em = emf.createEntityManager();
         
         try{
             em.getTransaction().begin();
@@ -98,8 +77,7 @@ public class UserDAOImpl implements UserDAO{
             em.getTransaction().commit();
         }
         finally{
-            if(em.isOpen())
-                em.close();
+            
         }
         return users;
     }
@@ -107,8 +85,6 @@ public class UserDAOImpl implements UserDAO{
     @Override
     public List<User> getAllUsers() {
         List<User> users = null;
-        
-        EntityManager em = emf.createEntityManager();
         
         try{
             em.getTransaction().begin();
@@ -118,8 +94,7 @@ public class UserDAOImpl implements UserDAO{
             em.getTransaction().commit();
         }
         finally{
-            if(em.isOpen())
-                em.close();
+            
         }
         return users;
     }
@@ -134,16 +109,7 @@ public class UserDAOImpl implements UserDAO{
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    public void close(){
-        if(emf!=null && emf.isOpen())
-            emf.close();
-    }
-    
     public void tearDown(){
-        EntityManager em = this.getEntityManager();
-        if (em.isOpen())
-            em.close();
-        em = getEntityManager();
         em.getTransaction().begin();
 
         Query query = em.createQuery("DELETE FROM User");

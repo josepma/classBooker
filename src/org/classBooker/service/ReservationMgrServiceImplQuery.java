@@ -64,10 +64,9 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                                   int capacity,
                                                   String roomType) 
             throws Exception{
-        if(!validation(nif,startDate,endDate,buildingName,
-                               roomNb,capacity,roomType)){
-            return new ArrayList<>();
-        }
+        if(validation(nif,startDate,endDate,buildingName,roomNb,capacity,roomType)){
+            return new ArrayList<>(); 
+        } 
         List<Reservation> lfreser= getReservationsByNif(nif);
    
         if(lfreser == null){
@@ -95,13 +94,13 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     
     private List <Reservation> getReservationAndDates(DateTime startDate,
                                DateTime endDate,List<Reservation>lfreser){
-        
-            for (Reservation res: lfreser){
-                    if(!(res.getReservationDate().isBefore(endDate))){
-                           lfreser.remove(res); 
-                    }          
-            } 
-        return lfreser;
+        List<Reservation> result = new ArrayList<>();
+        for (Reservation res: lfreser){
+                if((res.getReservationDate().isBefore(endDate))){
+                       result.add(res); 
+                }          
+        } 
+        return result;
     }
     private List <Reservation> getReservationAndBuilding(String buildingName
                                 ,List<Reservation>lfreser) 
@@ -123,13 +122,13 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     }
     private List <Reservation> getReservationAndRoom(long roomID,
                                List<Reservation>lfreser){
-        
+        List<Reservation> result = new ArrayList<>();
         for(Reservation res: lfreser){
-            if((res.getRoom().getRoomId()!=roomID)){
-                lfreser.remove(res);
+            if((res.getRoom().getRoomId()==roomID)){
+                result.add(res);
             }
         }
-        return lfreser;
+        return result;
     }
     private List <Reservation> getReservationAndCapacity(int capacity,
                                List<Reservation>lfreser){
@@ -164,11 +163,22 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                               int capacity,
                               String roomType){
       
-      return (nif==null || nif.matches("\\d{1,8}")) &&
-             (buildingName==null || buildingName.matches("[A-Z][a-z]+\\s.*")) &&
+      if ((startDate == null & endDate != null) || 
+             (startDate != null & endDate == null) ){
+          return true;
+      }  
+      
+      if (startDate != null & endDate != null){
+          if (startDate.isAfter(endDate)){
+              return true;
+          }
+      }
+        
+      return !((nif==null || nif.matches("\\d{1,8}")) &&
+             (buildingName==null || buildingName.matches("[A-Z][a-z].*")) &&
              (roomNb==null || roomNb.matches("\\d\\.\\d")) &&
               capacity>=0 &&
-             (roomType==null || roomType.matches("[A-Z][a-z]+[A-z][a-z]+"));
+             (roomType==null || roomType.matches("[A-Z][a-z]+[A-z][a-z]+")));
     }
     
     public void setResDao(ReservationDAO resDao) {
@@ -213,26 +223,17 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     }
 
     @Override
-    public List<Reservation> findReservationById(String buildingName, 
+    public List<Reservation> findReservationByBuildingAndRoomNb(String buildingName, 
                                                  String roomNumber) 
                              throws IncorrectBuildingException{
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        
-        List <Reservation> res = resDao.getAllReservation();
+        List <Reservation> res = resDao.getAllReservationByBuilding(buildingName);
         List <Reservation> result = new ArrayList<>();
-        List <Reservation> resultfinal = new ArrayList<>();
-        for(Reservation r : res){
-            if((r.getRoom().getBuilding().getBuildingName()==buildingName)){
-                result.add(r);
+        for(Reservation reser : res){
+            if(reser.getRoom().getNumber().equals(roomNumber)){
+                result.add(reser);
             }
         }
-        for(Reservation finalres : result ){
-            if(finalres.getRoom().getNumber()==roomNumber){
-                resultfinal.add(finalres);
-            }
-        }
-        //res.add(resDao.getAllReservationByBuilding(buildingName));
-        return resultfinal;
+        return result;
     }
 
     @Override

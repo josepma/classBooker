@@ -6,6 +6,8 @@
 
 package org.classBooker.dao;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -16,12 +18,14 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import org.classBooker.dao.exception.AlreadyExistingBuildingException;
 import org.classBooker.dao.exception.AlreadyExistingRoomException;
+import org.classBooker.dao.exception.AlredyExistReservationException;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectTypeException;
 import org.classBooker.dao.exception.NonBuildingException;
 import org.classBooker.dao.exception.PersistException;
 import org.classBooker.entity.Building;
+import org.classBooker.entity.MeetingRoom;
 import org.classBooker.entity.Room;
 
 /**
@@ -234,6 +238,7 @@ public class SpaceDAOImpl implements SpaceDAO{
     @Override
     public Room getRoomByNbAndBuilding(String roomNb, String buildingName) throws IncorrectBuildingException, IncorrectRoomException {
       Building building=  getBuildingByName(buildingName);
+      
       List<Room> rooms = building.getRooms();      
       for(Room r:rooms){          
           if(r.getNumber().equals(roomNb)) {              
@@ -241,10 +246,21 @@ public class SpaceDAOImpl implements SpaceDAO{
       }
       throw new IncorrectRoomException();
     }
-    
+    @Override
+    public void ModifyRoom(Room room, String type, int capacity)throws PersistException, 
+                            AlreadyExistingRoomException, NonBuildingException,
+                            AlredyExistReservationException{
+        
+         if(!room.getReservations().isEmpty())     
+             throw new AlredyExistReservationException();         
+         if(capacity!=0)modifyCapacity(room, capacity);
+         if(type!=null){ modifyType(room, type);  
+         }
+    }
        
     @Override
-    public void removeRoom(Room room) throws IncorrectRoomException {
+    public void removeRoom(Room room) {
+       room.getBuilding().getRooms().remove(room);
        em.remove(room);
     }
     
@@ -327,5 +343,36 @@ public class SpaceDAOImpl implements SpaceDAO{
        }
        return true;
    }
+
+    private void modifyCapacity(Room room, int capacity) {
+          
+          em.getTransaction().begin();
+          room.setCapacity(capacity);
+          em.getTransaction().commit();
+          
+         
+         }
+
+    private void modifyType(Room room, String type)throws PersistException, 
+                            AlreadyExistingRoomException, NonBuildingException,
+                            AlredyExistReservationException{
+        Room newRoom = null;
+        try {
+                
+                Constructor classType = Class.forName("org.classBooker.entity."+type)
+                        .getConstructor(Building.class, String.class , int.class );
+               
+                 newRoom= (Room) classType.newInstance(room.getBuilding(), 
+                                          room.getNumber(),room.getCapacity());
+                
+                
+            } catch ( ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                
+            }
+                     
+            removeRoom(room);
+            addRoom(newRoom);
+               
+    }
     
 }

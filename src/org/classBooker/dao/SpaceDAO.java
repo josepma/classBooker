@@ -9,6 +9,7 @@ package org.classBooker.dao;
 import java.util.List;
 import org.classBooker.dao.exception.AlreadyExistingBuildingException;
 import org.classBooker.dao.exception.AlreadyExistingRoomException;
+import org.classBooker.dao.exception.AlredyExistReservationException;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectTypeException;
@@ -27,6 +28,7 @@ public interface SpaceDAO {
     /**
      * Add a new Room in a existing Buiding 
      * @param room
+     * @return Room Id
      * @throws PersistException
      * @throws IncorrectRoomException
      * @throws org.classBooker.dao.exception.AlreadyExistingRoomException
@@ -35,12 +37,27 @@ public interface SpaceDAO {
      */
     long addRoom (Room room) throws PersistException, IncorrectRoomException,
                                 AlreadyExistingRoomException, AlreadyExistingBuildingException,
-                                NonBuildingException;
+                               NonBuildingException;
+    
+
+    /**
+     * Modify a exisiting Room
+     * @param room
+     * @param newType
+     * @param capacity
+     * @throws org.classBooker.dao.exception.PersistException
+     * @throws org.classBooker.dao.exception.AlreadyExistingRoomException
+     * @throws org.classBooker.dao.exception.NonBuildingException
+     * @throws org.classBooker.dao.exception.AlredyExistReservationException
+     */
+    public void ModifyRoom(Room room, String newType, int capacity) throws PersistException, 
+                            AlreadyExistingRoomException, NonBuildingException, AlredyExistReservationException; 
     /**
      * Remove a exisiting Room
      * @param room
      * @throws IncorrectRoomException
      */
+    
     void removeRoom (Room room) throws IncorrectRoomException;
 
     /**
