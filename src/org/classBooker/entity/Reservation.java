@@ -25,7 +25,7 @@ public class Reservation {
     private long reservationId;
   
     @Column (name="DATE")
-    @Temporal(javax.persistence.TemporalType.DATE)
+    @Temporal(javax.persistence.TemporalType.DATE)   
     private Calendar reservationDate;
     //   ****I PROPOSE private Calendar reservationDate;  (Josepma)
     

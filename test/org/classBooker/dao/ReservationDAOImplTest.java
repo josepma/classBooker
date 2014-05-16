@@ -110,7 +110,7 @@ public class ReservationDAOImplTest {
     public void testAddReservationByReservation() throws Exception {
         
         rDao.addReservation(reservation1);
-        actualReservation = getReservationFromDB(reservation1.getReservationId());
+        actualReservation = getReservationFromDB(reservation1.getReservationId());      
         checkReservation(reservation1, actualReservation);
         
     }

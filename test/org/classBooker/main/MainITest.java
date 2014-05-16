@@ -8,8 +8,8 @@ package org.classBooker.main;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
-import org.classBooker.entity.ProfessorPas;
-import org.classBooker.entity.User;
+import org.classBooker.entity.*;
+import org.joda.time.DateTime;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -29,14 +29,19 @@ public class MainITest {
          
           EntityManager em = Persistence.createEntityManagerFactory("classBookerIntegration").createEntityManager();
  
-          ProfessorPas pp = new ProfessorPas("989898", "josepma@popo.pp","popo");
           em.getTransaction().begin();
-          em.persist(pp);
-          User userDB = em.find(User.class, "989898");
-            
-          em.remove(userDB);
-          System.out.println(userDB);
-            
+          ProfessorPas pp2 = (ProfessorPas) em.find(User.class,"12345678");
+          Building building = (Building) em.find(Building.class,"Main Library");
+          
+          Room room2 = new ClassRoom(building, "222333", 30);
+          
+          em.persist(room2);
+          
+          Reservation reservation = new Reservation(
+                  new DateTime(2014,10,10,1,0),pp2, room2); 
+          
+          em.persist(reservation);
+          
           em.getTransaction().commit();
 
           em.close();
