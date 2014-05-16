@@ -5,7 +5,6 @@
 package org.classBooker.service;
 
 
-import org.classBooker.service.exception.BadFormatFileException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,6 +15,8 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.classBooker.dao.UserDAO;
@@ -35,31 +36,36 @@ import org.w3c.dom.NodeList;
  * @author Antares
  */
 public class StaffMgrServiceImpl implements StaffMgrService{
-
+    
     UserDAO u;
     
     public StaffMgrServiceImpl(){
         u =new UserDAOImpl();
+        
+    }
+    
+    public void setUserDao(UserDAO u){
+        this.u=u;
     }
     
     @Override
-    public void addUser(User user) {
-        try {
-            u.addUser(user);
-        } catch (AlreadyExistingUserException ex) {
-            System.out.println("El següent usuari no s'ha pogut afegir a la BD "
-                    + user.toString());
-        }
+    public void addUser(User user) throws AlreadyExistingUserException {
+        u.addUser(user);
     }
 
     @Override
     public void addMassiveUser(String filename) 
-            throws UnexpectedFormatFileException, InexistentFileException, BadFormatFileException{
+            throws UnexpectedFormatFileException, InexistentFileException{
         
         List<User> lUsers = parseFile(filename);
         
         for (User us : lUsers){
-            addUser(us);
+            try{
+                addUser(us);
+            }
+            catch(AlreadyExistingUserException e){
+                //TODO: Ficar un log aqui.
+            }
         }
     }
 
@@ -74,7 +80,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
     }
 
     private List<User> parseFile(String filename) 
-            throws UnexpectedFormatFileException, InexistentFileException, BadFormatFileException {
+            throws UnexpectedFormatFileException, InexistentFileException{
         
         List<User> lUsers = new ArrayList<>();
         if(isCSV(filename)){
@@ -97,7 +103,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         return filename.endsWith(".xml");
     }
 
-    private List<User> parseCsv(String filename) throws InexistentFileException, BadFormatFileException {
+    private List<User> parseCsv(String filename) throws InexistentFileException{
         List<User> lUsers = new ArrayList();
         File f = new File(filename);
         if(!f.exists()){
@@ -110,24 +116,18 @@ public class StaffMgrServiceImpl implements StaffMgrService{
             while((line=br.readLine())!=null){
                 StringTokenizer strTok = new StringTokenizer(line,";");
                 if(strTok.countTokens()!=3){
-                    throw new BadFormatFileException();
+                    Logger.getLogger(ReservationMgrServiceImpl.class.getName()).log(Level.INFO, "Bad data user.");
                 }
-                String nif = strTok.nextToken();
-                if(nif.replaceAll(" ", "").isEmpty()){
-                    
+                else{
+                    String nif = strTok.nextToken();
+                    String name = strTok.nextToken();
+                    String mail = strTok.nextToken();
+
+                    User us = createGoodProffesorpas(nif, mail, name);
+                    if(us!=null){
+                        lUsers.add(us);
+                    }
                 }
-                String name = strTok.nextToken();
-                if(name.replaceAll(" ", "").isEmpty()){
-                    
-                }
-                String mail = strTok.nextToken();
-                if(mail.replaceAll(" ", "").isEmpty()){
-                  
-                }
-                
-                
-                User us = new ProfessorPas(nif, mail, name);
-                lUsers.add(us);
             }
         }
         catch(FileNotFoundException e){
@@ -156,12 +156,13 @@ public class StaffMgrServiceImpl implements StaffMgrService{
             
             for(int temp = 0; temp<nList.getLength(); temp++){
                 Node nNode = nList.item(temp);
-                if(nNode.getNodeType() == Node.ELEMENT_NODE){
-                    Element eElement = (Element) nNode;
-                    String nif = eElement.getElementsByTagName("nif").item(0).getTextContent();
-                    String name = eElement.getElementsByTagName("name").item(0).getTextContent();
-                    String email = eElement.getElementsByTagName("email").item(0).getTextContent();
-                    User us = new ProfessorPas(nif, email, name);
+                
+                Element eElement = (Element) nNode;
+                String nif = eElement.getElementsByTagName("nif").item(0).getTextContent();
+                String name = eElement.getElementsByTagName("name").item(0).getTextContent();
+                String email = eElement.getElementsByTagName("email").item(0).getTextContent();
+                User us = createGoodProffesorpas(nif, email, name);
+                if(us!=null){
                     lUsers.add(us);
                 }
             }
@@ -170,6 +171,23 @@ public class StaffMgrServiceImpl implements StaffMgrService{
             
         }
         return lUsers;
+    }
+
+    private User createGoodProffesorpas(String nif, String mail, String name) {
+        if(nif.replaceAll(" ", "").isEmpty() || 
+                mail.replaceAll(" ", "").isEmpty() ||
+                name.replaceAll(" ", "").isEmpty()){
+            Logger.getLogger(ReservationMgrServiceImpl.class.getName()).log(Level.INFO, "Empty data user.");
+            return null;
+        }
+        else{
+            return new ProfessorPas(nif, mail, name);
+        }
+    }
+
+    @Override
+    public User getUser(String nif) {
+        return u.getUserByNif(nif);
     }
     
 }

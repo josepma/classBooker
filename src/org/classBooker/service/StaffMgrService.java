@@ -6,8 +6,8 @@
 
 package org.classBooker.service;
 
+import org.classBooker.dao.exception.AlreadyExistingUserException;
 import org.classBooker.entity.User;
-import org.classBooker.service.exception.BadFormatFileException;
 import org.classBooker.service.exception.InexistentFileException;
 import org.classBooker.service.exception.UnexpectedFormatFileException;
 
@@ -16,9 +16,10 @@ import org.classBooker.service.exception.UnexpectedFormatFileException;
  * @author josepma
  */
 public interface StaffMgrService {
-    public void addUser(User user);
+    public void addUser(User user) throws AlreadyExistingUserException;
     public void addMassiveUser(String filename) 
-            throws UnexpectedFormatFileException, InexistentFileException, BadFormatFileException;
+            throws UnexpectedFormatFileException, InexistentFileException;
+    public User getUser(String nif);
     public void deleteUser(User user);
     public void modifyUserInformation(User user);
 }

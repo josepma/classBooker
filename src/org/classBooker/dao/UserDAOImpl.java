@@ -24,6 +24,7 @@ public class UserDAOImpl implements UserDAO{
     private EntityManager em;
     
     public UserDAOImpl(){
+        em = Persistence.createEntityManagerFactory("classBooker").createEntityManager();
     }
     
     public void setEntityManager(EntityManager em){
