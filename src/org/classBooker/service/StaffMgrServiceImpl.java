@@ -64,7 +64,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
                 addUser(us);
             }
             catch(AlreadyExistingUserException e){
-                //TODO: Ficar un log aqui.
+                Logger.getLogger(ReservationMgrServiceImpl.class.getName()).log(Level.INFO, "The file contains Repeated Users");
             }
         }
     }

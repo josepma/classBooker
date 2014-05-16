@@ -12,6 +12,7 @@ import org.classBooker.service.exception.InexistentFileException;
 import org.classBooker.service.exception.UnexpectedFormatFileException;
 import org.jmock.Expectations;
 import static org.jmock.Expectations.returnValue;
+import static org.jmock.Expectations.throwException;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.After;
@@ -63,6 +64,13 @@ public class StaffMgrServiceImplTest {
     }
     
     @Test
+    public void addMassiveUserWithRepeatedUsersCsv() throws Exception {
+        setExpectationsAddRepeatedUserCsv();
+        staff.addMassiveUser("repeatedUsers.csv");
+        assertEquals(staff.getUser(u.getNif()),u);
+    }
+    
+    @Test
     public void addMassiveUserXml() throws Exception {
         setExpectationsAddUser();
         staff.addMassiveUser("users.xml");
@@ -92,6 +100,14 @@ public class StaffMgrServiceImplTest {
         context.checking(new Expectations(){{ 
             oneOf(uDao).addUser(u);
             oneOf(uDao).addUser(u);will(throwException(new AlreadyExistingUserException()));
+         }}); 
+    }
+    
+    private void setExpectationsAddRepeatedUserCsv() throws AlreadyExistingUserException{
+        context.checking(new Expectations(){{ 
+            oneOf(uDao).addUser(u);
+            oneOf(uDao).addUser(u);will(throwException(new AlreadyExistingUserException()));
+            oneOf(uDao).getUserByNif(u.getNif());will(returnValue(u));
          }}); 
     }
     
