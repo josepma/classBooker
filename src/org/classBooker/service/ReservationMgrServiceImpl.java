@@ -102,12 +102,11 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     }
 
     @Override
-    public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws Exception {
+    public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws IncorrectTimeException, IncorrectUserException, IncorrectRoomException, IncorrectBuildingException {
         Room room = spaceDao.getRoomByNbAndBuilding(roomNb, buildingName);
         Reservation reservation = makeReservationBySpace(room.getRoomId(), nif, resDate);
 
         if (reservation != null) {
-            acceptReservation(reservation);
             ReservationUser reservationUser = (ReservationUser) userDao.getUserByNif(nif);
             return new ReservationResult(reservation, reservationUser);
         }
@@ -124,7 +123,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
      * the database
      */
     @Override
-    public Reservation makeReservationBySpace(long roomId, String nif, DateTime initialTime) throws Exception {
+    public Reservation makeReservationBySpace(long roomId, String nif, DateTime initialTime) throws IncorrectRoomException, IncorrectUserException, IncorrectTimeException, IncorrectBuildingException {
         Room room = spaceDao.getRoomById(roomId);
         User user = userDao.getUserByNif(nif);
         datetime = initialTime;
@@ -227,18 +226,13 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
 
     @Override
     public Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws IncorrectBuildingException, IncorrectRoomException{
-        List<Room> sameTypeRooms = spaceDao.getAllRoomsByTypeAndCapacity(type, capacity, buildingName);
-        if(sameTypeRooms.isEmpty()){
-            return null;
-        }
-              
-        List<Room> nonReservedRooms = getNonReservedRooms(sameTypeRooms, date);
-        if(nonReservedRooms.isEmpty()){
+        List<Room> avaliableRooms = obtainAllRoomsWithSameFeatures(type, capacity, buildingName, date);
+        if(avaliableRooms.isEmpty()){
             return null;
         }
         User reservationUser = userDao.getUserByNif(nif);
         if(reservationUser instanceof ReservationUser){
-            return new Reservation(date, (ReservationUser)reservationUser, nonReservedRooms.get(0));
+            return new Reservation(date, (ReservationUser)reservationUser, avaliableRooms.get(0));
         }
         return null;
         
@@ -252,6 +246,20 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
             if (res == null) {
                 nonReservedRooms.add(r);
             }
+        }
+        return nonReservedRooms;
+    }
+
+    @Override
+    public List<Room> obtainAllRoomsWithSameFeatures(String type, int capacity, String building, DateTime date)throws IncorrectBuildingException, IncorrectRoomException{
+        List<Room> sameTypeRooms = spaceDao.getAllRoomsByTypeAndCapacity(type, capacity, building);
+        if(sameTypeRooms.isEmpty()){
+            return new ArrayList();
+        }
+              
+        List<Room> nonReservedRooms = getNonReservedRooms(sameTypeRooms, date);
+        if(nonReservedRooms.isEmpty()){
+            return new ArrayList();
         }
         return nonReservedRooms;
     }

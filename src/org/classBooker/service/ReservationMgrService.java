@@ -32,7 +32,7 @@ public interface ReservationMgrService {
      * @return A ReservationResult encapsulating the Reservation done or a list of suggested rooms.
      * @throws Exception If the roomNb or BuildingName doesn't match with a correct Room or Building.
      */
-    public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws Exception;
+    public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate)throws IncorrectTimeException, IncorrectUserException, IncorrectRoomException, IncorrectBuildingException;
 
     /**
      *
@@ -42,7 +42,7 @@ public interface ReservationMgrService {
      * @return
      * @throws Exception
      */
-    public Reservation makeReservationBySpace(long roomld, String nif, DateTime initialTime)throws Exception;
+    public Reservation makeReservationBySpace(long roomld, String nif, DateTime initialTime)throws IncorrectRoomException, IncorrectUserException, IncorrectTimeException, IncorrectBuildingException ;
     /**
      * Makes a reservation by type of space.
      * @param nif Nif of the user who makes the reservation.
@@ -157,4 +157,5 @@ public interface ReservationMgrService {
      */
     public void acceptReservation(Reservation reservation) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException,AlredyExistReservationException;
    
+    public List<Room> obtainAllRoomsWithSameFeatures(String type, int capacity, String building, DateTime date)throws IncorrectBuildingException, IncorrectRoomException;
 }

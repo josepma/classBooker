@@ -14,6 +14,7 @@ import org.classBooker.dao.SpaceDAO;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectReservationException;
 import org.classBooker.dao.exception.IncorrectRoomException;
+import org.classBooker.dao.exception.IncorrectTimeException;
 import org.classBooker.dao.exception.IncorrectTypeException;
 import org.classBooker.dao.exception.IncorrectUserException;
 import org.classBooker.entity.Building;
@@ -197,15 +198,6 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
         this.spaDao = spaDao;
     }
 
-    @Override
-    public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Reservation makeReservationBySpace(long roomld, String nif, DateTime initialTime) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public Reservation modifyReservation(long id) {
@@ -278,6 +270,21 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
 
     @Override
     public Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws IncorrectBuildingException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<Room> obtainAllRoomsWithSameFeatures(String type, int capacity, String building, DateTime date) throws IncorrectBuildingException, IncorrectRoomException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws IncorrectTimeException, IncorrectUserException, IncorrectRoomException, IncorrectBuildingException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Reservation makeReservationBySpace(long roomld, String nif, DateTime initialTime) throws IncorrectRoomException, IncorrectUserException, IncorrectTimeException, IncorrectBuildingException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

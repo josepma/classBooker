@@ -172,7 +172,6 @@ public class ReservationMgrServiceImplAcceptationTest {
                 will(returnValue(rUser));
                 oneOf(rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());
                 will(returnValue(null));
-                oneOf(rDao).addReservation(with(any(Reservation.class)));
             }
         });
         ReservationResult rr = rms.makeCompleteReservationBySpace(nif, room.getNumber(), building.getBuildingName(), dateTime);
