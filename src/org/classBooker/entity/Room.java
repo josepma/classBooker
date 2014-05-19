@@ -111,5 +111,10 @@ public abstract class Room {
         return (obj instanceof Room) && ((Room)obj).roomId==(this.roomId);
                 
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode(); 
+    }
     
 }

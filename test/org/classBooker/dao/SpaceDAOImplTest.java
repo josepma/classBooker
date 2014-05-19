@@ -212,7 +212,7 @@ public class SpaceDAOImplTest {
     public void testModifyCapacityRoom() throws Exception {
         room2 = new ClassRoom(building, "2.08", 30);
         long id = sdi.addRoom(room2);
-        sdi.ModifyRoom(room2, null, 20);
+        sdi.modifyRoom(room2, null, 20);
 
         assertEquals(20, sdi.getRoomByNbAndBuilding("2.08", "EPS").getCapacity());
     }
@@ -221,7 +221,7 @@ public class SpaceDAOImplTest {
     public void testModifyTypeRoom() throws Exception {
         room2 = new ClassRoom(building, "2.19", 30);
         long id = sdi.addRoom(room2);
-        sdi.ModifyRoom(room2, "MeetingRoom", 0);
+        sdi.modifyRoom(room2, "MeetingRoom", 0);
 
         Room expected = sdi.getRoomByNbAndBuilding("2.19", "EPS");
 
@@ -232,7 +232,7 @@ public class SpaceDAOImplTest {
     public void testModifyTypeAndCapacityRoom() throws Exception {
         room2 = new ClassRoom(building, "2.19", 30);
         long id = sdi.addRoom(room2);
-        sdi.ModifyRoom(room2, "MeetingRoom", 50);
+        sdi.modifyRoom(room2, "MeetingRoom", 50);
 
         Room expected = sdi.getRoomByNbAndBuilding("2.19", "EPS");
         assertEquals(50, sdi.getRoomByNbAndBuilding("2.19", "EPS").getCapacity());
@@ -246,7 +246,7 @@ public class SpaceDAOImplTest {
         List<Reservation> reservations = new ArrayList<Reservation>();
         reservations.add(reserv);
         room2.setReservations(reservations);
-        sdi.ModifyRoom(room2, "MeetingRoom", 50);
+        sdi.modifyRoom(room2, "MeetingRoom", 50);
     }
 
     /**
