@@ -24,7 +24,7 @@ public abstract class Room {
     @Id
     @GeneratedValue      
     @Column(name = "ROOMID")    
-    long roomId;
+    private long roomId;
     
     private String number;    
     private int capacity;
