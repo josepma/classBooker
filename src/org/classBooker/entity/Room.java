@@ -24,7 +24,7 @@ public abstract class Room {
     @Id
     @GeneratedValue      
     @Column(name = "ROOMID")    
-    long roomId;
+    private long roomId;
     
     private String number;    
     private int capacity;
@@ -110,6 +110,11 @@ public abstract class Room {
         
         return (obj instanceof Room) && ((Room)obj).roomId==(this.roomId);
                 
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode(); 
     }
     
 }
