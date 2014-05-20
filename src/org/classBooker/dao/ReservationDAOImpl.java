@@ -113,7 +113,7 @@ public class ReservationDAOImpl implements ReservationDAO{
         Room room =  sDao.getRoomByNbAndBuilding(roomNb, buildingName);
         List<Reservation> reservations = room.getReservations();
         for (Reservation res : reservations) {
-            if (res.getReservationDate().equals(dateTime)) {
+            if (res.getReservationDate().isEqual(dateTime)) {
                 return res;
             }
         }
@@ -149,11 +149,26 @@ public class ReservationDAOImpl implements ReservationDAO{
 
     @Override
     public void removeReservation(long id) throws IncorrectReservationException {
+        removeReservation(getReservationById(id));
+    }
+    
+    @Override
+    public void removeReservation(DateTime datetime, String roomNb, String buildingName) 
+                                        throws IncorrectReservationException, 
+                                                IncorrectRoomException, 
+                                                IncorrectBuildingException {
+
+        removeReservation(getReservationByDateRoomBulding(datetime, 
+                                                            roomNb, 
+                                                            buildingName));
+    }
+    
+    private void removeReservation(Reservation res)throws IncorrectReservationException {
+        if(res == null )throw new IncorrectReservationException();
         em.getTransaction().begin();
-        Reservation reservation = getReservationById(id);
-        reservation.getrUser().getReservations().remove(reservation);
-        reservation.getRoom().getReservations().remove(reservation);
-        em.remove(reservation);
+        res.getrUser().getReservations().remove(res);
+        res.getRoom().getReservations().remove(res);
+        em.remove(res);
         em.getTransaction().commit();
     }
 

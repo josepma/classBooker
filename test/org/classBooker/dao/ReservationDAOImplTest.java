@@ -285,7 +285,24 @@ public class ReservationDAOImplTest {
         actualReservation = rDao.getReservationById(resId);
         rDao.removeReservation(resId);
         
-        checkDontExistReservation(null, getReservationFromDB(resId));
+        checkDontExistReservation(reservation1, actualReservation);
+        
+    }
+    
+    @Test
+    public void testRemoveReservationByAtributes() throws Exception {
+        context.checking(new Expectations(){{
+            oneOf(sDao).getRoomByNbAndBuilding(room1.getNumber(), 
+                                               building1.getBuildingName());
+            will(returnValue(room1));
+        }});
+        long resId = rDao.addReservation(reservation1);
+        actualReservation = rDao.getReservationById(resId);
+        rDao.removeReservation(dataRes1, 
+                                room1.getNumber(), 
+                                building1.getBuildingName());
+        
+        checkDontExistReservation(reservation1, actualReservation);
         
     }
 
@@ -336,10 +353,10 @@ public class ReservationDAOImplTest {
         assertTrue(actual.getrUser().getReservations().contains(expected));
     }
     
-    private void checkDontExistReservation(Reservation expected,Reservation actual){
-        assertEquals(expected, actual);
-        assertFalse(actual.getRoom().getReservations().contains(expected));
-        assertFalse(actual.getrUser().getReservations().contains(expected));
+    private void checkDontExistReservation(Reservation check,Reservation on){
+        assertEquals(null, rDao.getReservationById(on.getReservationId()));
+        assertFalse(on.getRoom().getReservations().contains(check));
+        assertFalse(on.getrUser().getReservations().contains(check));
     }
     
     private Set<Reservation> reservationsToSet(Reservation... res){

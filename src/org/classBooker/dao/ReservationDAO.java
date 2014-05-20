@@ -80,6 +80,12 @@ public interface ReservationDAO {
 
     void removeReservation(long id) throws IncorrectReservationException;
     
+    
+    void removeReservation(DateTime datetime, String roomNb,String buildingName) 
+                                            throws IncorrectReservationException,
+                                                    IncorrectRoomException,
+                                                    IncorrectBuildingException;
+    
     /**
      * Get a reservation by id.
      * @param id identifier of the reservation.
