@@ -6,6 +6,8 @@
 
 package org.classBooker.entity;
 
+import org.classbooker.entity.StaffAdmin;
+import org.classbooker.entity.User;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

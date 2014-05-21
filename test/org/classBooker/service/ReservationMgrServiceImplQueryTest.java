@@ -6,8 +6,9 @@
 
 package org.classBooker.service;
 
-import org.classBooker.dao.ReservationDAO;
-import org.classBooker.entity.Reservation;
+import org.classbooker.service.ReservationMgrServiceImplQuery;
+import org.classbooker.dao.ReservationDAO;
+import org.classbooker.entity.Reservation;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.jmock.Expectations;
@@ -19,12 +20,12 @@ import org.junit.runner.RunWith;
 import org.jmock.Sequence;
 import java.util.List;
 import java.util.ArrayList;
-import org.classBooker.dao.SpaceDAO;
-import org.classBooker.dao.exception.IncorrectBuildingException;
-import org.classBooker.dao.exception.IncorrectRoomException;
-import org.classBooker.dao.exception.IncorrectTypeException;
-import org.classBooker.dao.exception.IncorrectUserException;
-import org.classBooker.entity.*;
+import org.classbooker.dao.SpaceDAO;
+import org.classbooker.dao.exception.IncorrectBuildingException;
+import org.classbooker.dao.exception.IncorrectRoomException;
+import org.classbooker.dao.exception.IncorrectTypeException;
+import org.classbooker.dao.exception.IncorrectUserException;
+import org.classbooker.entity.*;
 import org.joda.time.DateTime;
 import org.junit.Before;
 

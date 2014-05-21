@@ -6,6 +6,9 @@
 
 package org.classBooker.dao;
 
+import org.classbooker.dao.UserDAO;
+import org.classbooker.dao.SpaceDAO;
+import org.classbooker.dao.ReservationDAOImpl;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -15,8 +18,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import org.classBooker.dao.exception.*;
-import org.classBooker.entity.*;
+import org.classbooker.dao.exception.*;
+import org.classbooker.entity.*;
 import org.jmock.Expectations;
 import static org.jmock.Expectations.returnValue;
 import static org.jmock.Expectations.throwException;

@@ -6,14 +6,15 @@
 
 package org.classBooker.dao;
 
+import org.classbooker.dao.UserDAOImpl;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
-import org.classBooker.dao.exception.AlreadyExistingUserException;
-import org.classBooker.entity.User;
-import org.classBooker.entity.ProfessorPas;
+import org.classbooker.dao.exception.AlreadyExistingUserException;
+import org.classbooker.entity.User;
+import org.classbooker.entity.ProfessorPas;
 import org.junit.After;
 import org.junit.Test;
 import static org.junit.Assert.*;

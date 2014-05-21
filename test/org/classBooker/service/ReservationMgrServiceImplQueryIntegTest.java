@@ -6,19 +6,20 @@
 
 package org.classBooker.service;
 
+import org.classbooker.service.ReservationMgrServiceImplQuery;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import org.classBooker.dao.ReservationDAO;
-import org.classBooker.dao.ReservationDAOImpl;
-import org.classBooker.dao.SpaceDAO;
-import org.classBooker.dao.exception.IncorrectBuildingException;
-import org.classBooker.entity.Building;
-import org.classBooker.entity.Reservation;
-import org.classBooker.entity.ReservationUser;
-import org.classBooker.entity.Room;
+import org.classbooker.dao.ReservationDAO;
+import org.classbooker.dao.ReservationDAOImpl;
+import org.classbooker.dao.SpaceDAO;
+import org.classbooker.dao.exception.IncorrectBuildingException;
+import org.classbooker.entity.Building;
+import org.classbooker.entity.Reservation;
+import org.classbooker.entity.ReservationUser;
+import org.classbooker.entity.Room;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import static org.junit.Assert.*;

@@ -8,7 +8,7 @@ package org.classBooker.main;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
-import org.classBooker.entity.*;
+import org.classbooker.entity.*;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import static org.junit.Assert.*;
