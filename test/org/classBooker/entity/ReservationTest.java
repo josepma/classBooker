@@ -5,8 +5,6 @@
  */
 package org.classBooker.entity;
 
-import java.sql.Time;
-import java.util.Date;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.AfterClass;

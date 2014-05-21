@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import org.classBooker.dao.exception.*;
 import org.classBooker.entity.*;
 import org.joda.time.DateTime;
@@ -55,9 +56,13 @@ public class ReservationDAOImpl implements ReservationDAO{
                                                IncorrectRoomException,
                                                AlredyExistReservationException{
         em.getTransaction().begin();    
-        checkReservation(reservation);
-        persistReservation(reservation);
-        em.getTransaction().commit();
+        
+        if(checkReservationForUser(reservation)){
+            em.getTransaction().rollback();
+        }else{
+            persistReservation(reservation);
+            em.getTransaction().commit();
+        }
         return reservation.getReservationId();
     }
     
@@ -70,6 +75,11 @@ public class ReservationDAOImpl implements ReservationDAO{
                                                AlredyExistReservationException,
                                                IncorrectBuildingException{
         
+        return addReservation(new Reservation(dateTime, 
+                                            getUser(userId), 
+                                            getRoom(roomNb, buildingName)));
+        
+        /*
         em.getTransaction().begin();
         ReservationUser user= getUser(userId);
         Room room = getRoom(roomNb,buildingName);
@@ -78,6 +88,7 @@ public class ReservationDAOImpl implements ReservationDAO{
         persistReservation(reservation);
         em.getTransaction().commit();
         return reservation.getReservationId();
+        */
         
     }
     
@@ -102,7 +113,7 @@ public class ReservationDAOImpl implements ReservationDAO{
         Room room =  sDao.getRoomByNbAndBuilding(roomNb, buildingName);
         List<Reservation> reservations = room.getReservations();
         for (Reservation res : reservations) {
-            if (res.getReservationDate().equals(dateTime)) {
+            if (res.getReservationDate().isEqual(dateTime)) {
                 return res;
             }
         }
@@ -127,7 +138,8 @@ public class ReservationDAOImpl implements ReservationDAO{
     }
 
     @Override
-    public List<Reservation> getAllReservationByRoom(long id) throws IncorrectRoomException {
+    public List<Reservation> getAllReservationByRoom(long id) 
+                                                throws IncorrectRoomException {
         return em.createQuery("SELECT r "
                 + "FROM Reservation r "
                 + "WHERE r.room.roomId = :roomID ")
@@ -137,16 +149,32 @@ public class ReservationDAOImpl implements ReservationDAO{
 
     @Override
     public void removeReservation(long id) throws IncorrectReservationException {
+        removeReservation(getReservationById(id));
+    }
+    
+    @Override
+    public void removeReservation(DateTime datetime, String roomNb, String buildingName) 
+                                        throws IncorrectReservationException, 
+                                                IncorrectRoomException, 
+                                                IncorrectBuildingException {
+
+        removeReservation(getReservationByDateRoomBulding(datetime, 
+                                                            roomNb, 
+                                                            buildingName));
+    }
+    
+    private void removeReservation(Reservation res)throws IncorrectReservationException {
+        if(res == null )throw new IncorrectReservationException();
         em.getTransaction().begin();
-        Reservation reservation = getReservationById(id);
-        reservation.getrUser().getReservations().remove(reservation);
-        reservation.getRoom().getReservations().remove(reservation);
-        em.remove(reservation);
+        res.getrUser().getReservations().remove(res);
+        res.getRoom().getReservations().remove(res);
+        em.remove(res);
         em.getTransaction().commit();
     }
 
     @Override
-    public List<Reservation> getAllReservationByUserNif(String nif) throws IncorrectUserException {
+    public List<Reservation> getAllReservationByUserNif(String nif) 
+                                                throws IncorrectUserException {
         return em.createQuery("SELECT r "
                 + "FROM Reservation r "
                 + "WHERE r.rUser.nif = :nif ")
@@ -167,8 +195,19 @@ public class ReservationDAOImpl implements ReservationDAO{
         checkRoom(reservation.getRoom());
         checkUser(reservation.getrUser());
         checkExistingReservation(reservation);
+    }
         
-
+    private boolean checkReservationForUser(Reservation reservation) 
+                                        throws IncorrectReservationException, 
+                                                IncorrectRoomException, 
+                                                IncorrectUserException, 
+                                                AlredyExistReservationException{
+        
+        if(reservation == null || reservation.getReservationDate() == null)
+            throw new IncorrectReservationException();
+        checkRoom(reservation.getRoom());
+        checkUser(reservation.getrUser());
+        return checkExistingReservationForOtherUser(reservation);
     }
 
     private void checkRoom(Room room) throws IncorrectRoomException {
@@ -200,18 +239,43 @@ public class ReservationDAOImpl implements ReservationDAO{
     }
 
     private void checkExistingReservation(Reservation reservation) 
-                                        throws AlredyExistReservationException{
+                                        throws AlredyExistReservationException{     
         if(!em.createQuery("SELECT r "
                 + "FROM Reservation r "
                 + "WHERE r.reservationDate = :reservationdDate AND "
                 + "r.room = :reservationRoom ")
                 .setParameter("reservationdDate", 
-                        reservation.getReservationDate().toCalendar(Locale.getDefault()))
+                                reservation.getReservationDate()
+                                .toCalendar(Locale.getDefault()))
                 .setParameter("reservationRoom",  
-                        reservation.getRoom())
+                                reservation.getRoom())
                 .getResultList().isEmpty()){
             throw new AlredyExistReservationException();
+        }    
+    }
+    
+    private boolean checkExistingReservationForOtherUser(Reservation reservation) 
+                                        throws AlredyExistReservationException{
+        User ur = null;
+        try{
+        ur = (User) em.createQuery("SELECT r.rUser "
+                + "FROM Reservation r "
+                + "WHERE r.reservationDate = :reservationdDate AND "
+                + "r.room = :reservationRoom ")
+                .setParameter("reservationdDate", 
+                                reservation.getReservationDate()
+                                .toCalendar(Locale.getDefault()))
+                .setParameter("reservationRoom",  
+                                reservation.getRoom()).getSingleResult();
+        }catch(NonUniqueResultException ex ){
+            throw new AlredyExistReservationException();
+        }catch(NoResultException ex){
+            return false;
         }
+        if(ur != reservation.getrUser()){
+            throw new AlredyExistReservationException();
+        }
+        return true;
     }
 
     private ReservationUser getUser(String userId) throws IncorrectUserException {

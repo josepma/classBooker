@@ -42,7 +42,7 @@ public class Reservation {
     }
 
     public Reservation(DateTime reservationDate, ReservationUser rUser, Room room) {
-        this.reservationDate = reservationDate.toCalendar(Locale.getDefault());
+        this.reservationDate = changeDateToCalendar(reservationDate);
         this.rUser = rUser;
         this.room = room;
     }
@@ -53,19 +53,11 @@ public class Reservation {
 
     public DateTime getReservationDate() {
         return new DateTime(this.reservationDate);
-        
-      //  ****I PROPOSE:   return new DateTime(this.reservationDate); Josepma
-
     }
 
     
     public void setReservationDate(DateTime reservationDate) {
-        this.reservationDate = reservationDate.toCalendar(Locale.getDefault());
-    
-        // **** I propose: this.reservationDate = reservationDate.toCalendar(Locale.getDefault()); Josepma
-
-        
-        
+        this.reservationDate = changeDateToCalendar(reservationDate);     
     }
 
     public ReservationUser getrUser() {
@@ -113,6 +105,10 @@ public class Reservation {
         }
         return true;
     }
-
+    
+    private Calendar changeDateToCalendar(DateTime reservationDate){
+        return reservationDate.withMinuteOfHour(0).withSecondOfMinute(0)
+                .withMillisOfSecond(0).toCalendar(Locale.getDefault());
+    }
 
 }

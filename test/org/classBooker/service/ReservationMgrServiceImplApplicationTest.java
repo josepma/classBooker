@@ -51,8 +51,8 @@ public class ReservationMgrServiceImplApplicationTest {
     final DateTime date = new DateTime().plusDays(2).withMinuteOfHour(0);
     final DateTime dateBeforeNow = new DateTime(2014,3,2,12,0);
     final DateTime dateIncorrectFormatOfMinutes = new DateTime(2015,3,2,12,12);
-    final Building b = new Building("nameBuilding");
-    final Room room = new ClassRoom(b, nif, 30);
+    final Building building = new Building("nameBuilding");
+    final Room room = new ClassRoom(building, nif, 30);
     final ReservationUser professor = new ProfessorPas();
     final User staff = new StaffAdmin();
     final Reservation reservation = new Reservation();
@@ -153,31 +153,31 @@ public class ReservationMgrServiceImplApplicationTest {
     @Test (expected = IncorrectBuildingException.class)
     public void testCannotFindReservationByBuilding() throws Exception{
         checkFindReservationByBuildingRoomDateExpectations(null,room);
-        rmgr.findReservationById(b.getBuildingName(), room.getNumber(), date);
+        rmgr.findReservationById(building.getBuildingName(), room.getNumber(), date);
     }
     
     @Test(expected = IncorrectRoomException.class)
     public void testCannotFindReservationByRoom() throws Exception{
-        checkFindReservationByBuildingRoomDateExpectations(b,null);
-        rmgr.findReservationById(b.getBuildingName(), room.getNumber(), date);
+        checkFindReservationByBuildingRoomDateExpectations(building,null);
+        rmgr.findReservationById(building.getBuildingName(), room.getNumber(), date);
     }
     
     @Test(expected = IncorrectTimeException.class)
     public void testCannotFindReservationByDateIsBeforeNow() throws Exception{
-        checkFindReservationByBuildingRoomDateExpectations(b,room);
-        rmgr.findReservationById(b.getBuildingName(), room.getNumber(), dateBeforeNow);
+        checkFindReservationByBuildingRoomDateExpectations(building,room);
+        rmgr.findReservationById(building.getBuildingName(), room.getNumber(), dateBeforeNow);
     }
     
     @Test(expected = IncorrectTimeException.class)
     public void testCannotFindReservationByDateIncorrectFormatOfMinutes() throws Exception{
-        checkFindReservationByBuildingRoomDateExpectations(b,room);
-        rmgr.findReservationById(b.getBuildingName(), room.getNumber(), dateIncorrectFormatOfMinutes);
+        checkFindReservationByBuildingRoomDateExpectations(building,room);
+        rmgr.findReservationById(building.getBuildingName(), room.getNumber(), dateIncorrectFormatOfMinutes);
     }
     
     @Test
     public void testFindReservationByBuildingRoomDate() throws Exception{
-        checkFindReservationByBuildingRoomDateExpectations(b,room);
-        rmgr.findReservationById(b.getBuildingName(), room.getNumber(), date);
+        checkFindReservationByBuildingRoomDateExpectations(building,room);
+        rmgr.findReservationById(building.getBuildingName(), room.getNumber(), date);
     }
 
     
@@ -212,12 +212,12 @@ public class ReservationMgrServiceImplApplicationTest {
     }
    
 
-    private void checkFindReservationByBuildingRoomDateExpectations(final Building building, final Room room2) 
+    private void checkFindReservationByBuildingRoomDateExpectations(final Building b, final Room r) 
                                                                                     throws Exception{
         context.checking(new Expectations(){{ 
-            oneOf(sDao).getBuildingByName(b.getBuildingName());will(returnValue(building));
-            allowing(sDao).getRoomByNbAndBuilding(room.getNumber(),b.getBuildingName());will(returnValue(room2));
-            allowing(rDao).getReservationByDateRoomBulding(date, room.getNumber(), b.getBuildingName());
+            oneOf(sDao).getBuildingByName(building.getBuildingName());will(returnValue(b));
+            allowing(sDao).getRoomByNbAndBuilding(room.getNumber(),building.getBuildingName());will(returnValue(r));
+            allowing(rDao).getReservationByDateRoomBulding(date, room.getNumber(), building.getBuildingName());
         }});
     }
  
