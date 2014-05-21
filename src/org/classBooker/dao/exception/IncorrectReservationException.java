@@ -6,6 +6,8 @@
 
 package org.classBooker.dao.exception;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author Marc Sole, Carles Mònico
@@ -25,6 +27,10 @@ public class IncorrectReservationException extends Exception{
      */
     public IncorrectReservationException(String message){
         super(message);
+    }
+    
+    public IncorrectReservationException(Logger log,String nameFunction) {
+        log.error("in"+ nameFunction +"error:"+ this.getMessage());
     }
     
 }

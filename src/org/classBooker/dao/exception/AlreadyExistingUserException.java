@@ -6,6 +6,8 @@
 
 package org.classBooker.dao.exception;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author jpb3
@@ -25,6 +27,9 @@ public class AlreadyExistingUserException extends Exception {
      */
     public AlreadyExistingUserException(String msg) {
         super(msg);
+    }
+    public AlreadyExistingUserException(Logger log,String nameFunction) {
+        log.error("in"+ nameFunction +"error:"+ this.getMessage());
     }
     
 }

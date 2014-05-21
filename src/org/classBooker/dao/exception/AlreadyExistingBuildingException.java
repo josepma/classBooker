@@ -6,6 +6,8 @@
 
 package org.classBooker.dao.exception;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author saida
@@ -27,5 +29,9 @@ public class AlreadyExistingBuildingException extends Exception {
      */
     public AlreadyExistingBuildingException(String msg) {
         super(msg);
+    }
+    
+    public AlreadyExistingBuildingException(Logger log,String nameFunction) {
+        log.error("in"+ nameFunction +"error:"+ this.getMessage());
     }
 }

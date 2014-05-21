@@ -6,6 +6,8 @@
 
 package org.classBooker.dao.exception;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author saida
@@ -27,5 +29,8 @@ public class NonBuildingException extends Exception {
      */
     public NonBuildingException(String msg) {
         super(msg);
+    }
+    public NonBuildingException(Logger log,String nameFunction) {
+        log.error("in"+ nameFunction +"error:"+ this.getMessage());
     }
 }

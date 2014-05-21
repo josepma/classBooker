@@ -6,6 +6,8 @@
 
 package org.classBooker.dao.exception;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author marc
@@ -14,5 +16,7 @@ public class AlredyExistReservationException extends Exception {
 
     public AlredyExistReservationException() {
     }
-    
+    public AlredyExistReservationException(Logger log,String nameFunction) {
+        log.error("in"+ nameFunction +"error:"+ this.getMessage());
+    }
 }

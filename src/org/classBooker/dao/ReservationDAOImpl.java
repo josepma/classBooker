@@ -11,6 +11,8 @@ import java.util.Locale;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.classBooker.dao.exception.*;
 import org.classBooker.entity.*;
 import org.joda.time.DateTime;
@@ -25,6 +27,9 @@ public class ReservationDAOImpl implements ReservationDAO{
     private UserDAO uDao;
     private SpaceDAO sDao;
     
+    Logger logger = Logger.getLogger("ReservationDAOImpl.log");
+    
+
     public EntityManager getEm() {
         return em;
     }
@@ -58,6 +63,7 @@ public class ReservationDAOImpl implements ReservationDAO{
             persistReservation(reservation);
             em.getTransaction().commit();
         }
+        logger.info("Reservation added:"+reservation);
         return reservation.getReservationId();
     }
     
@@ -72,19 +78,7 @@ public class ReservationDAOImpl implements ReservationDAO{
         
         return addReservation(new Reservation(dateTime, 
                                             getUser(userId), 
-                                            getRoom(roomNb, buildingName)));
-        
-        /*
-        em.getTransaction().begin();
-        ReservationUser user= getUser(userId);
-        Room room = getRoom(roomNb,buildingName);
-        Reservation reservation = new Reservation(dateTime, user, room);
-        checkExistingReservation(reservation);
-        persistReservation(reservation);
-        em.getTransaction().commit();
-        return reservation.getReservationId();
-        */
-        
+                                            getRoom(roomNb, buildingName)));    
     }
     
     private void persistReservation(Reservation reservation){
@@ -145,6 +139,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     @Override
     public void removeReservation(long id) throws IncorrectReservationException {
         removeReservation(getReservationById(id));
+        logger.info("Reservation removed id:"+id);
     }
     
     @Override
@@ -186,7 +181,7 @@ public class ReservationDAOImpl implements ReservationDAO{
                                                 AlredyExistReservationException{
         
         if(reservation == null || reservation.getReservationDate() == null)
-            throw new IncorrectReservationException();
+            throw new IncorrectReservationException(logger,"checkReservation");
         checkRoom(reservation.getRoom());
         checkUser(reservation.getrUser());
         checkExistingReservation(reservation);
@@ -199,7 +194,7 @@ public class ReservationDAOImpl implements ReservationDAO{
                                                 AlredyExistReservationException{
         
         if(reservation == null || reservation.getReservationDate() == null)
-            throw new IncorrectReservationException();
+            throw new IncorrectReservationException(logger,"checkReservationForUser");
         checkRoom(reservation.getRoom());
         checkUser(reservation.getrUser());
         return checkExistingReservationForOtherUser(reservation);
@@ -207,29 +202,29 @@ public class ReservationDAOImpl implements ReservationDAO{
 
     private void checkRoom(Room room) throws IncorrectRoomException {
         if(room == null || room.getNumber() == null) 
-            throw new IncorrectRoomException();
+            throw new IncorrectRoomException(logger,"checkRoom");
         
         if(!em.contains(room))
-            throw new IncorrectRoomException();
+            throw new IncorrectRoomException(logger,"checkRoom");
         
         
     }
 
     private void checkUser(User user) throws IncorrectUserException {
         if(user == null || user.getNif() == null) 
-            throw new IncorrectUserException();
+            throw new IncorrectUserException(logger,"checkUser");
         
         if(!em.contains(user))
-            throw new IncorrectUserException();
+            throw new IncorrectUserException(logger,"checkUser");
         
     }
     
     private void checkBuilding(Building building) throws IncorrectBuildingException {
         if(building == null || building.getBuildingName() == null) 
-            throw new IncorrectBuildingException();
+            throw new IncorrectBuildingException(logger,"checkBuilding");
         
         if(!em.contains(building))
-            throw new IncorrectBuildingException();
+            throw new IncorrectBuildingException(logger,"checkBuilding");
         
     }
 
@@ -245,7 +240,7 @@ public class ReservationDAOImpl implements ReservationDAO{
                 .setParameter("reservationRoom",  
                                 reservation.getRoom())
                 .getResultList().isEmpty()){
-            throw new AlredyExistReservationException();
+            throw new AlredyExistReservationException(logger,"checkExistingReservation");
         }    
     }
     
@@ -263,12 +258,12 @@ public class ReservationDAOImpl implements ReservationDAO{
                 .setParameter("reservationRoom",  
                                 reservation.getRoom()).getSingleResult();
         }catch(NonUniqueResultException ex ){
-            throw new AlredyExistReservationException();
+            throw new AlredyExistReservationException(logger,"checkExistingReservationForOtherUser");
         }catch(NoResultException ex){
             return false;
         }
         if(ur != reservation.getrUser()){
-            throw new AlredyExistReservationException();
+            throw new AlredyExistReservationException(logger,"checkExistingReservationForOtherUser");
         }
         return true;
     }
@@ -276,11 +271,11 @@ public class ReservationDAOImpl implements ReservationDAO{
     private ReservationUser getUser(String userId) throws IncorrectUserException {
         User user = uDao.getUserByNif(userId);
         if(user == null){
-            throw new IncorrectUserException();
+            throw new IncorrectUserException(logger,"getUser");
         }else if (user instanceof ReservationUser) {
             return (ReservationUser) user;
         }else{
-            throw new IncorrectUserException();
+            throw new IncorrectUserException(logger,"getUser");
         }
         
     }

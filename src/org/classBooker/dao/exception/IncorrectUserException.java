@@ -6,6 +6,8 @@
 
 package org.classBooker.dao.exception;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author Marc Sole, Carles Mònico
@@ -25,6 +27,9 @@ public class IncorrectUserException extends Exception {
      */
     public IncorrectUserException(String msg) {
         super(msg);
+    }
+    public IncorrectUserException(Logger log,String nameFunction) {
+        log.error("in"+ nameFunction +"error:"+ this.getMessage());
     }
             
 }

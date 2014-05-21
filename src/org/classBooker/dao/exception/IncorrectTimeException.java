@@ -6,6 +6,8 @@
 
 package org.classBooker.dao.exception;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author richeng Jin
@@ -18,4 +20,7 @@ public class IncorrectTimeException extends Exception{
       public IncorrectTimeException(String message){
         super(message);
       }
+    public IncorrectTimeException(Logger log,String nameFunction) {
+        log.error("in"+ nameFunction +"error:"+ this.getMessage());
+    }
 }

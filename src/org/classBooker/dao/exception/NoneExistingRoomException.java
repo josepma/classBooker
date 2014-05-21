@@ -6,6 +6,8 @@
 
 package org.classBooker.dao.exception;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author villartexr
@@ -27,5 +29,8 @@ public class NoneExistingRoomException extends Exception {
      */
     public NoneExistingRoomException(String msg) {
         super(msg);
+    }
+    public NoneExistingRoomException(Logger log,String nameFunction) {
+        log.error("in"+ nameFunction +"error:"+ this.getMessage());
     }
 }

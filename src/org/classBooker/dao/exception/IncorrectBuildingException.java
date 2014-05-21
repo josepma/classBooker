@@ -6,6 +6,8 @@
 
 package org.classBooker.dao.exception;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author Marc Sole, Carles Mònico
@@ -25,6 +27,9 @@ public class IncorrectBuildingException extends Exception {
      */
     public IncorrectBuildingException(String message){
         super(message);
+    }
+    public IncorrectBuildingException(Logger log,String nameFunction) {
+        log.error("in"+ nameFunction +"error:"+ this.getMessage());
     }
     
 }

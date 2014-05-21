@@ -6,6 +6,8 @@
 
 package org.classBooker.dao.exception;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author msf7
@@ -25,6 +27,9 @@ public class IncorrectTypeException extends Exception{
      */
     public IncorrectTypeException(String message){
         super(message);
+    }
+    public IncorrectTypeException(Logger log,String nameFunction) {
+        log.error("in"+ nameFunction +"error:"+ this.getMessage());
     }
     
 }

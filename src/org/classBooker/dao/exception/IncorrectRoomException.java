@@ -6,6 +6,8 @@
 
 package org.classBooker.dao.exception;
 
+import org.apache.log4j.Logger;
+
 /**
  *
  * @author Marc Sole, Carles Mònico
@@ -25,5 +27,7 @@ public class IncorrectRoomException extends Exception{
     public IncorrectRoomException(String message){
         super(message); 
     }
-    
+    public IncorrectRoomException(Logger log,String nameFunction) {
+        log.error("in"+ nameFunction +"error:"+ this.getMessage());
+    }
 }
