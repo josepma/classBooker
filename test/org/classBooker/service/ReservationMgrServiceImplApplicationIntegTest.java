@@ -6,9 +6,15 @@
 
 package org.classBooker.service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import org.classBooker.dao.ReservationDAO;
+import org.classBooker.dao.ReservationDAOImpl;
 import org.classBooker.dao.SpaceDAO;
+import org.classBooker.dao.SpaceDAOImpl;
 import org.classBooker.dao.UserDAO;
+import org.classBooker.dao.UserDAOImpl;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectReservationException;
 import org.classBooker.dao.exception.IncorrectRoomException;
@@ -22,6 +28,7 @@ import org.classBooker.entity.ReservationUser;
 import org.classBooker.entity.Room;
 import org.classBooker.entity.StaffAdmin;
 import org.classBooker.entity.User;
+import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
 import org.jmock.Expectations;
 import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
@@ -38,43 +45,42 @@ import org.junit.runner.RunWith;
  *
  * @author aba8
  */
-@RunWith(JMock.class)
-public class ReservationMgrServiceImplApplicationTest {
-    Mockery context = new JUnit4Mockery();
+
+public class ReservationMgrServiceImplApplicationIntegTest {
     ReservationMgrServiceImpl rmgr;
-    ReservationDAO rDao;
-    SpaceDAO sDao;
-    UserDAO uDao;
+    ReservationDAOImpl rDao;
+    SpaceDAOImpl sDao;
+    UserDAOImpl uDao;
+    EntityManager em;
     
-    final String nif="12345";
-    final long roomId = 111;
-    final DateTime date = new DateTime().plusDays(2).withMinuteOfHour(0);
-    final DateTime dateBeforeNow = new DateTime(2014,3,2,12,0);
-    final DateTime dateIncorrectFormatOfMinutes = new DateTime(2015,3,2,12,12);
-    final Building building = new Building("nameBuilding");
-    final Room room = new ClassRoom(building, nif, 30);
-    final ReservationUser professor = new ProfessorPas();
-    final User staff = new StaffAdmin();
-    final Reservation reservation = new Reservation();
-    final long reservationId = 123;
+    String nif="12345";
+    long roomId = 111;
+    DateTime date = new DateTime().plusDays(2).withMinuteOfHour(0);
+    DateTime dateBeforeNow = new DateTime(2014,3,2,12,0);
+    DateTime dateIncorrectFormatOfMinutes = new DateTime(2015,3,2,12,12);
+    Building building = new Building("nameBuilding");
+    Room room = new ClassRoom(building, nif, 30);
+    ReservationUser professor = new ProfessorPas();
+    User staff = new StaffAdmin();
+    Reservation reservation = new Reservation();
+    long reservationId = 123;
     
     @Before
-    public void setUp(){
+    public void setUp() throws Exception{
         
         rmgr = new ReservationMgrServiceImpl();  
-        createAndSetMockObjects();
+        CreateAndSetObjects();
         
     }
     //Tests makeReservationBySpace
     @Test(expected = IncorrectRoomException.class)
     public void testIncorrectRoomId() throws Exception {
-        checkUserAndRoomExpectations(null,null);
         rmgr.makeReservationBySpace(roomId, nif, date);
     }
     
-     @Test(expected = IncorrectUserException.class)
+    /*@Test(expected = IncorrectUserException.class)
     public void testIncorrectUserDontExist() throws Exception {
-        checkUserAndRoomExpectations(room,null);
+        //checkUserAndRoomExpectations(room,null);
         rmgr.makeReservationBySpace(roomId, nif, date);
     }
     
@@ -152,37 +158,31 @@ public class ReservationMgrServiceImplApplicationTest {
     
     @Test (expected = IncorrectBuildingException.class)
     public void testCannotFindReservationByBuilding() throws Exception{
-        checkFindReservationByBuildingRoomDateExpectations(null,room,null);
+        checkFindReservationByBuildingRoomDateExpectations(null,room);
         rmgr.findReservationById(building.getBuildingName(), room.getNumber(), date);
     }
     
     @Test(expected = IncorrectRoomException.class)
     public void testCannotFindReservationByRoom() throws Exception{
-        checkFindReservationByBuildingRoomDateExpectations(building,null,null);
+        checkFindReservationByBuildingRoomDateExpectations(building,null);
         rmgr.findReservationById(building.getBuildingName(), room.getNumber(), date);
     }
     
     @Test(expected = IncorrectTimeException.class)
     public void testCannotFindReservationByDateIsBeforeNow() throws Exception{
-        checkFindReservationByBuildingRoomDateExpectations(building,room,null);
+        checkFindReservationByBuildingRoomDateExpectations(building,room);
         rmgr.findReservationById(building.getBuildingName(), room.getNumber(), dateBeforeNow);
     }
     
     @Test(expected = IncorrectTimeException.class)
     public void testCannotFindReservationByDateIncorrectFormatOfMinutes() throws Exception{
-        checkFindReservationByBuildingRoomDateExpectations(building,room,null);
+        checkFindReservationByBuildingRoomDateExpectations(building,room);
         rmgr.findReservationById(building.getBuildingName(), room.getNumber(), dateIncorrectFormatOfMinutes);
     }
     
     @Test
     public void testFindReservationByBuildingRoomDate() throws Exception{
-        checkFindReservationByBuildingRoomDateExpectations(building,room,reservation);
-        rmgr.findReservationById(building.getBuildingName(), room.getNumber(), date);
-    }
-    
-    @Test
-    public void testNotFindReservationByBuildingRoomDate() throws Exception{
-        checkFindReservationByBuildingRoomDateExpectations(building,room,null);
+        checkFindReservationByBuildingRoomDateExpectations(building,room);
         rmgr.findReservationById(building.getBuildingName(), room.getNumber(), date);
     }
 
@@ -218,23 +218,37 @@ public class ReservationMgrServiceImplApplicationTest {
     }
    
 
-    private void checkFindReservationByBuildingRoomDateExpectations(final Building b, final Room r, final Reservation res) 
+    private void checkFindReservationByBuildingRoomDateExpectations(final Building b, final Room r) 
                                                                                     throws Exception{
         context.checking(new Expectations(){{ 
             oneOf(sDao).getBuildingByName(building.getBuildingName());will(returnValue(b));
             allowing(sDao).getRoomByNbAndBuilding(room.getNumber(),building.getBuildingName());will(returnValue(r));
-            allowing(rDao).getReservationByDateRoomBulding(date, room.getNumber(), building.getBuildingName());will(returnValue(res));
+            allowing(rDao).getReservationByDateRoomBulding(date, room.getNumber(), building.getBuildingName());
         }});
-    }
+    }*/
  
-    private void createAndSetMockObjects() {
-        rDao = context.mock(ReservationDAO.class);
-        sDao = context.mock(SpaceDAO.class);
-        uDao = context.mock(UserDAO.class);
+    private void CreateAndSetObjects() throws Exception {
+        
+        
+        rDao = new ReservationDAOImpl();
+        sDao = new SpaceDAOImpl();
+        uDao = new UserDAOImpl();
+        em = getEntityManager();
+        
+        sDao.setEm(em);
+        uDao.setEntityManager(em);
+        rDao.setEm(em);
+        rDao.setsDao(sDao);
+        rDao.setuDao(uDao);
         
         rmgr.setReservationDao(rDao);
         rmgr.setSpaceDao(sDao);
         rmgr.setUserDao(uDao);
+    }
+    
+        private EntityManager getEntityManager() throws Exception{
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("classBookerIntegration");
+        return emf.createEntityManager();  
     }
 
     
