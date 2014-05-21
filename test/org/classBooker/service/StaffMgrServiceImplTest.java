@@ -4,6 +4,11 @@
  */
 package org.classBooker.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.log4j.AppenderSkeleton;
+import org.apache.log4j.Logger;
+import org.apache.log4j.spi.LoggingEvent;
 import org.classBooker.dao.UserDAO;
 import org.classBooker.dao.exception.AlreadyExistingUserException;
 import org.classBooker.entity.ProfessorPas;
@@ -58,15 +63,49 @@ public class StaffMgrServiceImplTest {
     
     @Test
     public void addMassiveUserCsv() throws Exception {
+        final TestAppender appender = new TestAppender();
+        final Logger logger = Logger.getRootLogger();
+        logger.addAppender(appender);
+        
         setExpectationsAddUser();
         staff.addMassiveUser("users.csv");
+        
+        try{
+            Logger.getLogger(ReservationMgrServiceImpl.class);
+        }
+        finally{
+            logger.removeAppender(appender);
+        }
+        final List<LoggingEvent> log = appender.getLog();
+        final LoggingEvent firstLogEntrey = log.get(0);
+        final LoggingEvent secondLogEntrey = log.get(1);
+        String l = firstLogEntrey.getMessage().toString();
+        assertEquals(l,"Empty data user.");
+        l = secondLogEntrey.getMessage().toString();
+        assertEquals(l,"Bad data user.");
         assertEquals(staff.getUser(u.getNif()),u);
     }
     
     @Test
     public void addMassiveUserWithRepeatedUsersCsv() throws Exception {
+        final TestAppender appender = new TestAppender();
+        final Logger logger = Logger.getRootLogger();
+        logger.addAppender(appender);
+        
+        
         setExpectationsAddRepeatedUserCsv();
         staff.addMassiveUser("repeatedUsers.csv");
+        
+        try{
+            Logger.getLogger(ReservationMgrServiceImpl.class);
+        }
+        finally{
+            logger.removeAppender(appender);
+        }
+        final List<LoggingEvent> log = appender.getLog();
+        final LoggingEvent firstLogEntrey = log.get(0);
+        String l = firstLogEntrey.getMessage().toString();
+        assertEquals(l,"The file contains Repeated Users");
         assertEquals(staff.getUser(u.getNif()),u);
     }
     
@@ -112,4 +151,27 @@ public class StaffMgrServiceImplTest {
     }
     
     
+}
+
+class TestAppender extends AppenderSkeleton {
+    private final List<LoggingEvent> log = new ArrayList<LoggingEvent>();
+
+    @Override
+    protected void append(final LoggingEvent le) {
+        log.add(le);
+    }
+
+    @Override
+    public void close() {
+        
+    }
+
+    @Override
+    public boolean requiresLayout() {
+        return false;
+    }
+    
+    public List<LoggingEvent> getLog(){
+        return new ArrayList<LoggingEvent>(log);
+    }
 }
