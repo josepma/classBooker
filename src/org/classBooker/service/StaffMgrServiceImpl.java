@@ -13,12 +13,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.classBooker.dao.UserDAO;
 import org.classBooker.dao.UserDAOImpl;
 import org.classBooker.dao.exception.AlreadyExistingUserException;
@@ -64,7 +64,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
                 addUser(us);
             }
             catch(AlreadyExistingUserException e){
-                Logger.getLogger(ReservationMgrServiceImpl.class.getName()).log(Level.INFO, "The file contains Repeated Users");
+                Logger.getLogger(ReservationMgrServiceImpl.class).log(Level.INFO, "The file contains Repeated Users");
             }
         }
     }
@@ -116,7 +116,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
             while((line=br.readLine())!=null){
                 StringTokenizer strTok = new StringTokenizer(line,";");
                 if(strTok.countTokens()!=3){
-                    Logger.getLogger(ReservationMgrServiceImpl.class.getName()).log(Level.INFO, "Bad data user.");
+                    Logger.getLogger(ReservationMgrServiceImpl.class).log(Level.INFO, "Bad data user.");
                 }
                 else{
                     String nif = strTok.nextToken();
@@ -177,7 +177,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         if(nif.replaceAll(" ", "").isEmpty() || 
                 mail.replaceAll(" ", "").isEmpty() ||
                 name.replaceAll(" ", "").isEmpty()){
-            Logger.getLogger(ReservationMgrServiceImpl.class.getName()).log(Level.INFO, "Empty data user.");
+            Logger.getLogger(ReservationMgrServiceImpl.class).log(Level.INFO, "Empty data user.");
             return null;
         }
         else{
