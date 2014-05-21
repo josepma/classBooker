@@ -305,10 +305,43 @@ public class ReservationDAOImplTest {
         checkDontExistReservation(reservation1, actualReservation);
         
     }
+    
+    @Test(expected = IncorrectReservationException.class)
+    public void testRemoveReservationByAtributesNoneExistReservation() throws Exception {
+        context.checking(new Expectations(){{
+            oneOf(sDao).getRoomByNbAndBuilding(room1.getNumber(), 
+                                               building1.getBuildingName());
+            will(returnValue(room1));
+        }});
+
+        rDao.removeReservation(dataRes1, 
+                                room1.getNumber(), 
+                                building1.getBuildingName());
+        
+        checkDontExistReservation(reservation1, actualReservation);
+        
+    }
+    
+    @Test(expected = IncorrectBuildingException.class)
+    public void testRemoveReservationByAtributesBadBuilding() throws Exception {
+        context.checking(new Expectations(){{
+            oneOf(sDao).getRoomByNbAndBuilding(room1.getNumber(), 
+                                               building1.getBuildingName());
+            will(throwException(new IncorrectBuildingException()));
+        }});
+
+        rDao.removeReservation(dataRes1, 
+                                room1.getNumber(), 
+                                building1.getBuildingName());
+        
+        checkDontExistReservation(reservation1, actualReservation);
+        
+    }
 
     /**
      * Test of getAllReservationByUserNif method, of class ReservationDAOImpl.
      */
+    
     @Test
     public void testGetAllReservationByUserNif() throws Exception {
         reservation2.setrUser(user1);
