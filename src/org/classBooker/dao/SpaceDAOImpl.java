@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package org.classBooker.dao;
 
 import java.lang.reflect.Constructor;
@@ -36,7 +35,7 @@ import org.classBooker.entity.Room;
 public class SpaceDAOImpl implements SpaceDAO {
 
     private EntityManager em;
-
+    Logger log = Logger.getLogger("MiLogger");
     public EntityManager getEm() {
         return em;
     }
@@ -85,13 +84,11 @@ public class SpaceDAOImpl implements SpaceDAO {
     @Override
     public Room getRoomById(long id) {
         Room room = null;
-        try {
-            em.getTransaction().begin();
-            room = (Room) em.find(Room.class, id);
-            em.getTransaction().commit();
-        } catch (PersistenceException e) {
-            System.out.print("Error" + e);
-        }
+
+        em.getTransaction().begin();
+        room = (Room) em.find(Room.class, id);
+        em.getTransaction().commit();
+
         return room;
     }
 
@@ -228,14 +225,12 @@ public class SpaceDAOImpl implements SpaceDAO {
         List<Room> roomsOneTypeOneBuilding = new ArrayList();
 
         Query query;
-        try {
-            em.getTransaction().begin();
-            query = em.createQuery("SELECT r FROM " + type + " r");
-            roomsOneType = (List<Room>) query.getResultList();
-            em.getTransaction().commit();
-        } catch (PersistenceException e) {
-            System.out.print("Error" + e);
-        }
+
+        em.getTransaction().begin();
+        query = em.createQuery("SELECT r FROM " + type + " r");
+        roomsOneType = (List<Room>) query.getResultList();
+        em.getTransaction().commit();
+
         for (Room r : roomsOneType) {
             if (r.getBuilding() == building) {
                 roomsOneTypeOneBuilding.add(r);
@@ -312,14 +307,11 @@ public class SpaceDAOImpl implements SpaceDAO {
         List<Room> roomsOneTypeOneBuilding = new ArrayList();
         Building building = getBuildingByName(buildingName);
         Query query;
-        try {
-            em.getTransaction().begin();
-            query = em.createQuery("SELECT r FROM " + type + " r" + " WHERE r.capacity>=" + capacity);
-            roomsOneType = (List<Room>) query.getResultList();
-            em.getTransaction().commit();
-        } catch (PersistenceException e) {
-            System.out.print("Error" + e);
-        }
+
+        em.getTransaction().begin();
+        query = em.createQuery("SELECT r FROM " + type + " r" + " WHERE r.capacity>=" + capacity);
+        roomsOneType = (List<Room>) query.getResultList();
+        em.getTransaction().commit();
 
         for (Room r : roomsOneType) {
             if (r.getBuilding() == building) {
@@ -361,8 +353,8 @@ public class SpaceDAOImpl implements SpaceDAO {
 
     private boolean roomExist(Room room) {
 
-        try {
-            room = (Room) em.createQuery("SELECT r "
+       try {
+            Room room2 = (Room)  em.createQuery("SELECT r "
                     + "FROM Room r "
                     + "WHERE r.building.name = :buildingName AND "
                     + "r.number = :roomNb ")
@@ -370,6 +362,7 @@ public class SpaceDAOImpl implements SpaceDAO {
                     .setParameter("roomNb", room.getNumber())
                     .getSingleResult();
         } catch (NoResultException e) {
+           
             return false;
         }
         return true;
@@ -396,7 +389,7 @@ public class SpaceDAOImpl implements SpaceDAO {
                     room.getNumber(), room.getCapacity());
 
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            System.out.print("Error");
+            log.warning("Error");
         }
 
         removeRoom(room);
