@@ -29,22 +29,17 @@ public class ReservationDAOImpl implements ReservationDAO{
         return em;
     }
 
+    @Override
     public void setEm(EntityManager em) {
         this.em = em;
     }
-    
-        public UserDAO getuDao() {
-        return uDao;
-    }
 
+    @Override
     public void setuDao(UserDAO uDao) {
         this.uDao = uDao;
     }
 
-    public SpaceDAO getsDao() {
-        return sDao;
-    }
-
+    @Override
     public void setsDao(SpaceDAO sDao) {
         this.sDao = sDao;
     }

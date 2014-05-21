@@ -7,6 +7,7 @@
 package org.classBooker.dao;
 
 import java.util.List;
+import javax.persistence.EntityManager;
 import org.classBooker.dao.exception.*;
 import org.classBooker.entity.Reservation;
 import org.joda.time.DateTime;
@@ -16,6 +17,26 @@ import org.joda.time.DateTime;
  * @author josepma, Marc Solé, Carles Mònico
  */
 public interface ReservationDAO {
+
+    /**
+     * Set the Entitymanager
+     * @param em EntityManager
+     */
+    public void setEm(EntityManager em);
+
+    /**
+     * Set the UserDAO
+     * @param uDao UserDAO
+     */
+    public void setuDao(UserDAO uDao);
+    
+    /**
+     * Set the SpaceDAO
+     * @param sDao SpaceDAO
+     */
+    public void setsDao(SpaceDAO sDao);
+    
+    
     
     /**
      * Add a reservation in the database
