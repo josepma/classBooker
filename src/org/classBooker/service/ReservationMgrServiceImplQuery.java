@@ -6,7 +6,6 @@
 
 package org.classBooker.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ArrayList;
 import org.classBooker.dao.ReservationDAO;
@@ -18,7 +17,6 @@ import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectTimeException;
 import org.classBooker.dao.exception.IncorrectTypeException;
 import org.classBooker.dao.exception.IncorrectUserException;
-import org.classBooker.entity.Building;
 import org.classBooker.entity.Reservation;
 import org.classBooker.entity.ReservationUser;
 import org.classBooker.entity.Room;
