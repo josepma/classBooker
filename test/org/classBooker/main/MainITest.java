@@ -6,9 +6,14 @@
 
 package org.classBooker.main;
 
+import org.classBooker.entity.Building;
+import org.classBooker.entity.Room;
+import org.classBooker.entity.ProfessorPas;
+import org.classBooker.entity.User;
+import org.classBooker.entity.Reservation;
+import org.classBooker.entity.ClassRoom;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
-import org.classbooker.entity.*;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import static org.junit.Assert.*;

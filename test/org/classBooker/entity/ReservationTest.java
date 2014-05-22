@@ -5,11 +5,6 @@
  */
 package org.classBooker.entity;
 
-import org.classbooker.entity.Room;
-import org.classbooker.entity.MeetingRoom;
-import org.classbooker.entity.Reservation;
-import org.classbooker.entity.ProfessorPas;
-import org.classbooker.entity.ReservationUser;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.AfterClass;

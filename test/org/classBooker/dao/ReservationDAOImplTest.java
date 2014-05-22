@@ -6,9 +6,7 @@
 
 package org.classBooker.dao;
 
-import org.classbooker.dao.UserDAO;
-import org.classbooker.dao.SpaceDAO;
-import org.classbooker.dao.ReservationDAOImpl;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -18,8 +16,17 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import org.classbooker.dao.exception.*;
-import org.classbooker.entity.*;
+import org.classBooker.dao.exception.AlredyExistReservationException;
+import org.classBooker.dao.exception.IncorrectBuildingException;
+import org.classBooker.dao.exception.IncorrectReservationException;
+import org.classBooker.dao.exception.IncorrectRoomException;
+import org.classBooker.dao.exception.IncorrectUserException;
+import org.classBooker.entity.Building;
+import org.classBooker.entity.MeetingRoom;
+import org.classBooker.entity.ProfessorPas;
+import org.classBooker.entity.Reservation;
+import org.classBooker.entity.ReservationUser;
+import org.classBooker.entity.Room;
 import org.jmock.Expectations;
 import static org.jmock.Expectations.returnValue;
 import static org.jmock.Expectations.throwException;

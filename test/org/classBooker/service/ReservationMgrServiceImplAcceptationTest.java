@@ -5,27 +5,26 @@
  */
 package org.classBooker.service;
 
-import org.classbooker.service.ReservationMgrServiceImpl;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import org.classbooker.dao.ReservationDAO;
-import org.classbooker.dao.SpaceDAO;
-import org.classbooker.dao.UserDAO;
-import org.classbooker.dao.exception.IncorrectBuildingException;
-import org.classbooker.dao.exception.IncorrectReservationException;
-import org.classbooker.dao.exception.IncorrectRoomException;
-import org.classbooker.dao.exception.IncorrectTypeException;
-import org.classbooker.dao.exception.IncorrectUserException;
-import org.classbooker.entity.Building;
-import org.classbooker.entity.ClassRoom;
-import org.classbooker.entity.ProfessorPas;
-import org.classbooker.entity.Reservation;
-import org.classbooker.entity.ReservationUser;
-import org.classbooker.entity.Room;
-import org.classbooker.entity.StaffAdmin;
-import org.classbooker.entity.User;
-import org.classbooker.util.ReservationResult;
+import org.classBooker.dao.ReservationDAO;
+import org.classBooker.dao.SpaceDAO;
+import org.classBooker.dao.UserDAO;
+import org.classBooker.dao.exception.IncorrectBuildingException;
+import org.classBooker.dao.exception.IncorrectReservationException;
+import org.classBooker.dao.exception.IncorrectRoomException;
+import org.classBooker.dao.exception.IncorrectTypeException;
+import org.classBooker.dao.exception.IncorrectUserException;
+import org.classBooker.entity.Building;
+import org.classBooker.entity.ClassRoom;
+import org.classBooker.entity.ProfessorPas;
+import org.classBooker.entity.Reservation;
+import org.classBooker.entity.ReservationUser;
+import org.classBooker.entity.Room;
+import org.classBooker.entity.StaffAdmin;
+import org.classBooker.entity.User;
+import org.classBooker.util.ReservationResult;
 import org.jmock.Expectations;
 import static org.jmock.Expectations.returnValue;
 import org.jmock.Mockery;
@@ -150,7 +149,7 @@ public class ReservationMgrServiceImplAcceptationTest {
     }
     
     @Test 
-    public void testGetCurrentUserOfIncorrectRoom() throws IncorrectRoomException, IncorrectBuildingException{
+    public void testGetCurrentUserOfIncorrectRoom() throws Exception{
         context.checking(new Expectations() {
             {
                 oneOf(rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());
@@ -246,7 +245,7 @@ public class ReservationMgrServiceImplAcceptationTest {
         assertNull(r);
     }
 
-    private void checkReservationByTypeExpectations(final List<Room> rooms, final Reservation res, final User user) throws IncorrectBuildingException, IncorrectRoomException {
+    private void checkReservationByTypeExpectations(final List<Room> rooms, final Reservation res, final User user) throws Exception{
         context.checking(new Expectations() {
             {
                 oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().getName(), capacity, building.getBuildingName());

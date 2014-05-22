@@ -6,9 +6,15 @@
 
 package org.classBooker.service;
 
-import org.classbooker.service.ReservationMgrServiceImplQuery;
-import org.classbooker.dao.ReservationDAO;
-import org.classbooker.entity.Reservation;
+import org.classBooker.entity.Building;
+import org.classBooker.entity.Room;
+import org.classBooker.entity.ProfessorPas;
+import org.classBooker.entity.LaboratoryRoom;
+import org.classBooker.entity.MeetingRoom;
+import org.classBooker.entity.ClassRoom;
+import org.classBooker.entity.ReservationUser;
+import org.classBooker.dao.ReservationDAO;
+import org.classBooker.entity.Reservation;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.jmock.Expectations;
@@ -20,12 +26,11 @@ import org.junit.runner.RunWith;
 import org.jmock.Sequence;
 import java.util.List;
 import java.util.ArrayList;
-import org.classbooker.dao.SpaceDAO;
-import org.classbooker.dao.exception.IncorrectBuildingException;
-import org.classbooker.dao.exception.IncorrectRoomException;
-import org.classbooker.dao.exception.IncorrectTypeException;
-import org.classbooker.dao.exception.IncorrectUserException;
-import org.classbooker.entity.*;
+import org.classBooker.dao.SpaceDAO;
+import org.classBooker.dao.exception.IncorrectBuildingException;
+import org.classBooker.dao.exception.IncorrectRoomException;
+import org.classBooker.dao.exception.IncorrectTypeException;
+import org.classBooker.dao.exception.IncorrectUserException;
 import org.joda.time.DateTime;
 import org.junit.Before;
 
@@ -214,7 +219,7 @@ public class ReservationMgrServiceImplQueryTest {
     }
     
     @Test 
-    public void findReservationBySpace() throws IncorrectBuildingException{
+    public void findReservationBySpace() throws Exception{
       final List<Reservation> returnlres = new ArrayList<>();
       returnlres.add(res1);
       context.checking(new Expectations(){{
@@ -227,7 +232,7 @@ public class ReservationMgrServiceImplQueryTest {
     }
     
     @Test 
-    public void finsReservationBySpaceBis() throws IncorrectBuildingException{
+    public void finsReservationBySpaceBis() throws Exception{
       final List<Reservation> returnlres = new ArrayList<>();
       returnlres.add(res3);
       returnlres.add(res4);
@@ -359,7 +364,7 @@ public class ReservationMgrServiceImplQueryTest {
     }
     
     private void getStartExpectations(final String nif, final List<Reservation> lRes) 
-            throws IncorrectUserException{
+            throws Exception{
         context.checking(new Expectations(){{
             oneOf(resDao).getAllReservationByUserNif(nif);
             will(returnValue(lRes));
@@ -370,9 +375,7 @@ public class ReservationMgrServiceImplQueryTest {
                                                 final String roomNb, 
                                                 final String building, 
                                                 final Room roomId) 
-                throws IncorrectUserException, 
-                IncorrectBuildingException, 
-                IncorrectRoomException{
+                throws Exception{
         context.checking(new Expectations(){{
             oneOf(spaDao).getRoomByNbAndBuilding(with(equal(roomNb)),
                                                  with(equal(building)));
