@@ -146,5 +146,9 @@ public interface ReservationDAO {
      */
     List<Reservation> getAllReservationByRoom(long id) 
                                             throws DAOException;
-                                            
+ 
+    /**
+     * Tear down date of reservation Table
+     */
+    public void tearDown();
 }

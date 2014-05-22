@@ -11,6 +11,7 @@ import java.util.Locale;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
+import javax.persistence.Query;
 import org.apache.log4j.Logger;
 import org.classBooker.dao.exception.*;
 import org.classBooker.entity.*;
@@ -264,6 +265,19 @@ public class ReservationDAOImpl implements ReservationDAO{
         
         
         
+    }
+    
+    @Override
+    public void tearDown(){
+        em.getTransaction().begin();
+
+        Query query = em.createQuery("DELETE FROM Reservation");
+
+        int deleteRecords = query.executeUpdate();
+
+        em.getTransaction().commit();
+        em.close();
+        System.out.println("All records have been deleted.");
     }
 
 }
