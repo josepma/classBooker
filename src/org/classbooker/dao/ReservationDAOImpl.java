@@ -11,7 +11,6 @@ import java.util.Locale;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.classbooker.dao.exception.*;
 import org.classbooker.entity.*;
@@ -27,7 +26,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     private UserDAO uDao;
     private SpaceDAO sDao;
     
-    Logger logger = Logger.getLogger("ReservationDAOImpl.log");
+    private Logger logger = Logger.getLogger("ReservationDAOImpl.log");
     
 
     public EntityManager getEm() {
@@ -111,17 +110,14 @@ public class ReservationDAOImpl implements ReservationDAO{
     
     @Override
     public List<Reservation> getAllReservation() {
-        return em.createQuery("SELECT r "
-                            + "FROM Reservation r ").getResultList();
+        return em.createQuery("SELECT r FROM Reservation r ").getResultList();
     }
 
 
     @Override
     public List<Reservation> getAllReservationByBuilding(String name) 
                                             throws IncorrectBuildingException {
-        return em.createQuery("SELECT r "
-                + "FROM Reservation r "
-                + "WHERE r.room.building.name = :buildingName ")
+        return em.createQuery("SELECT r FROM Reservation r WHERE r.room.building.name = :buildingName ")
                 .setParameter("buildingName", name)
                 .getResultList();
     }
@@ -129,9 +125,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     @Override
     public List<Reservation> getAllReservationByRoom(long id) 
                                                 throws IncorrectRoomException {
-        return em.createQuery("SELECT r "
-                + "FROM Reservation r "
-                + "WHERE r.room.roomId = :roomID ")
+        return em.createQuery("SELECT r FROM Reservation r WHERE r.room.roomId = :roomID ")
                 .setParameter("roomID", id)
                 .getResultList();
     }
@@ -167,9 +161,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     @Override
     public List<Reservation> getAllReservationByUserNif(String nif) 
                                                 throws IncorrectUserException {
-        return em.createQuery("SELECT r "
-                + "FROM Reservation r "
-                + "WHERE r.rUser.nif = :nif ")
+        return em.createQuery("SELECT r FROM Reservation r WHERE r.rUser.nif = :nif ")
                 .setParameter("nif", nif)
                 .getResultList();
     }
@@ -238,10 +230,7 @@ public class ReservationDAOImpl implements ReservationDAO{
 
     private void checkExistingReservation(Reservation reservation) 
                                         throws AlredyExistReservationException{     
-        if(!em.createQuery("SELECT r "
-                + "FROM Reservation r "
-                + "WHERE r.reservationDate = :reservationdDate AND "
-                + "r.room = :reservationRoom ")
+        if(!em.createQuery("SELECT r FROM Reservation r WHERE r.reservationDate = :reservationdDate AND r.room = :reservationRoom ")
                 .setParameter("reservationdDate", 
                                 reservation.getReservationDate()
                                 .toCalendar(Locale.getDefault()))
@@ -256,10 +245,7 @@ public class ReservationDAOImpl implements ReservationDAO{
                                         throws AlredyExistReservationException{
         User ur = null;
         try{
-        ur = (User) em.createQuery("SELECT r.rUser "
-                + "FROM Reservation r "
-                + "WHERE r.reservationDate = :reservationdDate AND "
-                + "r.room = :reservationRoom ")
+        ur = (User) em.createQuery("SELECT r.rUser FROM Reservation r WHERE r.reservationDate = :reservationdDate AND r.room = :reservationRoom ")
                 .setParameter("reservationdDate", 
                                 reservation.getReservationDate()
                                 .toCalendar(Locale.getDefault()))
