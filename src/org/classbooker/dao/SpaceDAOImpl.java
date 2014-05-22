@@ -354,13 +354,15 @@ public class SpaceDAOImpl implements SpaceDAO {
     private boolean roomExist(Room room) {
 
        try {
-            Room room2 = (Room)  em.createQuery("SELECT r "
+           Room room2;
+           room2 = (Room)  em.createQuery("SELECT r "
                     + "FROM Room r "
                     + "WHERE r.building.name = :buildingName AND "
                     + "r.number = :roomNb ")
                     .setParameter("buildingName", room.getBuilding().getBuildingName())
                     .setParameter("roomNb", room.getNumber())
                     .getSingleResult();
+                    log.info(room2.toString());
         } catch (NoResultException e) {
            
             return false;
