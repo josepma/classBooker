@@ -78,6 +78,6 @@ public class Building {
     
     @Override
     public int hashCode() {
-        return super.hashCode(); 
+        return hashCode(); 
     }
 }
