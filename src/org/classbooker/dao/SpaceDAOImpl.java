@@ -35,7 +35,7 @@ import org.classbooker.entity.Room;
 public class SpaceDAOImpl implements SpaceDAO {
 
     private EntityManager em;
-    Logger log = Logger.getLogger("MiLogger");
+    private static final Logger log = Logger.getLogger("MiLogger");
     public EntityManager getEm() {
         return em;
     }
