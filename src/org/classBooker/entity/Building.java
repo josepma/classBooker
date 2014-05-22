@@ -64,15 +64,16 @@ public class Building {
         this.rooms.add(room);
     }
     
-    @Override
-    public boolean equals(Object obj){
-        return (obj instanceof Building) && 
-                ((Building) obj).name.equals(this.name);          
-    }
     
     @Override
     public String toString(){
         return "Building{name="+name + "rooms="+rooms+"}";       
+    }
+    
+    @Override
+    public boolean equals(Object obj){
+        return (obj instanceof Building) && 
+                ((Building) obj).name.equals(this.name);          
     }
     
     @Override
