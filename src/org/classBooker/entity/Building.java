@@ -40,7 +40,7 @@ public class Building {
         return name;
     }
     
-    public void setBuildingName(String Name){
+    public void setBuildingName(String name){
         this.name=name;
     }    
     
@@ -64,6 +64,12 @@ public class Building {
         this.rooms.add(room);
     }
     
+    
+    @Override
+    public String toString(){
+        return "Building{name="+name + "rooms="+rooms+"}";       
+    }
+    
     @Override
     public boolean equals(Object obj){
         return (obj instanceof Building) && 
@@ -71,7 +77,7 @@ public class Building {
     }
     
     @Override
-    public String toString(){
-        return "Building{name="+name + "rooms="+rooms+"}";       
+    public int hashCode() {
+        return hashCode(); 
     }
 }
