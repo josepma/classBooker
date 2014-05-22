@@ -154,7 +154,9 @@ public class ReservationDAOImpl implements ReservationDAO{
     }
     
     private void removeReservation(Reservation res)throws IncorrectReservationException {
-        if(res == null )throw new IncorrectReservationException();
+        if(res == null ){
+            throw new IncorrectReservationException();
+        }
         em.getTransaction().begin();
         res.getrUser().getReservations().remove(res);
         res.getRoom().getReservations().remove(res);
@@ -180,8 +182,9 @@ public class ReservationDAOImpl implements ReservationDAO{
                                                 IncorrectUserException, 
                                                 AlredyExistReservationException{
         
-        if(reservation == null || reservation.getReservationDate() == null)
+        if(reservation == null || reservation.getReservationDate() == null){
             throw new IncorrectReservationException(logger,"checkReservation");
+        }
         checkRoom(reservation.getRoom());
         checkUser(reservation.getrUser());
         checkExistingReservation(reservation);
@@ -193,39 +196,44 @@ public class ReservationDAOImpl implements ReservationDAO{
                                                 IncorrectUserException, 
                                                 AlredyExistReservationException{
         
-        if(reservation == null || reservation.getReservationDate() == null)
+        if(reservation == null || reservation.getReservationDate() == null){
             throw new IncorrectReservationException(logger,"checkReservationForUser");
+        }
         checkRoom(reservation.getRoom());
         checkUser(reservation.getrUser());
         return checkExistingReservationForOtherUser(reservation);
     }
 
     private void checkRoom(Room room) throws IncorrectRoomException {
-        if(room == null || room.getNumber() == null) 
+        if(room == null || room.getNumber() == null){
             throw new IncorrectRoomException(logger,"checkRoom");
-        
-        if(!em.contains(room))
+        } 
+            
+        if(!em.contains(room)){
             throw new IncorrectRoomException(logger,"checkRoom");
-        
+        }
         
     }
 
     private void checkUser(User user) throws IncorrectUserException {
-        if(user == null || user.getNif() == null) 
+        if(user == null || user.getNif() == null){ 
             throw new IncorrectUserException(logger,"checkUser");
+        }
         
-        if(!em.contains(user))
+        if(!em.contains(user)){
             throw new IncorrectUserException(logger,"checkUser");
+        }
         
     }
     
     private void checkBuilding(Building building) throws IncorrectBuildingException {
-        if(building == null || building.getBuildingName() == null) 
+        if(building == null || building.getBuildingName() == null){
             throw new IncorrectBuildingException(logger,"checkBuilding");
+        }
         
-        if(!em.contains(building))
+        if(!em.contains(building)){
             throw new IncorrectBuildingException(logger,"checkBuilding");
-        
+        }
     }
 
     private void checkExistingReservation(Reservation reservation) 
