@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
  *
  * @author jpb3
  */
-public class AlreadyExistingUserException extends Exception {
+public class AlreadyExistingUserException extends DAOException {
     
     /**
      *

@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
  *
  * @author villartexr
  */
-public class NoneExistingRoomException extends Exception {
+public class NoneExistingRoomException extends DAOException {
 
     /**
      * Creates a new instance of <code>NoneExistingRoomException</code> without

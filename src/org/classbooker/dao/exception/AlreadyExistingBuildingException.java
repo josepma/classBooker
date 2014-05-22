@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
  *
  * @author saida
  */
-public class AlreadyExistingBuildingException extends Exception {
+public class AlreadyExistingBuildingException extends DAOException {
 
     /**
      * Creates a new instance of <code>AlreadyExistingBuilding</code> without

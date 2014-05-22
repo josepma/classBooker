@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
  *
  * @author msf7
  */
-public class IncorrectTypeException extends Exception{
+public class IncorrectTypeException extends DAOException{
     
     /**
      *

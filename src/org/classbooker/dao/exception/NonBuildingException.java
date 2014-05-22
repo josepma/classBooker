@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
  *
  * @author saida
  */
-public class NonBuildingException extends Exception {
+public class NonBuildingException extends DAOException {
 
     /**
      * Creates a new instance of <code>NonBuildingException</code> without

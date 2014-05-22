@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
  *
  * @author marc
  */
-public class AlredyExistReservationException extends Exception {
+public class AlredyExistReservationException extends DAOException {
 
     public AlredyExistReservationException() {
     }

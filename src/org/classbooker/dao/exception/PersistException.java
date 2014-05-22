@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
  *
  * @author Marc Sole, Carles Mònico
  */
-public class PersistException extends Exception {
+public class PersistException extends DAOException {
 
     /**
      * Creates a new instance of

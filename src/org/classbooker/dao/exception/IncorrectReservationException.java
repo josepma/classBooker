@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
  *
  * @author Marc Sole, Carles Mònico
  */
-public class IncorrectReservationException extends Exception{
+public class IncorrectReservationException extends DAOException{
     
     /**
      *

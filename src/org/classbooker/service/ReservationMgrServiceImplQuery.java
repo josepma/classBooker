@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.ArrayList;
 import org.classbooker.dao.ReservationDAO;
 import org.classbooker.dao.SpaceDAO;
+import org.classbooker.dao.exception.DAOException;
 import org.classbooker.dao.exception.IncorrectBuildingException;
 import org.classbooker.dao.exception.IncorrectReservationException;
 import org.classbooker.dao.exception.IncorrectRoomException;
@@ -40,7 +41,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
      * @throws IncorrectUserException 
      */
     public List <Reservation> getReservationsByNif(String nif) 
-                              throws IncorrectUserException{
+                              throws DAOException{
         List<Reservation> lreser = resDao.getAllReservationByUserNif(nif);
         return lreser;
     }
@@ -217,7 +218,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     @Override
     public List<Reservation> findReservationByBuildingAndRoomNb(String buildingName, 
                                                  String roomNumber) 
-                             throws IncorrectBuildingException{
+                             throws DAOException{
         List <Reservation> res = resDao.getAllReservationByBuilding(buildingName);
         List <Reservation> result = new ArrayList<>();
         for(Reservation reser : res){

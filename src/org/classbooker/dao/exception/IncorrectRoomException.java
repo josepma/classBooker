@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
  *
  * @author Marc Sole, Carles Mònico
  */
-public class IncorrectRoomException extends Exception{
+public class IncorrectRoomException extends DAOException{
 
     /**
      *

@@ -13,6 +13,7 @@ import org.classbooker.dao.ReservationDAO;
 import org.classbooker.dao.SpaceDAO;
 import org.classbooker.dao.UserDAO;
 import org.classbooker.dao.exception.AlredyExistReservationException;
+import org.classbooker.dao.exception.DAOException;
 import org.classbooker.dao.exception.IncorrectBuildingException;
 import org.classbooker.dao.exception.IncorrectReservationException;
 import org.classbooker.dao.exception.IncorrectRoomException;
@@ -66,12 +67,12 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
      * Returns a boolean which indicates if the reservationMade exists in the database.
      * if the reservationMade exists in the database, it will return true, else will return false
      */
-    public boolean alreadyExistingReservation(DateTime datetime, Room room) throws IncorrectBuildingException, IncorrectRoomException {
+    public boolean alreadyExistingReservation(DateTime datetime, Room room) throws  DAOException {
         return reservationDao.getReservationByDateRoomBulding(datetime, room.getNumber(), room.getBuilding().getBuildingName())!=null;
     }   
 
     @Override
-    public List<Room> suggestionSpace(String roomNb, String building, DateTime date) throws IncorrectBuildingException, IncorrectRoomException {
+    public List<Room> suggestionSpace(String roomNb, String building, DateTime date) throws DAOException {
         Room room = spaceDao.getRoomByNbAndBuilding(roomNb, building);
         List<Room> suggestedRoomsByTypeAndCapacity = spaceDao.getAllRoomsByTypeAndCapacity(room.getClass().toString(), room.getCapacity(), building);
         List<Room> finalSuggestedRooms = getNonReservedRooms(suggestedRoomsByTypeAndCapacity, date);
@@ -87,6 +88,8 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
             
         } catch (IncorrectBuildingException ex) {
             Logger.getLogger(ReservationMgrServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (DAOException ex) {
+            Logger.getLogger(ReservationMgrServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         
@@ -97,12 +100,12 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     }
 
     @Override
-    public void acceptReservation(Reservation reservation) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException, AlredyExistReservationException {
+    public void acceptReservation(Reservation reservation) throws DAOException {
         reservationDao.addReservation(reservation);
     }
 
     @Override
-    public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws IncorrectTimeException, IncorrectUserException, IncorrectRoomException, IncorrectBuildingException {
+    public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws DAOException {
         Room room = spaceDao.getRoomByNbAndBuilding(roomNb, buildingName);
         Reservation reservationMade = makeReservationBySpace(room.getRoomId(), nif, resDate);
 
@@ -123,7 +126,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
      * the database
      */
     @Override
-    public Reservation makeReservationBySpace(long roomId, String nif, DateTime initialTime) throws IncorrectRoomException, IncorrectUserException, IncorrectTimeException, IncorrectBuildingException {
+    public Reservation makeReservationBySpace(long roomId, String nif, DateTime initialTime) throws DAOException {
         Room room = spaceDao.getRoomById(roomId);
         User user = userDao.getUserByNif(nif);
         datetime = initialTime;
@@ -148,7 +151,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
      * IncorrectReservationException.
      */
     @Override
-    public void deleteReservation(long id) throws IncorrectReservationException {
+    public void deleteReservation(long id) throws DAOException {
         Reservation reser = reservationDao.getReservationById(id);
         if (reser == null) {
             throw new IncorrectReservationException("Can not find the reservation");
@@ -187,9 +190,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     
 
     @Override
-    public Reservation findReservationById(String buildingName, String roomNumber, DateTime date) throws IncorrectBuildingException,
-                                                                                                           IncorrectRoomException,
-                                                                                                           IncorrectTimeException {
+    public Reservation findReservationById(String buildingName, String roomNumber, DateTime date) throws DAOException {
         Building building = spaceDao.getBuildingByName(buildingName);
         Room room = spaceDao.getRoomByNbAndBuilding(roomNumber, buildingName);
         datetime = date;
@@ -225,7 +226,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     }
 
     @Override
-    public Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws IncorrectBuildingException, IncorrectRoomException{
+    public Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws DAOException{
         List<Room> avaliableRooms = obtainAllRoomsWithSameFeatures(type, capacity, buildingName, date);
         if(avaliableRooms.isEmpty()){
             return null;
@@ -238,7 +239,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
         
     }
 
-    private List<Room> getNonReservedRooms(List<Room> rooms, DateTime date) throws IncorrectBuildingException, IncorrectRoomException{
+    private List<Room> getNonReservedRooms(List<Room> rooms, DateTime date) throws DAOException{
         Reservation res;
         List<Room> nonReservedRooms = new ArrayList<>();
         for (Room r : rooms) {
@@ -251,7 +252,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     }
 
     @Override
-    public List<Room> obtainAllRoomsWithSameFeatures(String type, int capacity, String building, DateTime date)throws IncorrectBuildingException, IncorrectRoomException{
+    public List<Room> obtainAllRoomsWithSameFeatures(String type, int capacity, String building, DateTime date)throws DAOException{
         List<Room> sameTypeRooms = spaceDao.getAllRoomsByTypeAndCapacity(type, capacity, building);
         if(sameTypeRooms.isEmpty()){
             return new ArrayList();

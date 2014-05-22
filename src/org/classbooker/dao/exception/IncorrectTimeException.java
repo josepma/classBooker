@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
  *
  * @author richeng Jin
  */
-public class IncorrectTimeException extends Exception{
+public class IncorrectTimeException extends DAOException{
       public IncorrectTimeException(){
         
       }

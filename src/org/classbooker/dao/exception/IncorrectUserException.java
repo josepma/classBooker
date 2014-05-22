@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
  *
  * @author Marc Sole, Carles Mònico
  */
-public class IncorrectUserException extends Exception {
+public class IncorrectUserException extends DAOException {
     
     /**
      *

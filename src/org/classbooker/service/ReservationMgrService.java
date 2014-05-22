@@ -32,7 +32,7 @@ public interface ReservationMgrService {
      * @return A ReservationResult encapsulating the Reservation done or a list of suggested rooms.
      * @throws Exception If the roomNb or BuildingName doesn't match with a correct Room or Building.
      */
-    ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate)throws IncorrectTimeException, IncorrectUserException, IncorrectRoomException, IncorrectBuildingException;
+    ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate)throws DAOException;
 
     /**
      *
@@ -42,7 +42,7 @@ public interface ReservationMgrService {
      * @return
      * @throws Exception
      */
-    public Reservation makeReservationBySpace(long roomld, String nif, DateTime initialTime)throws IncorrectRoomException, IncorrectUserException, IncorrectTimeException, IncorrectBuildingException ;
+    public Reservation makeReservationBySpace(long roomld, String nif, DateTime initialTime) throws DAOException ;
     /**
      * Makes a reservation by type of space.
      * @param nif Nif of the user who makes the reservation.
@@ -53,7 +53,7 @@ public interface ReservationMgrService {
      * @throws IncorrectBuildingException If the building name is incorrect.
      * @return The reservation done.
      */
-    Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws IncorrectBuildingException, IncorrectRoomException;
+    Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws DAOException;
 
     /**
      *
@@ -74,7 +74,7 @@ public interface ReservationMgrService {
      * @param id
      * @return
      */
-    public Reservation findReservationById(long id)throws IncorrectReservationException; //???? És el id d'una reserva?
+    public Reservation findReservationById(long id)throws DAOException; //???? És el id d'una reserva?
 
     /**
      *
@@ -82,7 +82,7 @@ public interface ReservationMgrService {
      * @param roomNumber
      * @return
      */
-    public List<Reservation> findReservationByBuildingAndRoomNb(String buildingName, String roomNumber) throws IncorrectBuildingException;
+    public List<Reservation> findReservationByBuildingAndRoomNb(String buildingName, String roomNumber) throws DAOException;
 
     /**
      *
@@ -92,9 +92,7 @@ public interface ReservationMgrService {
      * @return
      */
    
-    public Reservation findReservationById(String buildingName, String roomNumber, DateTime date) throws IncorrectBuildingException,
-                                                                                                           IncorrectRoomException,
-                                                                                                           IncorrectTimeException ;
+    public Reservation findReservationById(String buildingName, String roomNumber, DateTime date) throws DAOException ;
 
 
     /**
@@ -122,7 +120,7 @@ public interface ReservationMgrService {
      *
      * @param id
      */
-    public void deleteReservation(long id) throws IncorrectReservationException;
+    public void deleteReservation(long id) throws DAOException;
 
     /**
      * Suggests alternative similar rooms when the specified Room is reserved in the date given.
@@ -134,7 +132,7 @@ public interface ReservationMgrService {
      * @throws IncorrectBuildingException If the building is incorrect.
      * @throws IncorrectRoomException If the Room number is incorrect.
      */
-    List<Room> suggestionSpace(String roomNb, String building, DateTime resDate) throws IncorrectTypeException, IncorrectBuildingException, IncorrectRoomException;
+    List<Room> suggestionSpace(String roomNb, String building, DateTime resDate) throws DAOException;
 
     /**
      * Returns the user who have the reservation of a room in a specific date.
@@ -155,7 +153,7 @@ public interface ReservationMgrService {
      * @throws IncorrectRoomException If the room is not correct.
      * @throws AlredyExistReservationException If the reservation is already done.
      */
-    void acceptReservation(Reservation reservation) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException,AlredyExistReservationException;
+    void acceptReservation(Reservation reservation) throws DAOException;
    
-    List<Room> obtainAllRoomsWithSameFeatures(String type, int capacity, String building, DateTime date)throws IncorrectBuildingException, IncorrectRoomException;
+    List<Room> obtainAllRoomsWithSameFeatures(String type, int capacity, String building, DateTime date)throws DAOException;
 }

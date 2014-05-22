@@ -50,10 +50,7 @@ public class ReservationDAOImpl implements ReservationDAO{
 
     @Override
     public long addReservation(Reservation reservation) 
-                                        throws IncorrectReservationException, 
-                                               IncorrectUserException, 
-                                               IncorrectRoomException,
-                                               AlredyExistReservationException{
+                                        throws DAOException{
         em.getTransaction().begin();    
         
         if(checkReservationForUser(reservation)){
@@ -69,11 +66,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     @Override
     public long addReservation(String userId, String roomNb, 
                                 String buildingName, DateTime dateTime) 
-                                        throws IncorrectReservationException, 
-                                               IncorrectUserException, 
-                                               IncorrectRoomException,
-                                               AlredyExistReservationException,
-                                               IncorrectBuildingException{
+                                        throws DAOException{
         
         return addReservation(new Reservation(dateTime, 
                                             getUser(userId), 
@@ -95,8 +88,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     public Reservation getReservationByDateRoomBulding(DateTime dateTime, 
                                                             String roomNb, 
                                                             String buildingName) 
-                                              throws IncorrectBuildingException, 
-                                                     IncorrectRoomException {
+                                              throws DAOException {
         
         Room room =  sDao.getRoomByNbAndBuilding(roomNb, buildingName);
         List<Reservation> reservations = room.getReservations();
@@ -116,7 +108,7 @@ public class ReservationDAOImpl implements ReservationDAO{
 
     @Override
     public List<Reservation> getAllReservationByBuilding(String name) 
-                                            throws IncorrectBuildingException {
+                                            throws DAOException {
         return em.createQuery("SELECT r FROM Reservation r WHERE r.room.building.name = :buildingName ")
                 .setParameter("buildingName", name)
                 .getResultList();
@@ -124,30 +116,28 @@ public class ReservationDAOImpl implements ReservationDAO{
 
     @Override
     public List<Reservation> getAllReservationByRoom(long id) 
-                                                throws IncorrectRoomException {
+                                                throws DAOException {
         return em.createQuery("SELECT r FROM Reservation r WHERE r.room.roomId = :roomID ")
                 .setParameter("roomID", id)
                 .getResultList();
     }
 
     @Override
-    public void removeReservation(long id) throws IncorrectReservationException {
+    public void removeReservation(long id) throws DAOException {
         removeReservation(getReservationById(id));
         logger.info("Reservation removed id:"+id);
     }
     
     @Override
     public void removeReservation(DateTime datetime, String roomNb, String buildingName) 
-                                        throws IncorrectReservationException, 
-                                                IncorrectRoomException, 
-                                                IncorrectBuildingException {
+                                        throws DAOException {
 
         removeReservation(getReservationByDateRoomBulding(datetime, 
                                                             roomNb, 
                                                             buildingName));
     }
     
-    private void removeReservation(Reservation res)throws IncorrectReservationException {
+    private void removeReservation(Reservation res) throws DAOException{
         if(res == null ){
             throw new IncorrectReservationException();
         }
@@ -160,7 +150,7 @@ public class ReservationDAOImpl implements ReservationDAO{
 
     @Override
     public List<Reservation> getAllReservationByUserNif(String nif) 
-                                                throws IncorrectUserException {
+                                                throws DAOException{
         return em.createQuery("SELECT r FROM Reservation r WHERE r.rUser.nif = :nif ")
                 .setParameter("nif", nif)
                 .getResultList();
@@ -169,10 +159,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     
     
     private void checkReservation(Reservation reservation) 
-                                        throws IncorrectReservationException, 
-                                                IncorrectRoomException, 
-                                                IncorrectUserException, 
-                                                AlredyExistReservationException{
+                                        throws DAOException{
         
         if(reservation == null || reservation.getReservationDate() == null){
             throw new IncorrectReservationException(logger,"checkReservation");
@@ -183,10 +170,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     }
         
     private boolean checkReservationForUser(Reservation reservation) 
-                                        throws IncorrectReservationException, 
-                                                IncorrectRoomException, 
-                                                IncorrectUserException, 
-                                                AlredyExistReservationException{
+                                        throws DAOException{
         
         if(reservation == null || reservation.getReservationDate() == null){
             throw new IncorrectReservationException(logger,"checkReservationForUser");
@@ -229,7 +213,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     }
 
     private void checkExistingReservation(Reservation reservation) 
-                                        throws AlredyExistReservationException{     
+                                        throws DAOException{     
         if(!em.createQuery("SELECT r FROM Reservation r WHERE r.reservationDate = :reservationdDate AND r.room = :reservationRoom ")
                 .setParameter("reservationdDate", 
                                 reservation.getReservationDate()
@@ -242,7 +226,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     }
     
     private boolean checkExistingReservationForOtherUser(Reservation reservation) 
-                                        throws AlredyExistReservationException{
+                                        throws DAOException{
         User ur = null;
         try{
         ur = (User) em.createQuery("SELECT r.rUser FROM Reservation r WHERE r.reservationDate = :reservationdDate AND r.room = :reservationRoom ")
@@ -262,7 +246,7 @@ public class ReservationDAOImpl implements ReservationDAO{
         return true;
     }
 
-    private ReservationUser getUser(String userId) throws IncorrectUserException {
+    private ReservationUser getUser(String userId) throws DAOException {
         User user = uDao.getUserByNif(userId);
         if(user == null){
             throw new IncorrectUserException(logger,"getUser");
@@ -275,8 +259,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     }
 
     private Room getRoom(String roomNb, String buildingName) 
-                                                throws IncorrectRoomException, 
-                                                IncorrectBuildingException {
+                                                throws DAOException {
         return sDao.getRoomByNbAndBuilding(roomNb, buildingName);
         
         

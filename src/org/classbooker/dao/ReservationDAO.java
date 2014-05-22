@@ -52,10 +52,7 @@ public interface ReservationDAO {
      * @throws AlredyExistReservationException
      */
     long addReservation(Reservation reservation)
-                                           throws IncorrectReservationException,
-                                           IncorrectUserException,
-                                           IncorrectRoomException,
-                                           AlredyExistReservationException ;
+                                           throws DAOException;
     
     /**
      * Add a reservation in the database by params
@@ -74,24 +71,8 @@ public interface ReservationDAO {
      */
     long addReservation (String nif, String roomId, 
                           String buildingName, DateTime dateTime)
-                                           throws IncorrectReservationException,
-                                           IncorrectUserException,
-                                           IncorrectRoomException,
-                                           IncorrectBuildingException,
-                                           AlredyExistReservationException;
+                                           throws DAOException;
 
-    /**
-     *
-     * @param reservation
-     * @throws IncorrectReservationException
-     * @throws IncorrectUserException
-     * @throws IncorrectRoomException
-     *//*
-    void modifyReservation(Reservation reservation)
-                                           throws IncorrectReservationException,
-                                           IncorrectUserException,
-                                           IncorrectRoomException;
-    */
     /**
      * Remove reservation by id.
      * @param id identifier of the reservation.
@@ -99,13 +80,11 @@ public interface ReservationDAO {
      * when the Room is null or the number of the room is null
      */
 
-    void removeReservation(long id) throws IncorrectReservationException;
+    void removeReservation(long id) throws DAOException;
     
     
     void removeReservation(DateTime datetime, String roomNb,String buildingName) 
-                                            throws IncorrectReservationException,
-                                                    IncorrectRoomException,
-                                                    IncorrectBuildingException;
+                                            throws DAOException;
     
     /**
      * Get a reservation by id.
@@ -124,8 +103,7 @@ public interface ReservationDAO {
     Reservation getReservationByDateRoomBulding(DateTime dateTime, 
                                                     String roomNb, 
                                                     String buildingName)
-                                                    throws IncorrectBuildingException,
-                                                            IncorrectRoomException;
+                                                    throws DAOException;
                                                            
                                                             
     
@@ -145,7 +123,7 @@ public interface ReservationDAO {
      * when the user doesn't exist.
      */
     List<Reservation> getAllReservationByUserNif(String nif)
-                                            throws IncorrectUserException;
+                                            throws DAOException;
 
     /**
      * Get all reservation by building.
@@ -156,7 +134,7 @@ public interface ReservationDAO {
      * when the Building doesn't exist.
      */
     List<Reservation> getAllReservationByBuilding(String name) 
-                                            throws IncorrectBuildingException;
+                                            throws DAOException;
 
     /**
      * Get all reservation by room.
@@ -167,6 +145,6 @@ public interface ReservationDAO {
      * when the Room doesn't exist.
      */
     List<Reservation> getAllReservationByRoom(long id) 
-                                            throws IncorrectRoomException;
+                                            throws DAOException;
                                             
 }
