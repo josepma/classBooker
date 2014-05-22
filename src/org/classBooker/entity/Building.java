@@ -40,7 +40,7 @@ public class Building {
         return name;
     }
     
-    public void setBuildingName(String Name){
+    public void setBuildingName(String name){
         this.name=name;
     }    
     
@@ -73,5 +73,10 @@ public class Building {
     @Override
     public String toString(){
         return "Building{name="+name + "rooms="+rooms+"}";       
+    }
+    
+    @Override
+    public int hashCode() {
+        return super.hashCode(); 
     }
 }
