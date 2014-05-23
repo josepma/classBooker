@@ -60,9 +60,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
     
     @Test 
     public void zeroReservationsByNif() throws Exception{    
-      //getStartExpectations("12345678",lreser);
-      searchReservationsByFields("12345678",null,null,null,null,0,null);
-//      List<Reservation>result=resDao.getAllReservationByUserNif(nif);
+     
       List <Reservation> tested = rmsQ.getReservationsByNif("123456");
       
       assertEquals("0 reservations",0,tested.size());
@@ -71,8 +69,8 @@ public class ReservationMgrServiceImplQueryIntegTest {
     @Test 
     public void ReservationsByNif() throws Exception{
        
-      //searchReservationsByFields("12345678",null,null,null,null,0,null);
-      List <Reservation> tested = rmsQ.getReservationsByNif("12345678");
+      searchReservationsByFields("12345678",null,null,null,null,0,null);
+      List <Reservation> tested = rmsQ.getReservationsByNif(nif);
       
       assertEquals("12 reservations for this nif",12,tested.size());
     }
@@ -96,7 +94,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
     public void ReservationFilteredByDates() throws Exception{
      
       searchReservationsByFields("12345678",new DateTime(2014,6,10,9,0),
-              new DateTime(2014,5,9,13,0),null,null,0,null);       
+              new DateTime(2014,6,10,10,0),null,null,0,null);       
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
