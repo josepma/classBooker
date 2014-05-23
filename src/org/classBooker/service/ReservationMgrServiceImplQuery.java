@@ -68,19 +68,21 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
             return new ArrayList<>(); 
         } 
         List<Reservation> lfreser= getReservationsByNif(nif);
-   
+        System.out.println("size"+lfreser.size());
         if(lfreser == null){
             return new ArrayList<>();
         }else{
             if(startDate != null && endDate != null & lfreser.size()>0){
                 lfreser = getReservationAndDates(startDate, endDate,lfreser);
             }
+            if(roomNb !=null & buildingName != null & lfreser.size()>0){
+                System.out.println("Entraaa");
+                lfreser = getReservationAndRoom(roomNb,buildingName,lfreser);
+            }
             if(buildingName !=null & lfreser.size()>0){
                 lfreser = getReservationAndBuilding(buildingName,lfreser);
             }
-            if(roomNb !=null & buildingName != null & lfreser.size()>0){
-                lfreser = getReservationAndRoom(roomNb,buildingName,lfreser);
-            }
+            
             if(capacity >0 & lfreser.size()>0){
                 lfreser = getReservationAndCapacity(capacity,lfreser);
             }
@@ -118,6 +120,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                                     List<Reservation>lfreser) 
             throws IncorrectBuildingException, IncorrectRoomException{
         Room roomID = spaDao.getRoomByNbAndBuilding(roomNb,buildingName);
+        System.out.println("*** Implemen: "+roomID);
         return getReservationAndRoom(roomID.getRoomId(),lfreser);
     }
     private List <Reservation> getReservationAndRoom(long roomID,
