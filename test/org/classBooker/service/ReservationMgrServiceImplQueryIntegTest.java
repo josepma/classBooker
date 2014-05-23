@@ -41,7 +41,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
    Building building;
    List<Reservation>lres,lreser;
    ReservationMgrServiceImplQuery rmsQ;
-   EntityManager eM;
+   EntityManager em;
     
     private String nif;
     private DateTime startD;
@@ -126,7 +126,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
     @Test 
     public void ReservationFilteredByRoomNb() throws Exception{
       searchReservationsByFields("12345678",null,null,"Rectorate Building",
-                                 "1",0,null);
+                                 "1.0",0,null);
       
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
@@ -293,9 +293,9 @@ public class ReservationMgrServiceImplQueryIntegTest {
     private void createEm() throws Exception{
         resDao = new ReservationDAOImpl();
         spaDao = new SpaceDAOImpl();
-        EntityManager eM = getEntityManager();
-        resDao.setEm(eM);
-        spaDao.setEm(eM);
+        em = getEntityManager();
+        resDao.setEm(em);
+        spaDao.setEm(em);
         resDao.setsDao(spaDao);
         rmsQ.setResDao(resDao);
         rmsQ.setSpaDao(spaDao);
