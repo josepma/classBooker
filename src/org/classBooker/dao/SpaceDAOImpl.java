@@ -58,7 +58,7 @@ public class SpaceDAOImpl implements SpaceDAO {
             AlreadyExistingRoomException, NonBuildingException {
 
         Building building = getBuildingByName(room.getBuilding().getBuildingName());
-        em.getTransaction().begin();
+    
 
         if (building == null) {
             throw new NonBuildingException();
@@ -69,7 +69,7 @@ public class SpaceDAOImpl implements SpaceDAO {
 
         em.persist(room);
         building.getRooms().add(room);
-        em.getTransaction().commit();
+  
 
         return room.getRoomId();
 
@@ -85,9 +85,9 @@ public class SpaceDAOImpl implements SpaceDAO {
     public Room getRoomById(long id) {
         Room room = null;
 
-        em.getTransaction().begin();
+     
         room = (Room) em.find(Room.class, id);
-        em.getTransaction().commit();
+     
 
         return room;
     }
@@ -103,10 +103,8 @@ public class SpaceDAOImpl implements SpaceDAO {
         List<Room> rooms = null;
         Query query;
 
-        em.getTransaction().begin();
         query = em.createQuery("SELECT r FROM Room r");
         rooms = (List<Room>) query.getResultList();
-        em.getTransaction().commit();
 
         return rooms;
 
@@ -124,10 +122,10 @@ public class SpaceDAOImpl implements SpaceDAO {
             AlreadyExistingBuildingException,
             AlreadyExistingRoomException {
 
-        em.getTransaction().begin();
+  
         checkExistingBuildingOrRoom(building);
         em.persist(building);
-        em.getTransaction().commit();
+ 
 
     }
 
@@ -142,9 +140,9 @@ public class SpaceDAOImpl implements SpaceDAO {
     public Building getBuildingByName(String name) {
         Building building = null;
 
-        em.getTransaction().begin();
+     
         building = (Building) em.find(Building.class, name);
-        em.getTransaction().commit();
+    
 
         return building;
     }
@@ -160,10 +158,10 @@ public class SpaceDAOImpl implements SpaceDAO {
         List<Building> buildings = null;
         Query query;
 
-        em.getTransaction().begin();
+      
         query = em.createQuery("SELECT b FROM Building b");
         buildings = (List<Building>) query.getResultList();
-        em.getTransaction().commit();
+     
 
         return buildings;
     }
@@ -202,10 +200,10 @@ public class SpaceDAOImpl implements SpaceDAO {
             throw new IncorrectTypeException();
         }
 
-        em.getTransaction().begin();
+     
         query = em.createQuery("SELECT r FROM " + type + " r");
         rooms = (List<Room>) query.getResultList();
-        em.getTransaction().commit();
+   
 
         return rooms;
     }
@@ -226,10 +224,10 @@ public class SpaceDAOImpl implements SpaceDAO {
 
         Query query;
 
-        em.getTransaction().begin();
+   
         query = em.createQuery("SELECT r FROM " + type + " r");
         roomsOneType = (List<Room>) query.getResultList();
-        em.getTransaction().commit();
+   
 
         for (Room r : roomsOneType) {
             if (r.getBuilding() == building) {
@@ -308,10 +306,10 @@ public class SpaceDAOImpl implements SpaceDAO {
         Building building = getBuildingByName(buildingName);
         Query query;
 
-        em.getTransaction().begin();
+  
         query = em.createQuery("SELECT r FROM " + type + " r" + " WHERE r.capacity>=" + capacity);
         roomsOneType = (List<Room>) query.getResultList();
-        em.getTransaction().commit();
+
 
         for (Room r : roomsOneType) {
             if (r.getBuilding() == building) {
@@ -372,9 +370,9 @@ public class SpaceDAOImpl implements SpaceDAO {
 
     private void modifyCapacity(Room room, int capacity) {
 
-        em.getTransaction().begin();
+    
         room.setCapacity(capacity);
-        em.getTransaction().commit();
+
 
     }
 

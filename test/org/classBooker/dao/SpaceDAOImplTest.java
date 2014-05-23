@@ -16,12 +16,9 @@ import javax.persistence.Query;
 import org.classBooker.dao.exception.AlreadyExistingBuildingException;
 import org.classBooker.dao.exception.AlreadyExistingRoomException;
 import org.classBooker.dao.exception.AlredyExistReservationException;
-import org.classBooker.dao.exception.IncorrectRoomException;
-import org.classBooker.dao.exception.IncorrectTimeException;
 import org.classBooker.dao.exception.IncorrectTypeException;
 import org.classBooker.dao.exception.NonBuildingException;
 import org.classBooker.dao.exception.NoneExistingRoomException;
-import org.classBooker.dao.exception.PersistException;
 import org.classBooker.entity.Building;
 import org.classBooker.entity.ClassRoom;
 import org.classBooker.entity.LaboratoryRoom;
@@ -30,10 +27,6 @@ import org.classBooker.entity.ProfessorPas;
 import org.classBooker.entity.Reservation;
 import org.classBooker.entity.ReservationUser;
 import org.classBooker.entity.Room;
-import org.classBooker.entity.User;
-import org.eclipse.persistence.internal.jpa.EntityManagerImpl;
-import org.jmock.Expectations;
-import static org.jmock.Expectations.returnValue;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
@@ -79,9 +72,7 @@ public class SpaceDAOImplTest {
         ema.persist(room);
         ema.persist(building);
         ema.persist(reserv);
-        ema.getTransaction().commit();
         sdi.setEm(ema);
-        // reservation.setEm(ema);
     }
 
     /**
@@ -423,6 +414,7 @@ public class SpaceDAOImplTest {
      */
     @After
     public void tearDown() throws Exception {
+        ema.getTransaction().commit();
         ema = sdi.getEm();
         if (ema.isOpen()) {
             ema.close();
