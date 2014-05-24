@@ -63,7 +63,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                                   String roomNb,
                                                   int capacity,
                                                   String roomType) 
-            throws Exception{
+            throws DAOException{
         if(validation(nif,startDate,endDate,buildingName,roomNb,capacity,roomType)){
             return new ArrayList<>(); 
         } 
@@ -106,7 +106,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     }
     private List <Reservation> getReservationAndBuilding(String buildingName
                                 ,List<Reservation>lfreser) 
-                                throws IncorrectBuildingException{
+                                throws DAOException{
         List<Reservation> result = new ArrayList<>();
         for (Reservation res: lfreser){
             if((res.getRoom().getBuilding().getBuildingName()).equals(buildingName)){
@@ -118,7 +118,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     private List <Reservation> getReservationAndRoom(String roomNb,
                                                     String buildingName,
                                                     List<Reservation>lfreser) 
-            throws IncorrectBuildingException, IncorrectRoomException{
+            throws IncorrectBuildingException, IncorrectRoomException, DAOException{
        
         Room roomID = spaDao.getRoomByNbAndBuilding(roomNb,buildingName);
 
@@ -146,7 +146,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     }
     private List <Reservation> getReservationAndRoomType(String roomType,
                                List<Reservation>lfreser) 
-            throws IncorrectTypeException{
+            throws DAOException{
         
         List<Room> rooms = spaDao.getAllRoomsOfOneType(roomType);
         List<Reservation> result = new ArrayList<>();
