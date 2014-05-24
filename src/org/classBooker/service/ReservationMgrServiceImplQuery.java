@@ -75,14 +75,13 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
             if(startDate != null && endDate != null & lfreser.size()>0){
                 lfreser = getReservationAndDates(startDate, endDate,lfreser);
             }
+            if(buildingName !=null & lfreser.size()>0){
+                lfreser = getReservationAndBuilding(buildingName,lfreser);
+            }
             if(roomNb !=null & buildingName != null & lfreser.size()>0){
                
                 lfreser = getReservationAndRoom(roomNb,buildingName,lfreser);
             }
-            if(buildingName !=null & lfreser.size()>0){
-                lfreser = getReservationAndBuilding(buildingName,lfreser);
-            }
-            
             if(capacity >0 & lfreser.size()>0){
                 lfreser = getReservationAndCapacity(capacity,lfreser);
             }
@@ -182,7 +181,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
              (buildingName==null || buildingName.matches("[A-Z][a-z].*")) &&
              (roomNb==null || roomNb.matches("\\d\\.\\d")) &&
               capacity>=0 &&
-             (roomType==null || roomType.matches("[A-Z][a-z]+[A-z][a-z]+")));
+             (roomType==null || roomType.matches("[A-Z][a-z]+.*")));
     }
     
     public void setResDao(ReservationDAO resDao) {

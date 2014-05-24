@@ -27,6 +27,7 @@ import org.jmock.Sequence;
 import java.util.List;
 import java.util.ArrayList;
 import org.classBooker.dao.SpaceDAO;
+import org.classBooker.dao.exception.DAOException;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.dao.exception.IncorrectRoomException;
 import org.classBooker.dao.exception.IncorrectTypeException;
@@ -386,7 +387,8 @@ public class ReservationMgrServiceImplQueryTest {
     private void getExpectationsWithRoomType(final String roomType,Reservation res) 
                 throws IncorrectUserException,
                 IncorrectRoomException,
-                IncorrectTypeException{
+                IncorrectTypeException,
+                DAOException{
         final List<Room> rooms = new ArrayList<>();
         rooms.add(res.getRoom());
         context.checking(new Expectations(){{

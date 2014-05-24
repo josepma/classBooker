@@ -15,6 +15,7 @@ import org.classBooker.dao.ReservationDAO;
 import org.classBooker.dao.ReservationDAOImpl;
 import org.classBooker.dao.SpaceDAO;
 import org.classBooker.dao.SpaceDAOImpl;
+import org.classBooker.dao.exception.DAOException;
 import org.classBooker.dao.exception.IncorrectBuildingException;
 import org.classBooker.entity.Building;
 import org.classBooker.entity.Reservation;
@@ -138,11 +139,10 @@ public class ReservationMgrServiceImplQueryIntegTest {
       assertEquals("Same size",7,tested.size());
       
     }
-    /*
+    
     @Test 
     public void ReservationFilteredByCapacity() throws Exception{
-      searchReservationsByFields("12345678",null,null,null,null,50,null);
-      getStartExpectations("12345678",lres);
+      searchReservationsByFields("12345678",null,null,null,null,20,null);
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
@@ -150,15 +150,13 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-      assertEquals("Same size",1,tested.size());
-      assertEquals("Fifth reservation",res5,tested.get(0));
+      assertEquals("Same size",12,tested.size());
+      //assertEquals("Fifth reservation",res5,tested.get(0));
     }
     
     @Test 
     public void ReservationFilteredByRoomType() throws Exception{
       searchReservationsByFields("12345678",null,null,null,null,0,"MeetingRoom");
-      getStartExpectations("12345678",lres);
-      getExpectationsWithRoomType("MeetingRoom",res1);
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
@@ -166,22 +164,19 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-      assertEquals("Same size",1,tested.size());
-      assertEquals("First reservation",res1,tested.get(0));
+      assertEquals("Same size",5,tested.size());
+      
     }
     
     @Test 
     public void ReservationFilteredByAllFields() throws Exception{
       searchReservationsByFields("12345678",
-                                  new DateTime(2014,5,9,12,0),
-                                  new DateTime(2014,5,9,13,0),
-                                  "Main Library","4.4",
-                                  50,
-                                  "ClassRoom");
-      getStartExpectations("12345678",lres);
-      getExpectationsWithRoomNbAndBuilding("4.4","Main Library",
-                                            res5.getRoom());
-      getExpectationsWithRoomType("ClassRoom",res5);
+                                  new DateTime(2014,6,10,9,0),
+                                  new DateTime(2014,6,10,10,0),
+                                  "Main Library","1.0",
+                                  40,
+                                  "MeetingRoom");
+      
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
@@ -190,41 +185,22 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               capacity,
                                                               roomType);
       assertEquals("Same size",1,tested.size());
-      assertEquals("First reservation",res5,tested.get(0));
+      //assertEquals("First reservation",res5,tested.get(0));
     }
     
     @Test 
-    public void findReservationBySpace() throws IncorrectBuildingException{
-      final List<Reservation> returnlres = new ArrayList<>();
-      returnlres.add(res1);
-      context.checking(new Expectations(){{
-            oneOf(resDao).getAllReservationByBuilding("Rectorate Building");
-            will(returnValue(returnlres));
-        }});
-      List <Reservation> tested = rmsQ.findReservationByBuildingAndRoomNb("Rectorate Building","2.3");
-      assertEquals("Same Size",1,tested.size());
-      assertEquals("First reservation",res1,tested.get(0));
-    }
-    
-    @Test 
-    public void finsReservationBySpaceBis() throws IncorrectBuildingException{
-      final List<Reservation> returnlres = new ArrayList<>();
-      returnlres.add(res3);
-      returnlres.add(res4);
-      context.checking(new Expectations(){{
-            oneOf(resDao).getAllReservationByBuilding("Faculty");
-            will(returnValue(returnlres));
-        }});
-      List <Reservation> tested = rmsQ.findReservationByBuildingAndRoomNb("Faculty","2.3");
-      assertEquals("Same Size",1,tested.size());
-      assertEquals("Only one reservation",res4,tested.get(0));
+    public void findReservationBySpace() throws IncorrectBuildingException, DAOException{
+      
+      List <Reservation> tested = rmsQ.findReservationByBuildingAndRoomNb("Rectorate Building","1.0");
+      assertEquals("Same Size",10,tested.size());
+      
     }
     
     @Test
     public void IncorrectFields() throws Exception{
        
        searchReservationsByFields("12345678",null,null,"2.04",null,0,null); 
-       
+       List<Reservation> result = new ArrayList<>();
        List<Reservation> tested = rmsQ.getFilteredReservation(nif, 
                                                               startDate, 
                                                               endDate, 
@@ -233,7 +209,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               capacity, 
                                                               roomType);
        
-       assertEquals("Non rerserves, building is incorrect",lreser,tested);
+       assertEquals("Non rerserves, building is incorrect",result,tested);
     }
     
     @Test 
@@ -241,7 +217,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
      
       searchReservationsByFields("12345678",null,new DateTime(2014,5,9,13,0)
                                  ,null,null,0,null);
-      
+      List<Reservation> result = new ArrayList<>();
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
@@ -250,7 +226,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               capacity,
                                                               roomType);
         
-        assertEquals("Non reserves,StartDate incorrect",lreser,tested);
+        assertEquals("Non reserves,StartDate incorrect",result,tested);
     }
     
     @Test 
@@ -258,7 +234,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
      
       searchReservationsByFields("12345678",new DateTime(2014,5,9,12,0),null
                                  ,null,null,0,null);
-      
+      List<Reservation> result = new ArrayList<>();
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
@@ -267,7 +243,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               capacity,
                                                               roomType);
         
-        assertEquals("Non reserves,EndDate incorrect",lreser,tested);
+        assertEquals("Non reserves,EndDate incorrect",result,tested);
     }
     
     @Test 
@@ -276,7 +252,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
       searchReservationsByFields("12345678",new DateTime(2014,5,9,12,0),
                                   new DateTime(2014,5,9,11,0),
                                  null,null,0,null);
-      
+      List<Reservation> result = new ArrayList<>();
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
@@ -286,9 +262,8 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomType);
         
         assertEquals("Non reserves,EndDate is before than startDate",
-                                                                lreser,tested);
+                                                                result,tested);
     }
-   */
     
     private void createEm() throws Exception{
         resDao = new ReservationDAOImpl();
