@@ -275,7 +275,6 @@ public class SpaceDAOImpl implements SpaceDAO {
 
     @Override
     public void removeRoom(Room room) throws DAOException {
-        System.out.print(room.getNumber());
         if (!roomExist(room)) {
             throw new NoneExistingRoomException();
         }
@@ -358,9 +357,9 @@ public class SpaceDAOImpl implements SpaceDAO {
                     .setParameter("buildingName", room.getBuilding().getBuildingName())
                     .setParameter("roomNb", room.getNumber())
                     .getSingleResult();
-                    log.info(room2.toString());
+                    log.log(Level.INFO, "Exist{0}", room2.toString());
         } catch (NoResultException e) {
-           // log.info(room.toString());
+            log.log(Level.WARNING, "Non exist{0}", room.toString());
             return false;
         }
         return true;
