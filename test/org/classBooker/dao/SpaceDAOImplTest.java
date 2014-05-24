@@ -125,7 +125,7 @@ public class SpaceDAOImplTest {
      *
      * @throws java.lang.Exception
      */
-    @Test
+   @Test
     public void testRemoveRoom() throws Exception {
         room2 = new ClassRoom(building, "2.08", 30);
         long rom = sdi.addRoom(room2);
@@ -152,7 +152,11 @@ public class SpaceDAOImplTest {
     public void testGetRoomById() {
         assertEquals(room, sdi.getRoomById(room.getRoomId()));
     }
-
+    @Test
+    public void testGetRoomByIdNonExist() {
+        room2 = new ClassRoom(building, "1.03", 30);
+        assertEquals(null, sdi.getRoomById(room2.getRoomId()));
+    }
     /**
      * Test of getAllRooms method, of class SpaceDAOImpl.
      *
@@ -171,6 +175,15 @@ public class SpaceDAOImplTest {
 
     }
 
+    @Test
+    public void testGetAllRoomsEmptyDataBase() throws Exception {
+        ema.remove(room);
+        final Set<Room> expected = new HashSet<>();
+        List<Room> result = sdi.getAllRooms();
+        Set<Room> resultSet = new HashSet(result);
+        assertEquals(expected, resultSet);
+
+    }
     /**
      * Test of addBuilding method, of class SpaceDAOImpl.
      *
@@ -262,7 +275,12 @@ public class SpaceDAOImplTest {
     public void testGetBuildingByName() throws Exception {
         assertEquals(building, sdi.getBuildingByName("EPS"));
     }
-
+    
+    @Test
+    public void testGetBuildingByNameNonExistBuilding() throws Exception {
+        building2 = new Building("FDE");
+        assertEquals(null, sdi.getBuildingByName("FDE"));
+    }
     /**
      * Test of getAllBuildings method, of class SpaceDAOImpl.
      *
@@ -279,7 +297,7 @@ public class SpaceDAOImplTest {
         Set<Building> resultSet = new HashSet(result);
         assertEquals(expected, resultSet);
     }
-
+    
     /**
      * Test of getAllRoomsOfOneBuilding method, of class SpaceDAOImpl.
      *
@@ -295,6 +313,15 @@ public class SpaceDAOImplTest {
         assertEquals(roomsSet, result);
     }
 
+    @Test
+    public void testGetAllRoomsOfOneBuildingNonExistBuilding() throws Exception {
+        List<Room> rooms = new ArrayList<Room>();        
+        building2 = new Building("FDE");
+        ema.persist(building2);
+        Set<Room> roomsSet = new HashSet<>(rooms);
+        Set<Room> result = new HashSet<>(sdi.getAllRoomsOfOneBuilding(building2.getBuildingName()));
+        assertEquals(roomsSet, result);
+    }
     /**
      * Test of getAllRoomsOfOneType method, of class SpaceDAOImpl.
      *
@@ -362,6 +389,32 @@ public class SpaceDAOImplTest {
     }
 
     /**
+     * Test of getAllRoomsOfOneTypeAndOneBuilding method, of class SpaceDAOImpl.
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testGetAllRoomsOfOneTypeAndOneBuildingNonExistRooms() throws Exception {
+        Building building2 = new Building("FDE");
+        labRoom = new LaboratoryRoom(building, "3.7", 10);
+        
+        classRoom = new ClassRoom(building, "3.09", 100);
+        Room room5 = new MeetingRoom(building2, "3.10", 30);
+        sdi.addBuilding(building2);
+        sdi.addRoom(labRoom);
+       
+        sdi.addRoom(classRoom);
+        sdi.addRoom(room5);
+        List<Room> meetingRooms = new ArrayList<Room>();
+        
+        building.setRooms(meetingRooms);
+        Set<Room> roomsSet = new HashSet<>(meetingRooms);
+        Set<Room> result = new HashSet<>(sdi.getAllRoomsOfOneTypeAndOneBuilding("MeetingRoom", building));
+        assertEquals(roomsSet, result);
+    }
+
+    
+    /**
      *
      * @throws Exception
      */
@@ -402,7 +455,11 @@ public class SpaceDAOImplTest {
         sdi.addRoom(labRoom);
         assertEquals(labRoom, sdi.getRoomByNbAndBuilding("2.21", "EPS"));
     }
-
+   @Test
+    public void testgetRoomByNbAndBuildingNonExistRoom() throws Exception {
+        labRoom = new LaboratoryRoom(building, "2.21", 10);
+        assertEquals(null, sdi.getRoomByNbAndBuilding("2.21", "EPS"));
+    }
     private EntityManager getEntityManager() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("classBooker");
         return emf.createEntityManager();
