@@ -55,8 +55,7 @@ public class SpaceDAOImpl implements SpaceDAO {
      * @throws NonBuildingException
      */
     @Override
-    public long addRoom(Room room) throws
-            AlreadyExistingRoomException, NonBuildingException {
+    public long addRoom(Room room) throws  DAOException{
 
         Building building = getBuildingByName(room.getBuilding().getBuildingName());
     
