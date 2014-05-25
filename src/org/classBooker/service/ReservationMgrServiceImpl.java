@@ -74,7 +74,10 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     @Override
     public List<Room> suggestionSpace(String roomNb, String building, DateTime date) throws DAOException {
         Room room = spaceDao.getRoomByNbAndBuilding(roomNb, building);
-        List<Room> suggestedRoomsByTypeAndCapacity = spaceDao.getAllRoomsByTypeAndCapacity(room.getClass().toString(), room.getCapacity(), building);
+        if ( room == null){
+            return new ArrayList();
+        }
+        List<Room> suggestedRoomsByTypeAndCapacity = spaceDao.getAllRoomsByTypeAndCapacity(room.getClass().getName(), room.getCapacity(), building);
         List<Room> finalSuggestedRooms = getNonReservedRooms(suggestedRoomsByTypeAndCapacity, date);
         return finalSuggestedRooms;
     }

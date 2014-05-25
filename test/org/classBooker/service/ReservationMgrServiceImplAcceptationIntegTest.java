@@ -91,7 +91,7 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
     @Test
     public void suggestedSpacesAssertRequirements() throws Exception {
 
-        List<Room> suggestedRooms = rms.suggestionSpace("2.19", "EPS", dateTime);
+        List<Room> suggestedRooms = rms.suggestionSpace("2.03", "EPS", dateTime);
         if (suggestedRooms.isEmpty()) {
             fail("No spaces suggested.");
         }
