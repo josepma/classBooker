@@ -5,12 +5,12 @@
         <email>email</email> 
     </user>
     <user> 
-        <name>name2</name>
-        <email>email2</email> 
-    </user>
-    <user> 
         <name>name3</name> 
         <nif>   </nif> 
         <email>email3</email> 
     </user> 
+    <user> 
+        <name>name2</name>
+        <email>email2</email> 
+    </user>
 </users>

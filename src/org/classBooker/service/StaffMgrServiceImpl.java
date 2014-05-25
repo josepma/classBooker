@@ -153,17 +153,24 @@ public class StaffMgrServiceImpl implements StaffMgrService{
             doc.getDocumentElement().normalize();
             
             NodeList nList = doc.getElementsByTagName("user");
-            
-            for(int temp = 0; temp<nList.getLength(); temp++){
+            int x = nList.getLength();
+            System.out.println(x);
+            for(int temp = 0; temp<x; temp++){
+                System.out.println("Temp: "+ temp+"X: "+x);
                 Node nNode = nList.item(temp);
                 
                 Element eElement = (Element) nNode;
-                String nif = eElement.getElementsByTagName("nif").item(0).getTextContent();
-                String name = eElement.getElementsByTagName("name").item(0).getTextContent();
-                String email = eElement.getElementsByTagName("email").item(0).getTextContent();
-                User us = createGoodProffesorpas(nif, email, name);
-                if(us!=null){
-                    lUsers.add(us);
+                try{
+                    String nif = eElement.getElementsByTagName("nif").item(0).getTextContent();
+                    String name = eElement.getElementsByTagName("name").item(0).getTextContent();
+                    String email = eElement.getElementsByTagName("email").item(0).getTextContent();
+                    User us = createGoodProffesorpas(nif, email, name);
+                    if(us!=null){
+                        lUsers.add(us);
+                    }
+                }
+                catch(NullPointerException e){
+                    Logger.getLogger(ReservationMgrServiceImpl.class).log(Level.INFO, "Bad data user.");
                 }
             }
         }

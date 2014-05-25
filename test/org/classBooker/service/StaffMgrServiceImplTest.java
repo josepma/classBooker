@@ -111,8 +111,26 @@ public class StaffMgrServiceImplTest {
     
     @Test
     public void addMassiveUserXml() throws Exception {
+        final TestAppender appender = new TestAppender();
+        final Logger logger = Logger.getRootLogger();
+        logger.addAppender(appender);
+        
         setExpectationsAddUser();
         staff.addMassiveUser("users.xml");
+        
+        try{
+            Logger.getLogger(ReservationMgrServiceImpl.class);
+        }
+        finally{
+            logger.removeAppender(appender);
+        }
+        final List<LoggingEvent> log = appender.getLog();
+        final LoggingEvent firstLogEntrey = log.get(0);
+        final LoggingEvent secondLogEntrey = log.get(1);
+        String l = firstLogEntrey.getMessage().toString();
+        assertEquals(l,"Empty data user.");
+        l = secondLogEntrey.getMessage().toString();
+        assertEquals(l,"Bad data user.");
         assertEquals(staff.getUser(u.getNif()),u);
     }
     
