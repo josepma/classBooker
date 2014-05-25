@@ -35,7 +35,7 @@ public class UserDAOImplIntegTest {
     @Before
     public void setUp() throws Exception{
         expected = new ArrayList<>();
-        udao = new UserDAOImpl();
+        udao = new UserDAOImpl("classBookerIntegration");
         u = new ProfessorPas("12345","pepito@gmail.com","Pepito");
         User us = new ProfessorPas("98765","jaunito@gmail.com","Juanito");
         addUser(u);

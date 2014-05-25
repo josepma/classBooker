@@ -6,10 +6,13 @@ package org.classBooker.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.LoggingEvent;
 import org.classBooker.dao.UserDAO;
+import org.classBooker.dao.UserDAOImpl;
 import org.classBooker.dao.exception.AlreadyExistingUserException;
 import org.classBooker.entity.ProfessorPas;
 import org.classBooker.entity.User;
@@ -21,42 +24,40 @@ import static org.jmock.Expectations.throwException;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.After;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
+import org.junit.Test;
 
 /**
  *
  * @author Antares
  */
-public class StaffMgrServiceImplTest {
+public class StaffMgrServiceImplIntegTest {
     
-    Mockery context = new JUnit4Mockery();
     UserDAO uDao;
     StaffMgrServiceImpl staff;
     
     final User u = new ProfessorPas("nif", "email", "name");
     
-    public StaffMgrServiceImplTest() {
+    public StaffMgrServiceImplIntegTest() {
     }
     
     @Before
     public void setUp(){
         staff = new StaffMgrServiceImpl();
-        uDao = context.mock(UserDAO.class);
+        uDao = new UserDAOImpl("classBookerIntegration");
+        
         staff.setUserDao(uDao);
     }
     
     @Test
     public void addUser() throws AlreadyExistingUserException{
-        setExpectationsAddUser();
         staff.addUser(u);
         assertEquals(staff.getUser(u.getNif()),u);
     }
     
     @Test(expected = AlreadyExistingUserException.class)
     public void addRepeatedUser() throws AlreadyExistingUserException{
-        setExpectationsAddRepeatedUser();
         staff.addUser(u);
         staff.addUser(u);
     }
@@ -67,7 +68,6 @@ public class StaffMgrServiceImplTest {
         final Logger logger = Logger.getRootLogger();
         logger.addAppender(appender);
         
-        setExpectationsAddUser();
         staff.addMassiveUser("users.csv");
         
         try{
@@ -93,7 +93,6 @@ public class StaffMgrServiceImplTest {
         logger.addAppender(appender);
         
         
-        setExpectationsAddRepeatedUserCsv();
         staff.addMassiveUser("repeatedUsers.csv");
         
         try{
@@ -115,7 +114,6 @@ public class StaffMgrServiceImplTest {
         final Logger logger = Logger.getRootLogger();
         logger.addAppender(appender);
         
-        setExpectationsAddUser();
         staff.addMassiveUser("users.xml");
         
         try{
@@ -145,28 +143,12 @@ public class StaffMgrServiceImplTest {
         staff = new StaffMgrServiceImpl();
         staff.addMassiveUser("format.unexpected");
     }
-
-    private void setExpectationsAddUser() throws AlreadyExistingUserException{
-        context.checking(new Expectations(){{ 
-            allowing(uDao).addUser(u);
-            oneOf(uDao).getUserByNif(u.getNif());will(returnValue(u));
-         }});  
-    }
-
-    private void setExpectationsAddRepeatedUser() throws AlreadyExistingUserException{
-        context.checking(new Expectations(){{ 
-            oneOf(uDao).addUser(u);
-            oneOf(uDao).addUser(u);will(throwException(new AlreadyExistingUserException()));
-         }}); 
-    }
     
-    private void setExpectationsAddRepeatedUserCsv() throws AlreadyExistingUserException{
-        context.checking(new Expectations(){{ 
-            oneOf(uDao).addUser(u);
-            oneOf(uDao).addUser(u);will(throwException(new AlreadyExistingUserException()));
-            oneOf(uDao).getUserByNif(u.getNif());will(returnValue(u));
-         }}); 
+    @After
+    public void clear(){
+        UserDAOImpl ud = (UserDAOImpl)uDao;
+        ud.tearDown();
     }
-    
     
 }
+
