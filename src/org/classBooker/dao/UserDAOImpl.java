@@ -111,7 +111,16 @@ public class UserDAOImpl implements UserDAO{
 
     @Override
     public void removeUser(User user) throws IncorrectUserException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try{
+            em.getTransaction().begin();
+            Query q = em.createQuery
+                    ("DELETE FROM User u WHERE u.nif ='"+user.getNif()+"'");
+            q.executeUpdate();
+            em.getTransaction().commit();
+        }
+        finally{
+            
+        }
     }
     
     public void tearDown(){
@@ -122,7 +131,6 @@ public class UserDAOImpl implements UserDAO{
         int deleteRecords = query.executeUpdate();
 
         em.getTransaction().commit();
-        em.close();
         System.out.println("All records have been deleted.");
     }
     

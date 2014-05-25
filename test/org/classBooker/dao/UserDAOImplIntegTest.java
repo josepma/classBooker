@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
 import org.classBooker.dao.exception.AlreadyExistingUserException;
+import org.classBooker.dao.exception.IncorrectUserException;
 import org.classBooker.entity.User;
 import org.classBooker.entity.ProfessorPas;
 import org.junit.After;
@@ -26,6 +27,8 @@ import org.junit.Before;
 public class UserDAOImplIntegTest {
     UserDAOImpl udao;
     User u;
+    User us;
+    User u1;
     List<User> expected; 
     Set<User> expectedSet;
     
@@ -37,7 +40,7 @@ public class UserDAOImplIntegTest {
         expected = new ArrayList<>();
         udao = new UserDAOImpl("classBookerIntegration");
         u = new ProfessorPas("12345","pepito@gmail.com","Pepito");
-        User us = new ProfessorPas("98765","jaunito@gmail.com","Juanito");
+        us = new ProfessorPas("98765","jaunito@gmail.com","Juanito");
         addUser(u);
         addUser(us);
         expected.add(u);
@@ -47,9 +50,9 @@ public class UserDAOImplIntegTest {
     
     @Test
     public void testAddUser() throws Exception{
-        User u1 = new ProfessorPas("55555","manganito@gmail.com","Manganito");
+        u1 = new ProfessorPas("66666","manganito@gmail.com","Manganito");
         udao.addUser(u1);
-        User exp = findUserByNif("55555");
+        User exp = findUserByNif("66666");
         assertEquals(u1,exp);
     }
     
@@ -90,8 +93,8 @@ public class UserDAOImplIntegTest {
     public void testGetMoreThanOneUserByName() throws Exception {
         User u1 = new ProfessorPas("44444","manganito1@gmail.com","Manganito");
         User u2 = new ProfessorPas("66666","manganito2@gmail.com","Manganito");
-        addUser(u1);
-        addUser(u2);
+        udao.addUser(u1);
+        udao.addUser(u2);
         List<User> expected = new ArrayList<>();
         expected.add(u1);
         expected.add(u2);
@@ -119,7 +122,7 @@ public class UserDAOImplIntegTest {
     
     
     @After
-    public void clear(){
+    public void clear() throws IncorrectUserException{
         udao.tearDown();
     }
     
@@ -131,8 +134,7 @@ public class UserDAOImplIntegTest {
             em.getTransaction().commit();
         }
         finally{
-            if(em.isOpen())
-                em.close();
+            
         }
     }
     
@@ -147,8 +149,7 @@ public class UserDAOImplIntegTest {
             em.getTransaction().commit();
         }
         finally{
-            if(em.isOpen())
-                em.close();
+            
         }
         return u;
     }
