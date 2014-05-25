@@ -7,6 +7,7 @@
 package org.classBooker.dao;
 
 import java.util.List;
+import javax.persistence.EntityManager;
 import org.classBooker.dao.exception.AlreadyExistingUserException;
 import org.classBooker.dao.exception.IncorrectUserException;
 import org.classBooker.dao.exception.PersistException;
@@ -69,5 +70,6 @@ public interface UserDAO {
      * @throws IncorrectUserException
      */
     void removeUser(User user) throws IncorrectUserException;
+    void setEntityManager(EntityManager em);
     
 }

@@ -6,6 +6,7 @@
 package org.classBooker.dao;
 
 import java.util.List;
+import javax.persistence.EntityManager;
 import org.classBooker.dao.exception.AlreadyExistingBuildingException;
 import org.classBooker.dao.exception.AlreadyExistingRoomException;
 import org.classBooker.dao.exception.AlredyExistReservationException;
@@ -166,4 +167,5 @@ public interface SpaceDAO {
      * @throws org.classBooker.dao.exception.IncorrectBuildingException
      */
     List<Room> getAllRoomsByTypeAndCapacity(String type, int capacity, String buildingName) throws DAOException;
+    void setEm(EntityManager em);
 }
