@@ -231,7 +231,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     }
 
     @Override
-    public Reservation findReservationById(String buildingName, String roomNumber, DateTime date) {
+    public Reservation findReservationBySpaceAndDate(String buildingName, String roomNumber, DateTime date) {
         throw new UnsupportedOperationException("Not supported yet."); 
     }
 

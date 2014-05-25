@@ -92,7 +92,7 @@ public interface ReservationMgrService {
      * @return
      */
    
-    public Reservation findReservationById(String buildingName, String roomNumber, DateTime date) throws DAOException ;
+    public Reservation findReservationBySpaceAndDate(String buildingName, String roomNumber, DateTime date) throws DAOException ;
 
 
     /**

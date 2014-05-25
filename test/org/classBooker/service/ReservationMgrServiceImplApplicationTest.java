@@ -153,37 +153,37 @@ public class ReservationMgrServiceImplApplicationTest {
     @Test (expected = IncorrectBuildingException.class)
     public void testCannotFindReservationByBuilding() throws Exception{
         checkFindReservationByBuildingRoomDateExpectations(null,room,null);
-        rmgr.findReservationById(building.getBuildingName(), room.getNumber(), date);
+        rmgr.findReservationBySpaceAndDate(building.getBuildingName(), room.getNumber(), date);
     }
     
     @Test(expected = IncorrectRoomException.class)
     public void testCannotFindReservationByRoom() throws Exception{
         checkFindReservationByBuildingRoomDateExpectations(building,null,null);
-        rmgr.findReservationById(building.getBuildingName(), room.getNumber(), date);
+        rmgr.findReservationBySpaceAndDate(building.getBuildingName(), room.getNumber(), date);
     }
     
     @Test(expected = IncorrectTimeException.class)
     public void testCannotFindReservationByDateIsBeforeNow() throws Exception{
         checkFindReservationByBuildingRoomDateExpectations(building,room,null);
-        rmgr.findReservationById(building.getBuildingName(), room.getNumber(), dateBeforeNow);
+        rmgr.findReservationBySpaceAndDate(building.getBuildingName(), room.getNumber(), dateBeforeNow);
     }
     
     @Test(expected = IncorrectTimeException.class)
     public void testCannotFindReservationByDateIncorrectFormatOfMinutes() throws Exception{
         checkFindReservationByBuildingRoomDateExpectations(building,room,null);
-        rmgr.findReservationById(building.getBuildingName(), room.getNumber(), dateIncorrectFormatOfMinutes);
+        rmgr.findReservationBySpaceAndDate(building.getBuildingName(), room.getNumber(), dateIncorrectFormatOfMinutes);
     }
     
     @Test
     public void testFindReservationByBuildingRoomDate() throws Exception{
         checkFindReservationByBuildingRoomDateExpectations(building,room,reservation);
-        rmgr.findReservationById(building.getBuildingName(), room.getNumber(), date);
+        rmgr.findReservationBySpaceAndDate(building.getBuildingName(), room.getNumber(), date);
     }
     
     @Test
     public void testNotFindReservationByBuildingRoomDate() throws Exception{
         checkFindReservationByBuildingRoomDateExpectations(building,room,null);
-        rmgr.findReservationById(building.getBuildingName(), room.getNumber(), date);
+        rmgr.findReservationBySpaceAndDate(building.getBuildingName(), room.getNumber(), date);
     }
 
     

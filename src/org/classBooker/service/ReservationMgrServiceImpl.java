@@ -130,20 +130,12 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
         Room room = spaceDao.getRoomById(roomId);
         User user = userDao.getUserByNif(nif);
         datetime = initialTime;
-        if (room == null) {
-            throw new IncorrectRoomException();
-        }
-        if (user == null || !(user instanceof ReservationUser)) {
-            throw new IncorrectUserException();
-        }
-        if (datetime.isBeforeNow() || datetime.getMinuteOfHour() != 0) {
-            throw new IncorrectTimeException();
-        }
-        if (alreadyExistingReservation(datetime, room)) {
-            return null;
-        } else {
-            return new Reservation(datetime, (ReservationUser) user, room);
-        }
+        
+        checkRoom(room);
+        checkUser(user);
+        checkDate(datetime);
+        Reservation r= makeReservation(datetime,user,room); 
+        return r;
     }
 
     /**
@@ -190,19 +182,13 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     
 
     @Override
-    public Reservation findReservationById(String buildingName, String roomNumber, DateTime date) throws DAOException {
+    public Reservation findReservationBySpaceAndDate(String buildingName, String roomNumber, DateTime date) throws DAOException {
         Building building = spaceDao.getBuildingByName(buildingName);
         Room room = spaceDao.getRoomByNbAndBuilding(roomNumber, buildingName);
         datetime = date;
-        if (room == null) {
-            throw new IncorrectRoomException();
-        }
-        if (building == null) {
-            throw new IncorrectBuildingException();
-        }
-        if (datetime.isBeforeNow() || datetime.getMinuteOfHour() != 0) {
-            throw new IncorrectTimeException();
-        }
+        checkRoom(room);
+        checkBuilding(building);
+        checkDate(datetime);
         return reservationDao.getReservationByDateRoomBulding(datetime, roomNumber, buildingName);
     }
 
@@ -263,6 +249,38 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
             return new ArrayList();
         }
         return nonReservedRooms;
+    }
+
+    private void checkRoom(Room room) throws DAOException{
+        if (room == null) {
+            throw new IncorrectRoomException("can not find the room");
+        }
+    }
+
+    private void checkUser(User user) throws DAOException{
+          if (user == null || !(user instanceof ReservationUser)) {
+            throw new IncorrectUserException("user not exist");
+        }
+    }
+
+    private void checkDate(DateTime datetime) throws DAOException{
+        if (datetime.isBeforeNow() || datetime.getMinuteOfHour() != 0) {
+            throw new IncorrectTimeException("incorrect date time format");
+        }
+    }
+
+    private Reservation makeReservation(DateTime datetime, User user, Room room) throws DAOException {
+       if (alreadyExistingReservation(datetime, room)) {
+            return null;
+        } else {
+            return new Reservation(datetime, (ReservationUser) user, room);
+        }
+    }
+
+    private void checkBuilding(Building building)throws DAOException {
+       if (building == null) {
+            throw new IncorrectBuildingException("can not find the building");
+        }
     }
     
 
