@@ -11,12 +11,6 @@ import java.util.ArrayList;
 import org.classBooker.dao.ReservationDAO;
 import org.classBooker.dao.SpaceDAO;
 import org.classBooker.dao.exception.DAOException;
-import org.classBooker.dao.exception.IncorrectBuildingException;
-import org.classBooker.dao.exception.IncorrectReservationException;
-import org.classBooker.dao.exception.IncorrectRoomException;
-import org.classBooker.dao.exception.IncorrectTimeException;
-import org.classBooker.dao.exception.IncorrectTypeException;
-import org.classBooker.dao.exception.IncorrectUserException;
 import org.classBooker.entity.Reservation;
 import org.classBooker.entity.ReservationUser;
 import org.classBooker.entity.Room;
@@ -72,22 +66,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
         if(lfreser == null){
             return new ArrayList<>();
         }else{
-            if(startDate != null && endDate != null & lfreser.size()>0){
-                lfreser = getReservationAndDates(startDate, endDate,lfreser);
-            }
-            if(buildingName !=null & lfreser.size()>0){
-                lfreser = getReservationAndBuilding(buildingName,lfreser);
-            }
-            if(roomNb !=null & buildingName != null & lfreser.size()>0){
-               
-                lfreser = getReservationAndRoom(roomNb,buildingName,lfreser);
-            }
-            if(capacity >0 & lfreser.size()>0){
-                lfreser = getReservationAndCapacity(capacity,lfreser);
-            }
-            if(roomType != null & lfreser.size()>0){
-                lfreser = getReservationAndRoomType(roomType,lfreser);
-            }
+            lfreser=validateField(startDate,endDate,buildingName,roomNb,capacity,roomType,lfreser);
         }           
         return lfreser;
     }
@@ -117,7 +96,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     private List <Reservation> getReservationAndRoom(String roomNb,
                                                     String buildingName,
                                                     List<Reservation>lfreser) 
-            throws IncorrectBuildingException, IncorrectRoomException, DAOException{
+            throws DAOException{
        
         Room roomID = spaDao.getRoomByNbAndBuilding(roomNb,buildingName);
 
@@ -177,13 +156,47 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
           }
       }
         
-      return !((nif==null || nif.matches("\\d{1,8}")) &&
-             (buildingName==null || buildingName.matches("[A-Z][a-z].*")) &&
-             (roomNb==null || roomNb.matches("\\d\\.\\d")) &&
-              capacity>=0 &&
-             (roomType==null || roomType.matches("[A-Z][a-z]+.*")));
+      return !comprovateFields(nif,buildingName,roomNb,capacity,roomType);
+    }
+    private List <Reservation> validateField(DateTime startDate,
+                              DateTime endDate, 
+                              String buildingName,
+                              String roomNb,
+                              int capacity,
+                              String roomType,
+                              List<Reservation>lfreser) throws DAOException{
+        List <Reservation> aux = lfreser;
+        
+        if(startDate != null && endDate != null & lfreser.size()>0){
+                aux = getReservationAndDates(startDate, endDate,lfreser);
+            }
+            if(buildingName !=null & aux.size()>0){
+                aux = getReservationAndBuilding(buildingName,aux);
+            }
+            if(roomNb !=null & buildingName != null & aux.size()>0){
+               
+                aux = getReservationAndRoom(roomNb,buildingName,aux);
+            }
+            if(capacity >0 & aux.size()>0){
+                aux = getReservationAndCapacity(capacity,aux);
+            }
+            if(roomType != null & aux.size()>0){
+                aux = getReservationAndRoomType(roomType,aux);
+            }
+         return aux;   
     }
     
+    private boolean comprovateFields(String nif,String buildingName,
+                                     String roomNb,
+                                     int capacity,
+                                     String roomType){        
+        
+      return ((nif==null || nif.matches("\\d{1,8}")) &&    
+              (buildingName==null || buildingName.matches("[A-Z][a-z].*")) &&
+              (roomNb==null || roomNb.matches("\\d\\.\\d")) &&
+               capacity>=0 &&
+              (roomType==null || roomType.matches("[A-Z][a-z]+.*")));           
+    }
     public void setResDao(ReservationDAO resDao) {
         this.resDao = resDao;
     }
@@ -261,32 +274,32 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     }
 
     @Override
-    public void acceptReservation(Reservation reservation) throws IncorrectReservationException, IncorrectUserException, IncorrectRoomException {
+    public void acceptReservation(Reservation reservation) throws DAOException {
         throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     @Override
-    public List<Room> suggestionSpace(String roomNb, String building, DateTime resDate) throws IncorrectTypeException, IncorrectBuildingException, IncorrectRoomException {
+    public List<Room> suggestionSpace(String roomNb, String building, DateTime resDate) throws DAOException{
         throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     @Override
-    public Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws IncorrectBuildingException {
+    public Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws DAOException {
         throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     @Override
-    public List<Room> obtainAllRoomsWithSameFeatures(String type, int capacity, String building, DateTime date) throws IncorrectBuildingException, IncorrectRoomException {
+    public List<Room> obtainAllRoomsWithSameFeatures(String type, int capacity, String building, DateTime date) throws DAOException {
         throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     @Override
-    public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws IncorrectTimeException, IncorrectUserException, IncorrectRoomException, IncorrectBuildingException {
+    public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws DAOException{
         throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     @Override
-    public Reservation makeReservationBySpace(long roomld, String nif, DateTime initialTime) throws IncorrectRoomException, IncorrectUserException, IncorrectTimeException, IncorrectBuildingException {
+    public Reservation makeReservationBySpace(long roomld, String nif, DateTime initialTime) throws DAOException {
         throw new UnsupportedOperationException("Not supported yet."); 
     }
 
