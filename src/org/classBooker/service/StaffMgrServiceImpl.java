@@ -153,10 +153,8 @@ public class StaffMgrServiceImpl implements StaffMgrService{
             doc.getDocumentElement().normalize();
             
             NodeList nList = doc.getElementsByTagName("user");
-            int x = nList.getLength();
-            System.out.println(x);
-            for(int temp = 0; temp<x; temp++){
-                System.out.println("Temp: "+ temp+"X: "+x);
+            
+            for(int temp = 0; temp<nList.getLength(); temp++){
                 Node nNode = nList.item(temp);
                 
                 Element eElement = (Element) nNode;
