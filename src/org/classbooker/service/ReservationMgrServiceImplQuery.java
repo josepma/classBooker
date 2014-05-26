@@ -191,12 +191,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
                                      String roomType){     
         boolean validate1 =validateNif(nif) & validateBuilding(buildingName);
         boolean validate2 = validateRoomNb(roomNb) && validateCapacity(capacity);
-        return validateRoomType(roomType) && validate1 && validate2;
-//      return ((nif==null || nif.matches("\\d{1,8}")) &&    
-//              (buildingName==null || buildingName.matches("[A-Z][a-z].*")) &&
-//              (roomNb==null || roomNb.matches("\\d\\.\\d")) &&
-//               capacity>=0 &&
-//              (roomType==null || roomType.matches("[A-Z][a-z]+.*")));           
+        return validateRoomType(roomType) && validate1 && validate2;          
     }
     
     private boolean validateNif(String nif){
@@ -214,37 +209,6 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     private boolean validateRoomType(String roomType){
         return (roomType==null || roomType.matches("[A-Z][a-z]+.*"));
     }
-    
-//    private boolean validateNif(String nif,String buildingName,
-//                                     String roomNb,
-//                                     int capacity,
-//                                     String roomType){
-//        return (nif==null || nif.matches("\\d{1,8}")) && validateBuilding(buildingName,
-//                                     roomNb,
-//                                     capacity,
-//                                     roomType);
-//    }
-//    private boolean validateBuilding(String buildingName,
-//                                     String roomNb,
-//                                     int capacity,
-//                                     String roomType){
-//        return (buildingName==null || buildingName.matches("[A-Z][a-z].*")) && validateRoomNb(roomNb,
-//                                     capacity,
-//                                     roomType);
-//    }
-//    private boolean validateRoomNb(String roomNb,
-//                                     int capacity,
-//                                     String roomType){
-//        return (roomNb==null || roomNb.matches("\\d\\.\\d")) && validateCapacity(capacity,
-//                                     roomType);
-//    }
-//    private boolean validateCapacity(int capacity,
-//                                     String roomType){
-//        return capacity>=0 && validateRoomType(roomType);
-//    }
-//    private boolean validateRoomType(String roomType){
-//        return (roomType==null || roomType.matches("[A-Z][a-z]+.*"));
-//    }
     public void setResDao(ReservationDAO resDao) {
         this.resDao = resDao;
     }
