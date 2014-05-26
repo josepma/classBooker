@@ -36,6 +36,10 @@ public abstract class User {
     @Column(name="name")
     private String name;
     
+    private static final int HASH = 5;
+    private static final int HASH_MULTI = 79;    
+    
+    
     public User(String nif, String email, String name) {
         this.nif = nif;
         this.email = email;
@@ -55,12 +59,14 @@ public abstract class User {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.nif);
-        hash = 67 * hash + Objects.hashCode(this.email);
-        hash = 67 * hash + Objects.hashCode(this.name);
+        int hash = HASH;
+        hash = HASH_MULTI * hash + Objects.hashCode(this.nif);
+        hash = HASH_MULTI * hash + Objects.hashCode(this.email);
+        hash = HASH_MULTI * hash + Objects.hashCode(this.name);
         return hash;
     }
+    
+    
     
     @Override
     public boolean equals(Object obj) {

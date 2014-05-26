@@ -1,6 +1,6 @@
 package org.classbooker.main;
 
-public class Main{
+public final class Main{
 
     private Main(){
         

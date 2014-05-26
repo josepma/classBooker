@@ -16,10 +16,10 @@ import org.classbooker.service.exception.UnexpectedFormatFileException;
  * @author josepma
  */
 public interface StaffMgrService {
-    public void addUser(User user) throws AlreadyExistingUserException;
-    public void addMassiveUser(String filename) 
+    void addUser(User user) throws AlreadyExistingUserException;
+    void addMassiveUser(String filename) 
             throws UnexpectedFormatFileException, InexistentFileException;
-    public User getUser(String nif);
-    public void deleteUser(User user);
-    public void modifyUserInformation(User user);
+    User getUser(String nif);
+    void deleteUser(User user);
+    void modifyUserInformation(User user);
 }
