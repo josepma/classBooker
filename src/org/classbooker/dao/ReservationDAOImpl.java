@@ -36,7 +36,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     private UserDAO uDao;
     private SpaceDAO sDao;
     
-    private Logger logger = Logger.getLogger("ReservationDAOImpl.log");
+    private final Logger logger = Logger.getLogger("ReservationDAOImpl.log");
     
 
     public EntityManager getEm() {
@@ -107,7 +107,6 @@ public class ReservationDAOImpl implements ReservationDAO{
                 return res;
             }
         }
-        System.out.print("No Reserva");
         return null;
     }
     
@@ -246,8 +245,7 @@ public class ReservationDAOImpl implements ReservationDAO{
                                 .toCalendar(Locale.getDefault()))
                 .setParameter("reservationRoom",  
                                 reservation.getRoom()).getSingleResult();
-        }catch(NonUniqueResultException ex ){
-            throw new AlredyExistReservationException(logger,"checkExistingReservationForOtherUser");
+
         }catch(NoResultException ex){
             return false;
         }
