@@ -1,6 +1,5 @@
 package org.classbooker.dao.exception;
 
-import org.apache.log4j.Logger;
 
 /*
  * To change this template, choose Tools | Templates
@@ -29,8 +28,5 @@ public class PersistException extends DAOException {
      */
     public PersistException(String msg) {
         super(msg);
-    }
-    public PersistException(Logger log,String nameFunction) {
-        log.error("in"+ nameFunction +"error:"+ this.getMessage());
     }
 }

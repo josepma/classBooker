@@ -8,7 +8,6 @@ package org.classbooker.dao;
 
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import org.classbooker.dao.exception.AlreadyExistingUserException;
@@ -42,16 +41,13 @@ public class UserDAOImpl implements UserDAO{
     @Override
     public void addUser(User user) throws AlreadyExistingUserException {
         User u = getUserByNif(user.getNif());
-        if(u!=null)
+        if(u!=null){
             throw new AlreadyExistingUserException();
-        try{
-            em.getTransaction().begin();
-            em.persist(user);
-            em.getTransaction().commit();
         }
-        finally{
-            
-        }
+        em.getTransaction().begin();
+        em.persist(user);
+        em.getTransaction().commit();
+
     }
 
     @Override
@@ -59,14 +55,10 @@ public class UserDAOImpl implements UserDAO{
         
         User u = null;
         
-        try{
-            em.getTransaction().begin();
-            u = em.find(User.class, nif);
-            em.getTransaction().commit();
-        }
-        finally{
-            
-        }
+        em.getTransaction().begin();
+        u = em.find(User.class, nif);
+        em.getTransaction().commit();
+        
         return u;
     }
     
@@ -74,16 +66,12 @@ public class UserDAOImpl implements UserDAO{
     public List<User> getUsersByName(String name) {
         List<User> users = null;
         
-        try{
-            em.getTransaction().begin();
-            Query q = em.createQuery
-                    ("SELECT u FROM User u WHERE u.name ='"+name+"'");
-            users = q.getResultList();
-            em.getTransaction().commit();
-        }
-        finally{
-            
-        }
+        em.getTransaction().begin();
+        Query q = em.createQuery
+                ("SELECT u FROM User u WHERE u.name ='"+name+"'");
+        users = q.getResultList();
+        em.getTransaction().commit();
+        
         return users;
     }
 
@@ -91,36 +79,30 @@ public class UserDAOImpl implements UserDAO{
     public List<User> getAllUsers() {
         List<User> users = null;
         
-        try{
-            em.getTransaction().begin();
-            Query q = em.createQuery
-                    ("SELECT u FROM User u ");
-            users = q.getResultList();
-            em.getTransaction().commit();
-        }
-        finally{
+        em.getTransaction().begin();
+        Query q = em.createQuery
+                ("SELECT u FROM User u ");
+        users = q.getResultList();
+        em.getTransaction().commit();
             
-        }
         return users;
     }
 
     @Override
     public void modifyUser(User user) throws PersistException, IncorrectUserException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     @Override
     public void removeUser(User user) throws IncorrectUserException {
-        try{
-            em.getTransaction().begin();
-            Query q = em.createQuery
-                    ("DELETE FROM User u WHERE u.nif ='"+user.getNif()+"'");
-            q.executeUpdate();
-            em.getTransaction().commit();
-        }
-        finally{
-            
-        }
+        
+        em.getTransaction().begin();
+        Query q = em.createQuery
+                ("DELETE FROM User u WHERE u.nif ='"+user.getNif()+"'");
+        q.executeUpdate();
+        em.getTransaction().commit();
+        
     }
     
     public void tearDown(){
@@ -128,10 +110,10 @@ public class UserDAOImpl implements UserDAO{
 
         Query query = em.createQuery("DELETE FROM User");
 
-        int deleteRecords = query.executeUpdate();
+        query.executeUpdate();
 
         em.getTransaction().commit();
-        System.out.println("All records have been deleted.");
+        
     }
     
 }
