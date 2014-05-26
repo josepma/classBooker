@@ -2,11 +2,11 @@ package org.classbooker.main;
 
 public class Main{
 
-    public static void main(String[] args) throws Exception{
+    private Main(){
         
-        System.out.println("hello world");
-        
-        
+    }
+    public static void main(String[] args){
+        //Empty method
     }
 
 }

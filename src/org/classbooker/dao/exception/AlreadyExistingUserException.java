@@ -6,7 +6,6 @@
 
 package org.classbooker.dao.exception;
 
-import org.apache.log4j.Logger;
 
 /**
  *
@@ -28,8 +27,4 @@ public class AlreadyExistingUserException extends DAOException {
     public AlreadyExistingUserException(String msg) {
         super(msg);
     }
-    public AlreadyExistingUserException(Logger log,String nameFunction) {
-        log.error("in"+ nameFunction +"error:"+ this.getMessage());
-    }
-    
 }
