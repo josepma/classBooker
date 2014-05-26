@@ -89,7 +89,7 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public void modifyUser(User user) throws PersistException, IncorrectUserException {
+    public void modifyUser(User user) throws PersistException {
         //To change body of generated methods, choose Tools | Templates.
         throw new UnsupportedOperationException("Not supported yet."); 
     }

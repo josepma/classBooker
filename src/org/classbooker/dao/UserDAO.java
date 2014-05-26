@@ -62,7 +62,7 @@ public interface UserDAO {
      * @throws PersistException
      * @throws IncorrectUserException
      */
-    void modifyUser(User user) throws PersistException, IncorrectUserException;
+    void modifyUser(User user) throws PersistException;
     
     /**
      *
