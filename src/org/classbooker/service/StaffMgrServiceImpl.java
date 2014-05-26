@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
-import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.log4j.Level;
@@ -38,6 +36,7 @@ import org.w3c.dom.NodeList;
 public class StaffMgrServiceImpl implements StaffMgrService{
     
     UserDAO u;
+    private static final Logger LOGGER = Logger.getLogger(ReservationMgrServiceImpl.class);
     
     public StaffMgrServiceImpl(){
         u =new UserDAOImpl();
@@ -62,21 +61,22 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         for (User us : lUsers){
             try{
                 addUser(us);
-            }
-            catch(AlreadyExistingUserException e){
-                Logger.getLogger(ReservationMgrServiceImpl.class).log(Level.INFO, "The file contains Repeated Users");
+            }catch(AlreadyExistingUserException e){
+                LOGGER.log(Level.INFO, "The file contains Repeated Users ",e);
             }
         }
     }
 
     @Override
     public void deleteUser(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("The operation deleteUser is not supported yet."); 
     }
 
     @Override
     public void modifyUserInformation(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("The operation modifyUserInformation is not supported yet."); 
     }
 
     private List<User> parseFile(String filename) 
@@ -85,11 +85,9 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         List<User> lUsers = new ArrayList<>();
         if(isCSV(filename)){
             lUsers = parseCsv(filename);
-        }            
-        else if(isXml(filename)){
+        }else if(isXml(filename)){
             lUsers = parseXml(filename);
-        }
-        else{
+        }else{
             throw new UnexpectedFormatFileException();
         }    
         return lUsers;
@@ -116,25 +114,18 @@ public class StaffMgrServiceImpl implements StaffMgrService{
             while((line=br.readLine())!=null){
                 StringTokenizer strTok = new StringTokenizer(line,";");
                 if(strTok.countTokens()!=3){
-                    Logger.getLogger(ReservationMgrServiceImpl.class).log(Level.INFO, "Bad data user.");
-                }
-                else{
+                    badDataUser();
+                }else{
                     String nif = strTok.nextToken();
                     String name = strTok.nextToken();
                     String mail = strTok.nextToken();
-
-                    User us = createGoodProffesorpas(nif, mail, name);
-                    if(us!=null){
-                        lUsers.add(us);
-                    }
+                    createGoodProffesorpas(nif, mail, name, lUsers);
                 }
             }
-        }
-        catch(FileNotFoundException e){
-                
-        }
-        catch(IOException e){
-            
+        }catch(FileNotFoundException e){
+            LOGGER.log(Level.WARN, e);
+        }catch(IOException e){
+            LOGGER.log(Level.WARN, e);
         }
         return lUsers;
     }
@@ -158,35 +149,24 @@ public class StaffMgrServiceImpl implements StaffMgrService{
                 Node nNode = nList.item(temp);
                 
                 Element eElement = (Element) nNode;
-                try{
-                    String nif = eElement.getElementsByTagName("nif").item(0).getTextContent();
-                    String name = eElement.getElementsByTagName("name").item(0).getTextContent();
-                    String email = eElement.getElementsByTagName("email").item(0).getTextContent();
-                    User us = createGoodProffesorpas(nif, email, name);
-                    if(us!=null){
-                        lUsers.add(us);
-                    }
-                }
-                catch(NullPointerException e){
-                    Logger.getLogger(ReservationMgrServiceImpl.class).log(Level.INFO, "Bad data user.");
-                }
+                
+                obtainElementInformation(eElement,lUsers);
+                
             }
-        }
-        catch(Exception e){
-            
+        }catch(Exception e){
+            LOGGER.log(Level.WARN, e);
         }
         return lUsers;
     }
 
-    private User createGoodProffesorpas(String nif, String mail, String name) {
+    private void createGoodProffesorpas(String nif, String mail, String name, List<User> lUser) {
         if(nif.replaceAll(" ", "").isEmpty() || 
                 mail.replaceAll(" ", "").isEmpty() ||
                 name.replaceAll(" ", "").isEmpty()){
             Logger.getLogger(ReservationMgrServiceImpl.class).log(Level.INFO, "Empty data user.");
-            return null;
-        }
-        else{
-            return new ProfessorPas(nif, mail, name);
+        }else{
+            User user = new ProfessorPas(nif, mail, name);
+            lUser.add(user);
         }
     }
 
@@ -194,5 +174,22 @@ public class StaffMgrServiceImpl implements StaffMgrService{
     public User getUser(String nif) {
         return u.getUserByNif(nif);
     }
+
+    private void badDataUser() {
+        LOGGER.log(Level.INFO, "Bad data user.");
+    }
+
+    private void obtainElementInformation(Element eElement, List<User> lUsers) {
+        try{
+            String nif = eElement.getElementsByTagName("nif").item(0).getTextContent();
+            String name = eElement.getElementsByTagName("name").item(0).getTextContent();
+            String email = eElement.getElementsByTagName("email").item(0).getTextContent();
+            createGoodProffesorpas(nif, email, name, lUsers);
+        }catch(NullPointerException e){
+            LOGGER.log(Level.INFO, "Bad data user in the xml.",e);
+        }
+    }
+
+    
     
 }
