@@ -8,6 +8,7 @@ package org.classbooker.entity;
 import javax.persistence.*;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  *
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 @Entity
 @Table(name="BUILDING")
 public class Building {
+
+
     
     @Id
     @Column (name="NAME")
@@ -76,8 +79,12 @@ public class Building {
                 ((Building) obj).name.equals(this.name);          
     }
     
+
     @Override
     public int hashCode() {
-        return this.hashCode(); 
+        int hash = 5;
+        hash = 17 * hash + Objects.hashCode(this.name);
+        hash = 17 * hash + Objects.hashCode(this.rooms);
+        return hash;
     }
 }
