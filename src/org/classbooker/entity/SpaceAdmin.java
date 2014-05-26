@@ -6,7 +6,6 @@
 
 package org.classbooker.entity;
 
-import java.util.List;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 

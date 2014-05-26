@@ -35,12 +35,7 @@ public abstract class User {
     
     @Column(name="name")
     private String name;
-
-    @Override
-    public String toString() {
-        return "User{" + "nif=" + nif + ", email=" + email + ", name=" + name + '}';
-    }
-
+    
     public User(String nif, String email, String name) {
         this.nif = nif;
         this.email = email;
@@ -51,6 +46,11 @@ public abstract class User {
         this.nif="";
         this.email="";
         this.name="";
+    }
+
+    @Override
+    public String toString() {
+        return "User{" + "nif=" + nif + ", email=" + email + ", name=" + name + '}';
     }
 
     @Override
