@@ -265,9 +265,11 @@ public class SpaceDAOImpl implements SpaceDAO {
             throw new AlredyExistReservationException();
         }
         if (capacity != 0) {
+            
             modifyCapacity(room, capacity);
         }
         if (type != null) {
+         
             modifyType(room, type);
         }
     }
@@ -373,10 +375,11 @@ public class SpaceDAOImpl implements SpaceDAO {
     }
 
     private void modifyType(Room room, String type) throws DAOException {
+      
         Room newRoom = null;
         try {
 
-            Constructor classType = Class.forName("org.classBooker.entity." + type)
+            Constructor classType = Class.forName("org.classbooker.entity." + type)
                     .getConstructor(Building.class, String.class, int.class);
 
             newRoom = (Room) classType.newInstance(room.getBuilding(),
@@ -385,7 +388,6 @@ public class SpaceDAOImpl implements SpaceDAO {
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             log.warning("Error");
         }
-
         removeRoom(room);
         addRoom(newRoom);
 

@@ -222,7 +222,7 @@ public class SpaceDAOImplIntegTest {
      *
      * @throws java.lang.Exception
      */
-  //  @Test
+    @Test
     public void testModifyCapacityRoom() throws Exception {
         buildingfind= ema.find(Building.class, "EPS"); 
         Room room = new ClassRoom(buildingfind, "2.29", 30);
