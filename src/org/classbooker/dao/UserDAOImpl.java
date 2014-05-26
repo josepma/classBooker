@@ -44,14 +44,11 @@ public class UserDAOImpl implements UserDAO{
         User u = getUserByNif(user.getNif());
         if(u!=null)
             throw new AlreadyExistingUserException();
-        try{
+
             em.getTransaction().begin();
             em.persist(user);
             em.getTransaction().commit();
-        }
-        finally{
-            
-        }
+
     }
 
     @Override
