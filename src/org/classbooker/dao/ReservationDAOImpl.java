@@ -283,11 +283,11 @@ public class ReservationDAOImpl implements ReservationDAO{
 
         Query query = em.createQuery("DELETE FROM Reservation");
 
-        int deleteRecords = query.executeUpdate();
+        query.executeUpdate();
 
         em.getTransaction().commit();
         em.close();
-        System.out.println("All records have been deleted.");
+        logger.info("All records of reservation have been deleted.");
     }
 
 }
