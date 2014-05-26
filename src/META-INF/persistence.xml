@@ -1,57 +1,45 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
-  version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
   <persistence-unit name="classBooker" transaction-type="RESOURCE_LOCAL">
-  <class>org.classBooker.entity.Building</class>
-  <class>org.classBooker.entity.ClassRoom</class>
-  <class>org.classBooker.entity.LaboratoryRoom</class>
-  <class>org.classBooker.entity.MeetingRoom</class>
-  <class>org.classBooker.entity.ProfessorPas</class>
-  <class>org.classBooker.entity.Reservation</class>
-  <class>org.classBooker.entity.ReservationUser</class>
-  <class>org.classBooker.entity.Room</class>
-  <class>org.classBooker.entity.SpaceAdmin</class>
-  <class>org.classBooker.entity.StaffAdmin</class>
-  <class>org.classBooker.entity.User</class>
-    
+    <class>org.classbooker.entity.ReservationUser</class>
+    <class>org.classbooker.entity.MeetingRoom</class>
+    <class>org.classbooker.entity.Room</class>
+    <class>org.classbooker.entity.LaboratoryRoom</class>
+    <class>org.classbooker.entity.ClassRoom</class>
+    <class>org.classbooker.entity.StaffAdmin</class>
+    <class>org.classbooker.entity.Building</class>
+    <class>org.classbooker.entity.ProfessorPas</class>
+    <class>org.classbooker.entity.Reservation</class>
+    <class>org.classbooker.entity.User</class>
+    <class>org.classbooker.entity.SpaceAdmin</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" 
-                value="jdbc:derby:memory:classBookerDB;create=true"/> 
-      <property name="eclipselink.ddl-generation" value="create-tables"/>  
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby:memory:classBookerDB;create=true"/>
+      <property name="eclipselink.ddl-generation" value="create-tables"/>
       <property name="javax.persistence.jdbc.user" value="dbuser"/>
-      <property name="javax.persistence.jdbc.driver" 
-                value="org.apache.derby.jdbc.EmbeddedDriver"/>
+      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
       <property name="javax.persistence.jdbc.password" value="dbuser"/>
-      <property name="eclipselink.ddl-generation.output-mode" value="database" />
+      <property name="eclipselink.ddl-generation.output-mode" value="database"/>
     </properties>
   </persistence-unit>
-  
-  
-   <persistence-unit name="classBookerIntegration">
-     <class>org.classBooker.entity.Building</class>
-     <class>org.classBooker.entity.ClassRoom</class>
-     <class>org.classBooker.entity.LaboratoryRoom</class>
-     <class>org.classBooker.entity.MeetingRoom</class>
-     <class>org.classBooker.entity.ProfessorPas</class>
-     <class>org.classBooker.entity.Reservation</class>
-     <class>org.classBooker.entity.ReservationUser</class>
-     <class>org.classBooker.entity.Room</class>
-     <class>org.classBooker.entity.SpaceAdmin</class>
-     <class>org.classBooker.entity.StaffAdmin</class>
-     <class>org.classBooker.entity.User</class>
-
-     <properties>
-      <property name="javax.persistence.jdbc.url" 
-                value="jdbc:mysql://sql3.freemysqlhosting.net:3306/sql339811"/> 
-      <property name="eclipselink.ddl-generation" value="create-tables"/>  
+  <persistence-unit name="classBookerIntegration">
+    <class>org.classbooker.entity.ReservationUser</class>
+    <class>org.classbooker.entity.MeetingRoom</class>
+    <class>org.classbooker.entity.Room</class>
+    <class>org.classbooker.entity.LaboratoryRoom</class>
+    <class>org.classbooker.entity.ClassRoom</class>
+    <class>org.classbooker.entity.StaffAdmin</class>
+    <class>org.classbooker.entity.Building</class>
+    <class>org.classbooker.entity.ProfessorPas</class>
+    <class>org.classbooker.entity.Reservation</class>
+    <class>org.classbooker.entity.User</class>
+    <class>org.classbooker.entity.SpaceAdmin</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://sql3.freemysqlhosting.net:3306/sql339811"/>
+      <property name="eclipselink.ddl-generation" value="create-tables"/>
       <property name="javax.persistence.jdbc.user" value="sql339811"/>
-      <property name="javax.persistence.jdbc.driver" 
-                value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.password" value="gT8*gJ3*"/>
-      <property name="eclipselink.ddl-generation.output-mode" value="database" />
-      </properties>
-   </persistence-unit>
-  
-  
+      <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+    </properties>
+  </persistence-unit>
 </persistence>
