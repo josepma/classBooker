@@ -37,6 +37,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
     
     private UserDAO u;
     private static final Logger LOGGER = Logger.getLogger(ReservationMgrServiceImpl.class);
+    private static final int X = 3;
     
     public StaffMgrServiceImpl(){
         u =new UserDAOImpl();
@@ -56,7 +57,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
 
     @Override
     public void addMassiveUser(String filename) 
-            throws UnexpectedFormatFileException, InexistentFileException{
+            throws Exception{
         
         List<User> lUsers = parseFile(filename);
         
@@ -81,8 +82,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         throw new UnsupportedOperationException("The operation modifyUserInformation is not supported yet."); 
     }
 
-    private List<User> parseFile(String filename) 
-            throws UnexpectedFormatFileException, InexistentFileException{
+    private List<User> parseFile(String filename) throws InexistentFileException, UnexpectedFormatFileException{
         
         List<User> lUsers = new ArrayList<>();
         if(isCSV(filename)){
@@ -115,7 +115,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
             String line;
             while((line=br.readLine())!=null){
                 StringTokenizer strTok = new StringTokenizer(line,";");
-                if(strTok.countTokens()!=3){
+                if(strTok.countTokens()!=X){
                     badDataUser();
                 }else{
                     String nif = strTok.nextToken();
