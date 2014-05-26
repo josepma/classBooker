@@ -35,7 +35,7 @@ import org.w3c.dom.NodeList;
  */
 public class StaffMgrServiceImpl implements StaffMgrService{
     
-    UserDAO u;
+    private UserDAO u;
     private static final Logger LOGGER = Logger.getLogger(ReservationMgrServiceImpl.class);
     
     public StaffMgrServiceImpl(){

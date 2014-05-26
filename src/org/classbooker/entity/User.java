@@ -24,7 +24,7 @@ import javax.persistence.Table;
 @Table(name="USERT")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="USER_TYPE",
-        discriminatorType=DiscriminatorType.STRING,length=5)
+        discriminatorType=DiscriminatorType.STRING)
 public abstract class User {
     @Id
     @Column(name="NIF")
