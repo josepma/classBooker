@@ -66,12 +66,15 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
         sDao.setEm(em);
         uDao.setEntityManager(em);
         rDao.setEm(em);
+        
+        rDao.setsDao(sDao);
+        rDao.setuDao(uDao);
 
         nif = "123";
         building = new Building("B1");
-        capacity = 100;
+        capacity = 30;
         room = new ClassRoom(building, "2.10", capacity);
-        dateTime = new DateTime(2015, 2, 3, 4, 0);
+        dateTime = new DateTime(2015, 5, 26, 9, 0);
         rUser = new ProfessorPas();
         reservation = new Reservation(dateTime, rUser, room);
         rResult = new ReservationResult(reservation, rUser);
@@ -89,30 +92,30 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
     public void tearDown() {
     }
 
-    @Test
+    //@Test
     public void suggestedSpacesAssertRequirements() throws Exception {
-
+        Room room = sDao.getRoomByNbAndBuilding("2.03", "EPS");
         List<Room> suggestedRooms = rms.suggestionSpace("2.03", "EPS", dateTime);
         if (suggestedRooms.isEmpty()) {
             fail("No spaces suggested.");
         }
-        assertSuggestedSpacesRequirements(suggestedRooms);
+        assertSuggestedSpacesRequirements(suggestedRooms, room);
     }
 
-    /*@Test
+    //@Test
     public void notSuggestedSpacesIfRoomsWhichAssertRequirementsAreReserved() throws Exception {
 
         List<Room> suggestedRooms = rms.suggestionSpace(room.getNumber(), building.getBuildingName(), dateTime);
         assertTrue(suggestedRooms.isEmpty());
     }
 
-    @Test
+    //@Test
     public void notSuggestedSpacesIfNoRoomsAssertRequirements() throws Exception {
 
         List<Room> suggestedRooms = rms.suggestionSpace(room.getNumber(), building.getBuildingName(), dateTime);
         assertTrue(suggestedRooms.isEmpty());
     }
-
+/*
     @Test
     public void testGetCurrentUserOfDemandedRoom() throws Exception {
 
@@ -194,8 +197,10 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
         }
     }
 
-    private void assertSuggestedSpacesRequirements(List<Room> rooms) {
+    private void assertSuggestedSpacesRequirements(List<Room> rooms, Room room) {
         for (Room r : rooms) {
+            assertFalse("Is the same room", r.getNumber().equals(room.getNumber()) 
+                    && r.getBuilding().equals(room.getBuilding()));
             assertEquals("Different room types.", r.getClass(), room.getClass());
             assertTrue("Less capacity than room intended to reserve.",
                     r.getCapacity() >= room.getCapacity());

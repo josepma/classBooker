@@ -232,6 +232,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
         Reservation res;
         List<Room> nonReservedRooms = new ArrayList<>();
         for (Room r : rooms) {
+            System.out.println(r.getNumber());
             res = reservationDao.getReservationByDateRoomBulding(date, r.getNumber(), r.getBuilding().getBuildingName());
             if (res == null) {
                 nonReservedRooms.add(r);

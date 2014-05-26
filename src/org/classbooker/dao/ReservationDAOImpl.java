@@ -100,13 +100,14 @@ public class ReservationDAOImpl implements ReservationDAO{
                                                             String buildingName) 
                                               throws DAOException {
         
-        Room room =  sDao.getRoomByNbAndBuilding(roomNb, buildingName);
+        Room room =  sDao.getRoomByNbAndBuilding(roomNb, buildingName);        
         List<Reservation> reservations = room.getReservations();
         for (Reservation res : reservations) {
             if (res.getReservationDate().isEqual(dateTime)) {
                 return res;
             }
         }
+        System.out.print("No Reserva");
         return null;
     }
     
