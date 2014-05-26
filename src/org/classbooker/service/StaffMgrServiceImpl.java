@@ -42,7 +42,9 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         u =new UserDAOImpl();
         
     }
-    
+    public UserDAO getUserDAO(){
+        return this.u;
+    }
     public void setUserDao(UserDAO u){
         this.u=u;
     }
