@@ -17,6 +17,7 @@ import org.classbooker.dao.SpaceDAO;
 import org.classbooker.dao.SpaceDAOImpl;
 import org.classbooker.dao.UserDAO;
 import org.classbooker.dao.UserDAOImpl;
+import org.classbooker.dao.exception.DAOException;
 import org.classbooker.dao.exception.IncorrectRoomException;
 import org.classbooker.entity.Building;
 import org.classbooker.entity.ClassRoom;
@@ -46,7 +47,7 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
     UserDAO uDao;
     ReservationDAO rDao;
     EntityManager em;
-    Room room;
+    Room room25, room30, room20;
     Building building;
     DateTime dateTime;
     ReservationUser rUser;
@@ -63,39 +64,46 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
         sDao = new SpaceDAOImpl();
         uDao = new UserDAOImpl();
         rDao = new ReservationDAOImpl();
+        
         sDao.setEm(em);
         uDao.setEntityManager(em);
-        rDao.setEm(em);
-        
+        rDao.setEm(em);        
         rDao.setsDao(sDao);
         rDao.setuDao(uDao);
-
-        nif = "123";
-        building = new Building("B1");
-        capacity = 30;
-        room = new ClassRoom(building, "2.10", capacity);
-        dateTime = new DateTime(2015, 5, 26, 9, 0);
-        rUser = new ProfessorPas();
-        reservation = new Reservation(dateTime, rUser, room);
-        rResult = new ReservationResult(reservation, rUser);
-        room.setReservation(reservation);
-
         rms.setSpaceDao(sDao);
         rms.setReservationDao(rDao);
         rms.setUserDao(uDao);
+        
+        nif = "123";
+        building = sDao.getBuildingByName("EPS");
+        room25 = new ClassRoom(building, "25", 25);
+        room20 = new ClassRoom(building, "20", 20);
+        room30 = new ClassRoom(building, "30", 30);
+        sDao.addRoom(room25);
+        sDao.addRoom(room20);
+        sDao.addRoom(room30);
+        dateTime = new DateTime(2015, 5, 26, 9, 0);
+        rUser = new ProfessorPas();
+        uDao.addUser(rUser);
+        reservation = new Reservation(dateTime, rUser, room25);
+        rDao.addReservation(reservation);
 
-        lRooms = new ArrayList<>();
-        lRooms.add(room);
     }
 
     @After
-    public void tearDown() {
+    public void tearDown() throws DAOException {
+        sDao.removeRoom(room25);
+        sDao.removeRoom(room30);
+        sDao.removeRoom(room20);        
+        uDao.removeUser(rUser);
+        rDao.removeReservation(dateTime, "25", "EPS");
+        
     }
 
     //@Test
     public void suggestedSpacesAssertRequirements() throws Exception {
-        Room room = sDao.getRoomByNbAndBuilding("2.03", "EPS");
-        List<Room> suggestedRooms = rms.suggestionSpace("2.03", "EPS", dateTime);
+        Room room = sDao.getRoomByNbAndBuilding("25", "EPS");
+        List<Room> suggestedRooms = rms.suggestionSpace("25", "EPS", dateTime);
         if (suggestedRooms.isEmpty()) {
             fail("No spaces suggested.");
         }
@@ -105,14 +113,14 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
     //@Test
     public void notSuggestedSpacesIfRoomsWhichAssertRequirementsAreReserved() throws Exception {
 
-        List<Room> suggestedRooms = rms.suggestionSpace(room.getNumber(), building.getBuildingName(), dateTime);
+        List<Room> suggestedRooms = rms.suggestionSpace(room25.getNumber(), building.getBuildingName(), dateTime);
         assertTrue(suggestedRooms.isEmpty());
     }
 
     //@Test
     public void notSuggestedSpacesIfNoRoomsAssertRequirements() throws Exception {
 
-        List<Room> suggestedRooms = rms.suggestionSpace(room.getNumber(), building.getBuildingName(), dateTime);
+        List<Room> suggestedRooms = rms.suggestionSpace(room25.getNumber(), building.getBuildingName(), dateTime);
         assertTrue(suggestedRooms.isEmpty());
     }
 /*
