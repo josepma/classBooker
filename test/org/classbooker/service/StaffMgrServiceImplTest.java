@@ -107,7 +107,7 @@ public class StaffMgrServiceImplTest {
         final List<LoggingEvent> log = appender.getLog();
         final LoggingEvent firstLogEntrey = log.get(0);
         String l = firstLogEntrey.getMessage().toString();
-        assertEquals(l,"The file contains Repeated Users");
+        assertEquals(l,"The file contains Repeated Users ");
         assertEquals(staff.getUser(u.getNif()),u);
     }
     
@@ -132,7 +132,7 @@ public class StaffMgrServiceImplTest {
         String l = firstLogEntrey.getMessage().toString();
         assertEquals(l,"Empty data user.");
         l = secondLogEntrey.getMessage().toString();
-        assertEquals(l,"Bad data user.");
+        assertEquals(l,"Bad data user in the xml.");
         assertEquals(staff.getUser(u.getNif()),u);
     }
     
