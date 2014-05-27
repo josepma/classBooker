@@ -22,19 +22,19 @@ public interface ReservationDAO {
      * Set the Entitymanager
      * @param em EntityManager
      */
-    public void setEm(EntityManager em);
+    void setEm(EntityManager em);
 
     /**
      * Set the UserDAO
      * @param uDao UserDAO
      */
-    public void setuDao(UserDAO uDao);
+    void setuDao(UserDAO uDao);
     
     /**
      * Set the SpaceDAO
      * @param sDao SpaceDAO
      */
-    public void setsDao(SpaceDAO sDao);
+    void setsDao(SpaceDAO sDao);
     
     
     
@@ -150,5 +150,5 @@ public interface ReservationDAO {
     /**
      * Tear down date of reservation Table
      */
-    public void tearDown();
+    void tearDown();
 }
