@@ -23,6 +23,7 @@ import org.classbooker.dao.exception.AlreadyExistingUserException;
 import org.classbooker.entity.ProfessorPas;
 import org.classbooker.entity.User;
 import org.classbooker.service.exception.InexistentFileException;
+import org.classbooker.service.exception.ServiceException;
 import org.classbooker.service.exception.UnexpectedFormatFileException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -57,7 +58,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
 
     @Override
     public void addMassiveUser(String filename) 
-            throws Exception{
+            throws ServiceException{
         
         List<User> lUsers = parseFile(filename);
         
@@ -82,7 +83,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         throw new UnsupportedOperationException("The operation modifyUserInformation is not supported yet."); 
     }
 
-    private List<User> parseFile(String filename) throws InexistentFileException, UnexpectedFormatFileException{
+    private List<User> parseFile(String filename) throws ServiceException{
         
         List<User> lUsers = new ArrayList<>();
         if(isCSV(filename)){
@@ -103,7 +104,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         return filename.endsWith(".xml");
     }
 
-    private List<User> parseCsv(String filename) throws InexistentFileException{
+    private List<User> parseCsv(String filename) throws ServiceException{
         List<User> lUsers = new ArrayList();
         File f = new File(filename);
         if(!f.exists()){
@@ -132,7 +133,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         return lUsers;
     }
 
-    private List<User> parseXml(String filename) throws InexistentFileException {
+    private List<User> parseXml(String filename) throws ServiceException {
         List<User> lUsers = new ArrayList();
         File f = new File(filename);
         if(!f.exists()){
