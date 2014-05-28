@@ -99,8 +99,8 @@ public interface SpaceDAO {
      * Get building by name
      *
      * @param name
-     * @return building if don't find it, return null
-     * @throws IncorrectBuildingException
+     * @return building if don't find it, return NonBuildingException
+     * @throws NonBuildingException
      */
     Building getBuildingByName(String name) throws DAOException;
 
@@ -151,7 +151,7 @@ public interface SpaceDAO {
      *
      * @param buildingName The building name Ex.("EPS")
      * @param roomNb The number about room Ex.(2.01)
-     * @return Room return null if non exist room
+     * @return Room return NonBuildingException if non exist room
      * @throws org.classBooker.dao.exception.IncorrectBuildingException
      * @throws org.classBooker.dao.exception.IncorrectRoomException
      */

@@ -136,13 +136,11 @@ public class SpaceDAOImpl implements SpaceDAO {
      *
      */
     @Override
-    public Building getBuildingByName(String name) {
-        Building building = null;
-
-     
+    public Building getBuildingByName(String name) throws DAOException {
+        Building building = null;       
         building = (Building) em.find(Building.class, name);
-    
-
+        if (building==null)
+             throw new NonBuildingException();  
         return building;
     }
 
@@ -173,7 +171,7 @@ public class SpaceDAOImpl implements SpaceDAO {
      *
      */
     @Override
-    public List<Room> getAllRoomsOfOneBuilding(String buildingName) {
+    public List<Room> getAllRoomsOfOneBuilding(String buildingName) throws DAOException {
 
         Building building = getBuildingByName(buildingName);
         return building.getRooms();
@@ -186,8 +184,7 @@ public class SpaceDAOImpl implements SpaceDAO {
      *
      * @param type
      * @return List<Room>
-     *
-     * @throws org.classBooker.dao.exception.IncorrectTypeException
+     * @throws org.classbooker.dao.exception.DAOException
      *
      */
     @Override

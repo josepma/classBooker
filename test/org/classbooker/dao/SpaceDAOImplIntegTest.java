@@ -80,7 +80,7 @@ public class SpaceDAOImplIntegTest {
        
        
         if(roomnew!=null)
-        { System.out.print("Remove"+roomnew);
+        { 
             ema.remove(roomnew);}
         if(buildingnew!=null)
             ema.remove(buildingnew);
