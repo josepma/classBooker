@@ -256,19 +256,20 @@ public class SpaceDAOImpl implements SpaceDAO {
     }
 
     @Override
-    public void modifyRoom(Room room, String type, int capacity) throws DAOException {
-
+    public Room modifyRoom(Room room, String type, int capacity) throws DAOException {
+        Room roomnew=null;
         if (!room.getReservations().isEmpty()) {
             throw new AlredyExistReservationException();
         }
         if (capacity != 0) {
             
-            modifyCapacity(room, capacity);
+            roomnew=modifyCapacity(room, capacity);
         }
         if (type != null) {
          
-            modifyType(room, type);
+            roomnew=modifyType(room, type);
         }
+        return roomnew;
     }
 
     @Override
@@ -276,6 +277,7 @@ public class SpaceDAOImpl implements SpaceDAO {
         if (!roomExist(room)) {
             throw new NoneExistingRoomException();
         }
+         System.out.print("Remove"+room.toString());
         room.getBuilding().getRooms().remove(room);
         em.remove(room);
     }
@@ -363,15 +365,15 @@ public class SpaceDAOImpl implements SpaceDAO {
         return true;
     }
 
-    private void modifyCapacity(Room room, int capacity) {
+    private Room modifyCapacity(Room room, int capacity) {
 
     
         room.setCapacity(capacity);
-
+        return room;
 
     }
 
-    private void modifyType(Room room, String type) throws DAOException {
+    private Room modifyType(Room room, String type) throws DAOException {
       
         Room newRoom = null;
         try {
@@ -381,13 +383,12 @@ public class SpaceDAOImpl implements SpaceDAO {
 
             newRoom = (Room) classType.newInstance(room.getBuilding(),
                     room.getNumber(), room.getCapacity());
-
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             log.warning("Error");
         }
         removeRoom(room);
         addRoom(newRoom);
-
+        return newRoom;
     }
 
 }

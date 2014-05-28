@@ -51,7 +51,7 @@ public interface SpaceDAO {
      * @throws org.classBooker.dao.exception.AlredyExistReservationException
      * @throws org.classBooker.dao.exception.NoneExistingRoomException
      */
-     void modifyRoom(Room room, String newType, int capacity) throws DAOException;
+     Room modifyRoom(Room room, String newType, int capacity) throws DAOException;
 
     /**
      * Remove a exisiting Room
