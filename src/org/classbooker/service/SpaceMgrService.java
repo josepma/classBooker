@@ -6,6 +6,7 @@
 
 package org.classbooker.service;
 
+import org.classbooker.dao.exception.DAOException;
 import org.classbooker.entity.Building;
 import org.classbooker.entity.Room;
 
@@ -14,8 +15,8 @@ import org.classbooker.entity.Room;
  * @author josepma
  */
 public interface SpaceMgrService {
-    public void addRoom(long id, String buildingName, int capacity, String type);
-    public void addBuilding(long id, String name);
+    public void addRoom(String number, String buildingName, int capacity, String type) throws DAOException;
+    public void addBuilding(String name) throws DAOException;
     public void deleteRoom(long id);
     public void deleteBuilding(long id);
     public Room modifyRoom(long id, String buildingName, int capacity, String type);
