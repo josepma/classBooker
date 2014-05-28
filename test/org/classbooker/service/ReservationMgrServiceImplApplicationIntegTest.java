@@ -133,7 +133,7 @@ public class ReservationMgrServiceImplApplicationIntegTest {
     //find reservationById(Space and Date)
    
     
-    //test no va , porque spaceDao si building =null, null.getrooms() lanza nullpointer Exception//
+    
     @Test (expected = NonBuildingException.class)
     public void testCannotFindReservationByBuilding() throws Exception{
         
@@ -141,7 +141,6 @@ public class ReservationMgrServiceImplApplicationIntegTest {
     }
    
     @Test(expected = IncorrectRoomException.class)
-    // in datebase room with roomnumber 2.05 doesn't exist
     public void testCannotFindReservationByRoom() throws Exception{
        
         rmgr.findReservationBySpaceAndDate("Rectorate Building","5.555555", correctDate);
