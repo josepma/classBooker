@@ -42,6 +42,56 @@ INSERT INTO `BUILDING` (`NAME`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `ROOM`
+--
+
+CREATE TABLE IF NOT EXISTS `ROOM` (
+  `ROOMID` bigint(20) NOT NULL,
+  `ROOM_TYPE` varchar(5) DEFAULT NULL,
+  `CAPACITY` int(11) DEFAULT NULL,
+  `NUMBER` varchar(255) DEFAULT NULL,
+  `BUILDING` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ROOMID`),
+  KEY `FK_ROOM_BUILDING` (`BUILDING`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `ROOM`
+--
+
+INSERT INTO `ROOM` (`ROOMID`, `ROOM_TYPE`, `CAPACITY`, `NUMBER`, `BUILDING`) VALUES
+(1, 'MET_R', 40, '1', 'Main Library'),
+(2, 'CLA_R', 50, '2', 'Main Library'),
+(3, 'CLA_R', 50, '1', 'Rectorate Building'),
+(4, 'LAB_R', 40, '2', 'Rectorate Building');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `USERT`
+--
+
+CREATE TABLE IF NOT EXISTS `USERT` (
+  `NIF` varchar(255) NOT NULL,
+  `USER_TYPE` varchar(5) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`NIF`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `USERT`
+--
+
+INSERT INTO `USERT` (`NIF`, `USER_TYPE`, `email`, `name`) VALUES
+('12345678', 'PPS_U', 'RalphPoteus@aus.com', 'Ralph Poteus'),
+('12457638', 'STF_U', 'SophieSpedelung@aus.com', 'Sophie Spedelung'),
+('45998872', 'SPC_U', 'NiklausWitmark@gmail.com', 'Niklaus Witmark'),
+('55555', 'PPS_U', 'manganito@gmail.com', 'Manganito'),
+('9876544', 'PPS_U', 'rspend@aus.edu', 'Robert Spendelung');
+
+-- --------------------------------------------------------
+--
 -- Estructura de tabla para la tabla `RESERVATION`
 --
 
@@ -82,33 +132,6 @@ INSERT INTO `RESERVATION` (`IDENTIFIER`, `DATE`, `USERT`, `ROOM`) VALUES
 (20, '2014-07-11 18:00:00', '12345678', 3);
 
 -- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `ROOM`
---
-
-CREATE TABLE IF NOT EXISTS `ROOM` (
-  `ROOMID` bigint(20) NOT NULL,
-  `ROOM_TYPE` varchar(5) DEFAULT NULL,
-  `CAPACITY` int(11) DEFAULT NULL,
-  `NUMBER` varchar(255) DEFAULT NULL,
-  `BUILDING` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`ROOMID`),
-  KEY `FK_ROOM_BUILDING` (`BUILDING`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `ROOM`
---
-
-INSERT INTO `ROOM` (`ROOMID`, `ROOM_TYPE`, `CAPACITY`, `NUMBER`, `BUILDING`) VALUES
-(1, 'MET_R', 40, '1', 'Main Library'),
-(2, 'CLA_R', 50, '2', 'Main Library'),
-(3, 'CLA_R', 50, '1', 'Rectorate Building'),
-(4, 'LAB_R', 40, '2', 'Rectorate Building');
-
--- --------------------------------------------------------
-
 --
 -- Estructura de tabla para la tabla `SEQUENCE`
 --
@@ -125,31 +148,6 @@ CREATE TABLE IF NOT EXISTS `SEQUENCE` (
 
 INSERT INTO `SEQUENCE` (`SEQ_NAME`, `SEQ_COUNT`) VALUES
 ('SEQ_GEN', '3100');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `USERT`
---
-
-CREATE TABLE IF NOT EXISTS `USERT` (
-  `NIF` varchar(255) NOT NULL,
-  `USER_TYPE` varchar(5) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`NIF`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `USERT`
---
-
-INSERT INTO `USERT` (`NIF`, `USER_TYPE`, `email`, `name`) VALUES
-('12345678', 'PPS_U', 'RalphPoteus@aus.com', 'Ralph Poteus'),
-('12457638', 'STF_U', 'SophieSpedelung@aus.com', 'Sophie Spedelung'),
-('45998872', 'SPC_U', 'NiklausWitmark@gmail.com', 'Niklaus Witmark'),
-('55555', 'PPS_U', 'manganito@gmail.com', 'Manganito'),
-('9876544', 'PPS_U', 'rspend@aus.edu', 'Robert Spendelung');
 
 --
 -- Restricciones para tablas volcadas
