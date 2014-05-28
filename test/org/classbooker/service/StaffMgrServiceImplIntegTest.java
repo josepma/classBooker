@@ -148,8 +148,7 @@ public class StaffMgrServiceImplIntegTest {
     
     @After
     public void clear(){
-        UserDAOImpl ud = (UserDAOImpl)uDao;
-        ud.tearDown();
+        staff.deleteUser(u);
     }
     
 }
