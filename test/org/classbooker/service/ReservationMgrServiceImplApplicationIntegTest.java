@@ -6,7 +6,6 @@
 
 package org.classbooker.service;
 
-import org.classbooker.service.ReservationMgrServiceImpl;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -17,7 +16,9 @@ import org.classbooker.dao.exception.IncorrectReservationException;
 import org.classbooker.dao.exception.IncorrectRoomException;
 import org.classbooker.dao.exception.IncorrectTimeException;
 import org.classbooker.dao.exception.IncorrectUserException;
+import org.classbooker.dao.exception.NonBuildingException;
 import org.classbooker.entity.Reservation;
+import org.classbooker.service.ReservationMgrServiceImpl;
 import org.joda.time.DateTime;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
@@ -133,7 +134,7 @@ public class ReservationMgrServiceImplApplicationIntegTest {
    
     
     //test no va , porque spaceDao si building =null, null.getrooms() lanza nullpointer Exception//
-   // @Test (expected = IncorrectBuildingException.class)
+    @Test (expected = NonBuildingException.class)
     public void testCannotFindReservationByBuilding() throws Exception{
         
         rmgr.findReservationBySpaceAndDate("ADE", "2.08", correctDate);
@@ -143,19 +144,19 @@ public class ReservationMgrServiceImplApplicationIntegTest {
     // in datebase room with roomnumber 2.05 doesn't exist
     public void testCannotFindReservationByRoom() throws Exception{
        
-        rmgr.findReservationBySpaceAndDate("EPS","2.05", correctDate);
+        rmgr.findReservationBySpaceAndDate("Rectorate Building","5.555555", correctDate);
     }
     
     @Test(expected = IncorrectTimeException.class)
     public void testCannotFindReservationByDateIsBeforeNow() throws Exception{
-        rmgr.findReservationBySpaceAndDate("EPS","2.08", dateBeforeNow);
+        rmgr.findReservationBySpaceAndDate("Rectorate Building","2.0", dateBeforeNow);
     
     }
     
     @Test(expected = IncorrectTimeException.class)
     public void testCannotFindReservationByDateIncorrectFormatOfMinutes() throws Exception{
        
-         rmgr.findReservationBySpaceAndDate("EPS","2.08",dateIncorrectFormatOfMinutes);
+         rmgr.findReservationBySpaceAndDate("Rectorate Building","2.0",dateIncorrectFormatOfMinutes);
     }
     
     

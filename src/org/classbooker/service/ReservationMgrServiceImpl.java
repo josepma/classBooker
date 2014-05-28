@@ -164,8 +164,9 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     public List<Reservation> findReservationByNif(String nif) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
     /**
-     * Return an particular reservationMade by a concrete ReservationId
+     * Return a particular reservationMade by a concrete ReservationId
      * If not exists, will throwIncorrectReservationException.
      */
     @Override
@@ -183,7 +184,10 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     }
 
     
-
+     /**
+     * Return a particular reservation Made by a concrete space and a concrete date
+     * if exists some errors, it will throws exceptions
+     */
     @Override
     public Reservation findReservationBySpaceAndDate(String buildingName, String roomNumber, DateTime date) throws DAOException {
         Building building = spaceDao.getBuildingByName(buildingName);
