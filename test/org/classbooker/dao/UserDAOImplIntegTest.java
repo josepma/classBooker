@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import org.classbooker.dao.exception.AlreadyExistingUserException;
 import org.classbooker.dao.exception.IncorrectUserException;
 import org.classbooker.entity.User;
@@ -55,6 +56,16 @@ public class UserDAOImplIntegTest {
         udao.addUser(u1);
         User exp = findUserByNif("66666");
         assertEquals(u1,exp);
+        removeUser(exp);
+    }
+    
+    @Test
+    public void testRemoveUser() throws Exception{
+        User user = udao.getUserByNif("12345");
+        assertEquals(u,user);
+        udao.removeUser(user);
+        user = udao.getUserByNif("12345");
+        assertNull(user);
     }
     
     @Test(expected = AlreadyExistingUserException.class)
@@ -89,42 +100,11 @@ public class UserDAOImplIntegTest {
         assertEquals(new ArrayList(),users);
         
     }
-    
-    @Test
-    public void testGetMoreThanOneUserByName() throws Exception {
-        User u1 = new ProfessorPas("44444","manganito1@gmail.com","Manganito");
-        User u2 = new ProfessorPas("66666","manganito2@gmail.com","Manganito");
-        udao.addUser(u1);
-        udao.addUser(u2);
-        List<User> expected = new ArrayList<>();
-        expected.add(u1);
-        expected.add(u2);
-        Set<User> expectedSet = new HashSet(expected);
-        List<User> users = udao.getUsersByName("Manganito");
-        Set<User> userSet = new HashSet(users);
-        assertEquals("These two users should be equals",expectedSet,userSet);
-        
-    }
-    
-    @Test
-    public void testGetAllUsers() throws Exception {
-        List<User> users = udao.getAllUsers();
-        Set<User> userSet = new HashSet(users);
-        assertEquals("These two users should be equals",userSet,expectedSet);
-        
-    }
-    
-    @Test
-    public void testGetAllUsersWithEmptyDatabase() throws Exception {
-        clear();
-        List<User> users = udao.getAllUsers();
-        assertEquals(new ArrayList(),users);
-    }
-    
-    
+ 
     @After
     public void clear() throws IncorrectUserException{
-        udao.tearDown();
+        removeUser(u);
+        removeUser(us);
     }
     
     private void addUser(User u){
@@ -153,6 +133,15 @@ public class UserDAOImplIntegTest {
             
         }
         return u;
+    }
+    
+    private void removeUser(User u){
+        EntityManager em = udao.getEntityManager();
+        em.getTransaction().begin();
+        Query q = em.createQuery
+                ("DELETE FROM User u WHERE u.nif ='"+u.getNif()+"'");
+        q.executeUpdate();
+        em.getTransaction().commit();
     }
     
 }

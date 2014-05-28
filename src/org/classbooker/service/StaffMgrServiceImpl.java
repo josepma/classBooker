@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 import org.classbooker.dao.UserDAO;
 import org.classbooker.dao.UserDAOImpl;
 import org.classbooker.dao.exception.AlreadyExistingUserException;
+import org.classbooker.dao.exception.IncorrectUserException;
 import org.classbooker.entity.ProfessorPas;
 import org.classbooker.entity.User;
 import org.classbooker.service.exception.InexistentFileException;
@@ -73,8 +74,11 @@ public class StaffMgrServiceImpl implements StaffMgrService{
 
     @Override
     public void deleteUser(User user) {
-        //To change body of generated methods, choose Tools | Templates.
-        throw new UnsupportedOperationException("The operation deleteUser is not supported yet."); 
+        try {
+            u.removeUser(user);
+        } catch (IncorrectUserException ex) {
+            LOGGER.log(Level.INFO, "This is a incorrect User ",ex);
+        }
     }
 
     @Override
