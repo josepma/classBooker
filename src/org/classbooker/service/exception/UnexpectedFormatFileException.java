@@ -8,7 +8,7 @@ package org.classbooker.service.exception;
  *
  * @author Antares
  */
-public class UnexpectedFormatFileException extends Exception{
+public class UnexpectedFormatFileException extends ServiceException{
     
      /**
      * Creates a new instance of <code>UnexpectedFormatFileException</code> without

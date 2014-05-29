@@ -47,7 +47,6 @@ public class SpaceDAOImplIntegTest {
     SpaceDAOImpl sdi;
     Room roomfind, roomnew, labRoom, meetRoom, classRoom;
     Building buildingfind, buildingnew;
-    //ReseReservationrvationDAOImpl reservation;
     DateTime dataRes1;
     ReservationUser user1;
     Reservation reserv;
@@ -66,7 +65,6 @@ public class SpaceDAOImplIntegTest {
     @Before
     public void setUp() {
         
-        roomfind = new ClassRoom(buildingfind, "2.01", 30);
         user1 = new ProfessorPas("55555", "manganito@gmail.com", "Manganito");
         dataRes1 = new DateTime(2014, 05, 11, 12, 00);
         ema = getEntityManager();
@@ -80,8 +78,8 @@ public class SpaceDAOImplIntegTest {
        
        
         if(roomnew!=null)
-        { System.out.print("Remove"+roomnew);
-            ema.remove(roomnew);}
+        {  
+            sdi.removeRoom(roomnew);}
         if(buildingnew!=null)
             ema.remove(buildingnew);
         ema.getTransaction().commit();
@@ -96,9 +94,7 @@ public class SpaceDAOImplIntegTest {
     public void testAddRoom() throws Exception {
         buildingfind= ema.find(Building.class, "EPS");        
         roomnew = new ClassRoom(buildingfind, "2.09", 30);      
-      //  ema.getTransaction().begin();
         long rom = sdi.addRoom(roomnew);
-     //   ema.getTransaction().commit();
         Room roomdb = sdi.getRoomByNbAndBuilding("2.09", buildingfind.getBuildingName());
         
         assertEquals(roomdb.getBuilding(), roomnew.getBuilding());
@@ -116,10 +112,8 @@ public class SpaceDAOImplIntegTest {
     @Test(expected = AlreadyExistingRoomException.class)
     public void testAddExistingRoom() throws Exception {
         roomfind = ema.find(Room.class, (long)1);  
-     //   ema.getTransaction().begin();
         sdi.addRoom(roomfind);
-    //    ema.getTransaction().commit();
-
+   
     }
 
     /**
@@ -129,8 +123,8 @@ public class SpaceDAOImplIntegTest {
     @Test(expected = NonBuildingException.class)
     public void testAddRoomNoneExistingBuilding() throws Exception {
         buildingnew = new Building("FDE");
-        roomnew = new ClassRoom(buildingnew, "2.01", 30);
-        sdi.addRoom(roomnew);
+        Room room = new ClassRoom(buildingnew, "2.01", 30);
+        sdi.addRoom(room);
     }
 
     /**
@@ -141,13 +135,13 @@ public class SpaceDAOImplIntegTest {
     @Test
     public void testRemoveRoom() throws Exception {
         buildingfind= ema.find(Building.class, "EPS"); 
-        roomnew = new ClassRoom(buildingfind, "2.10", 30);
+        Room room = new ClassRoom(buildingfind, "2.10", 30);
         
-        long rom = sdi.addRoom(roomnew);
-        sdi.removeRoom(roomnew);
+        long rom = sdi.addRoom(room);
+        sdi.removeRoom(room);
         
 
-        assertFalse(sdi.getAllRooms().contains(roomnew));
+        assertFalse(sdi.getAllRooms().contains(room));
         assertFalse(sdi.getAllRoomsOfOneBuilding(buildingfind.getBuildingName()).contains(buildingfind));
     }
 
@@ -186,7 +180,12 @@ public class SpaceDAOImplIntegTest {
         expected.add(ema.find(Room.class, (long)2));
         expected.add(ema.find(Room.class, (long)3));
         expected.add(ema.find(Room.class, (long)4));
-        expected.add(ema.find(Room.class, (long)3053));
+        expected.add(ema.find(Room.class, (long)15));
+        expected.add(ema.find(Room.class, (long)20));
+        expected.add(ema.find(Room.class, (long)25));
+        expected.add(ema.find(Room.class, (long)30));        
+        expected.add(ema.find(Room.class, (long)3401));
+        expected.add(ema.find(Room.class, (long)3402));
         List<Room> result = sdi.getAllRooms();
         Set<Room> resultSet = new HashSet(result);
         assertEquals(expected, resultSet);
@@ -226,42 +225,37 @@ public class SpaceDAOImplIntegTest {
     public void testModifyCapacityRoom() throws Exception {
         buildingfind= ema.find(Building.class, "EPS"); 
         Room room = new ClassRoom(buildingfind, "2.29", 30);
-        long id = sdi.addRoom(room);
-        sdi.modifyRoom(room, null, 20);
-        roomnew=sdi.getRoomById(id);        
-        System.out.println("rooomnew "+roomnew.toString());
+        ema.persist(room);
+        roomnew=sdi.modifyRoom(room, null, 20);       
         assertEquals(20, roomnew.getCapacity());
         
     }
 
-   // @Test
+    @Test
     public void testModifyTypeRoom() throws Exception {
         buildingfind= ema.find(Building.class, "EPS"); 
-        Room room = new ClassRoom(buildingfind, "2.19", 30);
-        long id = sdi.addRoom(room);
-        sdi.modifyRoom(room, "MeetingRoom", 0);
-        ema.remove(room);
+        Room room = new ClassRoom(buildingfind, "2.39", 30);
+        ema.persist(room);
+        roomnew=sdi.modifyRoom(room, "MeetingRoom", 0);
+        assertTrue(roomnew instanceof MeetingRoom);
         
     }
 
-   // @Test
+    @Test
     public void testModifyTypeAndCapacityRoom() throws Exception {
         buildingfind= ema.find(Building.class, "EPS"); 
-        Room room = new ClassRoom(buildingfind, "2.19", 30);
-        long id = sdi.addRoom(room);
-        sdi.modifyRoom(room, "MeetingRoom", 50);
-        ema.remove(room);
+        Room room = new ClassRoom(buildingfind, "3.29", 30);
+        ema.persist(room);
+        roomnew=sdi.modifyRoom(room, "MeetingRoom", 50);
+        assertTrue(roomnew instanceof MeetingRoom);
+        assertEquals(50, roomnew.getCapacity());
       }
 
-    //@Test(expected = AlredyExistReservationException.class)
+    @Test(expected = AlredyExistReservationException.class)
     public void testModifyRoomWithExistingReservation() throws Exception {
-        buildingfind= ema.find(Building.class, "EPS"); 
-        roomnew = new ClassRoom(buildingfind, "2.19", 30);
-        long id = sdi.addRoom(roomnew);
-        List<Reservation> reservations = new ArrayList<Reservation>();
-        reservations.add(reserv);
-        roomnew.setReservations(reservations);
-        sdi.modifyRoom(roomnew, "MeetingRoom", 50);
+        
+        roomfind = ema.find(Room.class, (long)1);       
+        sdi.modifyRoom(roomfind, "MeetingRoom", 50);
     }
 
     /**
@@ -301,7 +295,8 @@ public class SpaceDAOImplIntegTest {
         expected.add(ema.find(Building.class, "Main Library"));
         expected.add(ema.find(Building.class, "Rectorate Building"));
         expected.add(ema.find(Building.class, "EPS"));
-        expected.add(ema.find(Building.class, "Acceptance"));
+        expected.add(ema.find(Building.class, "testBuilding1"));
+        expected.add(ema.find(Building.class, "testBuilding2"));
         List<Building> result = sdi.getAllBuildings();
         Set<Building> resultSet = new HashSet(result);
         assertEquals(expected, resultSet);
@@ -336,6 +331,8 @@ public class SpaceDAOImplIntegTest {
         buildingfind= ema.find(Building.class, "Main Library");         
         List<Room> meetingRooms = new ArrayList<Room>();
         meetingRooms.add(meetRoom);
+        meetingRooms.add(ema.find(Room.class, (long)3401));
+        meetingRooms.add(ema.find(Room.class, (long)3402));
         buildingfind.setRooms(meetingRooms);
         Set<Room> roomsSet = new HashSet<>(meetingRooms);
         Set<Room> result = new HashSet<>(sdi.getAllRoomsOfOneType("MeetingRoom"));

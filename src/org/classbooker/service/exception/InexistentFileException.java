@@ -8,7 +8,7 @@ package org.classbooker.service.exception;
  *
  * @author Antares
  */
-public class InexistentFileException extends Exception{
+public class InexistentFileException extends ServiceException{
     
     /**
      * Creates a new instance of <code>InexistentFileException</code> without

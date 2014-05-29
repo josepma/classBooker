@@ -8,8 +8,7 @@ package org.classbooker.service;
 
 import org.classbooker.dao.exception.AlreadyExistingUserException;
 import org.classbooker.entity.User;
-import org.classbooker.service.exception.InexistentFileException;
-import org.classbooker.service.exception.UnexpectedFormatFileException;
+import org.classbooker.service.exception.ServiceException;
 
 /**
  *
@@ -18,7 +17,7 @@ import org.classbooker.service.exception.UnexpectedFormatFileException;
 public interface StaffMgrService {
     void addUser(User user) throws AlreadyExistingUserException;
     void addMassiveUser(String filename) 
-            throws Exception;
+            throws ServiceException;
     User getUser(String nif);
     void deleteUser(User user);
     void modifyUserInformation(User user);

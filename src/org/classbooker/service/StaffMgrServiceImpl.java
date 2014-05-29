@@ -20,9 +20,11 @@ import org.apache.log4j.Logger;
 import org.classbooker.dao.UserDAO;
 import org.classbooker.dao.UserDAOImpl;
 import org.classbooker.dao.exception.AlreadyExistingUserException;
+import org.classbooker.dao.exception.IncorrectUserException;
 import org.classbooker.entity.ProfessorPas;
 import org.classbooker.entity.User;
 import org.classbooker.service.exception.InexistentFileException;
+import org.classbooker.service.exception.ServiceException;
 import org.classbooker.service.exception.UnexpectedFormatFileException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -57,7 +59,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
 
     @Override
     public void addMassiveUser(String filename) 
-            throws Exception{
+            throws ServiceException{
         
         List<User> lUsers = parseFile(filename);
         
@@ -72,8 +74,11 @@ public class StaffMgrServiceImpl implements StaffMgrService{
 
     @Override
     public void deleteUser(User user) {
-        //To change body of generated methods, choose Tools | Templates.
-        throw new UnsupportedOperationException("The operation deleteUser is not supported yet."); 
+        try {
+            u.removeUser(user);
+        } catch (IncorrectUserException ex) {
+            LOGGER.log(Level.INFO, "This is a incorrect User ",ex);
+        }
     }
 
     @Override
@@ -82,7 +87,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         throw new UnsupportedOperationException("The operation modifyUserInformation is not supported yet."); 
     }
 
-    private List<User> parseFile(String filename) throws InexistentFileException, UnexpectedFormatFileException{
+    private List<User> parseFile(String filename) throws ServiceException{
         
         List<User> lUsers = new ArrayList<>();
         if(isCSV(filename)){
@@ -103,7 +108,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         return filename.endsWith(".xml");
     }
 
-    private List<User> parseCsv(String filename) throws InexistentFileException{
+    private List<User> parseCsv(String filename) throws ServiceException{
         List<User> lUsers = new ArrayList();
         File f = new File(filename);
         if(!f.exists()){
@@ -132,7 +137,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         return lUsers;
     }
 
-    private List<User> parseXml(String filename) throws InexistentFileException {
+    private List<User> parseXml(String filename) throws ServiceException {
         List<User> lUsers = new ArrayList();
         File f = new File(filename);
         if(!f.exists()){

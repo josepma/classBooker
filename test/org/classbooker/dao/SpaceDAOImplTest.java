@@ -277,10 +277,9 @@ public class SpaceDAOImplTest {
         assertEquals(building, sdi.getBuildingByName("EPS"));
     }
     
-    @Test
+    @Test(expected=NonBuildingException.class)
     public void testGetBuildingByNameNonExistBuilding() throws Exception {
-        building2 = new Building("FDE");
-        assertEquals(null, sdi.getBuildingByName("FDE"));
+        sdi.getBuildingByName("FDE");
     }
     /**
      * Test of getAllBuildings method, of class SpaceDAOImpl.
@@ -460,6 +459,12 @@ public class SpaceDAOImplTest {
     public void testgetRoomByNbAndBuildingNonExistRoom() throws Exception {
         labRoom = new LaboratoryRoom(building, "2.21", 10);
         assertEquals(null, sdi.getRoomByNbAndBuilding("2.21", "EPS"));
+    }
+    
+    @Test(expected=NonBuildingException.class)
+    public void testgetRoomByNbAndBuildingNonExistBuilding() throws Exception {
+       
+        assertEquals(null, sdi.getRoomByNbAndBuilding("2.21", "ETSEA"));
     }
     private EntityManager getEntityManager() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("classBooker");

@@ -56,6 +56,15 @@ public class UserDAOImplTest {
         assertEquals(u1,exp);
     }
     
+    @Test
+    public void testRemoveUser() throws Exception{
+        User user = udao.getUserByNif("12345");
+        assertEquals(u,user);
+        udao.removeUser(user);
+        user = udao.getUserByNif("12345");
+        assertNull(user);
+    }
+    
     @Test(expected = AlreadyExistingUserException.class)
     public void testAddRepeatedUser() throws Exception{
         udao.addUser(u);
