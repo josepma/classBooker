@@ -75,7 +75,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
       searchReservationsByFields("12345678",null,null,null,null,0,null);
       List <Reservation> tested = rmsQ.getReservationsByNif(nif);
       
-      assertEquals("12 reservations for this nif",12,tested.size());
+      assertEquals("Same size",13,tested.size());
     }
    
     @Test 
@@ -89,7 +89,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-      assertEquals("12 reservations for this parameters",12,tested.size());
+      assertEquals("Same size",13,tested.size());
      
     }
      
@@ -106,7 +106,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               capacity,
                                                               roomType);
       
-      assertEquals("Just One reservation in this time",1,tested.size());
+      assertEquals("Same size",2,tested.size());
       
     }
     
@@ -151,7 +151,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-      assertEquals("Same size",12,tested.size());
+      assertEquals("Same size",13,tested.size());
       //assertEquals("Fifth reservation",res5,tested.get(0));
     }
     
