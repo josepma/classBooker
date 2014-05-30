@@ -82,8 +82,7 @@ public interface SpaceDAO {
      * @param building
      * @throws PersistException
      * @throws IncorrectBuildingException
-     * @throws org.classBooker.dao.exception.AlreadyExistingBuildingException
-     * @throws org.classBooker.dao.exception.AlreadyExistingRoomException
+     * @throws AlreadyExistingRoomException
      */
     void addBuilding(Building building) throws DAOException;
 

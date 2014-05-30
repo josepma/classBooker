@@ -49,7 +49,6 @@ public interface ReservationDAO {
      * when the user is null or the nif of the user is null.
      * @throws IncorrectRoomException
      * when the Room is null or the number of the room is null.
-     * @throws AlredyExistReservationException
      */
     long addReservation(Reservation reservation)
                                            throws DAOException;

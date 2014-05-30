@@ -37,12 +37,28 @@ public class SpaceMgrServiceImpl implements SpaceMgrService{
         this.spd = spd;
     }
     
+    public Room getRoomById(long id)throws DAOException{
+        return spd.getRoomById(id);
+        
+    }
+    
+    public Room getRoomByNbAndBuilding(String number, String buildingName) throws DAOException{
+        return spd.getRoomByNbAndBuilding(number, buildingName);
+    }
+    
+    
+    public Building getBuildingbyName(String name) throws DAOException{
+        return spd.getBuildingByName(name);
+    
+    }
+    
+    
     
     
     
     
     @Override
-    public void addRoom(String number, String buildingName, int capacity, String type) throws DAOException {
+    public long addRoom(String number, String buildingName, int capacity, String type) throws DAOException {
         Room newRoom = null; 
         Building building = new Building(buildingName);
         try {
@@ -57,6 +73,7 @@ public class SpaceMgrServiceImpl implements SpaceMgrService{
             log.warning("Error");
         }
         spd.addRoom(newRoom);
+        return newRoom.getRoomId();
     }
 
     @Override
