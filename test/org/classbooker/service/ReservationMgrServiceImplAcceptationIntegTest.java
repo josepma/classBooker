@@ -73,7 +73,7 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
         rms.setReservationDao(rDao);
         rms.setUserDao(uDao);
 
-        nif = "44444";
+        nif = "55555";
         building = sDao.getBuildingByName("EPS");
 
     }
@@ -135,7 +135,7 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
     @Test
     public void testCompleteReservation() throws Exception {
 
-        dateTime = new DateTime(2014, 5, 30, 9, 0);
+        dateTime = new DateTime(2015, 5, 30, 9, 0);
 
         ReservationResult rr = rms.makeCompleteReservationBySpace(nif, "0.25", "EPS", dateTime);
         User u = uDao.getUserByNif(nif);
@@ -167,7 +167,7 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
 
     @Test
     public void testMakeReservationByTypeNoEmptyRooms() throws Exception {
-        dateTime = new DateTime(2014, 5, 26, 9, 0);
+        dateTime = new DateTime(2015, 5, 26, 9, 0);
         Reservation r = rms.makeReservationByType(nif, "LaboratoryRoom", "EPS",
                 20, dateTime);
         assertNull(r);
