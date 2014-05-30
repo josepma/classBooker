@@ -109,6 +109,15 @@ public class SpaceDAOImplTest {
         sdi.addRoom(room2);
     }
 
+    @Test(expected = AlreadyExistingRoomException.class)
+    public void testAddExistingRoomEqualsBuildingAndNumber() throws Exception {
+        building2 = new Building("FDE");
+        room2 = new ClassRoom(building, "2.05", 30);
+        Room room3 = new ClassRoom(building, "2.05", 30);
+        sdi.addBuilding(building2);
+        sdi.addRoom(room2);
+        sdi.addRoom(room3);
+    }
     /**
      *
      * @throws Exception
@@ -208,6 +217,7 @@ public class SpaceDAOImplTest {
         sdi.addBuilding(building);
     }
 
+     
     /**
      * Test of modifyRoom method, of class SpaceDAOImpl.
      *
