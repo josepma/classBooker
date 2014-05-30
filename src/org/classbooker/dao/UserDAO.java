@@ -10,6 +10,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import org.classbooker.dao.exception.AlreadyExistingUserException;
 import org.classbooker.dao.exception.IncorrectUserException;
+import org.classbooker.dao.exception.InexistentUserException;
 import org.classbooker.dao.exception.PersistException;
 import org.classbooker.entity.User;
 
@@ -65,11 +66,12 @@ public interface UserDAO {
     void modifyUser(User user) throws PersistException;
     
     /**
-     *
-     * @param user
-     * @throws IncorrectUserException
+     *This function remove a User from the Database
+     * 
+     * @param user the user we want to remove
+     * @throws InexistentUserException if the user is not in the Database
      */
-    void removeUser(User user) throws IncorrectUserException;
+    void removeUser(User user) throws InexistentUserException;
     void setEntityManager(EntityManager em);
     
 }

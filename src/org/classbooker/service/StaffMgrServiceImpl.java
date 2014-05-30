@@ -21,6 +21,7 @@ import org.classbooker.dao.UserDAO;
 import org.classbooker.dao.UserDAOImpl;
 import org.classbooker.dao.exception.AlreadyExistingUserException;
 import org.classbooker.dao.exception.IncorrectUserException;
+import org.classbooker.dao.exception.InexistentUserException;
 import org.classbooker.entity.ProfessorPas;
 import org.classbooker.entity.User;
 import org.classbooker.service.exception.InexistentFileException;
@@ -76,8 +77,8 @@ public class StaffMgrServiceImpl implements StaffMgrService{
     public void deleteUser(User user) {
         try {
             u.removeUser(user);
-        } catch (IncorrectUserException ex) {
-            LOGGER.log(Level.INFO, "This is a incorrect User ",ex);
+        } catch (InexistentUserException ex) {
+            LOGGER.log(Level.INFO, "The user is not in the DB",ex);
         }
     }
 

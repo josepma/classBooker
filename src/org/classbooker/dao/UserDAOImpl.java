@@ -12,6 +12,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import org.classbooker.dao.exception.AlreadyExistingUserException;
 import org.classbooker.dao.exception.IncorrectUserException;
+import org.classbooker.dao.exception.InexistentUserException;
 import org.classbooker.dao.exception.PersistException;
 import org.classbooker.entity.User;
 
@@ -95,14 +96,19 @@ public class UserDAOImpl implements UserDAO{
     }
 
     @Override
-    public void removeUser(User user) throws IncorrectUserException {
+    public void removeUser(User user) throws InexistentUserException {
+        
+        User u = getUserByNif(user.getNif());
+        if(u==null){
+            throw new InexistentUserException();
+        }
         
         em.getTransaction().begin();
         Query q = em.createQuery
                 ("DELETE FROM User u WHERE u.nif ='"+user.getNif()+"'");
         q.executeUpdate();
         em.getTransaction().commit();
-        
+               
     }
     
     public void tearDown(){

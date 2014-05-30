@@ -15,6 +15,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import org.classbooker.dao.exception.AlreadyExistingUserException;
 import org.classbooker.dao.exception.IncorrectUserException;
+import org.classbooker.dao.exception.InexistentUserException;
 import org.classbooker.entity.User;
 import org.classbooker.entity.ProfessorPas;
 import org.junit.After;
@@ -68,6 +69,12 @@ public class UserDAOImplIntegTest {
         assertNull(user);
     }
     
+    @Test(expected = InexistentUserException.class)
+    public void removeInexistentUser() throws Exception{
+        User user  = new ProfessorPas("9999", "notin@database.com", "Inexistent");
+        udao.removeUser(user);
+    }
+    
     @Test(expected = AlreadyExistingUserException.class)
     public void testAddRepeatedUser() throws Exception{
         udao.addUser(u);
@@ -94,7 +101,7 @@ public class UserDAOImplIntegTest {
     }
     
     @Test
-    public void testGetUsersByNameWithEmptyDatabase() throws Exception {
+    public void testGetUsersByNameThatNoAreInTheDatabase() throws Exception {
         clear();
         List<User> users = udao.getUsersByName("Pepito");
         assertEquals(new ArrayList(),users);
