@@ -82,6 +82,6 @@ public class Building {
 
     @Override
     public int hashCode() {
-        return Objects.hash(this.name, this.rooms);
+        return this.name.hashCode();
     }
 }

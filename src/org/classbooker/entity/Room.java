@@ -177,7 +177,12 @@ public abstract class Room {
      */
     @Override
     public int hashCode() {
-         return Objects.hash(this.number, this.building);
+        
+       int result = 23 ;
+       result = 7 * result + this.number.hashCode();
+       result = 7 * result + this.building.getBuildingName().hashCode();
+        
+       return result;
     }
     
 }

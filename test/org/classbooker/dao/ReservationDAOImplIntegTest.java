@@ -125,7 +125,15 @@ public class ReservationDAOImplIntegTest {
         
     }
     
-    @Test
+    //This test is incorrect. The id with which the reservation will be stored in the DB
+    //will be different from reservation1.getReservationId() because the actual id is created
+    //when the reservation is stored into the DB. Any previous id is simply ignored.
+    //You have two options:
+    //1. You return the id in addReservation: 
+    //         reservationId = rDao.addReservation(reservation1);
+    //         actualReservation = getReservationFromDB(reservationId);
+    //2. You get the reservation from the DB by date, user, room.
+   // @Test
     public void testAddReservationByReservation() throws Exception {
         
         rDao.addReservation(reservation1);
@@ -217,15 +225,16 @@ public class ReservationDAOImplIntegTest {
         assertEquals(reservation1,actualReservation);
     }
 
-
-    @Test
+  //This test is incorrect. The DB contains more than just one reservation.
+  //  @Test
     public void testGetAllReservation() throws Exception{
         rDao.addReservation(reservation1);
         assertEquals(reservationsToSet(reservation1), 
                                 reservationsToSet(rDao.getAllReservation()));
      }
     
-     @Test
+  //Idem  
+  //  @Test
      public void testGetAllReservationMultiReservations() throws Exception {
         allReservation.add(reservation1);
         allReservation.add(reservation2);
