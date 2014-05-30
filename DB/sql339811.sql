@@ -2,10 +2,10 @@
 -- version 3.5.5
 -- http://www.phpmyadmin.net
 --
--- Servidor: sql3.freemysqlhosting.net
--- Tiempo de generación: 30-05-2014 a las 09:02:21
--- Versión del servidor: 5.5.35-0ubuntu0.12.04.2
--- Versión de PHP: 5.3.28
+-- Host: sql3.freemysqlhosting.net
+-- Generation Time: May 30, 2014 at 08:27 PM
+-- Server version: 5.5.35-0ubuntu0.12.04.2
+-- PHP Version: 5.3.28
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,13 +17,21 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Base de datos: `sql339811`
+-- Database: `sql339811`
 --
 
 -- --------------------------------------------------------
 
+DROP TABLE IF EXISTS `RESERVATION`;
+
+DROP TABLE IF EXISTS `USERT`;
+
+DROP TABLE IF EXISTS `ROOM`;
+
+DROP TABLE IF EXISTS `BUILDING`;
+
 --
--- Estructura de tabla para la tabla `BUILDING`
+-- Table structure for table `BUILDING`
 --
 
 CREATE TABLE IF NOT EXISTS `BUILDING` (
@@ -32,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `BUILDING` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `BUILDING`
+-- Dumping data for table `BUILDING`
 --
 
 INSERT INTO `BUILDING` (`NAME`) VALUES
@@ -43,8 +51,9 @@ INSERT INTO `BUILDING` (`NAME`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `RESERVATION`
+-- Table structure for table `RESERVATION`
 --
+
 
 CREATE TABLE IF NOT EXISTS `RESERVATION` (
   `IDENTIFIER` bigint(20) NOT NULL,
@@ -57,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `RESERVATION` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `RESERVATION`
+-- Dumping data for table `RESERVATION`
 --
 
 INSERT INTO `RESERVATION` (`IDENTIFIER`, `DATE`, `USERT`, `ROOM`) VALUES
@@ -91,7 +100,7 @@ INSERT INTO `RESERVATION` (`IDENTIFIER`, `DATE`, `USERT`, `ROOM`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ROOM`
+-- Table structure for table `ROOM`
 --
 
 CREATE TABLE IF NOT EXISTS `ROOM` (
@@ -105,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `ROOM` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `ROOM`
+-- Dumping data for table `ROOM`
 --
 
 INSERT INTO `ROOM` (`ROOMID`, `ROOM_TYPE`, `CAPACITY`, `NUMBER`, `BUILDING`) VALUES
@@ -121,9 +130,10 @@ INSERT INTO `ROOM` (`ROOMID`, `ROOM_TYPE`, `CAPACITY`, `NUMBER`, `BUILDING`) VAL
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `SEQUENCE`
+-- Table structure for table `SEQUENCE`
 --
 
+DROP TABLE IF EXISTS `SEQUENCE`;
 CREATE TABLE IF NOT EXISTS `SEQUENCE` (
   `SEQ_NAME` varchar(50) NOT NULL,
   `SEQ_COUNT` decimal(38,0) DEFAULT NULL,
@@ -131,16 +141,16 @@ CREATE TABLE IF NOT EXISTS `SEQUENCE` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `SEQUENCE`
+-- Dumping data for table `SEQUENCE`
 --
 
 INSERT INTO `SEQUENCE` (`SEQ_NAME`, `SEQ_COUNT`) VALUES
-('SEQ_GEN', '3500');
+('SEQ_GEN', '4850');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `USERT`
+-- Table structure for table `USERT`
 --
 
 CREATE TABLE IF NOT EXISTS `USERT` (
@@ -152,10 +162,12 @@ CREATE TABLE IF NOT EXISTS `USERT` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `USERT`
+-- Dumping data for table `USERT`
 --
 
 INSERT INTO `USERT` (`NIF`, `USER_TYPE`, `email`, `name`) VALUES
+('111', 'PPS_U', 'kopo@popo', 'popo'),
+('11100099', 'PPS_U', 'kopo@popo', 'popo'),
 ('12345678', 'PPS_U', 'RalphPoteus@aus.com', 'Ralph Poteus'),
 ('12457638', 'STF_U', 'SophieSpedelung@aus.com', 'Sophie Spedelung'),
 ('45998872', 'SPC_U', 'NiklausWitmark@gmail.com', 'Niklaus Witmark'),
@@ -163,18 +175,18 @@ INSERT INTO `USERT` (`NIF`, `USER_TYPE`, `email`, `name`) VALUES
 ('9876544', 'PPS_U', 'rspend@aus.edu', 'Robert Spendelung');
 
 --
--- Restricciones para tablas volcadas
+-- Constraints for dumped tables
 --
 
 --
--- Filtros para la tabla `RESERVATION`
+-- Constraints for table `RESERVATION`
 --
 ALTER TABLE `RESERVATION`
   ADD CONSTRAINT `FK_RESERVATION_ROOM` FOREIGN KEY (`ROOM`) REFERENCES `ROOM` (`ROOMID`),
   ADD CONSTRAINT `FK_RESERVATION_USERT` FOREIGN KEY (`USERT`) REFERENCES `USERT` (`NIF`);
 
 --
--- Filtros para la tabla `ROOM`
+-- Constraints for table `ROOM`
 --
 ALTER TABLE `ROOM`
   ADD CONSTRAINT `FK_ROOM_BUILDING` FOREIGN KEY (`BUILDING`) REFERENCES `BUILDING` (`NAME`);

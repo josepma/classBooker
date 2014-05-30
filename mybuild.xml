@@ -24,6 +24,7 @@
     <property name="build.lib.dir" value="${build.dir}/lib"/>
     <property name="build.report.dir" value="${build.dir}/report"/>
     <property name="dist.dir" value="${basedir}/dist"/>
+    <property name="db.dir" value="${basedir}/DB"/>
 
 
     <property name="db.dir" value="${basedir}/classBookerDB"/>
@@ -133,10 +134,25 @@
 
 
     <!-- =================================================================== -->
+    <!-- Restores database                              -->
+    <!-- =================================================================== -->
+
+    <target name="dbrestore" depends="compile">
+
+    <exec executable="mysql" failonerror="true" input="${db.dir}/sql339811.sql">
+        <arg value="--user=sql339811" />  
+        <arg value="--password=gT8*gJ3*" />  
+        <arg value="--host=sql3.freemysqlhosting.net" />  
+        <arg value="--port=3306" />  
+        <arg value="--database=sql339811" />  
+    </exec>
+    </target>
+
+    <!-- =================================================================== -->
     <!-- Performs unit tests                                                 -->
     <!-- =================================================================== -->
 
-    <target name="test" depends="compile"> 
+    <target name="test" depends="dbrestore"> 
 
         <junit printsummary="yes" haltonerror="yes" haltonfailure="yes"  
             fork="yes"> 
