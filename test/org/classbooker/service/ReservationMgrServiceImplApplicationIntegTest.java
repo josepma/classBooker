@@ -55,7 +55,7 @@ public class ReservationMgrServiceImplApplicationIntegTest {
         rmgr.makeReservationBySpace(111, "55555", correctDate);
     }
    
-    //room with roomid 2 exits in database
+    //room with roomid 2 exits in database,user with nif '2222'no exists
     @Test(expected = IncorrectUserException.class)
     public void testIncorrectUserDontExist() throws Exception{
          rmgr.makeReservationBySpace(2, "2222", correctDate);
@@ -163,7 +163,7 @@ public class ReservationMgrServiceImplApplicationIntegTest {
     public void testFindReservationByBuildingRoomDate() throws Exception{
       
         Reservation r = rmgr.findReservationBySpaceAndDate("Rectorate Building", "1.0", correctDate);
-        assertEquals("same reservation id",16,r.getReservationId());
+        assertEquals("same reservation id",rDao.getReservationById(r.getReservationId()),r);
     }
 
     @Test
