@@ -180,7 +180,7 @@ public abstract class Room {
         
        int result = 23 ;
        result = 7 * result + this.number.hashCode();
-       result = 7 * result + this.building.getBuildingName().hashCode();
+       result = 7 * result + this.building.hashCode();
         
        return result;
     }

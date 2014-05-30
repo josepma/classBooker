@@ -111,7 +111,9 @@ public class ReservationMgrServiceImplApplicationIntegTest {
         rmgr.deleteReservation(99);
     }
     
-    @Test
+    //THIS TEST IS INCORRECT. IT RELIES ON ANOTHER ONE (TESTMAKENEWRESERVATION)
+    //CHECK IF THIS HAPPENS WITH OTHER TESTS!!!!
+   // @Test
     public void testDeleteExistingReservation()throws Exception{
         Reservation result = rmgr.makeReservationBySpace(2, "55555", correctDate);
         rDao.addReservation(result);
@@ -120,7 +122,8 @@ public class ReservationMgrServiceImplApplicationIntegTest {
     }
 
     //find reservationById
-    @Test(expected = IncorrectReservationException.class)
+    //THIS TEST IS INCORRECT. THERE EXIST A RESERVATION IN THE DB WITH ID = 26!!!!
+   // @Test(expected = IncorrectReservationException.class)
     public void testCannotFindReservationById()throws Exception{
         rmgr.findReservationById(26);
     }
