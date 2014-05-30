@@ -7,6 +7,7 @@
 package org.classbooker.entity;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.*;
 /**
@@ -166,7 +167,7 @@ public abstract class Room {
     @Override
     public boolean equals(Object obj) {
         
-        return (obj instanceof Room) && ((Room)obj).roomId==(this.roomId);
+        return  ((Room)obj).building==(this.building) && ((Room)obj).number==(this.number);
                 
     }
 
@@ -176,7 +177,7 @@ public abstract class Room {
      */
     @Override
     public int hashCode() {
-        return super.hashCode(); 
+         return Objects.hash(this.number, this.building);
     }
     
 }
