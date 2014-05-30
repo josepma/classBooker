@@ -66,9 +66,15 @@ public class SpaceDAOImpl implements SpaceDAO {
         if (roomExist(room)) {
             throw new AlreadyExistingRoomException();
         }
-
+        //TRANSACTION MANAGEMENT ADDED BY JOSEPMA. PLEASE, CHECK THAT YOU WORK WITH
+        //TRANSACTIONS IN ALL ENTITY MANAGER OPS. THIS INCLUDES FIND AND GETRESULTLIST
+        //YOU COMMIT TRANSACTION AFTER FINISHING THE MANAGEMENT OF THE PERSISTENT OBJECTS
+        //EXAMPLE: IN THIS CASE, YOU DO NOT COMMIT TRANSACTION AFTER EM.PERSIST(ROOM) BUT
+        //AFTER ASSOCIATING THE ROOM WITH THE BUILDING.
+        em.getTransaction().begin();
         em.persist(room);
         building.getRooms().add(room);
+        em.getTransaction().commit();
   
 
         return room.getRoomId();
