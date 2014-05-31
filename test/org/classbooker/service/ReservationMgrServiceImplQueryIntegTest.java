@@ -81,7 +81,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
       assertEquals("Same size",13,tested.size());
       assertEquals("Same size in BD",13,resDB.size());
       assertTrue("The same Nif in all reservation",
-                  resDB.get(12).getrUser().getNif().equals(nif));
+                  resDB.get(0).getrUser().getNif().equals(nif));
     }
    
     @Test 
@@ -100,15 +100,14 @@ public class ReservationMgrServiceImplQueryIntegTest {
       assertEquals("Same size",13,tested.size());
       assertEquals("Same size in BD",13,resDB.size());
       assertTrue("The same Nif in all reservation",
-                  resDB.get(12).getrUser().getNif().equals(nif));
+                  resDB.get(0).getrUser().getNif().equals(nif));
      
     }
      
     @Test 
     public void ReservationFilteredByDates() throws Exception{
       
-      List <Reservation> aux = new ArrayList<>();
-      
+  
       searchReservationsByFields("12345678",new DateTime(2014,6,10,9,0),
               new DateTime(2014,6,10,10,0),null,null,0,null);       
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
@@ -119,13 +118,8 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               capacity,
                                                               roomType);
       
-      List <Reservation> resDB = resDao.getAllReservationByUserNif(nif);
-      for (Reservation r: resDB){
-            if(r.getReservationDate().isEqual(startD)){        
-                aux.add(r);
-            }
-           
-      }
+      List <Reservation> aux = filterDate(nif,startD);
+  
       assertEquals("Same size",1,tested.size());
       assertEquals("Same size in BD",1,aux.size());
       assertTrue(aux.get(0).getReservationDate().isEqual(startD));
@@ -143,13 +137,8 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-      List <Reservation> aux = new ArrayList<>();
-      List <Reservation> resDB = resDao.getAllReservationByUserNif(nif);
-      for (Reservation r: resDB){
-            if(r.getRoom().getBuilding().getBuildingName().equals(buildingName)){        
-                aux.add(r);
-            }
-      }     
+      List <Reservation> aux = filterBuilding(nif,buildingName);
+      
       assertEquals("Same size",7,tested.size());
       assertEquals("Same size",7,aux.size());
       assertTrue("The Same Building",aux.get(4).getRoom().getBuilding().getBuildingName().equals(buildingName));
@@ -167,15 +156,9 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-      List <Reservation> aux = new ArrayList<>();
-      List <Reservation> resDB = resDao.getAllReservationByUserNif(nif);
-      for (Reservation r: resDB){
-            if(r.getRoom().getBuilding().getBuildingName().equals(buildingName) 
-               && r.getRoom().getNumber().equals(roomNb)){        
-                aux.add(r);
-            }
-      }     
       
+      List <Reservation> aux = filterRoomBuilding(nif,buildingName,roomNb);
+         
       assertEquals("Same size",7,tested.size());
       assertEquals("Same size in DB",7,aux.size());
       assertTrue("The Same roomNb", aux.get(3).getRoom().getBuilding().getBuildingName().equals(buildingName));
@@ -192,13 +175,8 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-      List <Reservation> aux = new ArrayList<>();
-      List <Reservation> resDB = resDao.getAllReservationByUserNif(nif);
-      for (Reservation r: resDB){
-            if(r.getRoom().getCapacity()>=capacity){        
-                aux.add(r);
-            }
-      }   
+      List <Reservation> aux = filterCapacity(nif,capacity);
+      
       assertEquals("Same size",13,tested.size());
       assertEquals("Same size in DB",13,aux.size());
       assertTrue("The Same Capacity or higher",aux.get(6).getRoom().getCapacity()>=capacity);
@@ -214,16 +192,8 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-      List <Reservation> aux = new ArrayList<>();
-      List <Room> roomDB = spaDao.getAllRoomsOfOneType(roomType);
-      for (Room r: roomDB){
-            List<Reservation> resDB = r.getReservations();        
-                for(Reservation res : resDB){
-                   if(res.getrUser().getNif().equals(nif)){
-                       aux.add(res);
-                   } 
-            }
-      } 
+      List <Reservation> aux = filterRoomType(nif,roomType);
+      
       assertEquals("Same size",5,tested.size());
       assertEquals("Same size in DB",5,aux.size());
       
@@ -245,20 +215,8 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-      List <Reservation> aux = new ArrayList<>();
-      List <Room> roomDB = spaDao.getAllRoomsOfOneType(roomType);
-      for(Room r: roomDB){
-          List<Reservation> resDB = r.getReservations(); 
-          for (Reservation res: resDB){
-                if(res.getrUser().getNif().equals(nif) &&
-                    res.getRoom().getBuilding().getBuildingName().equals(buildingName) &&
-                    res.getRoom().getNumber().equals(roomNb) && 
-                    res.getRoom().getCapacity()>=capacity &&
-                    res.getReservationDate().isEqual(startD)){
-                        aux.add(res);
-            } 
-          }
-      }   
+      
+      List <Reservation> aux = allFilter(nif,buildingName,roomNb,capacity,startD,roomType);
       
       assertEquals("Same size",1,tested.size());
       assertEquals("Same size in DB",1,aux.size());
@@ -275,13 +233,8 @@ public class ReservationMgrServiceImplQueryIntegTest {
       
       List <Reservation> tested = rmsQ.findReservationByBuildingAndRoomNb("Rectorate Building","1.0");
       
-      List <Reservation> aux = new ArrayList<>();
-      List <Reservation> resDB = resDao.getAllReservationByBuilding("Rectorate building");
-      for(Reservation res : resDB){
-          if(res.getRoom().getNumber().equals("1.0")){
-              aux.add(res);
-          }
-      }
+      List <Reservation> aux = filterRoomBuilding("Rectorate Building","1.0");
+      
       assertEquals("Same Size",10,tested.size());
       assertEquals("Same Size in DB",10,aux.size());
       assertTrue("The Same building",
@@ -407,4 +360,94 @@ public class ReservationMgrServiceImplQueryIntegTest {
         this.capacity = capacity;
         this.roomType = roomType;    
     }
+     
+     private List<Reservation> filterDate(String nif, DateTime startD) throws DAOException{
+        List <Reservation> aux = new ArrayList<>();
+        List <Reservation> resDB = resDao.getAllReservationByUserNif(nif);
+        for (Reservation r: resDB){
+            if(r.getReservationDate().isEqual(startD)){        
+                aux.add(r);
+            }      
+        }
+        return aux;
+     }
+     
+     private List <Reservation> filterBuilding(String nif,String buildingName) throws DAOException{
+        List <Reservation> aux = new ArrayList<>();
+        List <Reservation> resDB = resDao.getAllReservationByUserNif(nif);
+        for (Reservation r: resDB){
+            if(r.getRoom().getBuilding().getBuildingName().equals(buildingName)){        
+                aux.add(r);
+            }
+        } 
+        return aux;
+     }
+     
+     private List <Reservation> filterRoomBuilding(String nif,String buildingName,String roomNb) throws DAOException{
+        List <Reservation> aux = new ArrayList<>();
+        List <Reservation> resDB = resDao.getAllReservationByUserNif(nif);
+        for (Reservation r: resDB){
+                if(r.getRoom().getBuilding().getBuildingName().equals(buildingName) 
+                    && r.getRoom().getNumber().equals(roomNb)){        
+                    aux.add(r);
+                }
+        }
+        return aux;
+     }
+     
+     private List <Reservation> filterCapacity(String nif,int capacity) throws DAOException{
+       List <Reservation> aux = new ArrayList<>();
+       List <Reservation> resDB = resDao.getAllReservationByUserNif(nif);
+       for (Reservation r: resDB){
+            if(r.getRoom().getCapacity()>=capacity){        
+                aux.add(r);
+            }
+        }
+       return aux;
+     }
+     
+     private List <Reservation> filterRoomType(String nif, String roomType) throws DAOException{
+        List <Reservation> aux = new ArrayList<>();
+        List <Room> roomDB = spaDao.getAllRoomsOfOneType(roomType);
+        for (Room r: roomDB){
+            List<Reservation> resDB = r.getReservations();        
+                for(Reservation res : resDB){
+                   if(res.getrUser().getNif().equals(nif)){
+                       aux.add(res);
+                   } 
+                }
+        }
+        return aux;
+     }
+     
+     private List <Reservation> allFilter(String nif,String buildingName,String roomNb,
+             int capacity,DateTime startD,String roomType) throws DAOException{
+         
+        List <Reservation> aux = new ArrayList<>();
+        List <Room> roomDB = spaDao.getAllRoomsOfOneType(roomType);
+        for(Room r: roomDB){
+            List<Reservation> resDB = r.getReservations(); 
+            for (Reservation res: resDB){
+                if(res.getrUser().getNif().equals(nif) &&
+                    res.getRoom().getBuilding().getBuildingName().equals(buildingName) &&
+                    res.getRoom().getNumber().equals(roomNb) && 
+                    res.getRoom().getCapacity()>=capacity &&
+                    res.getReservationDate().isEqual(startD)){
+                        aux.add(res);
+                } 
+            }
+        }  
+        return aux;
+     }
+     
+     private List <Reservation> filterRoomBuilding(String buildingName,String roomNb) throws DAOException{
+        List <Reservation> aux = new ArrayList<>();
+        List <Reservation> resDB = resDao.getAllReservationByBuilding(buildingName);
+        for(Reservation res : resDB){
+            if(res.getRoom().getNumber().equals(roomNb)){
+                aux.add(res);
+            }
+        }
+        return aux;
+     } 
 }
