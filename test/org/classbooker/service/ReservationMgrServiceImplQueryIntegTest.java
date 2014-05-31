@@ -65,8 +65,10 @@ public class ReservationMgrServiceImplQueryIntegTest {
     public void zeroReservationsByNif() throws Exception{    
      
       List <Reservation> tested = rmsQ.getReservationsByNif("123456");
+      List <Reservation> resDB = resDao.getAllReservationByUserNif("123456");
       
       assertEquals("0 reservations",0,tested.size());
+      assertTrue(resDB.isEmpty());
     }
  
     @Test 
@@ -74,8 +76,12 @@ public class ReservationMgrServiceImplQueryIntegTest {
        
       searchReservationsByFields("12345678",null,null,null,null,0,null);
       List <Reservation> tested = rmsQ.getReservationsByNif(nif);
+      List <Reservation> resDB = resDao.getAllReservationByUserNif(nif);
       
       assertEquals("Same size",13,tested.size());
+      assertEquals("Same size in BD",13,resDB.size());
+      assertTrue("The same Nif in all reservation",
+                  resDB.get(12).getrUser().getNif().equals(nif));
     }
    
     @Test 
@@ -89,13 +95,20 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
+      
+      List <Reservation> resDB = resDao.getAllReservationByUserNif(nif);
       assertEquals("Same size",13,tested.size());
+      assertEquals("Same size in BD",13,resDB.size());
+      assertTrue("The same Nif in all reservation",
+                  resDB.get(12).getrUser().getNif().equals(nif));
      
     }
      
     @Test 
     public void ReservationFilteredByDates() throws Exception{
-     
+      
+      List <Reservation> aux = new ArrayList<>();
+      
       searchReservationsByFields("12345678",new DateTime(2014,6,10,9,0),
               new DateTime(2014,6,10,10,0),null,null,0,null);       
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
@@ -106,14 +119,23 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               capacity,
                                                               roomType);
       
-      assertEquals("Same size",2,tested.size());
+      List <Reservation> resDB = resDao.getAllReservationByUserNif(nif);
+      for (Reservation r: resDB){
+            if(r.getReservationDate().isEqual(startD)){        
+                aux.add(r);
+            }
+           
+      }
+      assertEquals("Same size",1,tested.size());
+      assertEquals("Same size in BD",1,aux.size());
+      assertTrue(aux.get(0).getReservationDate().isEqual(startD));
       
     }
     
     @Test 
     public void ReservationFilteredByBuildingName() throws Exception{
-      searchReservationsByFields("12345678",null,null,"Rectorate Building",null,0,null); 
       
+      searchReservationsByFields("12345678",null,null,"Rectorate Building",null,0,null); 
       List <Reservation> tested = rmsQ.getFilteredReservation(nif,
                                                               startD,
                                                               endD,
@@ -121,8 +143,16 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
+      List <Reservation> aux = new ArrayList<>();
+      List <Reservation> resDB = resDao.getAllReservationByUserNif(nif);
+      for (Reservation r: resDB){
+            if(r.getRoom().getBuilding().getBuildingName().equals(buildingName)){        
+                aux.add(r);
+            }
+      }     
       assertEquals("Same size",7,tested.size());
-      //assertEquals("First reservation",res1,tested.get(0));
+      assertEquals("Same size",7,aux.size());
+      assertTrue("The Same Building",aux.get(4).getRoom().getBuilding().getBuildingName().equals(buildingName));
     }
     
     @Test 
@@ -137,8 +167,19 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-      assertEquals("Same size",7,tested.size());
+      List <Reservation> aux = new ArrayList<>();
+      List <Reservation> resDB = resDao.getAllReservationByUserNif(nif);
+      for (Reservation r: resDB){
+            if(r.getRoom().getBuilding().getBuildingName().equals(buildingName) 
+               && r.getRoom().getNumber().equals(roomNb)){        
+                aux.add(r);
+            }
+      }     
       
+      assertEquals("Same size",7,tested.size());
+      assertEquals("Same size in DB",7,aux.size());
+      assertTrue("The Same roomNb", aux.get(3).getRoom().getBuilding().getBuildingName().equals(buildingName));
+      assertTrue("The Same roomNb", aux.get(3).getRoom().getNumber().equals(roomNb));
     }
     
     @Test 
@@ -151,8 +192,16 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
+      List <Reservation> aux = new ArrayList<>();
+      List <Reservation> resDB = resDao.getAllReservationByUserNif(nif);
+      for (Reservation r: resDB){
+            if(r.getRoom().getCapacity()>=capacity){        
+                aux.add(r);
+            }
+      }   
       assertEquals("Same size",13,tested.size());
-      //assertEquals("Fifth reservation",res5,tested.get(0));
+      assertEquals("Same size in DB",13,aux.size());
+      assertTrue("The Same Capacity or higher",aux.get(6).getRoom().getCapacity()>=capacity);
     }
     
     @Test 
@@ -165,7 +214,18 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
+      List <Reservation> aux = new ArrayList<>();
+      List <Room> roomDB = spaDao.getAllRoomsOfOneType(roomType);
+      for (Room r: roomDB){
+            List<Reservation> resDB = r.getReservations();        
+                for(Reservation res : resDB){
+                   if(res.getrUser().getNif().equals(nif)){
+                       aux.add(res);
+                   } 
+            }
+      } 
       assertEquals("Same size",5,tested.size());
+      assertEquals("Same size in DB",5,aux.size());
       
     }
     
@@ -185,16 +245,48 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
+      List <Reservation> aux = new ArrayList<>();
+      List <Room> roomDB = spaDao.getAllRoomsOfOneType(roomType);
+      for(Room r: roomDB){
+          List<Reservation> resDB = r.getReservations(); 
+          for (Reservation res: resDB){
+                if(res.getrUser().getNif().equals(nif) &&
+                    res.getRoom().getBuilding().getBuildingName().equals(buildingName) &&
+                    res.getRoom().getNumber().equals(roomNb) && 
+                    res.getRoom().getCapacity()>=capacity &&
+                    res.getReservationDate().isEqual(startD)){
+                        aux.add(res);
+            } 
+          }
+      }   
+      
       assertEquals("Same size",1,tested.size());
-      //assertEquals("First reservation",res5,tested.get(0));
+      assertEquals("Same size in DB",1,aux.size());
+      assertTrue("Same nif",aux.get(0).getrUser().getNif().equals(nif));
+      assertTrue("Same capacity or higher",aux.get(0).getRoom().getCapacity()>=capacity);
+      assertTrue("Same roomNb",aux.get(0).getRoom().getNumber().equals(roomNb));
+      assertTrue("Same building",
+                  aux.get(0).getRoom().getBuilding().getBuildingName().equals(buildingName));
+      assertTrue("Same Date",aux.get(0).getReservationDate().isEqual(startD));
     }
     
     @Test 
     public void findReservationBySpace() throws IncorrectBuildingException, DAOException{
       
       List <Reservation> tested = rmsQ.findReservationByBuildingAndRoomNb("Rectorate Building","1.0");
-      assertEquals("Same Size",10,tested.size());
       
+      List <Reservation> aux = new ArrayList<>();
+      List <Reservation> resDB = resDao.getAllReservationByBuilding("Rectorate building");
+      for(Reservation res : resDB){
+          if(res.getRoom().getNumber().equals("1.0")){
+              aux.add(res);
+          }
+      }
+      assertEquals("Same Size",10,tested.size());
+      assertEquals("Same Size in DB",10,aux.size());
+      assertTrue("The Same building",
+                  aux.get(3).getRoom().getBuilding().getBuildingName().equals("Rectorate Building"));
+      assertTrue("The Same roomNb",aux.get(3).getRoom().getNumber().equals("1.0"));
     }
     
     @Test
@@ -210,7 +302,13 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               capacity, 
                                                               roomType);
        
-       assertEquals("Non rerserves, building is incorrect",result,tested);
+        List <Reservation> resDB = resDao.getAllReservationByUserNif(nif);
+        for(Reservation res : resDB){
+            if(res.getRoom().getBuilding().getBuildingName().equals("2.04")){
+                result.add(res);
+            }
+        }
+       assertEquals("Non rerserves in DB, building is incorrect",result,tested);
     }
     
     @Test 
@@ -227,7 +325,14 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               capacity,
                                                               roomType);
         
-        assertEquals("Non reserves,StartDate incorrect",result,tested);
+      List <Reservation> resDB = resDao.getAllReservationByUserNif(nif);
+        for(Reservation res : resDB){
+            if(res.getReservationDate().isBefore(endD)){
+                result.add(res);
+            }
+        }
+        assertEquals("Non reserves in DB,StartDate incorrect",result,tested);
+        
     }
     
     @Test 
@@ -243,7 +348,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-        
+          
         assertEquals("Non reserves,EndDate incorrect",result,tested);
     }
     
@@ -261,7 +366,12 @@ public class ReservationMgrServiceImplQueryIntegTest {
                                                               roomNb,
                                                               capacity,
                                                               roomType);
-        
+        List <Reservation> resDB = resDao.getAllReservationByUserNif(nif);
+        for(Reservation res : resDB){
+            if(res.getReservationDate().isBefore(endD)){
+                result.add(res);
+            }
+        }
         assertEquals("Non reserves,EndDate is before than startDate",
                                                                 result,tested);
     }
