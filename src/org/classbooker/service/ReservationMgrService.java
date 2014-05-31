@@ -156,4 +156,16 @@ public interface ReservationMgrService {
     void acceptReservation(Reservation reservation) throws DAOException;
    
     List<Room> obtainAllRoomsWithSameFeatures(String type, int capacity, String building, DateTime date)throws DAOException;
+    
+    public List <Reservation> getReservationsByNif(String nif) throws DAOException;
+    
+    public List <Reservation> getFilteredReservation(String nif, 
+                                                  DateTime startDate,
+                                                  DateTime endDate, 
+                                                  String buildingName,
+                                                  String roomNb,
+                                                  int capacity,
+                                                  String roomType) 
+            throws DAOException;
+    
 }

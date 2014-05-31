@@ -155,7 +155,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
           }
       }
         
-      return !comprovateFields(nif,buildingName,roomNb,capacity,roomType);
+      return !testFields(nif,buildingName,roomNb,capacity,roomType);
     }
     private List <Reservation> validateField(DateTime startDate,
                               DateTime endDate, 
@@ -185,7 +185,7 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
          return aux;   
     }
     
-    private boolean comprovateFields(String nif,String buildingName,
+    private boolean testFields(String nif,String buildingName,
                                      String roomNb,
                                      int capacity,
                                      String roomType){     
@@ -224,7 +224,6 @@ public class ReservationMgrServiceImplQuery implements ReservationMgrService {
     public void setSpaDao(SpaceDAO spaDao) {
         this.spaDao = spaDao;
     }
-
 
     @Override
     public Reservation modifyReservation(long id) {

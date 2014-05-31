@@ -42,7 +42,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
    Room room;
    Building building;
    List<Reservation>lres,lreser;
-   ReservationMgrServiceImplQuery rmsQ;
+   ReservationMgrServiceImpl rmsQ;
    EntityManager em;
     
     private String nif;
@@ -57,7 +57,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
     public void setup() throws Exception{
         lres = new ArrayList<>();
         lreser = new ArrayList<>();
-        rmsQ = new ReservationMgrServiceImplQuery();
+        rmsQ = new ReservationMgrServiceImpl();
         createEm();
     }
     
@@ -336,8 +336,8 @@ public class ReservationMgrServiceImplQueryIntegTest {
         resDao.setEm(em);
         spaDao.setEm(em);
         resDao.setsDao(spaDao);
-        rmsQ.setResDao(resDao);
-        rmsQ.setSpaDao(spaDao);
+        rmsQ.setReservationDao(resDao);
+        rmsQ.setSpaceDao(spaDao);
     }
     
     private EntityManager getEntityManager() throws Exception{

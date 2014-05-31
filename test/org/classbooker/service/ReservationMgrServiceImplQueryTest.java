@@ -54,7 +54,7 @@ public class ReservationMgrServiceImplQueryTest {
     Room room;
     Building building;
     Sequence seq;
-    ReservationMgrServiceImplQuery rmsQ;
+    ReservationMgrServiceImpl rmsQ;
     List<Reservation> lres, lreser;
     
     private String nif;
@@ -69,7 +69,7 @@ public class ReservationMgrServiceImplQueryTest {
     public void setup(){
         lres = new ArrayList<>();
         lreser = new ArrayList<>();
-        rmsQ = new ReservationMgrServiceImplQuery();
+        rmsQ = new ReservationMgrServiceImpl();
         startingMockObjects();       
         makingSomeReservations();
     }
@@ -318,8 +318,8 @@ public class ReservationMgrServiceImplQueryTest {
     private void startingMockObjects(){
         resDao = context.mock(ReservationDAO.class);
         spaDao = context.mock(SpaceDAO.class);
-        rmsQ.setResDao(resDao);
-        rmsQ.setSpaDao(spaDao);
+        rmsQ.setReservationDao(resDao);
+        rmsQ.setSpaceDao(spaDao);
         seq = context.sequence("seq");
     }
     
