@@ -113,8 +113,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
         Reservation reservationMade = makeReservationBySpace(room.getRoomId(), nif, resDate);
 
         if (reservationMade != null) {
-            ReservationUser reservationUser = (ReservationUser) userDao.getUserByNif(nif);
-            return new ReservationResult(reservationMade, reservationUser);
+            return new ReservationResult(reservationMade);
         }
 
         List<Room> suggestedRooms = suggestionSpace(roomNb, buildingName, resDate);

@@ -141,7 +141,6 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
         User u = uDao.getUserByNif(nif);
 
         assertReservation(rr.getReservation(), "EPS", "0.25", dateTime, u);
-        assertEquals("Not same user", u, rr.getrUser());
         assertNull("Incorrect reservation result", rr.getSuggestions());
     }
 
@@ -152,7 +151,6 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
 
         ReservationResult rr = rms.makeCompleteReservationBySpace(nif, "0.20", "EPS", dateTime);
         assertNull("Incorrect reservation result", rr.getReservation());
-        assertNull("Incorrect reservation result", rr.getrUser());
         assertSuggestedSpacesRequirements(rr.getSuggestions(), sDao.getRoomByNbAndBuilding("0.20", "EPS"));
     }
 

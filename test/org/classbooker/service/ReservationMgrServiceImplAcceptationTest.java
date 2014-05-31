@@ -81,7 +81,7 @@ public class ReservationMgrServiceImplAcceptationTest {
         dateTime = new DateTime(2015, 2, 3, 4, 0);
         rUser = new ProfessorPas();
         reservation = new Reservation(dateTime, rUser, room);
-        rResult = new ReservationResult(reservation, rUser);
+        rResult = new ReservationResult(reservation);
         room.setReservation(reservation);
 
         rms.setSpaceDao(sDao);
@@ -178,7 +178,6 @@ public class ReservationMgrServiceImplAcceptationTest {
         ReservationResult rr = rms.makeCompleteReservationBySpace(nif, room.getNumber(), building.getBuildingName(), dateTime);
 
         assertReservation(rr.getReservation());
-        assertEquals("Not same user", rUser, rr.getrUser());
         assertNull("Incorrect reservation result", rr.getSuggestions());
     }
 
@@ -199,7 +198,6 @@ public class ReservationMgrServiceImplAcceptationTest {
         checkSuggestionSpacesExpectations(room, lRooms, null);
         ReservationResult rr = rms.makeCompleteReservationBySpace(nif, room.getNumber(), building.getBuildingName(), dateTime);
         assertNull("Incorrect reservation result", rr.getReservation());
-        assertNull("Incorrect reservation result", rr.getrUser());
         assertSuggestedSpacesRequirements(rr.getSuggestions());
     }
 
@@ -270,7 +268,7 @@ public class ReservationMgrServiceImplAcceptationTest {
             {
                 oneOf(sDao).getRoomByNbAndBuilding(room.getNumber(), building.getBuildingName());
                 will(returnValue(room));
-                oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().toString(), room.getCapacity(), building.getBuildingName());
+                oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().getName(), room.getCapacity(), building.getBuildingName());
                 will(returnValue(lRooms));
                 allowing(rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());
                 will(returnValue(r));
