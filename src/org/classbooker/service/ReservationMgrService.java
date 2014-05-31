@@ -157,8 +157,26 @@ public interface ReservationMgrService {
    
     List<Room> obtainAllRoomsWithSameFeatures(String type, int capacity, String building, DateTime date)throws DAOException;
     
+    /**
+     * Get a list of reservations for the user
+     * @param nif
+     * @return 
+     * @throws org.classbooker.dao.exception.DAOException 
+     */
     public List <Reservation> getReservationsByNif(String nif) throws DAOException;
     
+    /**
+     * Get a list of reservation using different filtered
+     * @param nif
+     * @param startDate
+     * @param endDate
+     * @param buildingName
+     * @param roomNb
+     * @param capacity
+     * @param roomType
+     * @return
+     * @throws org.classbooker.dao.exception.DAOException 
+     */
     public List <Reservation> getFilteredReservation(String nif, 
                                                   DateTime startDate,
                                                   DateTime endDate, 
