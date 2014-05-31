@@ -6,7 +6,6 @@
 
 package org.classbooker.service;
 
-import org.classbooker.service.ReservationMgrServiceImplQuery;
 import org.classbooker.entity.Building;
 import org.classbooker.entity.Room;
 import org.classbooker.entity.ProfessorPas;
