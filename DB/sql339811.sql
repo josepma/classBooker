@@ -166,8 +166,6 @@ CREATE TABLE IF NOT EXISTS `USERT` (
 --
 
 INSERT INTO `USERT` (`NIF`, `USER_TYPE`, `email`, `name`) VALUES
-('111', 'PPS_U', 'kopo@popo', 'popo'),
-('11100099', 'PPS_U', 'kopo@popo', 'popo'),
 ('12345678', 'PPS_U', 'RalphPoteus@aus.com', 'Ralph Poteus'),
 ('12457638', 'STF_U', 'SophieSpedelung@aus.com', 'Sophie Spedelung'),
 ('45998872', 'SPC_U', 'NiklausWitmark@gmail.com', 'Niklaus Witmark'),

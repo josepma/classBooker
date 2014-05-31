@@ -29,6 +29,14 @@
 
     <property name="db.dir" value="${basedir}/classBookerDB"/>
 
+    
+    <property name="user" value="sql339811"/>
+    <property name="pass" value="gT8*gJ3*"/>
+    <property name="host" value="sql3.freemysqlhosting.net"/>
+    <property name="database" value="sql339811"/>
+    
+    
+    
 
     <!-- ===================================================================== -->
     <!-- Classpath                                                             -->
@@ -134,17 +142,17 @@
 
 
     <!-- =================================================================== -->
-    <!-- Restores database                              -->
+    <!-- Restores database                                                   -->
     <!-- =================================================================== -->
 
-    <target name="dbrestore" depends="compile">
+    <target name="dbrestore">
 
     <exec executable="mysql" failonerror="true" input="${db.dir}/sql339811.sql">
-        <arg value="--user=sql339811" />  
-        <arg value="--password=gT8*gJ3*" />  
-        <arg value="--host=sql3.freemysqlhosting.net" />  
+        <arg value="--user=${user}" />  
+        <arg value="--password=${pass}" />  
+        <arg value="--host=${host}" />  
         <arg value="--port=3306" />  
-        <arg value="--database=sql339811" />  
+        <arg value="--database=${database}" />  
     </exec>
     </target>
 
@@ -152,7 +160,7 @@
     <!-- Performs unit tests                                                 -->
     <!-- =================================================================== -->
 
-    <target name="test" depends="dbrestore"> 
+    <target name="test" depends="compile"> 
 
         <junit printsummary="yes" haltonerror="yes" haltonfailure="yes"  
             fork="yes"> 
@@ -192,7 +200,18 @@
 
     <target name="integtest" depends="compile"> 
 
-        <junit printsummary="yes" haltonerror="yes" haltonfailure="yes"  
+     <!--Restore database                      -->           
+        
+      <exec executable="mysql" failonerror="true" input="${db.dir}/sql339811.sql">
+        <arg value="--user=${user}" />  
+        <arg value="--password=${pass}" />  
+        <arg value="--host=${host}" />  
+        <arg value="--port=3306" />  
+        <arg value="--database=${database}" />  
+      </exec>
+        
+      <!--Perform tests                      -->        
+      <junit printsummary="yes" haltonerror="yes" haltonfailure="yes"  
             fork="yes"> 
 
             <!-- fork="yes" would not force to include junit.jar in apache-ant/lib -->
@@ -207,19 +226,30 @@
                       
             <batchtest todir="${build.report.dir}" >
                 <fileset dir="${src.test.dir}">
-                    <include name="**/*IT.java"/>
+                    <include name="**/*Test.java"/>
                 </fileset>
                
             </batchtest>
-        </junit> 
+      </junit> 
 
-        <junitreport todir="${build.report.dir}">
+      <junitreport todir="${build.report.dir}">
             <fileset dir="${build.report.dir}">
                 <include name="TEST-*.xml"/>
             </fileset>
 
             <report todir="${build.report.dir}/html"/>
-        </junitreport>
+      </junitreport>
+
+       <!--Restore database                      -->         
+       <exec executable="mysql" failonerror="true" input="${db.dir}/sql339811.sql">
+        <arg value="--user=${user}" />  
+        <arg value="--password=${pass}" />  
+        <arg value="--host=${host}" />  
+        <arg value="--port=3306" />  
+        <arg value="--database=${database}" />  
+       </exec>
+        
+            
 
     </target>
 
