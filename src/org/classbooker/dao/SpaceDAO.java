@@ -7,13 +7,10 @@ package org.classbooker.dao;
 
 import java.util.List;
 import javax.persistence.EntityManager;
-import org.classbooker.dao.exception.AlreadyExistingBuildingException;
 import org.classbooker.dao.exception.AlreadyExistingRoomException;
-import org.classbooker.dao.exception.AlredyExistReservationException;
 import org.classbooker.dao.exception.DAOException;
 import org.classbooker.dao.exception.IncorrectBuildingException;
 import org.classbooker.dao.exception.IncorrectRoomException;
-import org.classbooker.dao.exception.IncorrectTypeException;
 import org.classbooker.dao.exception.NonBuildingException;
 import org.classbooker.dao.exception.NoneExistingRoomException;
 import org.classbooker.dao.exception.PersistException;
@@ -22,7 +19,7 @@ import org.classbooker.entity.Room;
 
 /**
  *
- * @author josepma, Marc Solé, Carles Mònico
+ * @author josepma, Saida, Genis
  */
 public interface SpaceDAO {
 
@@ -31,11 +28,7 @@ public interface SpaceDAO {
      *
      * @param room
      * @return Room Id
-     * @throws PersistException
-     * @throws IncorrectRoomException
-     * @throws org.classBooker.dao.exception.AlreadyExistingRoomException
-     * @throws org.classBooker.dao.exception.AlreadyExistingBuildingException
-     * @throws org.classBooker.dao.exception.NonBuildingException
+     * @throws DAOException
      */
     long addRoom(Room room) throws DAOException;
 
@@ -46,11 +39,7 @@ public interface SpaceDAO {
      * @param room The room that was modified.
      * @param newType If the newType is null, then this is not changed.
      * @param capacity If the capacity is 0, then this is not changed.
-     * @throws org.classBooker.dao.exception.PersistException
-     * @throws org.classBooker.dao.exception.AlreadyExistingRoomException
-     * @throws org.classBooker.dao.exception.NonBuildingException
-     * @throws org.classBooker.dao.exception.AlredyExistReservationException
-     * @throws org.classBooker.dao.exception.NoneExistingRoomException
+     * @throws org.classbooker.dao.exception.DAOException
      */
      Room modifyRoom(Room room, String newType, int capacity) throws DAOException;
 
@@ -88,7 +77,7 @@ public interface SpaceDAO {
     void addBuilding(Building building) throws DAOException;
 
     /**
-     * Remove a existing building
+     * Remove an existing building
      *
      * @param building
      * @throws IncorrectBuildingException
@@ -107,16 +96,16 @@ public interface SpaceDAO {
     /**
      * Get a list of all buildings
      *
-     * @return
+     * @return List Buildings. And return list empty if don't have buildings in DataBase
      */
     List<Building> getAllBuildings();
 
     /**
-     * Get all room of a building
+     * Get all rooms of a building
      *
      * @param building
-     * @return List Rooms if non exist rooms in building return empty list
-     * @throws IncorrectBuildingException 
+     * @return List Rooms. If non exist rooms in building return empty list
+     * @throws DAOException 
      */
     List<Room> getAllRoomsOfOneBuilding(String building)
             throws DAOException;
@@ -126,9 +115,8 @@ public interface SpaceDAO {
      * ClassRoom)
      *
      * @param type
-     * @return List<Room> return empty list if non exist rooms
-     * @throws org.classBooker.dao.exception.IncorrectTypeException
-     *
+     * @return List of Rooms. And return empty list if non exist rooms
+     * @throws org.classbooker.dao.exception.DAOException
      */
     List<Room> getAllRoomsOfOneType(String type) throws DAOException;
 
@@ -138,22 +126,20 @@ public interface SpaceDAO {
      *
      * @param type, Building
      * @param building
-     * @return List<Room> return empty list if non exist rooms
-     * @throws org.classBooker.dao.exception.IncorrectBuildingException
-     *
+     * @return List of Rooms. And return empty list if non exist rooms
+     * @throws org.classbooker.dao.exception.DAOException
      */
     List<Room> getAllRoomsOfOneTypeAndOneBuilding(String type,
             Building building)
             throws DAOException;
 
     /**
-     * Find room about one building name and one room name/number
+     * Find room about one building name and one room number
      *
-     * @param buildingName The building name Ex.("EPS")
      * @param roomNb The number about room Ex.(2.01)
+     * @param buildingName The building name Ex.("EPS")
      * @return Room return NonBuildingException if non exist room
-     * @throws org.classBooker.dao.exception.IncorrectBuildingException
-     * @throws org.classBooker.dao.exception.IncorrectRoomException
+     * @throws org.classbooker.dao.exception.DAOException
      */
     Room getRoomByNbAndBuilding(String roomNb, String buildingName) throws DAOException;
 
@@ -163,8 +149,8 @@ public interface SpaceDAO {
      * @param buildingName
      * @param type
      * @param capacity
-     * @return List<Room> return empty list if non exist rooms
-     * @throws org.classBooker.dao.exception.IncorrectBuildingException
+     * @return List of Rooms. And return empty list if non exist rooms
+     * @throws org.classbooker.dao.exception.DAOException
      */
     List<Room> getAllRoomsByTypeAndCapacity(String type, int capacity, String buildingName) throws DAOException;
     void setEm(EntityManager em);

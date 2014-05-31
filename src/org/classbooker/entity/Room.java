@@ -19,6 +19,7 @@ import javax.persistence.*;
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="ROOM_TYPE",
         discriminatorType=DiscriminatorType.STRING,length=5)
+
 public abstract class Room {
     
     
@@ -36,7 +37,8 @@ public abstract class Room {
     private List<Reservation> reservations;
 
     /**
-     *
+     *Constructor room (none parameters); 
+     * This construcotr initialize capacity = 0, building= null, reservation =empty List 
      */
     public Room() {
         this.capacity = 0;
@@ -124,7 +126,7 @@ public abstract class Room {
     }
 
     /**
-     *The method return a List<Reservation> object, this represent the reservations room's.
+     *The method return the List of reservations, it's the reservations room's.
      * @return  List reservations
      */
     public List<Reservation> getReservations() {
@@ -141,7 +143,7 @@ public abstract class Room {
 
     /**
      *The method change the reservation list
-     * @param reservations
+     * @param  reservations
      */
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
@@ -149,7 +151,7 @@ public abstract class Room {
 
     /**
      * The method return a String that describe a Room
-     * @return   description
+     * @return   String description
      */
     @Override
     public String toString() {
