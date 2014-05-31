@@ -21,7 +21,7 @@ DUMPING THE INTEGRATION DATABASE
 If you generate that file from phpmyadmin, proceed as follows:
 (a) Click on the export option.
 (b) Choose the "Custom-display all possible options" option.
-(c) Chosse the "Add DROP TABLE / VIEW / PROCEDURE / FUNCTION / EVENT statement"
+(c) Choose the "Add DROP TABLE / VIEW / PROCEDURE / FUNCTION / EVENT statement"
 (d) Go.
 
 (e) The (c) step will create in the sql instructions of the sort:
