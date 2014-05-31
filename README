@@ -1,9 +1,14 @@
-Run unit tests: ant -f mybuild.xml test
+**Run unit + integration tests: ant -f mybuild.xml test
+   This option does not restore the integration database.
 
-Run integration tests: ant -f mybuild.xml integtest
+**Run unit + integration tests: ant -f mybuild.xml integtest
+   This option restores the integration database before and after executing integration tests.
 
-Create jar: ant -f mybuild.xml jar
+**Create jar: ant -f mybuild.xml jar
 
-Clean generated artifacts: ant -f mybuild.xml clean
+**Clean generated artifacts: ant -f mybuild.xml clean
 
+**Restore integration database: ant -f mybuild.xml dbrestore
+   This option has not been tested when several users execute it concurrently. 
+   This situation may be problematic. Please, use it carefully.
 .............
