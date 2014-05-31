@@ -53,7 +53,7 @@ public class SpaceDAOImplIntegTest {
     private Query query;
 
     /**
-     *
+     * 
      */
     public SpaceDAOImplIntegTest() {
         this.sdi = new SpaceDAOImpl();
@@ -184,8 +184,6 @@ public class SpaceDAOImplIntegTest {
         expected.add(ema.find(Room.class, (long)20));
         expected.add(ema.find(Room.class, (long)25));
         expected.add(ema.find(Room.class, (long)30));        
-        expected.add(ema.find(Room.class, (long)3401));
-        expected.add(ema.find(Room.class, (long)3402));
         List<Room> result = sdi.getAllRooms();
         Set<Room> resultSet = new HashSet(result);
         assertEquals(expected, resultSet);
@@ -295,8 +293,6 @@ public class SpaceDAOImplIntegTest {
         expected.add(ema.find(Building.class, "Main Library"));
         expected.add(ema.find(Building.class, "Rectorate Building"));
         expected.add(ema.find(Building.class, "EPS"));
-        expected.add(ema.find(Building.class, "testBuilding1"));
-        expected.add(ema.find(Building.class, "testBuilding2"));
         List<Building> result = sdi.getAllBuildings();
         Set<Building> resultSet = new HashSet(result);
         assertEquals(expected, resultSet);

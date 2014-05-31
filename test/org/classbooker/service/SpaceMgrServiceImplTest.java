@@ -50,9 +50,7 @@ public class SpaceMgrServiceImplTest {
     public void addroom() throws DAOException {
         setExpectationsAddRoom();
         space.addRoom("2.65", "EPS", 45, "ClassRoom");
-        assertEquals(spdao.getRoomByNbAndBuilding("2.65", "EPS"),room);
-        
-        
+        assertEquals(spdao.getRoomByNbAndBuilding("2.65", "EPS"),room);  
     }
 
     private void setExpectationsAddRoom() throws DAOException {
@@ -60,6 +58,20 @@ public class SpaceMgrServiceImplTest {
             oneOf(spdao).addRoom("2.65", "EPS", 45, "ClassRoom");
             oneOf(spdao).getRoomByNbAndBuilding("2.65", "EPS"); will(returnValue(room));
          }});  
+    }
+    @Test
+    public void addBuilding() throws DAOException{
+        setExpectationsAddBuilding();
+        space.addBuilding("EPS");
+        assertEquals(spdao.getBuildingByName("EPS"), building);
+        
+    }
+
+    private void setExpectationsAddBuilding() throws DAOException {
+        context.checking(new Expectations(){{
+        oneOf(spdao).addBuilding(building);
+        oneOf(spdao).getBuildingByName("EPS");will(returnValue(building));
+        }});
     }
 
 }
