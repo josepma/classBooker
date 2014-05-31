@@ -49,16 +49,16 @@ public class SpaceMgrServiceImplTest {
     @Test
     public void addroom() throws DAOException {
         setExpectationsAddRoom();
-        id = space.addRoom("2.65", "EPS", 45, "ClassRoom");
-        assertEquals(space.getRoomByNbAndBuilding("2.65", building.getBuildingName()).getCapacity(), 45 );
+        space.addRoom("2.65", "EPS", 45, "ClassRoom");
+        assertEquals(spdao.getRoomByNbAndBuilding("2.65", "EPS"),room);
         
         
     }
 
     private void setExpectationsAddRoom() throws DAOException {
            context.checking(new Expectations(){{ 
-            allowing(spdao).addRoom(room);
-            oneOf(spdao).getRoomByNbAndBuilding("2.65", "EPS");will(returnValue(room));
+            oneOf(spdao).addRoom("2.65", "EPS", 45, "ClassRoom");
+            oneOf(spdao).getRoomByNbAndBuilding("2.65", "EPS"); will(returnValue(room));
          }});  
     }
 

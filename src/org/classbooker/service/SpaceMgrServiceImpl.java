@@ -50,30 +50,11 @@ public class SpaceMgrServiceImpl implements SpaceMgrService{
     public Building getBuildingbyName(String name) throws DAOException{
         return spd.getBuildingByName(name);
     
-    }
-    
-    
-    
-    
-    
+    }  
     
     @Override
     public long addRoom(String number, String buildingName, int capacity, String type) throws DAOException {
-        Room newRoom = null; 
-        Building building = new Building(buildingName);
-        try {
-
-            Constructor classType = Class.forName("org.classbooker.entity." + type)
-                    .getConstructor(Building.class, String.class, int.class);
-
-            newRoom = (Room) classType.newInstance(building,
-                    number, capacity);
-
-        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            log.warning("Error");
-        }
-        spd.addRoom(newRoom);
-        return newRoom.getRoomId();
+       return spd.addRoom(number, buildingName, capacity, type);
     }
 
     @Override

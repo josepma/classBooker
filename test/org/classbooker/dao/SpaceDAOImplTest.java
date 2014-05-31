@@ -74,6 +74,7 @@ public class SpaceDAOImplTest {
         ema.persist(building);
         ema.persist(reserv);
         sdi.setEm(ema);
+        ema.getTransaction().commit();
     }
 
     /**
@@ -187,7 +188,7 @@ public class SpaceDAOImplTest {
 
     @Test
     public void testGetAllRoomsEmptyDataBase() throws Exception {
-        ema.remove(room);
+        sdi.removeRoom(room);
         final Set<Room> expected = new HashSet<>();
         List<Room> result = sdi.getAllRooms();
         Set<Room> resultSet = new HashSet(result);
@@ -487,7 +488,7 @@ public class SpaceDAOImplTest {
      */
     @After
     public void tearDown() throws Exception {
-        ema.getTransaction().commit();
+        
         ema = sdi.getEm();
         if (ema.isOpen()) {
             ema.close();

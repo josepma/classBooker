@@ -9,6 +9,9 @@ package org.classbooker.service;
 import org.classbooker.dao.exception.DAOException;
 import java.util.HashMap;
 import java.util.List;
+import org.classbooker.dao.ReservationDAO;
+import org.classbooker.dao.SpaceDAO;
+import org.classbooker.dao.UserDAO;
 import org.classbooker.entity.Building;
 import org.classbooker.entity.Reservation;
 import org.classbooker.entity.ReservationUser;
@@ -185,5 +188,19 @@ public interface ReservationMgrService {
                                                   int capacity,
                                                   String roomType) 
             throws DAOException;
-    
+    /**
+     * Set SpaceDAO
+     * @param spaceDao 
+     */
+   public void setSpaceDao(SpaceDAO spaceDao) ;
+   /**
+    * Set UserDAO
+    * @param userDao 
+    */
+   public void setUserDao(UserDAO userDao);
+   /**
+    * Set ReservationDAO
+    * @param reservationDao 
+    */
+   public void setReservationDao(ReservationDAO reservationDao); 
 }

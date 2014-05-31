@@ -39,6 +39,7 @@ public interface SpaceDAO {
      */
     long addRoom(Room room) throws DAOException;
 
+    public long addRoom(String number, String buildingName, int capacity, String type) throws DAOException;
     /**
      * Modify a exisiting Room by capacity and type.
      *

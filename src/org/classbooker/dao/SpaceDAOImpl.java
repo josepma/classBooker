@@ -66,11 +66,7 @@ public class SpaceDAOImpl implements SpaceDAO {
         if (roomExist(room)) {
             throw new AlreadyExistingRoomException();
         }
-        //TRANSACTION MANAGEMENT ADDED BY JOSEPMA. PLEASE, CHECK THAT YOU WORK WITH
-        //TRANSACTIONS IN ALL ENTITY MANAGER OPS. THIS INCLUDES FIND AND GETRESULTLIST
-        //YOU COMMIT TRANSACTION AFTER FINISHING THE MANAGEMENT OF THE PERSISTENT OBJECTS
-        //EXAMPLE: IN THIS CASE, YOU DO NOT COMMIT TRANSACTION AFTER EM.PERSIST(ROOM) BUT
-        //AFTER ASSOCIATING THE ROOM WITH THE BUILDING.
+       
         em.getTransaction().begin();
         em.persist(room);
         building.getRooms().add(room);
@@ -80,7 +76,25 @@ public class SpaceDAOImpl implements SpaceDAO {
         return room.getRoomId();
 
     }
+    @Override
+    public long addRoom(String number, String buildingName, int capacity, String type) throws DAOException{
+     Room newRoom = null; 
+        Building building = new Building(buildingName);
+        try {
 
+            Constructor classType = Class.forName("org.classbooker.entity." + type)
+                    .getConstructor(Building.class, String.class, int.class);
+
+            newRoom = (Room) classType.newInstance(building,
+                    number, capacity);
+
+        } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            log.warning("Error");
+        }
+        addRoom(newRoom);
+        return newRoom.getRoomId(); 
+    }
+    
     /**
      * Find Room by id
      *
@@ -127,10 +141,10 @@ public class SpaceDAOImpl implements SpaceDAO {
     public void addBuilding(Building building) throws DAOException
              {
 
-  
+        em.getTransaction().begin();
         checkExistingBuildingOrRoom(building);
         em.persist(building);
- 
+        em.getTransaction().commit();
 
     }
 
@@ -283,14 +297,17 @@ public class SpaceDAOImpl implements SpaceDAO {
         if (!roomExist(room)) {
             throw new NoneExistingRoomException();
         }
-         System.out.print("Remove"+room.toString());
+        em.getTransaction().begin();
         room.getBuilding().getRooms().remove(room);
         em.remove(room);
+        em.getTransaction().commit();
     }
 
     @Override
     public void removeBuilding(Building building) throws DAOException {
+        em.getTransaction().begin();
         em.remove(building);
+        em.getTransaction().commit();
     }
 
     /**
