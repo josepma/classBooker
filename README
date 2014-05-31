@@ -1,3 +1,5 @@
+BUILDING THE APPLICATION
+
 **Run unit + integration tests: ant -f mybuild.xml test
    This option does not restore the integration database.
 
@@ -11,4 +13,28 @@
 **Restore integration database: ant -f mybuild.xml dbrestore
    This option has not been tested when several users execute it concurrently. 
    This situation may be problematic. Please, use it carefully.
+
+DUMPING THE INTEGRATION DATABASE
+
+**Instructions to change the database dump file (i.e., DB/sql339811.sql) 
+
+If you generate that file from phpmyadmin, proceed as follows:
+(a) Click on the export option.
+(b) Choose the "Custom-display all possible options" option.
+(c) Chosse the "Add DROP TABLE / VIEW / PROCEDURE / FUNCTION / EVENT statement"
+(d) Go.
+
+(e) The (c) step will create in the sql instructions of the sort:
+
+DROP TABLE IF EXISTS RESERVATION;
+DROP TABLE IF EXISTS USERT;
+DROP TABLE IF EXISTS ROOM;
+DROP TABLE IF EXISTS BUILDING;
+
+Please, find those instructions throughout the sql339811.sql file, cut them and 
+paste them at the beginning of the file IN THE ORDER GIVEN BEFORE. 
+There exists an example file in the DB folder. Please, have a look at it. 
+
+(f) Save the dump file as DB/sql339811.sql
+
 .............
