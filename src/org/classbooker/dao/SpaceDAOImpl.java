@@ -13,20 +13,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import org.classbooker.dao.exception.AlreadyExistingBuildingException;
 import org.classbooker.dao.exception.AlreadyExistingRoomException;
 import org.classbooker.dao.exception.AlredyExistReservationException;
 import org.classbooker.dao.exception.DAOException;
-import org.classbooker.dao.exception.IncorrectBuildingException;
-import org.classbooker.dao.exception.IncorrectRoomException;
 import org.classbooker.dao.exception.IncorrectTypeException;
 import org.classbooker.dao.exception.NonBuildingException;
 import org.classbooker.dao.exception.NoneExistingRoomException;
 import org.classbooker.dao.exception.PersistException;
 import org.classbooker.entity.Building;
-import org.classbooker.entity.MeetingRoom;
 import org.classbooker.entity.Room;
 
 /**
@@ -37,10 +33,16 @@ public class SpaceDAOImpl implements SpaceDAO {
 
     private EntityManager em;
     private  Logger log = Logger.getLogger("MiLogger");
+
+    /**
+     *
+     * @return
+     */
     public EntityManager getEm() {
         return em;
     }
 
+    @Override
     public void setEm(EntityManager em) {
         this.em = em;
     }
@@ -48,9 +50,8 @@ public class SpaceDAOImpl implements SpaceDAO {
     /**
      * Add new room in database and add room in buiding
      *
-     * @param room
+     * @param room 
      * @return RoomId
-     * @throws PersistException
      * @throws AlreadyExistingRoomException
      * @throws NonBuildingException
      */
@@ -89,7 +90,7 @@ public class SpaceDAOImpl implements SpaceDAO {
                     number, capacity);
 
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            log.warning("Error");
+            log.warning("Error to create new room");
         }
         addRoom(newRoom);
         return newRoom.getRoomId(); 
@@ -153,6 +154,7 @@ public class SpaceDAOImpl implements SpaceDAO {
      *
      * @param name
      * @return building If buiding non exist 
+     * @throws org.classbooker.dao.exception.DAOException 
      *
      */
     @Override
@@ -188,6 +190,7 @@ public class SpaceDAOImpl implements SpaceDAO {
      *
      * @param buildingName
      * @return List<Room>
+     * @throws org.classbooker.dao.exception.DAOException
      *
      */
     @Override
@@ -259,8 +262,7 @@ public class SpaceDAOImpl implements SpaceDAO {
      * @param buildingName The building name Ex.("EPS")
      * @param roomNb The number about room Ex.(2.01)
      * @return Room If room non exist return null
-     * @throws org.classBooker.dao.exception.IncorrectBuildingException
-     * @throws org.classBooker.dao.exception.IncorrectRoomException
+     * @throws org.classbooker.dao.exception.DAOException
      */
     @Override
     public Room getRoomByNbAndBuilding(String roomNb, String buildingName) throws DAOException{
@@ -305,6 +307,9 @@ public class SpaceDAOImpl implements SpaceDAO {
 
     @Override
     public void removeBuilding(Building building) throws DAOException {
+        if(!buildingExist(building)){
+            throw new NonBuildingException();
+        }
         em.getTransaction().begin();
         em.remove(building);
         em.getTransaction().commit();
@@ -316,7 +321,7 @@ public class SpaceDAOImpl implements SpaceDAO {
      * @param buildingName
      * @param type
      * @param capacity
-     * @throws org.classBooker.dao.exception.IncorrectBuildingException
+     * @throws org.classbooker.dao.exception.DAOException
      */
     @Override
     public List<Room> getAllRoomsByTypeAndCapacity(String type, int capacity, String buildingName)

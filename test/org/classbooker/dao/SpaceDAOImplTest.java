@@ -96,10 +96,18 @@ public class SpaceDAOImplTest {
 
     }
 
-    /**
-     *
-     * @throws Exception
-     */
+    @Test
+    public void testAddRoom2() throws Exception {
+        room2 = new ClassRoom(building, "2.08", 30);
+        long rom = sdi.addRoom("2.08", building.getBuildingName(), 30, "ClassRoom");
+        Room roomdb = ema.find(Room.class, (long)rom);
+
+        assertEquals(roomdb.getBuilding(), building);
+        assertEquals(roomdb.getCapacity(),30);
+        assertEquals(roomdb.getNumber(),"2.08");
+        assertTrue(roomdb instanceof ClassRoom);
+    }
+    
     @Test(expected = AlreadyExistingRoomException.class)
     public void testAddExistingRoom() throws Exception {
         building2 = new Building("FDE");

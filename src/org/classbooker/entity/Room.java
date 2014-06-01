@@ -7,8 +7,6 @@
 package org.classbooker.entity;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 import javax.persistence.*;
 /**
  *
@@ -49,9 +47,9 @@ public abstract class Room {
     
     /**
      * Contructor room
-     * @param building
-     * @param number
-     * @param capacity
+     * @param building The building room 
+     * @param number Represents the number room in the building
+     * @param capacity People capacity in the room
      */
     public Room( Building building, String number, int capacity) {
         this.number=number;
@@ -79,7 +77,7 @@ public abstract class Room {
 
     /**
      *This method change String number room 
-     * @param number
+     * @param number Represents the number room in the building
      */
     public void setNumber(String number) {
         this.number = number;
@@ -87,7 +85,7 @@ public abstract class Room {
 
     /**
      *This method change Integer capacity room 
-     * @param capacity
+     * @param capacity People capacity in the room
      */
     public void setCapacity(int capacity) {
         this.capacity = capacity;
@@ -135,7 +133,7 @@ public abstract class Room {
 
     /**
      * The method change building room
-     * @param building
+     * @param building The building room 
      */
     public void setBuilding(Building building) {
         this.building = building;
@@ -143,7 +141,7 @@ public abstract class Room {
 
     /**
      *The method change the reservation list
-     * @param  reservations
+     * @param  reservations list reservation about the room
      */
     public void setReservations(List<Reservation> reservations) {
         this.reservations = reservations;
@@ -161,7 +159,7 @@ public abstract class Room {
     }
 
     /**
-     *This method compare if two rooms are equals, return true if is equals and false if not equals
+     *This method compare if two rooms are equals, two rooms are equal if have the same building and number.
      *
      * @param obj Especific Room
      * @return  If the Rooms are equals
