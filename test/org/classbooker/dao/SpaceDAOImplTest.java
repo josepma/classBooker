@@ -296,9 +296,9 @@ public class SpaceDAOImplTest {
         assertEquals(building, sdi.getBuildingByName("EPS"));
     }
     
-    @Test(expected=NonBuildingException.class)
+    @Test
     public void testGetBuildingByNameNonExistBuilding() throws Exception {
-        sdi.getBuildingByName("FDE");
+       assertEquals(null, sdi.getBuildingByName("FDE"));
     }
     /**
      * Test of getAllBuildings method, of class SpaceDAOImpl.
@@ -480,7 +480,7 @@ public class SpaceDAOImplTest {
         assertEquals(null, sdi.getRoomByNbAndBuilding("2.21", "EPS"));
     }
     
-    @Test(expected=NonBuildingException.class)
+    @Test
     public void testgetRoomByNbAndBuildingNonExistBuilding() throws Exception {
        
         assertEquals(null, sdi.getRoomByNbAndBuilding("2.21", "ETSEA"));

@@ -21,7 +21,6 @@ import org.classbooker.dao.exception.DAOException;
 import org.classbooker.dao.exception.IncorrectTypeException;
 import org.classbooker.dao.exception.NonBuildingException;
 import org.classbooker.dao.exception.NoneExistingRoomException;
-import org.classbooker.dao.exception.PersistException;
 import org.classbooker.entity.Building;
 import org.classbooker.entity.Room;
 
@@ -154,15 +153,12 @@ public class SpaceDAOImpl implements SpaceDAO {
      *
      * @param name
      * @return building If buiding non exist 
-     * @throws org.classbooker.dao.exception.DAOException 
      *
      */
     @Override
-    public Building getBuildingByName(String name) throws DAOException {
+    public Building getBuildingByName(String name) {
         Building building = null;       
-        building = (Building) em.find(Building.class, name);
-        if (building==null)
-             throw new NonBuildingException();  
+        building = (Building) em.find(Building.class, name);        
         return building;
     }
 
@@ -190,13 +186,14 @@ public class SpaceDAOImpl implements SpaceDAO {
      *
      * @param buildingName
      * @return List<Room>
-     * @throws org.classbooker.dao.exception.DAOException
      *
      */
     @Override
-    public List<Room> getAllRoomsOfOneBuilding(String buildingName) throws DAOException {
+    public List<Room> getAllRoomsOfOneBuilding(String buildingName) {
 
         Building building = getBuildingByName(buildingName);
+        if(building==null)
+            return null;
         return building.getRooms();
 
     }
@@ -262,12 +259,14 @@ public class SpaceDAOImpl implements SpaceDAO {
      * @param buildingName The building name Ex.("EPS")
      * @param roomNb The number about room Ex.(2.01)
      * @return Room If room non exist return null
-     * @throws org.classbooker.dao.exception.DAOException
+     * 
      */
     @Override
-    public Room getRoomByNbAndBuilding(String roomNb, String buildingName) throws DAOException{
+    public Room getRoomByNbAndBuilding(String roomNb, String buildingName) {
         Building building = getBuildingByName(buildingName);
-
+        if(building==null){
+            return null;
+        }
         List<Room> rooms = building.getRooms();
         for (Room r : rooms) {
             if (r.getNumber().equals(roomNb)) {
@@ -321,11 +320,10 @@ public class SpaceDAOImpl implements SpaceDAO {
      * @param buildingName
      * @param type
      * @param capacity
-     * @throws org.classbooker.dao.exception.DAOException
      */
     @Override
     public List<Room> getAllRoomsByTypeAndCapacity(String type, int capacity, String buildingName)
-            throws DAOException {
+       {
 
         List<Room> roomsOneType = null;
         List<Room> roomsOneTypeOneBuilding = new ArrayList();
