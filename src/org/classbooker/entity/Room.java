@@ -167,7 +167,7 @@ public abstract class Room {
     @Override
     public boolean equals(Object obj) {
         
-        return  ((Room)obj).building==(this.building) && ((Room)obj).number==(this.number);
+        return  ((Room)obj).building.equals((this.building)) && ((Room)obj).number.equals((this.number));
                 
     }
 

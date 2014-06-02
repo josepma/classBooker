@@ -28,4 +28,10 @@ public class SpaceMrcServiceImplInteg {
     //
     // @Test
     // public void hello() {}
+
+    @Test
+    public void firstTest() throws Exception{
+        
+    }
+
 }
