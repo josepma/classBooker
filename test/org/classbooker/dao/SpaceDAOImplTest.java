@@ -50,16 +50,11 @@ public class SpaceDAOImplTest {
     Reservation reserv;
     private Query query;
 
-    /**
-     *
-     */
+
     public SpaceDAOImplTest() {
         this.sdi = new SpaceDAOImpl();
     }
 
-    /**
-     *
-     */
     @Before
     public void setUp() {
         building = new Building("EPS");
@@ -77,10 +72,6 @@ public class SpaceDAOImplTest {
         ema.getTransaction().commit();
     }
 
-    /**
-     *
-     * @throws Exception
-     */
     @Test
     public void testAddRoom() throws Exception {
         room2 = new ClassRoom(building, "2.08", 30);
@@ -127,10 +118,7 @@ public class SpaceDAOImplTest {
         sdi.addRoom(room2);
         sdi.addRoom(room3);
     }
-    /**
-     *
-     * @throws Exception
-     */
+
     @Test(expected = NonBuildingException.class)
     public void testAddRoomNoneExistingBuilding() throws Exception {
         building2 = new Building("FDE");
@@ -139,11 +127,7 @@ public class SpaceDAOImplTest {
         sdi.addRoom(room2);
     }
 
-    /**
-     * Test of removeRoom method, of class SpaceDAOImpl.
-     *
-     * @throws java.lang.Exception
-     */
+
    @Test
     public void testRemoveRoom() throws Exception {
         room2 = new ClassRoom(building, "2.08", 30);
@@ -153,20 +137,13 @@ public class SpaceDAOImplTest {
         assertFalse(sdi.getAllRoomsOfOneBuilding(building.getBuildingName()).contains(room2));
     }
 
-    /**
-     * Test of removeRoom method, of class SpaceDAOImpl.
-     *
-     * @throws java.lang.Exception
-     */
+
     @Test(expected = NoneExistingRoomException.class)
     public void testRemoveNoneExistingRoom() throws Exception {
         room2 = new ClassRoom(building, "2.08", 30);
         sdi.removeRoom(room2);
     }
 
-    /**
-     * Test of getRoomById method, of class SpaceDAOImpl.
-     */
     @Test
     public void testGetRoomById() {
         assertEquals(room, sdi.getRoomById(room.getRoomId()));
@@ -176,11 +153,7 @@ public class SpaceDAOImplTest {
         room2 = new ClassRoom(building, "1.03", 30);
         assertEquals(null, sdi.getRoomById(room2.getRoomId()));
     }
-    /**
-     * Test of getAllRooms method, of class SpaceDAOImpl.
-     *
-     * @throws java.lang.Exception
-     */
+
     @Test
     public void testGetAllRooms() throws Exception {
         room2 = new ClassRoom(building, "2.08", 30);
@@ -203,11 +176,7 @@ public class SpaceDAOImplTest {
         assertEquals(expected, resultSet);
 
     }
-    /**
-     * Test of addBuilding method, of class SpaceDAOImpl.
-     *
-     * @throws java.lang.Exception
-     */
+
     @Test
     public void testAddBuilding() throws Exception {
         building2 = new Building("FDE");
@@ -215,10 +184,7 @@ public class SpaceDAOImplTest {
         assertTrue(sdi.getAllBuildings().contains(building));
     }
 
-    /**
-     *
-     * @throws Exception
-     */
+
     @Test(expected = AlreadyExistingBuildingException.class)
     public void testAddExixtingBuilding() throws Exception {
         building2 = new Building("FDE");
@@ -227,11 +193,7 @@ public class SpaceDAOImplTest {
     }
 
      
-    /**
-     * Test of modifyRoom method, of class SpaceDAOImpl.
-     *
-     * @throws java.lang.Exception
-     */
+
     @Test
     public void testModifyCapacityRoom() throws Exception {
         room2 = new ClassRoom(building, "2.08", 30);
@@ -273,11 +235,7 @@ public class SpaceDAOImplTest {
         sdi.modifyRoom(room2, "MeetingRoom", 50);
     }
 
-    /**
-     * Test of removeBuilding method, of class SpaceDAOImpl.
-     *
-     * @throws java.lang.Exception
-     */
+
     @Test
     public void testRemoveBuilding() throws Exception {
         building2 = new Building("FDE");
@@ -286,11 +244,7 @@ public class SpaceDAOImplTest {
         assertFalse(sdi.getAllBuildings().contains(building2));
     }
 
-    /**
-     * Test of getBuildingByName method, of class SpaceDAOImpl.
-     *
-     * @throws java.lang.Exception
-     */
+
     @Test
     public void testGetBuildingByName() throws Exception {
         assertEquals(building, sdi.getBuildingByName("EPS"));
@@ -300,11 +254,7 @@ public class SpaceDAOImplTest {
     public void testGetBuildingByNameNonExistBuilding() throws Exception {
        assertEquals(null, sdi.getBuildingByName("FDE"));
     }
-    /**
-     * Test of getAllBuildings method, of class SpaceDAOImpl.
-     *
-     * @throws java.lang.Exception
-     */
+
     @Test
     public void testGetAllBuildings() throws Exception {
         building2 = new Building("FDE");
@@ -317,11 +267,7 @@ public class SpaceDAOImplTest {
         assertEquals(expected, resultSet);
     }
     
-    /**
-     * Test of getAllRoomsOfOneBuilding method, of class SpaceDAOImpl.
-     *
-     * @throws java.lang.Exception
-     */
+
     @Test
     public void testGetAllRoomsOfOneBuilding() throws Exception {
         List<Room> rooms = new ArrayList<Room>();
@@ -341,11 +287,7 @@ public class SpaceDAOImplTest {
         Set<Room> result = new HashSet<>(sdi.getAllRoomsOfOneBuilding(building2.getBuildingName()));
         assertEquals(roomsSet, result);
     }
-    /**
-     * Test of getAllRoomsOfOneType method, of class SpaceDAOImpl.
-     *
-     * @throws java.lang.Exception
-     */
+
     @Test
     public void testGetAllRoomsOfOneType() throws Exception {
         labRoom = new LaboratoryRoom(building, "3.01", 10);
@@ -362,10 +304,6 @@ public class SpaceDAOImplTest {
         assertEquals(roomsSet, result);
     }
 
-    /**
-     *
-     * @throws Exception
-     */
     @Test(expected = IncorrectTypeException.class)
     public void testGetAllRoomsOfOneIncorrectType() throws Exception {
         labRoom = new LaboratoryRoom(building, "3.4", 10);
@@ -382,11 +320,7 @@ public class SpaceDAOImplTest {
         assertEquals(roomsSet, result);
     }
 
-    /**
-     * Test of getAllRoomsOfOneTypeAndOneBuilding method, of class SpaceDAOImpl.
-     *
-     * @throws java.lang.Exception
-     */
+
     @Test
     public void testGetAllRoomsOfOneTypeAndOneBuilding() throws Exception {
         Building building2 = new Building("FDE");
@@ -407,11 +341,6 @@ public class SpaceDAOImplTest {
         assertEquals(roomsSet, result);
     }
 
-    /**
-     * Test of getAllRoomsOfOneTypeAndOneBuilding method, of class SpaceDAOImpl.
-     *
-     * @throws java.lang.Exception
-     */
     @Test
     public void testGetAllRoomsOfOneTypeAndOneBuildingNonExistRooms() throws Exception {
         Building building2 = new Building("FDE");
@@ -433,10 +362,7 @@ public class SpaceDAOImplTest {
     }
 
     
-    /**
-     *
-     * @throws Exception
-     */
+
     @Test
     public void testGetAllRoomsOfOneTypeAndOneBuildingandcapacity() throws Exception {
         labRoom = new LaboratoryRoom(building, "2.6", 10);
@@ -464,10 +390,7 @@ public class SpaceDAOImplTest {
         assertEquals(roomsSet, result);
     }
 
-    /**
-     *
-     * @throws Exception
-     */
+
     @Test
     public void testgetRoomByNbAndBuilding() throws Exception {
         labRoom = new LaboratoryRoom(building, "2.21", 10);
@@ -490,10 +413,7 @@ public class SpaceDAOImplTest {
         return emf.createEntityManager();
     }
 
-    /**
-     *
-     * @throws Exception
-     */
+   
     @After
     public void tearDown() throws Exception {
         
