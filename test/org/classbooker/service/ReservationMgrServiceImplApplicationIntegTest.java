@@ -85,15 +85,15 @@ public class ReservationMgrServiceImplApplicationIntegTest {
     @Test
     //we have all requirements to make new reservation
     public void testMakeNewReservation() throws Exception {
-        Reservation result = rmgr.makeReservationBySpace(2, "55555", correctDate);
+        Reservation result = rmgr.makeReservationBySpace(1, "55555", correctDate);
         assertEquals("Check hour of day",correctDate.getHourOfDay(),result.getReservationDate().getHourOfDay());
         assertEquals("Check year",correctDate.getYear(),result.getReservationDate().getYear());
         assertEquals("Check minute of hour",correctDate.getMinuteOfHour(),result.getReservationDate().getMinuteOfHour());
         assertEquals("Check month of year",correctDate.getMonthOfYear(),result.getReservationDate().getMonthOfYear());
         assertEquals("Check day of month",correctDate.getDayOfMonth(),result.getReservationDate().getDayOfMonth());
         assertEquals("Check user",uDao.getUserByNif("55555"),result.getrUser());
-        assertEquals("Check roomNumber",sDao.getRoomById(2).getNumber(),result.getRoom().getNumber());
-        assertEquals("Check nameBuilding",sDao.getRoomById(2).getBuilding(),result.getRoom().getBuilding());
+        assertEquals("Check roomNumber",sDao.getRoomById(1).getNumber(),result.getRoom().getNumber());
+        assertEquals("Check nameBuilding",sDao.getRoomById(1).getBuilding(),result.getRoom().getBuilding());
         
     }
 
@@ -111,21 +111,21 @@ public class ReservationMgrServiceImplApplicationIntegTest {
         rmgr.deleteReservation(99);
     }
     
-    //THIS TEST IS INCORRECT. IT RELIES ON ANOTHER ONE (TESTMAKENEWRESERVATION)
-    //CHECK IF THIS HAPPENS WITH OTHER TESTS!!!!
-   // @Test
+    //This test is correct, we create the new reservation, then we add to the DB and finally delete it. 
+    //MakeReservation create reservation but only create and return it, doesn't insert it into DB.
+    @Test
     public void testDeleteExistingReservation()throws Exception{
         Reservation result = rmgr.makeReservationBySpace(2, "55555", correctDate);
         rDao.addReservation(result);
+        assertEquals("stored it correctly in DB",result,rDao.getReservationById(result.getReservationId()));
         rmgr.deleteReservation(result.getReservationId());
         assertEquals("already delete the reservation made",null,rDao.getReservationById(result.getReservationId()));
     }
 
     //find reservationById
-    //THIS TEST IS INCORRECT. THERE EXIST A RESERVATION IN THE DB WITH ID = 26!!!!
-   // @Test(expected = IncorrectReservationException.class)
+    @Test(expected = IncorrectReservationException.class)
     public void testCannotFindReservationById()throws Exception{
-        rmgr.findReservationById(26);
+        rmgr.findReservationById(99);
     }
     
     @Test
