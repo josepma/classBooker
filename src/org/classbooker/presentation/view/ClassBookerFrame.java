@@ -63,7 +63,7 @@ public class ClassBookerFrame extends JFrame {
         menubar = new JMenuBar();
         
         createSpacesMenu();
-    
+        createStaffMenu();
 
         this.setJMenuBar(menubar);
     }
@@ -94,6 +94,21 @@ public class ClassBookerFrame extends JFrame {
         menubar.add(spacemenu);
 
         
+    }
+
+    private void createStaffMenu() {
+        JMenu staffmenu = new JMenu("Staff");
+        staffmenu.add(new JSeparator());
+        
+        JMenuItem staffItem1 = new JMenuItem("Add user");
+        staffItem1.addActionListener(new UserInsertionAction(this, staffService));
+        
+        JMenuItem staffItem2 = new JMenuItem("Add masive users");
+      //  staffItem2.addActionListener(new MassiveUserInsertionAction(this, staffService));
+        
+        staffmenu.add(staffItem1);
+        staffmenu.add(staffItem2);
+        menubar.add(staffmenu);
     }
     
    
