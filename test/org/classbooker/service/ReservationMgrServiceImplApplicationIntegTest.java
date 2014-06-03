@@ -16,7 +16,7 @@ import org.classbooker.dao.exception.IncorrectReservationException;
 import org.classbooker.dao.exception.IncorrectRoomException;
 import org.classbooker.dao.exception.IncorrectTimeException;
 import org.classbooker.dao.exception.IncorrectUserException;
-import org.classbooker.dao.exception.NonBuildingException;
+import org.classbooker.dao.exception.IncorrectBuildingException;
 import org.classbooker.entity.Reservation;
 import org.classbooker.service.ReservationMgrServiceImpl;
 import org.joda.time.DateTime;
@@ -137,7 +137,7 @@ public class ReservationMgrServiceImplApplicationIntegTest {
    
     
     
-    @Test (expected = NonBuildingException.class)
+    @Test (expected = IncorrectBuildingException.class)
     public void testCannotFindReservationByBuilding() throws Exception{
         
         rmgr.findReservationBySpaceAndDate("ADE", "2.08", correctDate);

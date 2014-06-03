@@ -199,8 +199,8 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
         Building building = spaceDao.getBuildingByName(buildingName);
         Room room = spaceDao.getRoomByNbAndBuilding(roomNumber, buildingName);
         datetime = date;
-        checkRoom(room);
         checkBuilding(building);
+        checkRoom(room);
         checkDate(datetime);
         return reservationDao.getReservationByDateRoomBulding(datetime, roomNumber, buildingName);
     }

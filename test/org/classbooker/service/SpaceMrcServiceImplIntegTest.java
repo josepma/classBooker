@@ -14,9 +14,9 @@ import static org.junit.Assert.*;
  *
  * @author saida
  */
-public class SpaceMrcServiceImplInteg {
+public class SpaceMrcServiceImplIntegTest {
     
-    public SpaceMrcServiceImplInteg() {
+    public SpaceMrcServiceImplIntegTest() {
     }
     
     @Before
