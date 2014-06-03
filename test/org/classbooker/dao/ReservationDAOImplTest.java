@@ -24,6 +24,7 @@ import org.classbooker.dao.exception.IncorrectBuildingException;
 import org.classbooker.dao.exception.IncorrectReservationException;
 import org.classbooker.dao.exception.IncorrectRoomException;
 import org.classbooker.dao.exception.IncorrectUserException;
+import org.classbooker.dao.exception.NoneExistingRoomException;
 import org.classbooker.entity.Building;
 import org.classbooker.entity.MeetingRoom;
 import org.classbooker.entity.ProfessorPas;
@@ -195,26 +196,26 @@ public class ReservationDAOImplTest {
         
     }
         
-    @Test(expected = IncorrectRoomException.class)
+    @Test(expected = NoneExistingRoomException.class)
     public void testAddReservationByAttributeNotExistRoom() throws Exception {
         context.checking(new Expectations(){{
-            oneOf(uDao).getUserByNif(user1.getNif());
+            allowing(uDao).getUserByNif(user1.getNif());
             will(returnValue(user1));
-            oneOf(sDao).getRoomByNbAndBuilding("11","testBuilding");
-            will(throwException(new IncorrectRoomException()));
+            allowing(sDao).getRoomByNbAndBuilding("11","testBuilding");
+            will(returnValue(null));
         }});
         
         rDao.addReservation("47658245M", "11", "testBuilding", dataRes1);
     }
     
-    @Test(expected = IncorrectBuildingException.class)
+    @Test(expected = NoneExistingRoomException.class)
     public void testAddReservationByAttributeNotExistBuilding() throws Exception {
         context.checking(new Expectations(){{
             oneOf(uDao).getUserByNif(user1.getNif());
             will(returnValue(user1));
             oneOf(sDao).getRoomByNbAndBuilding("10", 
                                                "NotExistBuilding");
-            will(throwException(new IncorrectBuildingException()));
+            will(returnValue(null));
         }});
         
         rDao.addReservation("47658245M", "10","NotExistBuilding", dataRes1);
@@ -335,12 +336,12 @@ public class ReservationDAOImplTest {
         
     }
     
-    @Test(expected = IncorrectBuildingException.class)
+    @Test(expected = NoneExistingRoomException.class)
     public void testRemoveReservationByAtributesBadBuilding() throws Exception {
         context.checking(new Expectations(){{
             oneOf(sDao).getRoomByNbAndBuilding(room1.getNumber(), 
                                                building1.getBuildingName());
-            will(throwException(new IncorrectBuildingException()));
+            will(returnValue(null));
         }});
 
         rDao.removeReservation(dataRes1, 

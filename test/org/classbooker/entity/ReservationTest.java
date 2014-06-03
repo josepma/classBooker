@@ -5,11 +5,6 @@
  */
 package org.classbooker.entity;
 
-import org.classbooker.entity.ProfessorPas;
-import org.classbooker.entity.Reservation;
-import org.classbooker.entity.MeetingRoom;
-import org.classbooker.entity.ReservationUser;
-import org.classbooker.entity.Room;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -45,7 +40,7 @@ public class ReservationTest {
 
         dateTime = new DateTime(2014, 4, 25, 10, 25);
         rUser = new ProfessorPas();
-        room = new MeetingRoom();
+        room = new MeetingRoom(new Building("TestBuilding"), "0.1", 10);
 
         instance = new Reservation(dateTime, rUser, room);
     }
@@ -126,9 +121,9 @@ public class ReservationTest {
      */
     @Test
     public void testSetRoom() {
-        Room expResult = new MeetingRoom();
-        instance.setRoom(expResult);
-        assertEquals(expResult, instance.getRoom());
+
+        instance.setRoom(room);
+        assertEquals(room, instance.getRoom());
     }
 
 }
