@@ -65,12 +65,13 @@ public class ReservationDAOImpl implements ReservationDAO{
         
         if(!checkReservationForUser(reservation)){
             persistReservation(reservation);
+            em.getTransaction().commit();
         }else{
+            em.getTransaction().commit();
             reservation = getReservationByDateRoomBulding(reservation.getReservationDate(), 
                                     reservation.getRoom().getNumber(), 
-                                    reservation.getRoom().getBuilding().getBuildingName());
+                                    reservation.getRoom().getBuilding().getBuildingName());    
         }
-        em.getTransaction().commit();
         logger.info("Reservation added:"+reservation);
         return reservation.getReservationId();
     }
@@ -85,11 +86,7 @@ public class ReservationDAOImpl implements ReservationDAO{
                                             getRoom(roomNb, buildingName)));    
     }
     
-    private void persistReservation(Reservation reservation){
-            em.persist(reservation);
-            reservation.getrUser().getReservations().add(reservation);
-            reservation.getRoom().getReservations().add(reservation);
-    }
+
 
     @Override
     public Reservation getReservationById(long id) {
@@ -129,6 +126,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     @Override
     public List<Reservation> getAllReservationByBuilding(String name) 
                                             throws DAOException {
+        checkBuilding(sDao.getBuildingByName(name));
         em.getTransaction().begin();
         List resultList = em.createQuery("SELECT r FROM Reservation r WHERE r.room.building.name = :buildingName ")
                 .setParameter("buildingName", name)
@@ -141,6 +139,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     @Override
     public List<Reservation> getAllReservationByRoom(long id) 
                                                 throws DAOException {
+        checkRoom(sDao.getRoomById(id));
         em.getTransaction().begin();
         List resultList = em.createQuery("SELECT r FROM Reservation r WHERE r.room.roomId = :roomID ")
                 .setParameter("roomID", id)
@@ -165,9 +164,8 @@ public class ReservationDAOImpl implements ReservationDAO{
     }
     
     private void removeReservation(Reservation res) throws DAOException{
-        if(res == null ){
-            throw new IncorrectReservationException();
-        }
+        
+        checkReservation(res);
         em.getTransaction().begin();
         ReservationUser usr =res.getrUser();
         Room room = res.getRoom();
@@ -185,9 +183,12 @@ public class ReservationDAOImpl implements ReservationDAO{
     @Override
     public List<Reservation> getAllReservationByUserNif(String nif) 
                                                 throws DAOException{
+        checkUser(uDao.getUserByNif(nif));
+        em.getTransaction().begin();
         List resultList = em.createQuery("SELECT r FROM Reservation r WHERE r.rUser.nif = :nif ")
                 .setParameter("nif", nif)
                 .getResultList();
+        em.getTransaction().commit();
         return resultList;
     }
     
@@ -215,12 +216,12 @@ public class ReservationDAOImpl implements ReservationDAO{
         return checkExistingReservationForOtherUser(reservation);
     }
 
-    private void checkRoom(Room room) throws IncorrectRoomException {
+    private void checkRoom(Room room) throws IncorrectRoomException, NoneExistingRoomException {
         if(room == null || room.getNumber() == null){
             throw new IncorrectRoomException(logger,"checkRoom");
         }    
         if(!em.contains(room)){
-            throw new IncorrectRoomException(logger,"checkRoom");
+            throw new NoneExistingRoomException(logger,"checkRoom");
         }
         
     }
@@ -249,7 +250,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     private void checkExistingReservation(Reservation reservation) 
                                         throws DAOException{  
         em.getTransaction().begin();
-        boolean exist = em.createQuery("SELECT r FROM Reservation r WHERE r.reservationDate = :reservationdDate AND r.room = :reservationRoom ")
+        boolean nonexist = em.createQuery("SELECT r FROM Reservation r WHERE r.reservationDate = :reservationdDate AND r.room = :reservationRoom ")
                 .setParameter("reservationdDate", 
                                 reservation.getReservationDate()
                                 .toCalendar(Locale.getDefault()))
@@ -257,8 +258,8 @@ public class ReservationDAOImpl implements ReservationDAO{
                                 reservation.getRoom())
                 .getResultList().isEmpty();
         em.getTransaction().commit();
-        if(!exist){
-            throw new AlredyExistReservationException(logger,"checkExistingReservation");
+        if(nonexist){
+            throw new IncorrectReservationException(logger,"checkExistingReservation");
         }    
     }
     
@@ -307,6 +308,12 @@ public class ReservationDAOImpl implements ReservationDAO{
         
         return room;
 
+    }
+    
+    private void persistReservation(Reservation reservation){
+            em.persist(reservation);
+            reservation.getrUser().getReservations().add(reservation);
+            reservation.getRoom().getReservations().add(reservation);
     }
     
     @Override

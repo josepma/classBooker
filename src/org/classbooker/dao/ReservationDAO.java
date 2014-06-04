@@ -39,7 +39,7 @@ public interface ReservationDAO {
     
     
     /**
-     * Add a reservation in the database
+     * Add a reservation in the database and her relationships of user and the room.
      *
      * @param reservation
      * @return an identifier of the reservation added.
@@ -47,26 +47,33 @@ public interface ReservationDAO {
      * when the reservation is null or the date is null.
      * @throws IncorrectUserException 
      * when the user is null or the nif of the user is null.
-     * @throws IncorrectRoomException
-     * when the Room is null or the number of the room is null.
+     * @throws IncorrectRoomException 
+     * when the room is null or number is null.
+     * @throws NoneExistingRoomException
+     * when the Room non exist.
+     * @throws IncorrectBuildingException
+     * when the Building is null or the name of the building is null.
      */
     long addReservation(Reservation reservation)
                                            throws DAOException;
     
     /**
-     * Add a reservation in the database by params
+     * Add a reservation in the database and her relationships of user and the room by params.
      * @param nif
      * @param roomId
      * @param buildingName name of the building
      * @param dateTime the time of reservation
      * @return an identifier of the reservation added.
      * @throws IncorrectReservationException 
-     * when the reservation is null or the date is null
+     * when the reservation is null or the date is null.
      * @throws IncorrectUserException 
-     * when the user is null or the nif of the user is null
-     * @throws IncorrectRoomException
-     * when the Room is null or the number of the room is null
-     * @throws AlredyExistReservationException
+     * when the user is null or the nif of the user is null.
+     * @throws IncorrectRoomException 
+     * when the room is null or number is null.
+     * @throws NoneExistingRoomException
+     * when the Room non exist.
+     * @throws IncorrectBuildingException
+     * when the Building is null or the name of the building is null.
      */
     long addReservation (String nif, String roomId, 
                           String buildingName, DateTime dateTime)
@@ -76,24 +83,42 @@ public interface ReservationDAO {
      * Remove reservation by id.
      * @param id identifier of the reservation.
      * @throws IncorrectReservationException 
-     * when the Room is null or the number of the room is null
+     * when the reservation is null or the date is null.
+     * @throws IncorrectUserException 
+     * when the user is null or the nif of the user is null.
+     * @throws IncorrectRoomException 
+     * when the room is null or number is null.
+     * @throws NoneExistingRoomException
+     * when the Room non exist.
      */
 
     void removeReservation(long id) throws DAOException;
     
-    
+     /**
+     * Remove reservation by attributes.
+     * @param id identifier of the reservation.
+     * @throws IncorrectReservationException 
+     * when the reservation not exist.
+     * @throws IncorrectUserException 
+     * when the user is null or the nif of the user is null.
+     * @throws IncorrectRoomException 
+     * when the room is null or number is null.
+     * @throws NoneExistingRoomException
+     * when the Room non exist.
+     */
     void removeReservation(DateTime datetime, String roomNb,String buildingName) 
                                             throws DAOException;
     
     /**
      * Get a reservation by id.
      * @param id identifier of the reservation.
-     * @return the reservation equals that identifier
+     * @return the reservation equals that identifier or null if the reservation
+     * does not exist
      */
     Reservation getReservationById(long id);
     
     /**
-     * Get a reservation by date, Room
+     * Get a reservation by date, Room and building
      * @param dateTime the time of reservation.
      * @param roomNb identifier of the room.
      * @param buildingName name of the building.
@@ -119,7 +144,7 @@ public interface ReservationDAO {
      * @return a list of reservations when non exist reservations 
      * returns empty list
      * @throws IncorrectUserException
-     * when the user doesn't exist.
+     * when the user doesn't exist or is null.
      */
     List<Reservation> getAllReservationByUserNif(String nif)
                                             throws DAOException;
@@ -130,7 +155,7 @@ public interface ReservationDAO {
      * @return a list of reservations when non exist reservations 
      * returns empty list
      * @throws IncorrectBuildingException
-     * when the Building doesn't exist.
+     * when the Building doesn't exist or is null.
      */
     List<Reservation> getAllReservationByBuilding(String name) 
                                             throws DAOException;
@@ -141,7 +166,9 @@ public interface ReservationDAO {
      * @return a list of reservations when non exist reservations 
      * returns empty list
      * @throws IncorrectRoomException
-     * when the Room doesn't exist.
+     * when the Room  is null.
+     * @throws NoneExistingRoomException
+     * when the Room non exist.
      */
     List<Reservation> getAllReservationByRoom(long id) 
                                             throws DAOException;

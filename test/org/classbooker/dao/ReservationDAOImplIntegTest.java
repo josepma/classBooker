@@ -140,7 +140,7 @@ public class ReservationDAOImplIntegTest {
         rDao.addReservation(reservation1);
     }
     
-    @Test(expected = IncorrectRoomException.class)
+    @Test(expected = NoneExistingRoomException.class)
     public void testAddReservationNotExistRoom() throws Exception {
         roomaux = new MeetingRoom(building1, "20", 10);
         reservationaux = new Reservation(dataRes1, user1, roomaux);
