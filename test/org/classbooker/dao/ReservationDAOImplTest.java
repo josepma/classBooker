@@ -155,7 +155,7 @@ public class ReservationDAOImplTest {
         rDao.addReservation(reservation1);
     }
     
-    @Test(expected = IncorrectRoomException.class)
+    @Test(expected = NoneExistingRoomException.class)
     public void testAddReservationNotExistRoom() throws Exception {
         Room notExistRoom = new MeetingRoom(building1, "20", 10);
         Reservation res = new Reservation(dataRes1, user1, notExistRoom);
@@ -273,6 +273,10 @@ public class ReservationDAOImplTest {
      */
     @Test
     public void testGetAllReservationByBuilding() throws Exception {
+        context.checking(new Expectations(){{
+            oneOf(sDao).getBuildingByName(building1.getBuildingName());
+            will(returnValue(building1));
+        }});
         allReservation.add(reservation1);
         allReservation.add(reservation3);
        
@@ -288,6 +292,10 @@ public class ReservationDAOImplTest {
      */
     @Test
     public void testGetAllReservationByRoom() throws Exception {
+        context.checking(new Expectations(){{
+            oneOf(sDao).getRoomById(room1.getRoomId());
+            will(returnValue(room1));
+        }});
         allReservation.add(reservation1);
         allReservation.add(reservation3);
         long idRoom = room1.getRoomId();
@@ -364,6 +372,12 @@ public class ReservationDAOImplTest {
     
     @Test
     public void testGetAllReservationByUserNif() throws Exception {
+        
+        context.checking(new Expectations(){{
+            oneOf(uDao).getUserByNif(user1.getNif());
+            will(returnValue(user1));
+        }});
+        
         reservation2.setrUser(user1);
         addAllReservations();
         
