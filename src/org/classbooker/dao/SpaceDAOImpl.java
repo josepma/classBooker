@@ -60,8 +60,8 @@ public class SpaceDAOImpl implements SpaceDAO {
      */
     @Override
     public long addRoom(Room room) throws  DAOException{
-
-        Building building = getBuildingByName(room.getBuilding().getBuildingName());
+        
+        Building building = room.getBuilding();
     
 
         if (building == null) {
@@ -70,7 +70,7 @@ public class SpaceDAOImpl implements SpaceDAO {
         if (roomExist(room)) {
             throw new AlreadyExistingRoomException();
         }
-       
+        System.out.println("atributs: "+ room.toString());
         em.getTransaction().begin();
         em.persist(room);
         building.getRooms().add(room);
@@ -106,6 +106,7 @@ public class SpaceDAOImpl implements SpaceDAO {
         } catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             log.warning("Error to create new room");
         }
+        //System.out.println("atributs: "+ newRoom.toString());
         addRoom(newRoom);
         return newRoom.getRoomId(); 
     }
@@ -165,12 +166,14 @@ public class SpaceDAOImpl implements SpaceDAO {
      * Get building by name, if don't find it, return null     *
      * @param name building name
      * @return building 
-     * @throws NonBuildingException
      */
     @Override
     public Building getBuildingByName(String name) {
-        Building building = null;       
-        building = (Building) em.find(Building.class, name);        
+        Building building = null;   
+        em.getTransaction().begin();
+        building = (Building) em.find(Building.class, name);   
+        em.persist(building);
+        em.getTransaction().commit();
         return building;
     }
 
@@ -402,8 +405,12 @@ public class SpaceDAOImpl implements SpaceDAO {
      * @return true if there rooms, false if not.
      */
     private boolean roomsExist(List<Room> rooms) {
+      
+        
         for (Room r : rooms) {
+            em.getTransaction().begin();
             Room room = (Room) em.find(Room.class, r.getRoomId());
+            em.getTransaction().commit();
             if (room != null) {
                 return true;
             }
@@ -431,6 +438,7 @@ public class SpaceDAOImpl implements SpaceDAO {
       
        try {
            Room room2;
+           em.getTransaction().begin();
            room2 = (Room)  em.createQuery("SELECT r "
                     + "FROM Room r "
                     + "WHERE r.building.name = :buildingName AND "
@@ -439,6 +447,7 @@ public class SpaceDAOImpl implements SpaceDAO {
                     .setParameter("roomNb", room.getNumber())
                     .getSingleResult();
                     log.log(Level.INFO, "Exist{0}", room2.toString());
+          em.getTransaction().commit();          
         } catch (NoResultException e) {
             log.log(Level.WARNING, "Non exist{0}", room.toString());
             return false;

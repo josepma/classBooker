@@ -43,9 +43,8 @@ public class StaffMgrServiceImpl implements StaffMgrService{
     private static final int X = 3;
     
     public StaffMgrServiceImpl(){
-        u =new UserDAOImpl();
-        
     }
+    
     public UserDAO getUserDAO(){
         return this.u;
     }

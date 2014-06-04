@@ -6,6 +6,7 @@
 
 package org.classbooker.service;
 
+import javax.persistence.EntityManager;
 import org.classbooker.dao.exception.DAOException;
 import org.classbooker.entity.Building;
 import org.classbooker.entity.Room;
@@ -21,6 +22,7 @@ public interface SpaceMgrService {
     public void deleteBuilding(long id);
     public Room modifyRoom(long id, String buildingName, int capacity, String type);
     public Building modifyBuilding(long id, String name);
-     public Room getRoomById(long id) throws DAOException;
-     public Building getBuildingbyName(String name) throws DAOException;
+    public Room getRoomById(long id) throws DAOException;
+    public Building getBuildingbyName(String name) throws DAOException;
+    public void setEm(EntityManager em);
 }

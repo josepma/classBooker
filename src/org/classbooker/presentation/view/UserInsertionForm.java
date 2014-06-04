@@ -6,7 +6,6 @@
 
 package org.classbooker.presentation.view;
 
-import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,7 +14,6 @@ import javax.swing.JTextField;
 import org.classbooker.service.*;
 import org.classbooker.presentation.controller.*;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 

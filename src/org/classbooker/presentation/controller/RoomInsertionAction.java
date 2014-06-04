@@ -10,31 +10,32 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
-import org.classbooker.service.*;
 import org.classbooker.presentation.view.*;
+import org.classbooker.service.*;
 
 /**
  *
- * @author aba8
+ * @author genis, saida
  */
-public class UserInsertionAction implements ActionListener {
+public class RoomInsertionAction implements ActionListener {
 
     JFrame parent;
-    StaffMgrService services;
-
-    public UserInsertionAction(JFrame frame, StaffMgrService service) {
+    SpaceMgrService services;
+    
+    public RoomInsertionAction(JFrame frame, SpaceMgrService spaceservice) {
         parent = frame;
-        this.services = service;
+        this.services = services;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e){
     
         parent.getContentPane().removeAll();
          
-        UserInsertionForm form = new UserInsertionForm(parent,services);
+        RoomInsertionForm form = new RoomInsertionForm(parent,services);
         parent.getContentPane().add(form,BorderLayout.CENTER);
      
         parent.revalidate();                        
     }
-
+    
 }
