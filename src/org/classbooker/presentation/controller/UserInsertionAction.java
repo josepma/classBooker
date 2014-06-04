@@ -22,9 +22,9 @@ public class UserInsertionAction implements ActionListener {
     JFrame parent;
     StaffMgrService services;
 
-    public UserInsertionAction(JFrame frame, StaffMgrService spaceservice) {
+    public UserInsertionAction(JFrame frame, StaffMgrService service) {
         parent = frame;
-        this.services = services;
+        this.services = service;
     }
 
     public void actionPerformed(ActionEvent e){

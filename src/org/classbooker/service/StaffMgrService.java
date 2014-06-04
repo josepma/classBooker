@@ -6,6 +6,7 @@
 
 package org.classbooker.service;
 
+import org.classbooker.dao.UserDAO;
 import org.classbooker.dao.exception.AlreadyExistingUserException;
 import org.classbooker.entity.User;
 import org.classbooker.service.exception.ServiceException;
@@ -21,4 +22,5 @@ public interface StaffMgrService {
     User getUser(String nif);
     void deleteUser(User user);
     void modifyUserInformation(User user);
+    void setUserDao(UserDAO userdao);
 }

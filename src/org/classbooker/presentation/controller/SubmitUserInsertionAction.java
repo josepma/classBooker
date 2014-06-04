@@ -10,12 +10,14 @@ package org.classbooker.presentation.controller;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import org.classbooker.presentation.view.*;
-import org.classbooker.service.*;
+import org.classbooker.dao.UserDAO;
+import org.classbooker.dao.UserDAOImpl;
 import org.classbooker.dao.exception.AlreadyExistingBuildingException;
 import org.classbooker.entity.ProfessorPas;
 import org.classbooker.entity.ReservationUser;
 import org.classbooker.entity.User;
+import org.classbooker.presentation.view.*;
+import org.classbooker.service.*;
 
 /**
  *
@@ -41,9 +43,14 @@ public class SubmitUserInsertionAction implements ActionListener{
        String email = userInsertionForm.email.getText();
        User user = new ProfessorPas(nif,email,userName);
        userInsertionForm.parent.getContentPane().removeAll();
-      
+      //userDao not set entitymanager(classbookintegration)
+       UserDAO userdao = new UserDAOImpl("classBookerIntegration");
+       services.setUserDao(userdao);
+       
         try{
-          services.addUser(new ProfessorPas("dhsjdd","ejkkfd@djk","Angel"));
+          services.addUser(user);
+          System.out.println("ok,inserted");
+          
          // ConfirmationForm confirm = new ConfirmationForm();
          // buildingInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
      
