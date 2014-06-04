@@ -110,4 +110,9 @@ public class Reservation {
                 .withMillisOfSecond(0).toCalendar(Locale.getDefault());
     }
 
+    @Override
+    public String toString() {
+        return "Reservation{" + "reservationId=" + reservationId +/* ", reservationDate=" + reservationDate.getTimeZone() + */", rUser=" + rUser.toString() + ", room=" + room.toString() + '}';
+    }
+
 }

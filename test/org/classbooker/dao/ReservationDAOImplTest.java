@@ -170,7 +170,13 @@ public class ReservationDAOImplTest {
     }
         
     @Test
-    public void testAddReservationSameTimeAndRoomAndUser() throws Exception {  
+    public void testAddReservationSameTimeAndRoomAndUser() throws Exception { 
+        context.checking(new Expectations(){{
+            oneOf(sDao).getRoomByNbAndBuilding(room1.getNumber(), 
+                                               room1.getBuilding().getBuildingName());
+            will(returnValue(room1));
+        }});
+        
         Reservation res = new Reservation(dataRes1, user1, room1);
         rDao.addReservation(reservation1);
         rDao.addReservation(res);

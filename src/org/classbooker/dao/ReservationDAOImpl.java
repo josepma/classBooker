@@ -65,6 +65,10 @@ public class ReservationDAOImpl implements ReservationDAO{
         
         if(!checkReservationForUser(reservation)){
             persistReservation(reservation);
+        }else{
+            reservation = getReservationByDateRoomBulding(reservation.getReservationDate(), 
+                                    reservation.getRoom().getNumber(), 
+                                    reservation.getRoom().getBuilding().getBuildingName());
         }
         em.getTransaction().commit();
         logger.info("Reservation added:"+reservation);
@@ -122,7 +126,6 @@ public class ReservationDAOImpl implements ReservationDAO{
         return resultList;
     }
 
-
     @Override
     public List<Reservation> getAllReservationByBuilding(String name) 
                                             throws DAOException {
@@ -166,8 +169,15 @@ public class ReservationDAOImpl implements ReservationDAO{
             throw new IncorrectReservationException();
         }
         em.getTransaction().begin();
-        res.getrUser().getReservations().remove(res);
-        res.getRoom().getReservations().remove(res);
+        ReservationUser usr =res.getrUser();
+        Room room = res.getRoom();
+        while(usr.getReservations().contains(res)){
+            usr.getReservations().remove(res);
+        }
+        while(room.getReservations().contains(res)){
+            room.getReservations().remove(res);
+        }
+
         em.remove(res);
         em.getTransaction().commit();
     }
@@ -180,7 +190,6 @@ public class ReservationDAOImpl implements ReservationDAO{
                 .getResultList();
         return resultList;
     }
-    
     
     
     private void checkReservation(Reservation reservation) 
@@ -297,9 +306,7 @@ public class ReservationDAOImpl implements ReservationDAO{
         }
         
         return room;
-        
-        
-        
+
     }
     
     @Override
