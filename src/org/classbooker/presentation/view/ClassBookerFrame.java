@@ -81,7 +81,7 @@ public class ClassBookerFrame extends JFrame {
         //However, the overall design would be a bit more complicated (but more reusable).
 
         JMenuItem spaceItem2 = new JMenuItem("New room");
-        //spaceItem2.addActionListener(new RoomInsertionAction(this, spaceService));
+        spaceItem2.addActionListener(new RoomInsertionAction(this, spaceService));
         
         
 

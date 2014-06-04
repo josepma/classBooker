@@ -9,6 +9,7 @@ package org.classbooker.service;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Logger;
+import javax.persistence.EntityManager;
 import org.classbooker.dao.SpaceDAO;
 import org.classbooker.dao.SpaceDAOImpl;
 import org.classbooker.dao.UserDAO;
@@ -24,6 +25,7 @@ import org.classbooker.entity.Room;
 public class SpaceMgrServiceImpl implements SpaceMgrService{
     private  Logger log = Logger.getLogger("MiLogger");
     private SpaceDAO spd;
+    private EntityManager em;
 
     public SpaceMgrServiceImpl() {
         spd = new SpaceDAOImpl();
@@ -47,6 +49,7 @@ public class SpaceMgrServiceImpl implements SpaceMgrService{
     }
     
     
+    @Override
     public Building getBuildingbyName(String name) throws DAOException{
         return spd.getBuildingByName(name);
     
@@ -82,5 +85,14 @@ public class SpaceMgrServiceImpl implements SpaceMgrService{
     public Building modifyBuilding(long id, String name) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    @Override
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
+    
+    public EntityManager getEm() {
+        return em;
+    }
+    
     
 }
