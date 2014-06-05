@@ -30,7 +30,7 @@ public class SubmitMakeReservationByTypeAction {
        
         String buildingName = ReservationByTypeInsertionForm.buildingName.getText();
  
-       ReservationByTypeInsertionForm.parent.getContentPane().removeAll();
+       reservationByTypeInsertionForm.parent.getContentPane().removeAll();
       
         try{
 //          Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date)
