@@ -44,7 +44,6 @@ public class SpaceDAOImplTest {
     SpaceDAOImpl sdi;
     Room room, room2, labRoom, meetRoom, classRoom;
     Building building, building2;
-    //ReseReservationrvationDAOImpl reservation;
     DateTime dataRes1;
     ReservationUser user1;
     Reservation reserv;
