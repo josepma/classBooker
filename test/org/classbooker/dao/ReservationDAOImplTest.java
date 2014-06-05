@@ -7,22 +7,16 @@
 package org.classbooker.dao;
 
 
-import org.classbooker.dao.SpaceDAO;
-import org.classbooker.dao.UserDAO;
-import org.classbooker.dao.ReservationDAOImpl;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import org.classbooker.dao.exception.AlredyExistReservationException;
-import org.classbooker.dao.exception.IncorrectBuildingException;
 import org.classbooker.dao.exception.IncorrectReservationException;
-import org.classbooker.dao.exception.IncorrectRoomException;
 import org.classbooker.dao.exception.IncorrectUserException;
 import org.classbooker.dao.exception.NoneExistingRoomException;
 import org.classbooker.entity.Building;
@@ -33,7 +27,6 @@ import org.classbooker.entity.ReservationUser;
 import org.classbooker.entity.Room;
 import org.jmock.Expectations;
 import static org.jmock.Expectations.returnValue;
-import static org.jmock.Expectations.throwException;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -46,7 +39,7 @@ import org.junit.runner.RunWith;
 
 /**
  *
- * @author msf7
+ * @author josepma, Carles Mònico Bonell, Marc Solé Farré
  */
 @RunWith(JMock.class)
 public class ReservationDAOImplTest {
@@ -55,7 +48,6 @@ public class ReservationDAOImplTest {
     ReservationDAOImpl rDao;
     UserDAO uDao;
     SpaceDAO sDao;
-    
 
     EntityManager em;
     Room room1, room2;
@@ -66,16 +58,9 @@ public class ReservationDAOImplTest {
     Set <Reservation> allReservation;
     DateTime dataRes1, dataRes2, dataRes3;
 
-    
-    
-    public ReservationDAOImplTest() {
-        
-    }
     @Before
     public void setUp() throws Exception {
 
-        
-        
         rDao = new ReservationDAOImpl();
         uDao = context.mock(UserDAO.class, "uDao");
         sDao = context.mock(SpaceDAO.class, "sDao");
@@ -133,7 +118,6 @@ public class ReservationDAOImplTest {
     @Test
     public void  testReservationIdGenerationIsNotTheSame() throws Exception{
     
-
         long id1, id2, id3;
         id1 = rDao.addReservation(reservation1);
         id2 = rDao.addReservation(reservation2);
@@ -143,9 +127,7 @@ public class ReservationDAOImplTest {
         assertNotSame(id1, id3);
         assertNotSame(id3, id2);
     }
-    
-    
-    
+
     @Test(expected = IncorrectUserException.class)
     public void testAddReservationNotExistUser() throws Exception {
         ProfessorPas nonExistUser = new ProfessorPas("4765665M", 
@@ -205,9 +187,9 @@ public class ReservationDAOImplTest {
     @Test(expected = NoneExistingRoomException.class)
     public void testAddReservationByAttributeNotExistRoom() throws Exception {
         context.checking(new Expectations(){{
-            allowing(uDao).getUserByNif(user1.getNif());
+            oneOf(uDao).getUserByNif(user1.getNif());
             will(returnValue(user1));
-            allowing(sDao).getRoomByNbAndBuilding("11","testBuilding");
+            oneOf(sDao).getRoomByNbAndBuilding("11","testBuilding");
             will(returnValue(null));
         }});
         
@@ -279,12 +261,9 @@ public class ReservationDAOImplTest {
         }});
         allReservation.add(reservation1);
         allReservation.add(reservation3);
-       
         addAllReservations();
-        
         assertEquals(allReservation, 
-                     reservationsToSet(rDao.getAllReservationByBuilding("testBuilding1")));
-        
+                     reservationsToSet(rDao.getAllReservationByBuilding("testBuilding1")));   
     }
 
     /**
@@ -341,7 +320,6 @@ public class ReservationDAOImplTest {
                                                building1.getBuildingName());
             will(returnValue(room1));
         }});
-
         rDao.removeReservation(dataRes1, 
                                 room1.getNumber(), 
                                 building1.getBuildingName());
@@ -350,14 +328,13 @@ public class ReservationDAOImplTest {
         
     }
     
-    @Test(expected = NoneExistingRoomException.class)
+    @Test(expected = IncorrectReservationException.class)
     public void testRemoveReservationByAtributesBadBuilding() throws Exception {
         context.checking(new Expectations(){{
             oneOf(sDao).getRoomByNbAndBuilding(room1.getNumber(), 
                                                building1.getBuildingName());
             will(returnValue(null));
         }});
-
         rDao.removeReservation(dataRes1, 
                                 room1.getNumber(), 
                                 building1.getBuildingName());
@@ -439,10 +416,10 @@ public class ReservationDAOImplTest {
         Query query2 = em.createQuery("DELETE FROM User");
         Query query3 = em.createQuery("DELETE FROM Room");
         Query query4 = em.createQuery("DELETE FROM Building");
-        int deleteRecords = query.executeUpdate();
-        deleteRecords = query2.executeUpdate();
-        deleteRecords = query3.executeUpdate();
-        deleteRecords = query4.executeUpdate();
+        query.executeUpdate();
+        query2.executeUpdate();
+        query3.executeUpdate();
+        query4.executeUpdate();
     }
 
     private void addAllReservations() throws Exception{

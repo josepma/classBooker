@@ -7,17 +7,13 @@
 package org.classbooker.dao;
 
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import org.classbooker.dao.exception.AlredyExistReservationException;
-import org.classbooker.dao.exception.DAOException;
 import org.classbooker.dao.exception.IncorrectReservationException;
 import org.classbooker.dao.exception.IncorrectUserException;
 import org.classbooker.dao.exception.NoneExistingRoomException;
@@ -36,7 +32,7 @@ import java.util.ArrayList;
 
 /**
  *
- * @author msf7
+ * @author josepma, Carles Mònico Bonell, Marc Solé Farré
  */
 
 public class ReservationDAOImplIntegTest {
@@ -46,7 +42,7 @@ public class ReservationDAOImplIntegTest {
     SpaceDAO sDao;
 
     
-    List<Reservation> elist = new ArrayList<Reservation>();
+    List<Reservation> elist = new ArrayList<>();
 
     EntityManager em;
     Room room1, room2, roomaux;
@@ -54,7 +50,6 @@ public class ReservationDAOImplIntegTest {
     ReservationUser user1, user2, user3, useraux;
     Reservation reservation1, reservation2, reservation3, reservationaux, actualReservation, 
                 expectsReservation;
-    Set <Reservation> allReservation;
     DateTime dataRes1, dataRes2, dataRes3;
 
     
@@ -96,9 +91,7 @@ public class ReservationDAOImplIntegTest {
         reservation2 = new Reservation(dataRes2, user2, room2);
         reservation3 = new Reservation(dataRes3, user3, room1);
         reservationaux = null; 
-        
-        allReservation = new HashSet();
-         
+   
     }
     
     @After
@@ -113,14 +106,13 @@ public class ReservationDAOImplIntegTest {
         long id = rDao.addReservation(reservation1);
         elist.add(reservation1);
         actualReservation = getReservationFromDB(id);  
-        checkExistReservation(reservation1, actualReservation);
         
+        checkExistReservation(reservation1, actualReservation);
     }
     
     @Test
     public void  testReservationIdGenerationIsNotTheSame() throws Exception{
     
-
         long id1, id2, id3;
         id1 = rDao.addReservation(reservation1);
         id2 = rDao.addReservation(reservation2);
@@ -137,6 +129,7 @@ public class ReservationDAOImplIntegTest {
     
     @Test(expected = IncorrectUserException.class)
     public void testAddReservationNotExistUser() throws Exception {
+        
         useraux = new ProfessorPas("4765665M","random@professor.ly","Manolo");
         reservation1.setrUser(useraux);
         rDao.addReservation(reservation1);
@@ -144,6 +137,7 @@ public class ReservationDAOImplIntegTest {
     
     @Test(expected = NoneExistingRoomException.class)
     public void testAddReservationNotExistRoom() throws Exception {
+        
         roomaux = new MeetingRoom(building1, "20", 10);
         reservationaux = new Reservation(dataRes1, user1, roomaux);
         rDao.addReservation(reservationaux);
@@ -151,6 +145,7 @@ public class ReservationDAOImplIntegTest {
     
     @Test(expected = AlredyExistReservationException.class)
     public void testAddReservationSameTimeAndRoomButDifferentUser() throws Exception {  
+        
         reservationaux = new Reservation(dataRes1, user2, room1);
         elist.add(reservation1);
         rDao.addReservation(reservation1);
@@ -158,7 +153,8 @@ public class ReservationDAOImplIntegTest {
     }
         
     @Test
-    public void testAddReservationSameTimeAndRoomAndUser() throws Exception {  
+    public void testAddReservationSameTimeAndRoomAndUser() throws Exception { 
+        
         reservationaux = new Reservation(dataRes1, user1, room1);
         elist.add(reservation1);
         rDao.addReservation(reservation1);
@@ -175,7 +171,6 @@ public class ReservationDAOImplIntegTest {
         actualReservation = rDao.getReservationById(resId);
         elist.add(actualReservation);
         checkExistReservation(expectsReservation , actualReservation);
-        //deleteAll(actualReservation);
         
     }
         
@@ -183,7 +178,6 @@ public class ReservationDAOImplIntegTest {
     public void testAddReservationByAttributeNotExistRoom() throws Exception {
         
         rDao.addReservation("12345678", "11", "EPS", dataRes1);
-        
     }
     
     @Test(expected = NoneExistingRoomException.class)
@@ -200,6 +194,7 @@ public class ReservationDAOImplIntegTest {
 
     @Test
     public void testGetReservationById()throws Exception{
+        
         long resId = rDao.addReservation(reservation1);
         actualReservation = rDao.getReservationById(resId);
         elist.add(reservation1);
@@ -208,9 +203,9 @@ public class ReservationDAOImplIntegTest {
 
     @Test
     public void testGetAllReservation() throws Exception{
+        
         rDao.addReservation(reservation1);
         elist.add(reservation1);
-        
         List resultList = em.createQuery("SELECT r FROM Reservation r ")
                 .getResultList();
         
@@ -220,7 +215,9 @@ public class ReservationDAOImplIntegTest {
     
     @Test
     public void testGetAllReservationByUserNif() throws Exception {
-        List resultList = em.createQuery("SELECT r FROM Reservation r WHERE r.rUser.nif = :nif ")
+        
+        List resultList;
+        resultList = em.createQuery("SELECT r FROM Reservation r WHERE r.rUser.nif = :nif ")
                 .setParameter("nif", user1.getNif())
                 .getResultList();
         
@@ -243,7 +240,8 @@ public class ReservationDAOImplIntegTest {
     @Test
     public void testGetAllReservationByBuilding() throws Exception {
         
-        List resultList = em.createQuery("SELECT r FROM Reservation r WHERE r.room.building.name = :building ")
+        List resultList;
+        resultList = em.createQuery("SELECT r FROM Reservation r WHERE r.room.building.name = :building ")
                 .setParameter("building", "Main Library")
                 .getResultList();
 
@@ -264,12 +262,12 @@ public class ReservationDAOImplIntegTest {
 
     @Test
     public void testRemoveReservation() throws Exception {
+        
         long resId = rDao.addReservation(reservation1);
         actualReservation = rDao.getReservationById(resId);
         rDao.removeReservation(resId);
         
         checkDontExistReservation(reservation1);
-        
     }
     
     @Test
@@ -282,7 +280,6 @@ public class ReservationDAOImplIntegTest {
                                 building1.getBuildingName());
         
         checkDontExistReservation(actualReservation);
-        
     }
     
     @Test(expected = IncorrectReservationException.class)
@@ -303,6 +300,7 @@ public class ReservationDAOImplIntegTest {
     }
 
     private EntityManager getEntityManager() throws Exception{
+        
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("classBookerIntegration");
         return emf.createEntityManager();  
     }
@@ -319,21 +317,19 @@ public class ReservationDAOImplIntegTest {
     }
     
     private void checkExistReservation(Reservation expected,Reservation actual){
+        
         assertEquals(expected, actual);
         assertTrue(actual.getRoom().getReservations().contains(expected));
         assertTrue(actual.getrUser().getReservations().contains(expected));
     }
     
     private void checkDontExistReservation(Reservation res){
+        
         Room room = sDao.getRoomById(res.getRoom().getRoomId());
         
         assertEquals("exist reservation",null, rDao.getReservationById(res.getReservationId()));
         assertFalse("Exist reservation in room",room.getReservations().contains(res));
         assertFalse("Exist reservation in user",res.getrUser().getReservations().contains(res));
-    }
-    
-    private Set<Reservation> reservationsToSet(Reservation... res){
-        return new HashSet<>(Arrays.asList(res));
     }
         
     private Set<Reservation> reservationsToSet(List res){
@@ -347,24 +343,6 @@ public class ReservationDAOImplIntegTest {
           rDao.removeReservation(entity.getReservationId());
       }
       elist.clear();
-    }
-    
-    private void deleteAll(Reservation... argv) {
-        
-        em.getTransaction().begin();
-        for (Reservation entity : argv) {
-            if(entity!=null && em.contains(entity)){
-                while(entity.getrUser().getReservations().contains(entity)){
-                    entity.getrUser().getReservations().remove(entity);
-                }
-                while(entity.getRoom().getReservations().contains(entity)){
-                    entity.getRoom().getReservations().remove(entity);
-                }
-                em.remove(entity);
-            }
-        }
-
-        em.getTransaction().commit();
     }
 
     private void addAllReservations() throws Exception{

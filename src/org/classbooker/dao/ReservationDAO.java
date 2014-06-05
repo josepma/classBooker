@@ -126,11 +126,8 @@ public interface ReservationDAO {
      */
     Reservation getReservationByDateRoomBulding(DateTime dateTime, 
                                                     String roomNb, 
-                                                    String buildingName)
-                                                    throws DAOException;
-                                                           
-                                                            
-    
+                                                    String buildingName);
+                                                                                                                       
     /**
      * Get all Reservation
      * @return a List of all reservations if 
@@ -144,34 +141,24 @@ public interface ReservationDAO {
      * @return a list of reservations when non exist reservations 
      * returns empty list. If the user does not exist or is null, it returns an
      * empty list too.
-     * @throws 
      */
-    List<Reservation> getAllReservationByUserNif(String nif)
-                                            throws DAOException;
+    List<Reservation> getAllReservationByUserNif(String nif);
 
     /**
      * Get all reservation by building.
      * @param name
      * @return a list of reservations when non exist reservations 
      * returns empty list
-     * @throws IncorrectBuildingException
-     * when the Building doesn't exist or is null.
      */
-    List<Reservation> getAllReservationByBuilding(String name) 
-                                            throws DAOException;
+    List<Reservation> getAllReservationByBuilding(String name);
 
     /**
      * Get all reservation by room.
      * @param id
      * @return a list of reservations when non exist reservations 
      * returns empty list
-     * @throws IncorrectRoomException
-     * when the Room  is null.
-     * @throws NoneExistingRoomException
-     * when the Room non exist.
      */
-    List<Reservation> getAllReservationByRoom(long id) 
-                                            throws DAOException;
+    List<Reservation> getAllReservationByRoom(long id);
  
     /**
      * Tear down date of reservation Table
