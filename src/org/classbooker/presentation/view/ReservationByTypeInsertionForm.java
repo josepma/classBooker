@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import org.classbooker.service.ReservationMgrService;
 import java.awt.Dimension;
+import javax.swing.BoxLayout;
 import org.classbooker.presentation.controller.SubmitMakeReservationByTypeAction;
 
 /**
@@ -62,6 +63,7 @@ public class ReservationByTypeInsertionForm extends JPanel {
         but.setText("Submit");
         
         JPanel lines = new JPanel();
+        lines.setLayout(new BoxLayout(lines, BoxLayout.Y_AXIS));
         JPanel line1 = new JPanel(); 
         line1.add(labelNif);
         line1.add(nif);
