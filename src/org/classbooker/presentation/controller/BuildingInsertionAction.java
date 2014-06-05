@@ -19,9 +19,10 @@ public class BuildingInsertionAction implements ActionListener {
 
     public BuildingInsertionAction(JFrame frame, SpaceMgrService spaceservice) {
         parent = frame;
-        this.services = services;
+        this.services = spaceservice;
     }
 
+    @Override
     public void actionPerformed(ActionEvent e){
     
         parent.getContentPane().removeAll();

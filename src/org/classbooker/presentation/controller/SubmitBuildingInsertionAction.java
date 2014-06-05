@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import org.classbooker.presentation.view.*;
 import org.classbooker.service.*;
-import org.classbooker.dao.exception.AlreadyExistingBuildingException;
+import org.classbooker.dao.exception.*;
 
 
 public class SubmitBuildingInsertionAction implements ActionListener{
@@ -22,24 +22,27 @@ public class SubmitBuildingInsertionAction implements ActionListener{
    }
    
    public void actionPerformed(ActionEvent e){
-   
+
        String buildingName = buildingInsertionForm.buildingName.getText();
  
        buildingInsertionForm.parent.getContentPane().removeAll();
       
         try{
           services.addBuilding(buildingName); 
-         // ConfirmationForm confirm = new ConfirmationForm();
-         // buildingInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
+      //    ConfirmationForm confirm = new ConfirmationForm();
+        //  buildingInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
      
         }
-        catch(Exception exc){ //AlreadyExistingBuildingException exc){
+        catch(DAOException exc){
            exc.printStackTrace(); 
            ExceptionInfo exception = new ExceptionInfo("Existing building");
            buildingInsertionForm.parent.getContentPane().add(exception,BorderLayout.CENTER);
         }
         finally{
-            buildingInsertionForm.parent.revalidate();                        
+          
+          buildingInsertionForm.parent.revalidate();                        
+          buildingInsertionForm.parent.getContentPane().repaint();
+
         }
    }   
 }

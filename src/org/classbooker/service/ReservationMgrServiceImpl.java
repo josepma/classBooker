@@ -50,31 +50,32 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     public void setReservationDao(ReservationDAO reservationDao) {
         this.reservationDao = reservationDao;
     }
-    
+
     /**
      * Set the DateTime.
      */
     public void setDatetime(DateTime datetime) {
         this.datetime = datetime;
     }
-    
+
     /**
-     * Returns a boolean which indicates if the reservationMade exists in the database.
-     * if the reservationMade exists in the database, it will return true, else will return false
+     * Returns a boolean which indicates if the reservationMade exists in the
+     * database. if the reservationMade exists in the database, it will return
+     * true, else will return false
      */
-    
     /**
-     * Returns a boolean which indicates if the reservationMade exists in the database.
-     * if the reservationMade exists in the database, it will return true, else will return false
+     * Returns a boolean which indicates if the reservationMade exists in the
+     * database. if the reservationMade exists in the database, it will return
+     * true, else will return false
      */
-    public boolean alreadyExistingReservation(DateTime datetime, Room room) throws  DAOException {
-        return reservationDao.getReservationByDateRoomBulding(datetime, room.getNumber(), room.getBuilding().getBuildingName())!=null;
-    }   
+    public boolean alreadyExistingReservation(DateTime datetime, Room room) throws DAOException {
+        return reservationDao.getReservationByDateRoomBulding(datetime, room.getNumber(), room.getBuilding().getBuildingName()) != null;
+    }
 
     @Override
     public List<Room> suggestionSpace(String roomNb, String building, DateTime date) throws DAOException {
         Room room = spaceDao.getRoomByNbAndBuilding(roomNb, building);
-        if ( room == null){
+        if (room == null) {
             return new ArrayList();
         }
         List<Room> suggestedRoomsByTypeAndCapacity = spaceDao.getAllRoomsByTypeAndCapacity(room.getClass().getName(), room.getCapacity(), building);
@@ -83,19 +84,10 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     }
 
     @Override
-    public ReservationUser getCurrentUserOfDemandedRoom(String roomNb, String building, DateTime datetime){
+    public ReservationUser getCurrentUserOfDemandedRoom(String roomNb, String building, DateTime datetime) {
         Reservation res = null;
-        try{
-            res = reservationDao.getReservationByDateRoomBulding(datetime, roomNb, building);
-        }catch(IncorrectRoomException e ){
-            
-        } catch (IncorrectBuildingException ex) {
-            Logger.getLogger(ReservationMgrServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DAOException ex) {
-            Logger.getLogger(ReservationMgrServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
+        res = reservationDao.getReservationByDateRoomBulding(datetime, roomNb, building);
+
         if (res == null) {
             return null;
         }
@@ -121,22 +113,22 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     }
 
     /**
-     * Returns a reservationMade for the roomId, the date initialTime and the user
-     * nif. For making correctly the reservationMade, we should check that the user
-     * and the room exist in database also the format of time should be correct.
-     * This reservationMade should be accepted by the user before inserting it into
-     * the database
+     * Returns a reservationMade for the roomId, the date initialTime and the
+     * user nif. For making correctly the reservationMade, we should check that
+     * the user and the room exist in database also the format of time should be
+     * correct. This reservationMade should be accepted by the user before
+     * inserting it into the database
      */
     @Override
     public Reservation makeReservationBySpace(long roomId, String nif, DateTime initialTime) throws DAOException {
         Room room = spaceDao.getRoomById(roomId);
         User user = userDao.getUserByNif(nif);
         datetime = initialTime;
-        
+
         checkRoom(room);
         checkUser(user);
         checkDate(datetime);
-        Reservation r= makeReservation(datetime,user,room); 
+        Reservation r = makeReservation(datetime, user, room);
         return r;
     }
 
@@ -163,36 +155,35 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     public List<Reservation> findReservationByNif(String nif) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     /**
-     * Return a particular reservationMade by a concrete ReservationId
-     * If not exists, will throwIncorrectReservationException.
+     * Return a particular reservationMade by a concrete ReservationId If not
+     * exists, will throwIncorrectReservationException.
      */
     @Override
-    public Reservation findReservationById(long id)throws IncorrectReservationException {
+    public Reservation findReservationById(long id) throws IncorrectReservationException {
         Reservation reser = reservationDao.getReservationById(id);
-        if(reser == null){
-            throw new IncorrectReservationException("Can not find the reservation");   
+        if (reser == null) {
+            throw new IncorrectReservationException("Can not find the reservation");
         }
         return reser;
     }
 
     @Override
     public List<Reservation> findReservationByBuildingAndRoomNb(String buildingName, String roomNumber) throws DAOException {
-        List <Reservation> res = reservationDao.getAllReservationByBuilding(buildingName);
-        List <Reservation> result = new ArrayList<>();
-        for(Reservation reser : res){
-            if(reser.getRoom().getNumber().equals(roomNumber)){
+        List<Reservation> res = reservationDao.getAllReservationByBuilding(buildingName);
+        List<Reservation> result = new ArrayList<>();
+        for (Reservation reser : res) {
+            if (reser.getRoom().getNumber().equals(roomNumber)) {
                 result.add(reser);
             }
         }
         return result;
     }
 
-    
-     /**
-     * Return a particular reservation Made by a concrete space and a concrete date
-     * if exists some errors, it will throws exceptions
+    /**
+     * Return a particular reservation Made by a concrete space and a concrete
+     * date if exists some errors, it will throws exceptions
      */
     @Override
     public Reservation findReservationBySpaceAndDate(String buildingName, String roomNumber, DateTime date) throws DAOException {
@@ -205,7 +196,6 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
         return reservationDao.getReservationByDateRoomBulding(datetime, roomNumber, buildingName);
     }
 
-
     @Override
     public List<Reservation> findReservationByType(String type) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -215,7 +205,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     public List<Reservation> findReservationByType(String type, DateTime date) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     /**
      * Return a List of all reservations of Database
      */
@@ -225,20 +215,20 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     }
 
     @Override
-    public Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws DAOException{
+    public Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws DAOException {
         List<Room> avaliableRooms = obtainAllRoomsWithSameFeatures(type, capacity, buildingName, date);
-        if(avaliableRooms.isEmpty()){
+        if (avaliableRooms.isEmpty()) {
             return null;
         }
         User reservationUser = userDao.getUserByNif(nif);
-        if(reservationUser instanceof ReservationUser){
-            return new Reservation(date, (ReservationUser)reservationUser, avaliableRooms.get(0));
+        if (reservationUser instanceof ReservationUser) {
+            return new Reservation(date, (ReservationUser) reservationUser, avaliableRooms.get(0));
         }
         return null;
-        
+
     }
 
-    private List<Room> getNonReservedRooms(List<Room> rooms, DateTime date) throws DAOException{
+    private List<Room> getNonReservedRooms(List<Room> rooms, DateTime date) throws DAOException {
         Reservation res;
         List<Room> nonReservedRooms = new ArrayList<>();
         for (Room r : rooms) {
@@ -252,219 +242,227 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     }
 
     @Override
-    public List<Room> obtainAllRoomsWithSameFeatures(String type, int capacity, String building, DateTime date)throws DAOException{
+    public List<Room> obtainAllRoomsWithSameFeatures(String type, int capacity, String building, DateTime date) throws DAOException {
         List<Room> sameTypeRooms = spaceDao.getAllRoomsByTypeAndCapacity(type, capacity, building);
-        if(sameTypeRooms.isEmpty()){
+        if (sameTypeRooms.isEmpty()) {
             return new ArrayList();
         }
-              
+
         List<Room> nonReservedRooms = getNonReservedRooms(sameTypeRooms, date);
-        if(nonReservedRooms.isEmpty()){
+        if (nonReservedRooms.isEmpty()) {
             return new ArrayList();
         }
         return nonReservedRooms;
     }
-    
+
     @Override
-    public List <Reservation> getReservationsByNif(String nif) 
-                              throws DAOException{
+    public List<Reservation> getReservationsByNif(String nif)
+            throws DAOException {
         List<Reservation> lreser = reservationDao.getAllReservationByUserNif(nif);
         return lreser;
     }
-    
+
     @Override
-    public List <Reservation> getFilteredReservation(String nif, 
-                                                  DateTime startDate,
-                                                  DateTime endDate, 
-                                                  String buildingName,
-                                                  String roomNb,
-                                                  int capacity,
-                                                  String roomType) 
-            throws DAOException{
-        if(validation(nif,startDate,endDate,buildingName,roomNb,capacity,roomType)){
-            return new ArrayList<>(); 
-        } 
-        List<Reservation> lfreser= getReservationsByNif(nif);
-        
-        if(lfreser == null){
+    public List<Reservation> getFilteredReservation(String nif,
+            DateTime startDate,
+            DateTime endDate,
+            String buildingName,
+            String roomNb,
+            int capacity,
+            String roomType)
+            throws DAOException {
+        if (validation(nif, startDate, endDate, buildingName, roomNb, capacity, roomType)) {
             return new ArrayList<>();
-        }else{
-            lfreser=validateField(startDate,endDate,buildingName,roomNb,capacity,roomType,lfreser);
-        }           
+        }
+        List<Reservation> lfreser = getReservationsByNif(nif);
+
+        if (lfreser == null) {
+            return new ArrayList<>();
+        } else {
+            lfreser = validateField(startDate, endDate, buildingName, roomNb, capacity, roomType, lfreser);
+        }
         return lfreser;
     }
 
-    private void checkRoom(Room room) throws DAOException{
+    private void checkRoom(Room room) throws DAOException {
         if (room == null) {
             throw new IncorrectRoomException("can not find the room");
         }
     }
 
-    private void checkUser(User user) throws DAOException{
-          if (user == null || !(user instanceof ReservationUser)) {
+    private void checkUser(User user) throws DAOException {
+        if (user == null || !(user instanceof ReservationUser)) {
             throw new IncorrectUserException("user not exist");
         }
     }
 
-    private void checkDate(DateTime datetime) throws DAOException{
+    private void checkDate(DateTime datetime) throws DAOException {
         if (datetime.isBeforeNow() || datetime.getMinuteOfHour() != 0) {
             throw new IncorrectTimeException("incorrect date time format");
         }
     }
 
     private Reservation makeReservation(DateTime datetime, User user, Room room) throws DAOException {
-       if (alreadyExistingReservation(datetime, room)) {
+        if (alreadyExistingReservation(datetime, room)) {
             return null;
         } else {
             return new Reservation(datetime, (ReservationUser) user, room);
         }
     }
 
-    private void checkBuilding(Building building)throws DAOException {
-       if (building == null) {
+    private void checkBuilding(Building building) throws DAOException {
+        if (building == null) {
             throw new IncorrectBuildingException("can not find the building");
         }
     }
-    
-    private List <Reservation> getReservationAndDates(DateTime startDate,
-                               DateTime endDate,List<Reservation>lfreser){
-        List<Reservation> result = new ArrayList<>();
-        for (Reservation res: lfreser){
-                if((res.getReservationDate().isEqual(startDate))){
-                        result.add(res); 
-                }          
-        } 
-        return result;
-    }
-    private List <Reservation> getReservationAndBuilding(String buildingName
-                                ,List<Reservation>lfreser) 
-                                throws DAOException{
-        List<Reservation> result = new ArrayList<>();
-        for (Reservation res: lfreser){
-            if((res.getRoom().getBuilding().getBuildingName()).equals(buildingName)){
-                result.add(res);
-            }
-        }
-        return result;
-    }
-    private List <Reservation> getReservationAndRoom(String roomNb,
-                                                    String buildingName,
-                                                    List<Reservation>lfreser) 
-            throws DAOException{
-       
-        Room roomID = spaceDao.getRoomByNbAndBuilding(roomNb,buildingName);
 
-        return getReservationAndRoom(roomID.getRoomId(),lfreser);
-    }
-    private List <Reservation> getReservationAndRoom(long roomID,
-                               List<Reservation>lfreser){
+    private List<Reservation> getReservationAndDates(DateTime startDate,
+            DateTime endDate, List<Reservation> lfreser) {
         List<Reservation> result = new ArrayList<>();
-        for(Reservation res: lfreser){
-            if((res.getRoom().getRoomId()==roomID)){
+        for (Reservation res : lfreser) {
+            if ((res.getReservationDate().isEqual(startDate))) {
                 result.add(res);
             }
         }
         return result;
     }
-    private List <Reservation> getReservationAndCapacity(int capacity,
-                               List<Reservation>lfreser){
+
+    private List<Reservation> getReservationAndBuilding(String buildingName, List<Reservation> lfreser)
+            throws DAOException {
         List<Reservation> result = new ArrayList<>();
-        for(Reservation res: lfreser){
-            if((res.getRoom().getCapacity()>=capacity)){
+        for (Reservation res : lfreser) {
+            if ((res.getRoom().getBuilding().getBuildingName()).equals(buildingName)) {
                 result.add(res);
             }
         }
         return result;
     }
-    private List <Reservation> getReservationAndRoomType(String roomType,
-                               List<Reservation>lfreser) 
-            throws DAOException{
-        
+
+    private List<Reservation> getReservationAndRoom(String roomNb,
+            String buildingName,
+            List<Reservation> lfreser)
+            throws DAOException {
+
+        Room roomID = spaceDao.getRoomByNbAndBuilding(roomNb, buildingName);
+
+        return getReservationAndRoom(roomID.getRoomId(), lfreser);
+    }
+
+    private List<Reservation> getReservationAndRoom(long roomID,
+            List<Reservation> lfreser) {
+        List<Reservation> result = new ArrayList<>();
+        for (Reservation res : lfreser) {
+            if ((res.getRoom().getRoomId() == roomID)) {
+                result.add(res);
+            }
+        }
+        return result;
+    }
+
+    private List<Reservation> getReservationAndCapacity(int capacity,
+            List<Reservation> lfreser) {
+        List<Reservation> result = new ArrayList<>();
+        for (Reservation res : lfreser) {
+            if ((res.getRoom().getCapacity() >= capacity)) {
+                result.add(res);
+            }
+        }
+        return result;
+    }
+
+    private List<Reservation> getReservationAndRoomType(String roomType,
+            List<Reservation> lfreser)
+            throws DAOException {
+
         List<Room> rooms = spaceDao.getAllRoomsOfOneType(roomType);
         List<Reservation> result = new ArrayList<>();
-        for(Reservation res: lfreser){
-            for (Room room : rooms){
-                if((res.getRoom()== room)){
+        for (Reservation res : lfreser) {
+            for (Room room : rooms) {
+                if ((res.getRoom() == room)) {
                     result.add(res);
                 }
             }
         }
         return result;
     }
-    
-    private boolean validation(String nif, 
-                              DateTime startDate,
-                              DateTime endDate, 
-                              String buildingName,
-                              String roomNb,
-                              int capacity,
-                              String roomType){
-      
-      if ((startDate == null & endDate != null) || 
-             (startDate != null & endDate == null) ){
-          return true;
-      }  
-      
-      if (startDate != null & endDate != null){
-          if (startDate.isAfter(endDate)){
-              return true;
-          }
-      }
-        
-      return !testFields(nif,buildingName,roomNb,capacity,roomType);
+
+    private boolean validation(String nif,
+            DateTime startDate,
+            DateTime endDate,
+            String buildingName,
+            String roomNb,
+            int capacity,
+            String roomType) {
+
+        if ((startDate == null & endDate != null)
+                || (startDate != null & endDate == null)) {
+            return true;
+        }
+
+        if (startDate != null & endDate != null) {
+            if (startDate.isAfter(endDate)) {
+                return true;
+            }
+        }
+
+        return !testFields(nif, buildingName, roomNb, capacity, roomType);
     }
-    private List <Reservation> validateField(DateTime startDate,
-                              DateTime endDate, 
-                              String buildingName,
-                              String roomNb,
-                              int capacity,
-                              String roomType,
-                              List<Reservation>lfreser) throws DAOException{
-        List <Reservation> aux = lfreser;
-        
-        if(startDate != null && endDate != null & lfreser.size()>0){
-                aux = getReservationAndDates(startDate, endDate,lfreser);
-            }
-            if(buildingName !=null & aux.size()>0){
-                aux = getReservationAndBuilding(buildingName,aux);
-            }
-            if(roomNb !=null & buildingName != null & aux.size()>0){
-               
-                aux = getReservationAndRoom(roomNb,buildingName,aux);
-            }
-            if(capacity >0 & aux.size()>0){
-                aux = getReservationAndCapacity(capacity,aux);
-            }
-            if(roomType != null & aux.size()>0){
-                aux = getReservationAndRoomType(roomType,aux);
-            }
-         return aux;   
+
+    private List<Reservation> validateField(DateTime startDate,
+            DateTime endDate,
+            String buildingName,
+            String roomNb,
+            int capacity,
+            String roomType,
+            List<Reservation> lfreser) throws DAOException {
+        List<Reservation> aux = lfreser;
+
+        if (startDate != null && endDate != null & lfreser.size() > 0) {
+            aux = getReservationAndDates(startDate, endDate, lfreser);
+        }
+        if (buildingName != null & aux.size() > 0) {
+            aux = getReservationAndBuilding(buildingName, aux);
+        }
+        if (roomNb != null & buildingName != null & aux.size() > 0) {
+
+            aux = getReservationAndRoom(roomNb, buildingName, aux);
+        }
+        if (capacity > 0 & aux.size() > 0) {
+            aux = getReservationAndCapacity(capacity, aux);
+        }
+        if (roomType != null & aux.size() > 0) {
+            aux = getReservationAndRoomType(roomType, aux);
+        }
+        return aux;
     }
-    
-    private boolean testFields(String nif,String buildingName,
-                                     String roomNb,
-                                     int capacity,
-                                     String roomType){     
-        boolean validate1 =validateNif(nif) & validateBuilding(buildingName);
+
+    private boolean testFields(String nif, String buildingName,
+            String roomNb,
+            int capacity,
+            String roomType) {
+        boolean validate1 = validateNif(nif) & validateBuilding(buildingName);
         boolean validate2 = validateRoomNb(roomNb) && validateCapacity(capacity);
-        return validateRoomType(roomType) && validate1 && validate2;          
+        return validateRoomType(roomType) && validate1 && validate2;
     }
-    
-    private boolean validateNif(String nif){
-        return (nif==null || nif.matches("\\d{1,8}"));
+
+    private boolean validateNif(String nif) {
+        return (nif == null || nif.matches("\\d{1,8}"));
     }
-    private boolean validateBuilding(String buildingName){
-        return (buildingName==null || buildingName.matches("[A-Z][a-z].*"));
+
+    private boolean validateBuilding(String buildingName) {
+        return (buildingName == null || buildingName.matches("[A-Z][a-z].*"));
     }
-    private boolean validateRoomNb(String roomNb){
-        return (roomNb==null || roomNb.matches("\\d\\.\\d"));
+
+    private boolean validateRoomNb(String roomNb) {
+        return (roomNb == null || roomNb.matches("\\d\\.\\d"));
     }
-    private boolean validateCapacity(int capacity){
-        return capacity>=0;
+
+    private boolean validateCapacity(int capacity) {
+        return capacity >= 0;
     }
-    private boolean validateRoomType(String roomType){
-        return (roomType==null || roomType.matches("[A-Z][a-z]+.*"));
+
+    private boolean validateRoomType(String roomType) {
+        return (roomType == null || roomType.matches("[A-Z][a-z]+.*"));
     }
-    
 
 }
