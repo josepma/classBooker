@@ -99,7 +99,7 @@ public class ClassBookerFrame extends JFrame {
         staffItem1.addActionListener(new UserInsertionAction(this, staffService));
 
         JMenuItem staffItem2 = new JMenuItem("Add masive users");
-      //  staffItem2.addActionListener(new MassiveUserInsertionAction(this, staffService));
+        staffItem2.addActionListener(new MassiveUserInsertionAction(this, staffService));
 
         staffmenu.add(staffItem1);
         staffmenu.add(staffItem2);
@@ -112,7 +112,7 @@ public class ClassBookerFrame extends JFrame {
 
         
         JMenuItem reservationItem1 = new JMenuItem("Find user reservations");
-        reservationItem1.addActionListener(new ReservationFindAction(this, resService));
+     //   reservationItem1.addActionListener(new ReservationFindAction(this, resService));
         
         reservationsmenu.add(reservationItem1);
         menubar.add(reservationsmenu);

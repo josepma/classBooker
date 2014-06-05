@@ -13,6 +13,7 @@ import org.classbooker.dao.UserDAO;
 import org.classbooker.dao.UserDAOImpl;
 import org.classbooker.entity.ProfessorPas;
 import org.classbooker.entity.User;
+import org.classbooker.presentation.view.ConfirmationForm;
 import org.classbooker.presentation.view.ExceptionInfo;
 import org.classbooker.presentation.view.MassiveUserInsertionForm;
 import org.classbooker.service.StaffMgrService;
@@ -47,8 +48,8 @@ public class SubmitMassiveUserInsertionAction implements ActionListener{
           services.addMassiveUser(fileName);
           System.out.println("ok,inserted");
           
-         // ConfirmationForm confirm = new ConfirmationForm();
-         // buildingInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
+          ConfirmationForm confirm = new ConfirmationForm("Massive Users successfully added ");
+          massiveUserInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
      
         }
         catch(Exception exc){ //AlreadyExistingBuildingException exc){
