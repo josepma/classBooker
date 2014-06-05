@@ -36,6 +36,9 @@ public abstract class User {
     @Column(name="name")
     private String name;
     
+    @Column(name="password")
+    private String password = null;
+    
     private static final int HASH = 5;
     private static final int HASH_MULTI = 79;    
     
@@ -63,6 +66,7 @@ public abstract class User {
         hash = HASH_MULTI * hash + Objects.hashCode(this.nif);
         hash = HASH_MULTI * hash + Objects.hashCode(this.email);
         hash = HASH_MULTI * hash + Objects.hashCode(this.name);
+        hash = HASH_MULTI * hash + Objects.hashCode(this.password);
         return hash;
     }
     
@@ -95,7 +99,11 @@ public abstract class User {
     public String getName() {
         return name;
     }
-
+    
+    public String getPassword() {
+        return password;
+    }
+    
     public void setNif(String nif) {
         this.nif = nif;
     }
@@ -107,6 +115,9 @@ public abstract class User {
     public void setName(String name) {
         this.name = name;
     }
-    
+
+    public void setPassword(String password) {
+        this.password = password;
+    }    
     
 }

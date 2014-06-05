@@ -48,6 +48,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
     public UserDAO getUserDAO(){
         return this.u;
     }
+    @Override
     public void setUserDao(UserDAO u){
         this.u=u;
     }
