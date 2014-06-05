@@ -8,6 +8,7 @@ package org.classbooker.presentation.controller;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import org.classbooker.presentation.view.ExceptionInfo;
 import org.classbooker.presentation.view.ReservationByTypeInsertionForm;
 import org.classbooker.service.ReservationMgrService;
@@ -16,7 +17,7 @@ import org.classbooker.service.ReservationMgrService;
  *
  * @author Mauro Churata
  */
-public class SubmitMakeReservationByTypeAction {
+public class SubmitMakeReservationByTypeAction implements ActionListener{
     ReservationByTypeInsertionForm reservationByTypeInsertionForm;
     ReservationMgrService services;
     public SubmitMakeReservationByTypeAction(ReservationByTypeInsertionForm form){
@@ -28,7 +29,7 @@ public class SubmitMakeReservationByTypeAction {
     public void actionPerformed(ActionEvent e){
    
        
-        String buildingName = ReservationByTypeInsertionForm.buildingName.getText();
+       String buildingName = ReservationByTypeInsertionForm.nif.getText();
  
        reservationByTypeInsertionForm.parent.getContentPane().removeAll();
       
@@ -42,10 +43,10 @@ public class SubmitMakeReservationByTypeAction {
         catch(Exception exc){ //AlreadyExistingBuildingException exc){
            exc.printStackTrace(); 
            ExceptionInfo exception = new ExceptionInfo("Existing Reservation");
-            ReservationByTypeInsertionForm.parent.getContentPane().add(exception,BorderLayout.CENTER);
+           reservationByTypeInsertionForm.parent.getContentPane().add(exception,BorderLayout.CENTER);
         }
         finally{
-             ReservationByTypeInsertionForm.parent.revalidate();                        
+           reservationByTypeInsertionForm.parent.revalidate();                        
         }
    }
 }

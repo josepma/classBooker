@@ -8,6 +8,7 @@ package org.classbooker.presentation.controller;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import org.classbooker.presentation.view.FindUserReservationsForm;
 import org.classbooker.presentation.view.ReservationByTypeInsertionForm;
@@ -18,7 +19,7 @@ import org.classbooker.service.SpaceMgrService;
  *
  * @author Mauro Churata
  */
-public class MakeReservationByTypeAction {
+public class MakeReservationByTypeAction implements ActionListener{
     JFrame parent;
     ReservationMgrService services;
     public MakeReservationByTypeAction(JFrame frame, ReservationMgrService service) {
