@@ -50,9 +50,9 @@ public class SubmitUserInsertionAction implements ActionListener{
         try{
           services.addUser(user);
           System.out.println("ok,inserted");
-          
-         // ConfirmationForm confirm = new ConfirmationForm();
-         // buildingInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
+        //  services.deleteUser(user);
+          ConfirmationForm confirm = new ConfirmationForm("User successfully added");
+          userInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
      
         }
         catch(Exception exc){ //AlreadyExistingBuildingException exc){
