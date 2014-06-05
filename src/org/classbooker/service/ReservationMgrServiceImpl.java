@@ -254,7 +254,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
         }
         return nonReservedRooms;
     }
-
+    
     @Override
     public List<Reservation> getReservationsByNif(String nif)
             throws DAOException {
