@@ -11,10 +11,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import org.classbooker.dao.exception.AlredyExistReservationException;
+import org.classbooker.dao.exception.DAOException;
 import org.classbooker.dao.exception.IncorrectReservationException;
 import org.classbooker.dao.exception.IncorrectUserException;
 import org.classbooker.dao.exception.NoneExistingRoomException;
@@ -228,9 +231,6 @@ public class ReservationDAOImplIntegTest {
     
     @Test
     public void testGetAllReservationMultiReservations() throws Exception {
-        allReservation.add(reservation1);
-        allReservation.add(reservation2);
-        allReservation.add(reservation3);
         
         addAllReservations();
         
@@ -318,15 +318,6 @@ public class ReservationDAOImplIntegTest {
         return reservationDB; 
     }
     
-    private void addDB(Object... argv){
-        em.getTransaction().begin();
-        for (Object entity : argv) {
-            em.persist(entity);
-        }
-        em.getTransaction().commit();
-        
-    }
-    
     private void checkExistReservation(Reservation expected,Reservation actual){
         assertEquals(expected, actual);
         assertTrue(actual.getRoom().getReservations().contains(expected));
@@ -362,32 +353,18 @@ public class ReservationDAOImplIntegTest {
         
         em.getTransaction().begin();
         for (Reservation entity : argv) {
-            if(entity!=null){
+            if(entity!=null && em.contains(entity)){
                 while(entity.getrUser().getReservations().contains(entity)){
                     entity.getrUser().getReservations().remove(entity);
                 }
                 while(entity.getRoom().getReservations().contains(entity)){
                     entity.getRoom().getReservations().remove(entity);
                 }
-                if (em.contains(entity)) em.remove(entity);
+                em.remove(entity);
             }
         }
-        /*
-        
-        Query query  = em.createQuery("DELETE FROM Reservation");
-        Query query2 = em.createQuery("DELETE FROM User");
-        Query query3 = em.createQuery("DELETE FROM Room");
-        Query query4 = em.createQuery("DELETE FROM Building");
-        int deleteRecords = query.executeUpdate();
-        deleteRecords = query2.executeUpdate();
-        deleteRecords = query3.executeUpdate();
-        deleteRecords = query4.executeUpdate();
-        */
-        
-        em.getTransaction().commit();
-        
-        
 
+        em.getTransaction().commit();
     }
 
     private void addAllReservations() throws Exception{
