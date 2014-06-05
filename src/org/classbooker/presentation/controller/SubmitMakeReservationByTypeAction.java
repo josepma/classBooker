@@ -9,6 +9,7 @@ package org.classbooker.presentation.controller;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import org.classbooker.presentation.view.ConfirmationForm;
 import org.classbooker.presentation.view.ExceptionInfo;
 import org.classbooker.presentation.view.ReservationByTypeInsertionForm;
 import org.classbooker.service.ReservationMgrService;
@@ -37,16 +38,16 @@ public class SubmitMakeReservationByTypeAction implements ActionListener{
        String buildingName = reservationByTypeInsertionForm.buildingName.getText();
        int capacity = Integer.parseInt(reservationByTypeInsertionForm.capacity.getText());
 //       DateTime dateIni = reservationByTypeInsertionForm.dateIni.getText();
-       DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy.MM.dd HH:mm:ss");
+       DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm");
        DateTime dateIni = formatter.parseDateTime(reservationByTypeInsertionForm.dateIni.getText());
- 
+       
        reservationByTypeInsertionForm.parent.getContentPane().removeAll();
       
         try{
 //          Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date)
           services.makeReservationByType(nif, type, buildingName, capacity, dateIni); 
-         // ConfirmationForm confirm = new ConfirmationForm();
-         // buildingInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
+         ConfirmationForm confirm = new ConfirmationForm("Add Reservation");
+         reservationByTypeInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
      
         }
         catch(Exception exc){ //AlreadyExistingBuildingException exc){
