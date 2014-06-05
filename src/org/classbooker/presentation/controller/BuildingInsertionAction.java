@@ -19,7 +19,7 @@ public class BuildingInsertionAction implements ActionListener {
 
     public BuildingInsertionAction(JFrame frame, SpaceMgrService spaceservice) {
         parent = frame;
-        this.services = services;
+        this.services = spaceservice;
     }
 
     public void actionPerformed(ActionEvent e){
