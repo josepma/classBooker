@@ -11,12 +11,13 @@ import javax.swing.JLabel;
 
 import org.classbooker.service.*;
 import org.classbooker.presentation.controller.*;
+
 /**
  *
  * @author josepma
- * 
- * 
- * 
+ *
+ *
+ *
  */
 public class ClassBookerFrame extends JFrame {
 
@@ -26,15 +27,13 @@ public class ClassBookerFrame extends JFrame {
     private ReservationMgrService resService;
     private SpaceMgrService spaceService;
     private StaffMgrService staffService;
-    
-    
+
     public ClassBookerFrame(ReservationMgrService resService, SpaceMgrService spaceService, StaffMgrService staffService) {
 
         super("ClassBooker space reservation application");
         this.resService = resService;
         this.spaceService = spaceService;
         this.staffService = staffService;
-        
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setLayout(new BorderLayout());
@@ -43,9 +42,7 @@ public class ClassBookerFrame extends JFrame {
         createMenuBar();
         createContents();
 
-
         this.setVisible(true);
-
 
     }
 
@@ -61,14 +58,15 @@ public class ClassBookerFrame extends JFrame {
 
     private void createMenuBar() {
         menubar = new JMenuBar();
-        
+
         createSpacesMenu();
         createStaffMenu();
+        createReservationsMenu();
 
         this.setJMenuBar(menubar);
     }
 
-    private void createSpacesMenu(){
+    private void createSpacesMenu() {
         JMenu spacemenu = new JMenu("Spaces");
         spacemenu.add(new JSeparator());
 
@@ -82,8 +80,6 @@ public class ClassBookerFrame extends JFrame {
 
         JMenuItem spaceItem2 = new JMenuItem("New room");
         spaceItem2.addActionListener(new RoomInsertionAction(this, spaceService));
-        
-        
 
         JMenuItem spaceItem3 = new JMenuItem("List buildings");
         //spaceItem3.addActionListener(new BuildingListAction(this, spaceService));
@@ -93,23 +89,33 @@ public class ClassBookerFrame extends JFrame {
         spacemenu.add(spaceItem3);
         menubar.add(spacemenu);
 
-        
     }
 
     private void createStaffMenu() {
         JMenu staffmenu = new JMenu("Staff");
         staffmenu.add(new JSeparator());
-        
+
         JMenuItem staffItem1 = new JMenuItem("Add user");
         staffItem1.addActionListener(new UserInsertionAction(this, staffService));
-        
+
         JMenuItem staffItem2 = new JMenuItem("Add masive users");
       //  staffItem2.addActionListener(new MassiveUserInsertionAction(this, staffService));
-        
+
         staffmenu.add(staffItem1);
         staffmenu.add(staffItem2);
         menubar.add(staffmenu);
     }
-    
-   
+
+    private void createReservationsMenu() {
+        JMenu reservationsmenu = new JMenu("Reservations");
+        reservationsmenu.add(new JSeparator());
+
+        
+        JMenuItem reservationItem1 = new JMenuItem("Find user reservations");
+        reservationItem1.addActionListener(new ReservationFindAction(this, resService));
+        
+        reservationsmenu.add(reservationItem1);
+        menubar.add(reservationsmenu);
+    }
+
 }
