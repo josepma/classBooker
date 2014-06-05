@@ -13,6 +13,8 @@ import org.classbooker.presentation.view.ExceptionInfo;
 import org.classbooker.presentation.view.ReservationByTypeInsertionForm;
 import org.classbooker.service.ReservationMgrService;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 /**
  *
@@ -35,7 +37,8 @@ public class SubmitMakeReservationByTypeAction implements ActionListener{
        String buildingName = reservationByTypeInsertionForm.buildingName.getText();
        int capacity = Integer.parseInt(reservationByTypeInsertionForm.capacity.getText());
 //       DateTime dateIni = reservationByTypeInsertionForm.dateIni.getText();
-       DateTime dateIni = new DateTime(2014,5,9,13,0);
+       DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy.MM.dd HH:mm:ss");
+       DateTime dateIni = formatter.parseDateTime(reservationByTypeInsertionForm.dateIni.getText());
  
        reservationByTypeInsertionForm.parent.getContentPane().removeAll();
       
