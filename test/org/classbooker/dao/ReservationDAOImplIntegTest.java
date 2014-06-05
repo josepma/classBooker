@@ -14,11 +14,8 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
 import org.classbooker.dao.exception.AlredyExistReservationException;
-import org.classbooker.dao.exception.IncorrectBuildingException;
 import org.classbooker.dao.exception.IncorrectReservationException;
-import org.classbooker.dao.exception.IncorrectRoomException;
 import org.classbooker.dao.exception.IncorrectUserException;
 import org.classbooker.dao.exception.NoneExistingRoomException;
 import org.classbooker.entity.Building;
@@ -354,7 +351,7 @@ public class ReservationDAOImplIntegTest {
                 while(entity.getRoom().getReservations().contains(entity)){
                     entity.getRoom().getReservations().remove(entity);
                 }
-                em.remove(em.merge(entity));
+                if (em.contains(entity)) em.remove(entity);
             }
         }
         /*
