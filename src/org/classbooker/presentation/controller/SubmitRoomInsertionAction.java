@@ -9,7 +9,11 @@ package org.classbooker.presentation.controller;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import org.classbooker.presentation.view.BuildingInsertionForm;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.classbooker.dao.exception.AlreadyExistingBuildingException;
+import org.classbooker.dao.exception.DAOException;
+import org.classbooker.presentation.view.ConfirmationForm;
 import org.classbooker.presentation.view.ExceptionInfo;
 import org.classbooker.presentation.view.RoomInsertionForm;
 import org.classbooker.service.SpaceMgrService;
@@ -43,17 +47,17 @@ public class SubmitRoomInsertionAction implements ActionListener {
         try{
           services.addRoom(roomNumber, buildingName, roomCapacity, roomType);
          
-         // ConfirmationForm confirm = new ConfirmationForm();
-         // buildingInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
+        //  ConfirmationForm confirm = new ConfirmationForm("Room successfully added");
+         // roomInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
      
         }
-        catch(Exception exc){ //AlreadyExistingBuildingException exc){
+        catch(DAOException exc){ 
            exc.printStackTrace(); 
            ExceptionInfo exception = new ExceptionInfo("Existing room");
            roomInsertionForm.parent.getContentPane().add(exception,BorderLayout.CENTER);
         }
         finally{
-            roomInsertionForm.parent.revalidate();                        
+          roomInsertionForm.parent.revalidate();                        
         }
    }   
 }

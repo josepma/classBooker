@@ -14,7 +14,7 @@ import org.joda.time.DateTime;
 
 /**
  *
- * @author josepma
+ * @author josepma, Carles Mònico Bonell, Marc Solé Farré
  */
 @Entity
 @Table (name="RESERVATION")
@@ -26,9 +26,7 @@ public class Reservation {
   
     @Column (name="DATE")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)   
-    private Calendar reservationDate;
-    //   ****I PROPOSE private Calendar reservationDate;  (Josepma)
-    
+    private Calendar reservationDate;   
     
     @ManyToOne
     @JoinColumn(name = "USERT", referencedColumnName = "NIF")
@@ -97,12 +95,9 @@ public class Reservation {
             return false;
         }
         final Reservation other = (Reservation) obj;
-        if (!Objects.equals(this.reservationDate, other.reservationDate) ||
-                !Objects.equals(this.rUser, other.rUser) || !Objects.equals(this.room, other.room)) {
-            return false;
-        }
-        
-        return true;
+        return Objects.equals(this.reservationDate, other.reservationDate) 
+               && Objects.equals(this.rUser, other.rUser) 
+               && Objects.equals(this.room, other.room);
     }
     
     private Calendar changeDateToCalendar(DateTime reservationDate){
@@ -112,7 +107,7 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return "Reservation{" + "reservationId=" + reservationId +/* ", reservationDate=" + reservationDate.getTimeZone() + */", rUser=" + rUser.toString() + ", room=" + room.toString() + '}';
+        return "Reservation{" + "reservationId=" + reservationId + ", reservationDate=" + reservationDate.getTimeZone() +", rUser=" + rUser.toString() + ", room=" + room.toString() + '}';
     }
 
 }

@@ -22,8 +22,8 @@ public interface SpaceMgrService {
     public void setSpd(SpaceDAO spd);
     public long addRoom(String number, String buildingName, int capacity, String type) throws DAOException;
     public void addBuilding(String name) throws DAOException;
-    public void deleteRoom(long id);
-    public void deleteBuilding(long id);
+    public void deleteRoom(long id)throws DAOException;
+    public void deleteBuilding(String name)throws DAOException;
     public Room modifyRoom(long id, String buildingName, int capacity, String type);
     public Building modifyBuilding(long id, String name);
     public Room getRoomById(long id) throws DAOException;

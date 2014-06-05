@@ -29,8 +29,8 @@ public class SubmitBuildingInsertionAction implements ActionListener{
       
         try{
           services.addBuilding(buildingName); 
-         // ConfirmationForm confirm = new ConfirmationForm();
-         // buildingInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
+      //    ConfirmationForm confirm = new ConfirmationForm();
+        //  buildingInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
      
         }
         catch(DAOException exc){

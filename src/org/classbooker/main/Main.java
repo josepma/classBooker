@@ -12,7 +12,7 @@ import org.classbooker.presentation.view.*;
 public final class Main{
 
     static ReservationMgrServiceImpl resService;
-    static SpaceMgrService spaceService;
+    static SpaceMgrServiceImpl spaceService;
     static StaffMgrServiceImpl staffService;
         
     static ReservationDAO resDao;
@@ -66,6 +66,7 @@ public final class Main{
          
          staffService.setUserDao(userDao);
          
+         spaceService.setSpd(spaceDao);
 
     }
 

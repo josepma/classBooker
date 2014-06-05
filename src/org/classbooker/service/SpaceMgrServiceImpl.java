@@ -57,23 +57,26 @@ public class SpaceMgrServiceImpl implements SpaceMgrService{
     
     @Override
     public long addRoom(String number, String buildingName, int capacity, String type) throws DAOException {
-       return spd.addRoom(number, buildingName, capacity, type);
+       
+        return spd.addRoom(number, buildingName, capacity, type);
     }
 
     @Override
     public void addBuilding(String name) throws DAOException {
-        Building building = new Building(name);
+        Building building = new Building(name);        
         spd.addBuilding(building);
     }
 
     @Override
-    public void deleteRoom(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void deleteRoom(long id) throws DAOException {
+        Room room= spd.getRoomById(id);
+        spd.removeRoom(room);
     }
 
     @Override
-    public void deleteBuilding(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void deleteBuilding(String name)throws DAOException {
+        Building building = spd.getBuildingByName(name);
+        spd.removeBuilding(building);
     }
 
     @Override
