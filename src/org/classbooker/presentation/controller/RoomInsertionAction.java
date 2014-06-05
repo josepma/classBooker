@@ -24,7 +24,7 @@ public class RoomInsertionAction implements ActionListener {
     
     public RoomInsertionAction(JFrame frame, SpaceMgrService spaceservice) {
         parent = frame;
-        this.services = services;
+        this.services = spaceservice;
     }
 
     @Override
