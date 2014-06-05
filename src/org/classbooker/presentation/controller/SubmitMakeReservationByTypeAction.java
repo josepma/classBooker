@@ -29,13 +29,17 @@ public class SubmitMakeReservationByTypeAction implements ActionListener{
     public void actionPerformed(ActionEvent e){
    
        
-       String buildingName = ReservationByTypeInsertionForm.nif.getText();
+       String nif = reservationByTypeInsertionForm.nif.getText();
+       String type = reservationByTypeInsertionForm.nif.getText(); 
+       String buildingName = reservationByTypeInsertionForm.nif.getText();
+       int capacity = Integer.parseInt(reservationByTypeInsertionForm.nif.getText());
+       DateTime dateIni = reservationByTypeInsertionForm.nif.getText();
  
        reservationByTypeInsertionForm.parent.getContentPane().removeAll();
       
         try{
 //          Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date)
-          services.makeReservationByType(nif, type, buildingName, capacity, date); 
+          services.makeReservationByType(nif, type, buildingName, capacity, dateIni); 
          // ConfirmationForm confirm = new ConfirmationForm();
          // buildingInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
      

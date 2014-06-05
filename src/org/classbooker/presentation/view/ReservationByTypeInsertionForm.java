@@ -88,9 +88,9 @@ public class ReservationByTypeInsertionForm extends JPanel {
         
         this.add(lines);
         
-        //SubmitMakeReservationByTypeAction action = new SubmitMakeReservationByTypeAction(this);
-        //action.setServices(services);
+        SubmitMakeReservationByTypeAction action = new SubmitMakeReservationByTypeAction(this);
+        action.setServices(services);
 
-        //but.addActionListener(action);
+        but.addActionListener(action);
     }
 }
