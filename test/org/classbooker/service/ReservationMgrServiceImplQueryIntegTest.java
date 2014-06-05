@@ -11,10 +11,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import org.classbooker.dao.ReservationDAO;
-import org.classbooker.dao.ReservationDAOImpl;
-import org.classbooker.dao.SpaceDAO;
-import org.classbooker.dao.SpaceDAOImpl;
+import org.classbooker.dao.*;
 import org.classbooker.dao.exception.DAOException;
 import org.classbooker.dao.exception.IncorrectBuildingException;
 import org.classbooker.entity.Building;
@@ -34,6 +31,7 @@ public class ReservationMgrServiceImplQueryIntegTest {
    
    ReservationUser rUser;
    ReservationDAOImpl resDao;
+   UserDAOImpl uDao;
    SpaceDAOImpl spaDao;
    DateTime startDate;
    DateTime endDate;
@@ -331,10 +329,13 @@ public class ReservationMgrServiceImplQueryIntegTest {
     private void createEm() throws Exception{
         resDao = new ReservationDAOImpl();
         spaDao = new SpaceDAOImpl();
+        uDao = new UserDAOImpl();
         em = getEntityManager();
         resDao.setEm(em);
         spaDao.setEm(em);
+        uDao.setEntityManager(em);
         resDao.setsDao(spaDao);
+        resDao.setuDao(uDao);
         rmsQ.setReservationDao(resDao);
         rmsQ.setSpaceDao(spaDao);
     }

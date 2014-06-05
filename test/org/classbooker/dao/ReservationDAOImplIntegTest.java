@@ -29,6 +29,7 @@ import org.junit.After;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+import java.util.ArrayList;
 
 /**
  *
@@ -40,7 +41,9 @@ public class ReservationDAOImplIntegTest {
     ReservationDAOImpl rDao;
     UserDAO uDao;
     SpaceDAO sDao;
+
     
+    List<Reservation> elist = new ArrayList<Reservation>();
 
     EntityManager em;
     Room room1, room2, roomaux;
@@ -97,20 +100,15 @@ public class ReservationDAOImplIntegTest {
     
     @After
     public void tearDown() throws Exception {
-        
-        em = rDao.getEm();
-        if (em.isOpen()) em.close();
-        em = getEntityManager();
-        deleteAll(reservation1,reservation2,reservation3, reservationaux);
-  
-        em.close();
-        
+       
+        deleteEList();
     }
 
     @Test
     public void testAddReservationByReservation() throws Exception {
         
         long id = rDao.addReservation(reservation1);
+        elist.add(reservation1);
         actualReservation = getReservationFromDB(id);  
         checkExistReservation(reservation1, actualReservation);
         
@@ -124,6 +122,10 @@ public class ReservationDAOImplIntegTest {
         id1 = rDao.addReservation(reservation1);
         id2 = rDao.addReservation(reservation2);
         id3 = rDao.addReservation(reservation3);
+        
+        elist.add(reservation1);
+        elist.add(reservation2);
+        elist.add(reservation3);
         
         assertNotSame(id1, id2);
         assertNotSame(id1, id3);
@@ -147,6 +149,7 @@ public class ReservationDAOImplIntegTest {
     @Test(expected = AlredyExistReservationException.class)
     public void testAddReservationSameTimeAndRoomButDifferentUser() throws Exception {  
         reservationaux = new Reservation(dataRes1, user2, room1);
+        elist.add(reservation1);
         rDao.addReservation(reservation1);
         rDao.addReservation(reservationaux);
     }
@@ -154,6 +157,7 @@ public class ReservationDAOImplIntegTest {
     @Test
     public void testAddReservationSameTimeAndRoomAndUser() throws Exception {  
         reservationaux = new Reservation(dataRes1, user1, room1);
+        elist.add(reservation1);
         rDao.addReservation(reservation1);
         rDao.addReservation(reservationaux);
     }
@@ -166,8 +170,9 @@ public class ReservationDAOImplIntegTest {
                                          dataRes1);
         expectsReservation = reservation1;
         actualReservation = rDao.getReservationById(resId);
+        elist.add(actualReservation);
         checkExistReservation(expectsReservation , actualReservation);
-        deleteAll(actualReservation);
+        //deleteAll(actualReservation);
         
     }
         
@@ -175,6 +180,7 @@ public class ReservationDAOImplIntegTest {
     public void testAddReservationByAttributeNotExistRoom() throws Exception {
         
         rDao.addReservation("12345678", "11", "EPS", dataRes1);
+        
     }
     
     @Test(expected = NoneExistingRoomException.class)
@@ -193,12 +199,15 @@ public class ReservationDAOImplIntegTest {
     public void testGetReservationById()throws Exception{
         long resId = rDao.addReservation(reservation1);
         actualReservation = rDao.getReservationById(resId);
+        elist.add(reservation1);
         assertEquals(reservation1,actualReservation);
     }
 
     @Test
     public void testGetAllReservation() throws Exception{
         rDao.addReservation(reservation1);
+        elist.add(reservation1);
+        
         List resultList = em.createQuery("SELECT r FROM Reservation r ")
                 .getResultList();
         
@@ -340,6 +349,15 @@ public class ReservationDAOImplIntegTest {
         return new HashSet<>(res);
     }
 
+    private void deleteEList() throws Exception{
+        
+      for (Reservation entity : elist){
+
+          rDao.removeReservation(entity.getReservationId());
+      }
+      elist.clear();
+    }
+    
     private void deleteAll(Reservation... argv) {
         
         em.getTransaction().begin();
@@ -376,6 +394,10 @@ public class ReservationDAOImplIntegTest {
         rDao.addReservation(reservation1);
         rDao.addReservation(reservation2);
         rDao.addReservation(reservation3);
+        elist.add(reservation1);
+        elist.add(reservation2);
+        elist.add(reservation3);
+        
     }
     
 }

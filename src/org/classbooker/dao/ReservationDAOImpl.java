@@ -18,6 +18,7 @@ import org.classbooker.dao.exception.AlredyExistReservationException;
 import org.classbooker.dao.exception.IncorrectReservationException;
 import org.classbooker.dao.exception.IncorrectRoomException;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Locale;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -61,6 +62,7 @@ public class ReservationDAOImpl implements ReservationDAO{
     @Override
     public long addReservation(Reservation reservation) 
                                         throws DAOException{
+     try{
         em.getTransaction().begin();    
         
         if(!checkReservationForUser(reservation)){
@@ -74,6 +76,10 @@ public class ReservationDAOImpl implements ReservationDAO{
         }
         logger.info("Reservation added:"+reservation);
         return reservation.getReservationId();
+     }
+     finally{
+         if (em.getTransaction().isActive() ) em.getTransaction().commit();
+     }
     }
     
     @Override
@@ -183,6 +189,8 @@ public class ReservationDAOImpl implements ReservationDAO{
     @Override
     public List<Reservation> getAllReservationByUserNif(String nif) 
                                                 throws DAOException{
+        
+      try{  
         checkUser(uDao.getUserByNif(nif));
         em.getTransaction().begin();
         List resultList = em.createQuery("SELECT r FROM Reservation r WHERE r.rUser.nif = :nif ")
@@ -190,6 +198,8 @@ public class ReservationDAOImpl implements ReservationDAO{
                 .getResultList();
         em.getTransaction().commit();
         return resultList;
+      }
+      catch(Exception e){ return new ArrayList<Reservation>();}
     }
     
     
