@@ -50,7 +50,7 @@ public class ReservationByTypeInsertionForm extends JPanel {
         labelCap.setText(" Capacity :");
         capacity = new JTextField();
         JLabel labelDate = new JLabel();
-        labelDate.setText(" Date Reservation :");
+        labelDate.setText(" Date (i.e. dd-mm-yyyy hh:mm) :");
         dateIni = new JTextField();
         
         nif.setPreferredSize( new Dimension( 200, 24 ) );
