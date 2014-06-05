@@ -142,9 +142,9 @@ public interface ReservationDAO {
      * Get all reservations by User Nif.
      * @param nif
      * @return a list of reservations when non exist reservations 
-     * returns empty list
-     * @throws IncorrectUserException
-     * when the user doesn't exist or is null.
+     * returns empty list. If the user does not exist or is null, it returns an
+     * empty list too.
+     * @throws 
      */
     List<Reservation> getAllReservationByUserNif(String nif)
                                             throws DAOException;

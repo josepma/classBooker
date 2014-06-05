@@ -137,12 +137,14 @@ public class StaffMgrServiceImplIntegTest {
     @Test(expected = InexistentFileException.class)
     public void addMassiveUserWithInexistentFile() throws Exception {
         staff = new StaffMgrServiceImpl();
+        staff.setUserDao(uDao);
         staff.addMassiveUser("inexistent.csv");
     }
     
     @Test(expected = UnexpectedFormatFileException.class)
     public void addMassiveUserWithUnexpectedFormatFile() throws Exception {
         staff = new StaffMgrServiceImpl();
+        staff.setUserDao(uDao);
         staff.addMassiveUser("format.unexpected");
     }
     

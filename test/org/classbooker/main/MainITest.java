@@ -30,28 +30,6 @@ public class MainITest {
      @Test
      public void firstIT() {
      
-         System.out.println("Integration test");
-         
-          EntityManager em = Persistence.createEntityManagerFactory("classBookerIntegration").createEntityManager();
- 
-          em.getTransaction().begin();
-          ProfessorPas pp2 = (ProfessorPas) em.find(User.class,"12345678");
-          Building building = (Building) em.find(Building.class,"Main Library");
-          
-          Room room2 = new ClassRoom(building, "222333", 30);
-          
-          em.persist(room2);
-          
-          Reservation reservation = new Reservation(
-                  new DateTime(2014,10,10,1,0),pp2, room2); 
-          
-          em.persist(reservation);
-          
-          em.getTransaction().commit();
-
-          em.close();
-        
-         
      
      }
 }
