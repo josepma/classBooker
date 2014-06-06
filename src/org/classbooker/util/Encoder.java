@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
  * @author Antares
  */
 public class Encoder {
-    public String codifySHA512(String message) throws NoSuchAlgorithmException{
+    public static String codifySHA256(String message) throws NoSuchAlgorithmException{
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         
         md.update(message.getBytes());
