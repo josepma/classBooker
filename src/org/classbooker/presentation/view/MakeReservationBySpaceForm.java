@@ -26,6 +26,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.classbooker.dao.exception.IncorrectTimeException;
+import org.classbooker.dao.exception.IncorrectUserException;
 import org.classbooker.entity.Room;
 import org.classbooker.entity.User;
 import org.classbooker.service.AuthenticationMgr;
@@ -110,10 +112,10 @@ public class MakeReservationBySpaceForm extends JPanel {
                 User user = AuthenticationMgr.loggedUser;
 
                 if (user == null) {
-                    ReservationResult res = reservationServ.makeCompleteReservationBySpace("12345678", room, building, date);
+                    ReservationResult res = reservationServ.makeCompleteReservationBySpace("12457638", room, building, date);
                     if (res.getReservation() != null) {
                         reservationServ.acceptReservation(res.getReservation());
-                        JOptionPane.showMessageDialog(null, "S'ha efectuat la reserva correctament: \n" + res.getReservation(), "Info", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "The reservation has been successful: \n" + res.getReservation(), "Info", JOptionPane.INFORMATION_MESSAGE);
                     } else {
 
                         suggestedListRooms = res.getSuggestions();
@@ -130,8 +132,15 @@ public class MakeReservationBySpaceForm extends JPanel {
                     }
 
                 } else {
-                    JOptionPane.showMessageDialog(null, "Usuari no autenticat", "Info", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "User is not authenticated", "Info", JOptionPane.WARNING_MESSAGE);
                 }
+            } catch (IncorrectUserException ex) {
+                JOptionPane.showMessageDialog(null, "You do not have permission for this action", "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+
+            } catch (IncorrectTimeException ex) {
+                JOptionPane.showMessageDialog(null, "The date is incorrect.\nThe data has to be after the current time", "Error",
+                        JOptionPane.ERROR_MESSAGE);
 
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, ex.toString(), "Error",
@@ -171,7 +180,7 @@ public class MakeReservationBySpaceForm extends JPanel {
         }
 
     }
-    
+
     private void addelements() {
 
         GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -228,11 +237,9 @@ public class MakeReservationBySpaceForm extends JPanel {
                                         .addGap(18, 18, 18)
                                         .addComponent(suggestionsScroll)))
                         .addContainerGap(236, Short.MAX_VALUE))
-        
         );
         suggestionsScroll.setVisible(false);
 
     }
-
 
 }
