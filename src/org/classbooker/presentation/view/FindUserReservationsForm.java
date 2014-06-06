@@ -31,6 +31,8 @@ public class FindUserReservationsForm extends JPanel {
     public JTextField nif;
 
     public FindUserReservationsForm(JFrame frame, ReservationMgrService services) {
+        
+        System.out.println("EOOOOO");
         this.services = services;
         this.parent = frame;
 
@@ -56,7 +58,6 @@ public class FindUserReservationsForm extends JPanel {
 
         GetUserReservationsAction action = new GetUserReservationsAction(this);
         action.setServices(services);
-
         but.addActionListener(action);
     }
 }

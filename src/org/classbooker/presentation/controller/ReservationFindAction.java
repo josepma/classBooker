@@ -22,7 +22,7 @@ public class ReservationFindAction implements ActionListener {
     JFrame parent;
     ReservationMgrService services;
 
-    public ReservationFindAction(JFrame frame, ReservationMgrService spaceservice) {
+    public ReservationFindAction(JFrame frame, ReservationMgrService services) {
         parent = frame;
         this.services = services;
     }

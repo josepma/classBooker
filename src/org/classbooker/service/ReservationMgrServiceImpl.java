@@ -102,6 +102,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     @Override
     public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws DAOException {
         Room room = spaceDao.getRoomByNbAndBuilding(roomNb, buildingName);
+        if (room == null) return null;
         Reservation reservationMade = makeReservationBySpace(room.getRoomId(), nif, resDate);
 
         if (reservationMade != null) {
@@ -256,8 +257,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     }
     
     @Override
-    public List<Reservation> getReservationsByNif(String nif)
-            throws DAOException {
+    public List<Reservation> getReservationsByNif(String nif){
         List<Reservation> lreser = reservationDao.getAllReservationByUserNif(nif);
         return lreser;
     }
