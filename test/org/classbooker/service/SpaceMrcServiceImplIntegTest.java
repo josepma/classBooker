@@ -42,14 +42,8 @@ public class SpaceMrcServiceImplIntegTest {
     public void tearDown() throws Exception {
    
     }
-
-    @Test
-    public void testAddBuilding() throws Exception { 
-        Building FDE = new Building("FDE");
-        sms.addBuilding("FDE"); 
-        assertEquals(sms.getBuildingbyName("FDE"), FDE);
-        sms.deleteBuilding("FDE");
-    }
+    //User story: AddSpace (Room)
+    
     @Test
     public void testAddRoom()throws Exception{
         long id = sms.addRoom("2.08", "EPS", 40, "ClassRoom");
@@ -60,6 +54,13 @@ public class SpaceMrcServiceImplIntegTest {
         sms.deleteRoom(id);
     }
     
+    @Test
+    public void testAddBuilding() throws Exception { 
+        Building FDE = new Building("FDE");
+        sms.addBuilding("FDE"); 
+        assertEquals(sms.getBuildingbyName("FDE"), FDE);
+        sms.deleteBuilding("FDE");
+    }
    private EntityManager getEntityManager() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("classBookerIntegration");
         return emf.createEntityManager();
