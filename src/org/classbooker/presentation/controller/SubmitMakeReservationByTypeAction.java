@@ -53,7 +53,7 @@ public class SubmitMakeReservationByTypeAction implements ActionListener{
         }
         catch(Exception exc){ //AlreadyExistingBuildingException exc){
            exc.printStackTrace(); 
-           ExceptionInfo exception = new ExceptionInfo("Existing Reservation");
+           ExceptionInfo exception = new ExceptionInfo("Something is going wrong! Ups!");
            reservationByTypeInsertionForm.parent.getContentPane().add(exception,BorderLayout.CENTER);
         }
         finally{
