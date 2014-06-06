@@ -66,7 +66,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         } catch (NoSuchAlgorithmException ex) {
             java.util.logging.Logger.getLogger(StaffMgrServiceImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        System.out.println(codifiedPassword);
+        user.setPassword(codifiedPassword);
         u.addUser(user);
         sendMailWithPasswordToUser(user.getEmail(),password);
     }
