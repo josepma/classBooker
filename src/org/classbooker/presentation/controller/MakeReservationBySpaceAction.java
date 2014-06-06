@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import org.classbooker.presentation.view.ClassBookerFrame;
+import org.classbooker.presentation.view.MakeReservationBySpaceForm;
 import org.classbooker.presentation.view.MassiveUserInsertionForm;
 import org.classbooker.service.ReservationMgrService;
 import org.classbooker.service.SpaceMgrService;
