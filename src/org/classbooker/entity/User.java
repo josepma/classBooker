@@ -90,9 +90,6 @@ public abstract class User {
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
-        if (!Objects.equals(this.password, other.password)) {
-            return false;
-        }
         return true;
     }
     

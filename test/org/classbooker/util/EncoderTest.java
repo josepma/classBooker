@@ -5,6 +5,7 @@
 package org.classbooker.util;
 
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

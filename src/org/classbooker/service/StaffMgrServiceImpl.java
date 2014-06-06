@@ -10,9 +10,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.UUID;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.log4j.Level;
@@ -27,6 +29,7 @@ import org.classbooker.entity.User;
 import org.classbooker.service.exception.InexistentFileException;
 import org.classbooker.service.exception.ServiceException;
 import org.classbooker.service.exception.UnexpectedFormatFileException;
+import org.classbooker.util.Encoder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -39,6 +42,7 @@ import org.w3c.dom.NodeList;
 public class StaffMgrServiceImpl implements StaffMgrService{
     
     private UserDAO u;
+    private Encoder encoder = new Encoder();
     private static final Logger LOGGER = Logger.getLogger(ReservationMgrServiceImpl.class);
     private static final int X = 3;
     
@@ -55,7 +59,16 @@ public class StaffMgrServiceImpl implements StaffMgrService{
     
     @Override
     public void addUser(User user) throws AlreadyExistingUserException {
+        String password = UUID.randomUUID().toString().substring(0,8);
+        String codifiedPassword="";
+        try {
+            codifiedPassword = encoder.codifySHA512(password);
+        } catch (NoSuchAlgorithmException ex) {
+            java.util.logging.Logger.getLogger(StaffMgrServiceImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        System.out.println(codifiedPassword);
         u.addUser(user);
+        sendMailWithPasswordToUser(user.getEmail(),password);
     }
 
     @Override
@@ -196,6 +209,10 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         }catch(NullPointerException e){
             LOGGER.log(Level.INFO, "Bad data user in the xml.",e);
         }
+    }
+
+    private void sendMailWithPasswordToUser(String email, String password) {
+        //TODO: Send the mail with the password to this email address.
     }
 
     
