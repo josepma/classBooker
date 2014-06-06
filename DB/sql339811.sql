@@ -166,7 +166,7 @@ CREATE TABLE IF NOT EXISTS `USERT` (
 -- Dumping data for table `USERT`
 --
 
-INSERT INTO `USERT` (`NIF`, `USER_TYPE`, `email`, `name`) VALUES
+INSERT INTO `USERT` (`NIF`, `USER_TYPE`, `email`, `name`, `password`) VALUES
 ('12345678', 'PPS_U', 'RalphPoteus@aus.com', 'Ralph Poteus', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92'),
 ('12457638', 'STF_U', 'SophieSpedelung@aus.com', 'Sophie Spedelung', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92'),
 ('45998872', 'SPC_U', 'NiklausWitmark@gmail.com', 'Niklaus Witmark', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92'),
