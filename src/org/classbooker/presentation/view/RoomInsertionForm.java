@@ -60,11 +60,11 @@ public class RoomInsertionForm extends JPanel {
         lines.setLayout(new BoxLayout(lines, BoxLayout.Y_AXIS));
         JPanel line1 = new JPanel(); 
         line1.add(labelName);  
-        line1.add(buildingName);
+        line1.add(roomNumber);
         lines.add(line1);
         JPanel line2 = new JPanel(); 
         line2.add(labelName2);  
-        line2.add(roomNumber);
+        line2.add(buildingName);
         lines.add(line2);
         JPanel line3 = new JPanel(); 
         line3.add(labelName3);  

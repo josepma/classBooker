@@ -62,8 +62,6 @@ public class SpaceDAOImpl implements SpaceDAO {
     public long addRoom(Room room) throws  DAOException{
         
         Building building = getBuildingByName(room.getBuilding().getBuildingName());
-    
-
         if (building == null) {
             throw new NonBuildingException();
         }
