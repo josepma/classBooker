@@ -171,7 +171,7 @@ INSERT INTO `USERT` (`NIF`, `USER_TYPE`, `email`, `name`, `password`) VALUES
 ('12457638', 'STF_U', 'SophieSpedelung@aus.com', 'Sophie Spedelung', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92'),
 ('45998872', 'SPC_U', 'NiklausWitmark@gmail.com', 'Niklaus Witmark', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92'),
 ('55555', 'PPS_U', 'manganito@gmail.com', 'Manganito', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92'),
-('9876544', 'PPS_U', 'rspend@aus.edu', 'Robert Spendelung' '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92');
+('9876544', 'PPS_U', 'rspend@aus.edu', 'Robert Spendelung', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92');
 
 --
 -- Constraints for dumped tables
