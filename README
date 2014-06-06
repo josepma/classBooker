@@ -13,7 +13,7 @@ BUILDING THE APPLICATION
 **Restore integration database: ant -f mybuild.xml dbrestore
    This option has not been tested when several users execute it concurrently. 
    This situation may be problematic. Please, use it carefully.
-
+--------------------------------------------------------------------------------
 DUMPING THE INTEGRATION DATABASE
 
 **Instructions to change the database dump file (i.e., DB/sql339811.sql) 
@@ -37,4 +37,22 @@ There exists an example file in the DB folder. Please, have a look at it.
 
 (f) Save the dump file as DB/sql339811.sql
 
-.............
+--------------------------------------------------------------------------------
+USING DIFFERENT PERSISTENCE UNITS
+
+
+Three different persistence units can be used:
+   *"classBooker": local DB with embedded DERBY DBMS kept in memory.
+   *"classBookerHosted": local DB with hosted DERBY DBMS. You can see
+                         the contents of the DB in Netbeans:
+                          1.  Services-->Java DB-->Start service
+                          2.  Services-->Java DB-->Create DB. 
+                                                      Name=ClassBookerDB, 
+                                                      user=dbuser, 
+                                                      passwd=dbuser
+                          3.  Right-click on the created DB-->Connect + execute command  
+                              (use SQL commands)
+   *"classBookerIntegration": Remote integration DB. MySQL DBMS.
+                              This DB should be restored at the end.
+  
+--------------------------------------------------------------------------------  

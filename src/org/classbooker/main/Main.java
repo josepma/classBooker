@@ -70,8 +70,14 @@ public final class Main {
 
     private static EntityManager getEntityManager() throws Exception {
         EntityManagerFactory emf
-                = Persistence.createEntityManagerFactory("classBookerIntegration");
-
+                = Persistence.createEntityManagerFactory("classBookerHosted");
+                    //Three different persistence units can be used:
+                    //"classBooker": local DB with embedded DERBY DBMS kept in memory.
+                    //"classBookerHosted": local DB with hosted DERBY DBMS. You can see
+                    //                     the contents of the DB in Netbeans
+                    //"classBookerIntegration": Remote integration DB. MySQL DBMS.
+                    //                          This DB should be restored at the end.
+                    //Have a look at README and src/META-INF/persistence.xml.
         return emf.createEntityManager();
     }
 
