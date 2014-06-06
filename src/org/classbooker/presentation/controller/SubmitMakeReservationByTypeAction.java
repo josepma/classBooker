@@ -46,7 +46,7 @@ public class SubmitMakeReservationByTypeAction implements ActionListener{
       
         try{
 //          Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date)
-          Reservation Reser = services.makeReservationByType(nif, type, buildingName, capacity, dateIni); 
+          Reservation Reser = services.makeReservationByType(nif, type, buildingName, capacity, dateIni);
          //ConfirmationForm confirm = new ConfirmationForm("Add Reservation");
          //reservationByTypeInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
      
