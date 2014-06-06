@@ -9,6 +9,7 @@ package org.classbooker.presentation.controller;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import org.classbooker.entity.Reservation;
 import org.classbooker.presentation.view.ConfirmationForm;
 import org.classbooker.presentation.view.ExceptionInfo;
 import org.classbooker.presentation.view.ReservationByTypeInsertionForm;
@@ -45,9 +46,9 @@ public class SubmitMakeReservationByTypeAction implements ActionListener{
       
         try{
 //          Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date)
-          services.makeReservationByType(nif, type, buildingName, capacity, dateIni); 
-         ConfirmationForm confirm = new ConfirmationForm("Add Reservation");
-         reservationByTypeInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
+          Reservation Reser = services.makeReservationByType(nif, type, buildingName, capacity, dateIni); 
+         //ConfirmationForm confirm = new ConfirmationForm("Add Reservation");
+         //reservationByTypeInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
      
         }
         catch(Exception exc){ //AlreadyExistingBuildingException exc){
