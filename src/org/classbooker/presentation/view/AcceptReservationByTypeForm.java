@@ -97,7 +97,7 @@ public class AcceptReservationByTypeForm extends JPanel{
         
         SubmitAcceptReservationByTypeAction action = new SubmitAcceptReservationByTypeAction(parent,reservation);
         action.setServices(services);
-        //but1.addActionListener(action);
+        but1.addActionListener(action);
      }
 
 }

@@ -8,6 +8,7 @@ package org.classbooker.presentation.controller;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import org.classbooker.dao.exception.DAOException;
 import org.classbooker.entity.Reservation;
@@ -22,7 +23,7 @@ import org.classbooker.service.SpaceMgrService;
  *
  * @author xurata
  */
-public class SubmitAcceptReservationByTypeAction {
+public class SubmitAcceptReservationByTypeAction implements ActionListener {
     Reservation reservation;
     JFrame parent;
     ReservationMgrService services;
@@ -30,7 +31,6 @@ public class SubmitAcceptReservationByTypeAction {
    public SubmitAcceptReservationByTypeAction(JFrame frame, Reservation res){
        this.reservation = res;
        this.parent= frame;
-       
    } 
 
     public void setServices(ReservationMgrService services){
