@@ -24,12 +24,10 @@ public class MakeReservationBySpaceAction implements ActionListener{
     
     private JFrame parent;
     private ReservationMgrService reservationServ;
-    private SpaceMgrService spaceServ;
 
-    public MakeReservationBySpaceAction(ClassBookerFrame cbf, ReservationMgrService rms, SpaceMgrService spaceService) {
+    public MakeReservationBySpaceAction(ClassBookerFrame cbf, ReservationMgrService rms) {
         this.parent = cbf;
         this.reservationServ = rms;
-        this.spaceServ = spaceService;
     }
 
 
@@ -37,7 +35,7 @@ public class MakeReservationBySpaceAction implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         parent.getContentPane().removeAll();
          
-        MakeReservationBySpaceForm form = new MakeReservationBySpaceForm(parent,reservationServ, spaceServ);
+        MakeReservationBySpaceForm form = new MakeReservationBySpaceForm(parent,reservationServ);
         parent.getContentPane().add(form,BorderLayout.CENTER);
      
         parent.revalidate();

@@ -22,7 +22,6 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
-import org.classbooker.entity.Reservation;
 import org.classbooker.service.ReservationMgrService;
 import org.classbooker.service.SpaceMgrService;
 import org.classbooker.util.ReservationResult;
@@ -37,7 +36,6 @@ public class MakeReservationBySpaceForm extends JPanel {
     
     private final JFrame parent;
     private final ReservationMgrService reservationServ;
-    private final SpaceMgrService spaceServ;
     
     private final SpinnerNumberModel hoursList;
     public JTextField buildingName, roomNumber;
@@ -46,14 +44,13 @@ public class MakeReservationBySpaceForm extends JPanel {
     private final JButton submitRes;
     private final JSpinner hoursSpinner;
 
-    public MakeReservationBySpaceForm(JFrame parent, ReservationMgrService reservationServ, SpaceMgrService spaceServ) {
+    public MakeReservationBySpaceForm(JFrame parent, ReservationMgrService reservationServ) {
 
         this.parent = parent;
         this.reservationServ = reservationServ;
-        this.spaceServ = spaceServ;
 
         title = new JLabel();
-        title.setText(" MakeReservationBySpace ");
+        title.setText(" Add Reservation By Space ");
         title.setFont(new Font("Ubuntu", 0, 24));
         title.setHorizontalAlignment(SwingConstants.CENTER);
         
@@ -77,16 +74,6 @@ public class MakeReservationBySpaceForm extends JPanel {
         submitRes = new JButton("Reservar");
         submitRes.setText("Reservar");
         submitRes.addActionListener(new ListenerMakeReservation());
-        
-        /*this.add(calendar);
-        
-        this.add(labelHours);
-        this.add(hoursSpinner);
-        this.add(labelBuilding);
-        this.add(buildingName);
-        this.add(labelRoom);
-        this.add(roomNumber);
-        this.add(submitRes);*/
 
         addelements();
     }
@@ -165,7 +152,7 @@ public class MakeReservationBySpaceForm extends JPanel {
                 System.err.println(date);
                 
                 //aki peta
-                ReservationResult res= reservationServ.makeCompleteReservationBySpace(room, room, building, date);         
+                ReservationResult res= reservationServ.makeCompleteReservationBySpace("12345678", room, building, date);         
                 if(res.getReservation() == null) reservationServ.acceptReservation(res.getReservation());
                 
                 JOptionPane.showMessageDialog(null, "S'ha efectuat la reserva correctament: "+res

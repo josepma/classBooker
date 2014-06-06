@@ -114,7 +114,7 @@ public class ClassBookerFrame extends JFrame {
         JMenuItem reservationItem1 = new JMenuItem("Find user reservations");
         reservationItem1.addActionListener(new ReservationFindAction(this, resService));
         JMenuItem reservationItem2 = new JMenuItem("Make Reservation by space");
-        reservationItem2.addActionListener(new MakeReservationBySpaceAction(this,resService, spaceService));
+        reservationItem2.addActionListener(new MakeReservationBySpaceAction(this,resService));
         
         JMenuItem reservationItem3 = new JMenuItem("Make reservation by type");
         reservationItem3.addActionListener(new MakeReservationByTypeAction(this, resService));
