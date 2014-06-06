@@ -9,6 +9,7 @@ package org.classbooker.presentation.view;
 import java.awt.Dimension;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -40,9 +41,9 @@ public class AcceptReservationByTypeForm extends JPanel{
         this.services = services;
         
         JLabel label = new JLabel();
-        label.setText(" Aquesta es la reserva:");
+        label.setText(" This is the reservation that suggest the system:");
         JLabel labelType = new JLabel();
-        labelType.setText(reservation.getRoom().getClass().getName());
+        labelType.setText(reservation.getRoom().getClass().getSimpleName().toString());
         type = new JTextField();
         JLabel labelName = new JLabel();
         labelName.setText(reservation.getRoom().getBuilding().getBuildingName());
@@ -51,22 +52,22 @@ public class AcceptReservationByTypeForm extends JPanel{
         labelCap.setText(Integer.toString(reservation.getRoom().getCapacity()));
         capacity = new JTextField();
         JLabel labelDate = new JLabel();
-        DateFormat df = new SimpleDateFormat("yyyyMMdd  HH:mm");
-        String dtf = df.format(reservation.getReservationDate());
+        String dtf = reservation.getReservationDate().toString();
         labelDate.setText(dtf);
         dateIni = new JTextField();
         
-        type.setPreferredSize( new Dimension( 200, 24 ) );
-        buildingName.setPreferredSize( new Dimension( 200, 24 ) );
-        capacity.setPreferredSize( new Dimension( 200, 24 ) );
-        dateIni.setPreferredSize( new Dimension( 200, 24 ) );
+        //type.setPreferredSize( new Dimension( 200, 24 ) );
+        //buildingName.setPreferredSize( new Dimension( 200, 24 ) );
+        //capacity.setPreferredSize( new Dimension( 200, 24 ) );
+        //dateIni.setPreferredSize( new Dimension( 200, 24 ) );
         
         but1 = new JButton();
-        but1.setText("Yes");
+        but1.setText("Do it!");
         //but2 = new JButton();
         //but2.setText("No");
         
         JPanel lines = new JPanel();
+        lines.setLayout(new BoxLayout(lines, BoxLayout.Y_AXIS));
         JPanel line1 = new JPanel();
         line1.add(label);
         lines.add(line1);
