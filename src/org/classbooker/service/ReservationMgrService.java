@@ -164,9 +164,8 @@ public interface ReservationMgrService {
      * Get a list of reservations from his own Nif
      * @param nif, this is the nif that we would use to search into the DB 
      * @return List of Reservation made by that Nif
-     * @throws DAOException 
      */
-    public List <Reservation> getReservationsByNif(String nif) throws DAOException;
+    public List <Reservation> getReservationsByNif(String nif) ;
     
     /**
      * Get a list of reservation using different fields for filtering 

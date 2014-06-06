@@ -41,8 +41,6 @@ public class SubmitMassiveUserInsertionAction implements ActionListener{
        
        massiveUserInsertionForm.parent.getContentPane().removeAll();
       //userDao not set entitymanager(classbookintegration)
-       UserDAO userdao = new UserDAOImpl("classBookerIntegration");
-       services.setUserDao(userdao);
        
         try{
           services.addMassiveUser(fileName);

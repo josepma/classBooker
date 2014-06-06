@@ -44,6 +44,7 @@ public class Reservation {
 
     public Reservation(DateTime reservationDate, ReservationUser rUser, Room room) {
         this.reservationDate = changeDateToCalendar(reservationDate);
+        //this.DT = reservationDate;
         this.rUser = rUser;
         this.room = room;
     }
@@ -107,7 +108,10 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return "Reservation{" + "reservationId=" + reservationId + ", reservationDate=" + reservationDate.getTimeZone() +", rUser=" + rUser.toString() + ", room=" + room.toString() + '}';
+        return "Reservation { Date: " + reservationDate.getTime().toString() + 
+                ", Room number: " + room.getNumber() +
+                ", type: " + room.getClass().getSimpleName() +
+                ", User: " + rUser.getName() + "}";
     }
 
 }

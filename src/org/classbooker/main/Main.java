@@ -9,73 +9,70 @@ import static org.classbooker.main.Main.resDao;
 import org.classbooker.service.*;
 import org.classbooker.presentation.view.*;
 
-public final class Main{
+public final class Main {
 
     static ReservationMgrServiceImpl resService;
     static SpaceMgrServiceImpl spaceService;
     static StaffMgrServiceImpl staffService;
-        
+
     static ReservationDAO resDao;
-    static SpaceDAO spaceDao ;
-    static UserDAO userDao ;
-        
+    static SpaceDAO spaceDao;
+    static UserDAO userDao;
+
     static EntityManager em;
 
-    
-    
-    private Main(){
-        
+    private Main() {
+
     }
-    public static void main(String[] args) throws Exception{
+
+    public static void main(String[] args) throws Exception {
         //Empty method
         System.out.println("hello world");
- 
-        setUpEnvironment();        
-                
-         
-        
-        ClassBookerFrame classBooker = new ClassBookerFrame(resService,spaceService,staffService);
-        
+
+        setUpEnvironment();
+
+        ClassBookerFrame classBooker = new ClassBookerFrame(resService, spaceService, staffService);
+
     }
-    
 
-
-   private static void setUpEnvironment() throws Exception{
+    private static void setUpEnvironment() throws Exception {
 
         resDao = new ReservationDAOImpl();
         spaceDao = new SpaceDAOImpl();
-        UserDAO userDao = new UserDAOImpl();
-        
-        em= getEntityManager();
-      
+        userDao = new UserDAOImpl();
+
+        em = getEntityManager();
+
         spaceDao.setEm(em);
         userDao.setEntityManager(em);
-         resDao.setEm(em);
-         resDao.setuDao(userDao);
-         resDao.setsDao(spaceDao);
-        
-         resService = new ReservationMgrServiceImpl();
-         spaceService = new SpaceMgrServiceImpl();
-         staffService = new StaffMgrServiceImpl();
-         
-         spaceService.setSpd(spaceDao);
-         
-         resService.setReservationDao(resDao);
-         resService.setSpaceDao(spaceDao);
-         resService.setUserDao(userDao);
-         
-         staffService.setUserDao(userDao);
-         
-         spaceService.setSpd(spaceDao);
+        resDao.setEm(em);
+        resDao.setuDao(userDao);
+        resDao.setsDao(spaceDao);
+
+        resService = new ReservationMgrServiceImpl();
+        if (resService == null) {
+            System.out.println("NULL EN MAIN");
+        }
+        spaceService = new SpaceMgrServiceImpl();
+        staffService = new StaffMgrServiceImpl();
+
+        spaceService.setSpd(spaceDao);
+
+        resService.setReservationDao(resDao);
+        resService.setSpaceDao(spaceDao);
+        resService.setUserDao(userDao);
+
+        staffService.setUserDao(userDao);
+
+        spaceService.setSpd(spaceDao);
 
     }
 
     private static EntityManager getEntityManager() throws Exception {
-        EntityManagerFactory emf =
-                Persistence.createEntityManagerFactory("classBooker");
+        EntityManagerFactory emf
+                = Persistence.createEntityManagerFactory("classBookerIntegration");
 
         return emf.createEntityManager();
     }
-
 
 }
