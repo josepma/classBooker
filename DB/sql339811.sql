@@ -158,6 +158,7 @@ CREATE TABLE IF NOT EXISTS `USERT` (
   `USER_TYPE` varchar(5) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`NIF`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -166,11 +167,11 @@ CREATE TABLE IF NOT EXISTS `USERT` (
 --
 
 INSERT INTO `USERT` (`NIF`, `USER_TYPE`, `email`, `name`) VALUES
-('12345678', 'PPS_U', 'RalphPoteus@aus.com', 'Ralph Poteus'),
-('12457638', 'STF_U', 'SophieSpedelung@aus.com', 'Sophie Spedelung'),
-('45998872', 'SPC_U', 'NiklausWitmark@gmail.com', 'Niklaus Witmark'),
-('55555', 'PPS_U', 'manganito@gmail.com', 'Manganito'),
-('9876544', 'PPS_U', 'rspend@aus.edu', 'Robert Spendelung');
+('12345678', 'PPS_U', 'RalphPoteus@aus.com', 'Ralph Poteus', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92'),
+('12457638', 'STF_U', 'SophieSpedelung@aus.com', 'Sophie Spedelung', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92'),
+('45998872', 'SPC_U', 'NiklausWitmark@gmail.com', 'Niklaus Witmark', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92'),
+('55555', 'PPS_U', 'manganito@gmail.com', 'Manganito', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92'),
+('9876544', 'PPS_U', 'rspend@aus.edu', 'Robert Spendelung' '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92');
 
 --
 -- Constraints for dumped tables
