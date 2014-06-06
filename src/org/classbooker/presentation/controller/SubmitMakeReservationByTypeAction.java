@@ -60,7 +60,7 @@ public class SubmitMakeReservationByTypeAction implements ActionListener{
             AcceptReservationByTypeForm form = new AcceptReservationByTypeForm(parent,reservation,services);
             reservationByTypeInsertionForm.parent.getContentPane().add(form,BorderLayout.CENTER);
      
-//            reservationByTypeInsertionForm.parent.revalidate();
+            reservationByTypeInsertionForm.parent.revalidate();
      
         }
         catch(Exception exc){ //AlreadyExistingBuildingException exc){
