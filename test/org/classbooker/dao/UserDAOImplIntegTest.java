@@ -42,8 +42,8 @@ public class UserDAOImplIntegTest {
     public void setUp() throws Exception{
         expected = new ArrayList<>();
         udao = new UserDAOImpl("classBookerIntegration");
-        u = new ProfessorPas("12345","pepito@gmail.com","Pepito");
-        us = new ProfessorPas("98765","jaunito@gmail.com","Juanito");
+        u = new ProfessorPas("12345","pepito@gmail.com","Pepito","");
+        us = new ProfessorPas("98765","jaunito@gmail.com","Juanito","");
         addUser(u);
         addUser(us);
         expected.add(u);
@@ -53,7 +53,7 @@ public class UserDAOImplIntegTest {
     
     @Test
     public void testAddUser() throws Exception{
-        u1 = new ProfessorPas("66666","manganito@gmail.com","Manganito");
+        u1 = new ProfessorPas("66666","manganito@gmail.com","Manganito","");
         udao.addUser(u1);
         User exp = findUserByNif("66666");
         assertEquals(u1,exp);
@@ -71,7 +71,7 @@ public class UserDAOImplIntegTest {
     
     @Test(expected = InexistentUserException.class)
     public void removeInexistentUser() throws Exception{
-        User user  = new ProfessorPas("9999", "notin@database.com", "Inexistent");
+        User user  = new ProfessorPas("9999", "notin@database.com", "Inexistent","");
         udao.removeUser(user);
     }
     

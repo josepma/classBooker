@@ -99,7 +99,7 @@ public class ReservationTest {
     @Test
     public void testSetrUser() {
 
-        ReservationUser expResult = new ProfessorPas("45654565k", "asdfsad@gmail.com", "pep");
+        ReservationUser expResult = new ProfessorPas("45654565k", "asdfsad@gmail.com", "pep","");
         instance.setrUser(expResult);
         assertEquals(expResult, instance.getrUser());
 

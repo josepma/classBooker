@@ -161,24 +161,25 @@ public interface ReservationMgrService {
     List<Room> obtainAllRoomsWithSameFeatures(String type, int capacity, String building, DateTime date)throws DAOException;
     
     /**
-     * Get a list of reservations for the user
-     * @param nif
-     * @return 
-     * @throws org.classbooker.dao.exception.DAOException 
+     * Get a list of reservations from his own Nif
+     * @param nif, this is the nif that we would use to search into the DB 
+     * @return List of Reservation made by that Nif
+     * @throws DAOException 
      */
     public List <Reservation> getReservationsByNif(String nif) throws DAOException;
     
     /**
-     * Get a list of reservation using different filtered
-     * @param nif
-     * @param startDate
-     * @param endDate
-     * @param buildingName
-     * @param roomNb
-     * @param capacity
-     * @param roomType
-     * @return
-     * @throws org.classbooker.dao.exception.DAOException 
+     * Get a list of reservation using different fields for filtering 
+     * the list that it obtained before by Nif
+     * @param nif, this is the nif that we would use to search into the DB
+     * @param startDate, this is the start date of a Reservation
+     * @param endDate, this is the end date of a Reservation
+     * @param buildingName, this is the building's name of a Reservation
+     * @param roomNb, this is the room number of a Reservation
+     * @param capacity, this is the capacity of a Reservation
+     * @param roomType, this is the room type of a Reservation
+     * @return List of Reservations filtered by some fields customized. 
+     * @throws DAOException 
      */
     public List <Reservation> getFilteredReservation(String nif, 
                                                   DateTime startDate,

@@ -40,8 +40,8 @@ public class UserDAOImplTest {
         expected = new ArrayList<>();
         udao = new UserDAOImpl();
         udao.setEntityManager(Persistence.createEntityManagerFactory("classBooker").createEntityManager());
-        u = new ProfessorPas("12345","pepito@gmail.com","Pepito");
-        User us = new ProfessorPas("98765","jaunito@gmail.com","Juanito");
+        u = new ProfessorPas("12345","pepito@gmail.com","Pepito","");
+        User us = new ProfessorPas("98765","jaunito@gmail.com","Juanito","");
         addUser(u);
         addUser(us);
         expected.add(u);
@@ -51,7 +51,7 @@ public class UserDAOImplTest {
     
     @Test
     public void testAddUser() throws Exception{
-        User u1 = new ProfessorPas("55555","manganito@gmail.com","Manganito");
+        User u1 = new ProfessorPas("55555","manganito@gmail.com","Manganito","");
         udao.addUser(u1);
         User exp = findUserByNif("55555");
         assertEquals(u1,exp);
@@ -68,7 +68,7 @@ public class UserDAOImplTest {
     
     @Test(expected = InexistentUserException.class)
     public void removeInexistentUser() throws Exception{
-        User user  = new ProfessorPas("9999", "notin@database.com", "Inexistent");
+        User user  = new ProfessorPas("9999", "notin@database.com", "Inexistent","");
         udao.removeUser(user);
     }
     
@@ -108,8 +108,8 @@ public class UserDAOImplTest {
     
     @Test
     public void testGetMoreThanOneUserByName() throws Exception {
-        User u1 = new ProfessorPas("44444","manganito1@gmail.com","Manganito");
-        User u2 = new ProfessorPas("66666","manganito2@gmail.com","Manganito");
+        User u1 = new ProfessorPas("44444","manganito1@gmail.com","Manganito","");
+        User u2 = new ProfessorPas("66666","manganito2@gmail.com","Manganito","");
         addUser(u1);
         addUser(u2);
         List<User> expected = new ArrayList<>();

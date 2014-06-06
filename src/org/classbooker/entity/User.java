@@ -36,25 +36,30 @@ public abstract class User {
     @Column(name="name")
     private String name;
     
+    @Column(name="password")
+    private String password;
+    
     private static final int HASH = 5;
     private static final int HASH_MULTI = 79;    
     
     
-    public User(String nif, String email, String name) {
+    public User(String nif, String email, String name, String password) {
         this.nif = nif;
         this.email = email;
         this.name = name;
+        this.password = password;
     }
 
     public User() {
         this.nif="";
         this.email="";
         this.name="";
+        this.password="";
     }
 
     @Override
     public String toString() {
-        return "User{" + "nif=" + nif + ", email=" + email + ", name=" + name + '}';
+        return "User{" + "nif=" + nif + ", email=" + email + ", name=" + name + ", password=" + password + '}';
     }
 
     @Override
@@ -63,11 +68,10 @@ public abstract class User {
         hash = HASH_MULTI * hash + Objects.hashCode(this.nif);
         hash = HASH_MULTI * hash + Objects.hashCode(this.email);
         hash = HASH_MULTI * hash + Objects.hashCode(this.name);
+        hash = HASH_MULTI * hash + Objects.hashCode(this.password);
         return hash;
     }
-    
-    
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -80,7 +84,12 @@ public abstract class User {
         if (!Objects.equals(this.nif, other.nif)) {
             return false;
         }
-
+        if (!Objects.equals(this.email, other.email)) {
+            return false;
+        }
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
         return true;
     }
     
@@ -95,7 +104,11 @@ public abstract class User {
     public String getName() {
         return name;
     }
-
+    
+    public String getPassword() {
+        return password;
+    }
+    
     public void setNif(String nif) {
         this.nif = nif;
     }
@@ -107,6 +120,9 @@ public abstract class User {
     public void setName(String name) {
         this.name = name;
     }
-    
+
+    public void setPassword(String password) {
+        this.password = password;
+    }    
     
 }

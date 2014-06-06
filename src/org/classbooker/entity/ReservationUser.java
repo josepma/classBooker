@@ -25,8 +25,8 @@ import javax.persistence.OneToMany;
         this.reservations = new ArrayList<>();
     }
 
-    public ReservationUser(String nif, String email, String name) {
-        super(nif, email, name);
+    public ReservationUser(String nif, String email, String name, String password) {
+        super(nif, email, name, password);
         this.reservations = new ArrayList<>();
         
     }

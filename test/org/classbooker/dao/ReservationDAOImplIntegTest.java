@@ -130,7 +130,7 @@ public class ReservationDAOImplIntegTest {
     @Test(expected = IncorrectUserException.class)
     public void testAddReservationNotExistUser() throws Exception {
         
-        useraux = new ProfessorPas("4765665M","random@professor.ly","Manolo");
+        useraux = new ProfessorPas("4765665M","random@professor.ly","Manolo","");
         reservation1.setrUser(useraux);
         rDao.addReservation(reservation1);
     }

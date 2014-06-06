@@ -174,7 +174,7 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
 
     @Test
     public void testMakeReservationByTypeNoReservationUser() throws Exception {
-        User staffAdm = new StaffAdmin("454654", "name@hotmail.com", "StaffName");
+        User staffAdm = new StaffAdmin("454654", "name@hotmail.com", "StaffName","");
         dateTime = new DateTime(2014, 5, 26, 10, 0);
 
         Reservation r = rms.makeReservationByType(staffAdm.getNif(), "ClassRoom", "EPS",

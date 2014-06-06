@@ -28,9 +28,8 @@ public final class Main{
     }
     public static void main(String[] args) throws Exception{
         //Empty method
-                System.out.println("hello world");
+        System.out.println("hello world");
  
-
         setUpEnvironment();        
                 
          
@@ -51,8 +50,6 @@ public final class Main{
       
         spaceDao.setEm(em);
         userDao.setEntityManager(em);
-        
-        
          resDao.setEm(em);
          resDao.setuDao(userDao);
          resDao.setsDao(spaceDao);
@@ -60,6 +57,8 @@ public final class Main{
          resService = new ReservationMgrServiceImpl();
          spaceService = new SpaceMgrServiceImpl();
          staffService = new StaffMgrServiceImpl();
+         
+         spaceService.setSpd(spaceDao);
          
          resService.setReservationDao(resDao);
          resService.setSpaceDao(spaceDao);

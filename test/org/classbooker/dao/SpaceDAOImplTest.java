@@ -58,7 +58,7 @@ public class SpaceDAOImplTest {
     public void setUp() {
         building = new Building("EPS");
         room = new ClassRoom(building, "2.01", 30);
-        user1 = new ProfessorPas("55555", "manganito@gmail.com", "Manganito");
+        user1 = new ProfessorPas("55555", "manganito@gmail.com", "Manganito","");
         dataRes1 = new DateTime(2014, 05, 11, 12, 00);
         ema = getEntityManager();
         reserv = new Reservation(dataRes1, user1, room2);

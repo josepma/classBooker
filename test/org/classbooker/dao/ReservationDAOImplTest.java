@@ -77,9 +77,9 @@ public class ReservationDAOImplTest {
         building2 = new Building("testBuilding2");
         room1 = new MeetingRoom(building1, "10", 10);
         room2 = new MeetingRoom(building2, "11", 11);
-        user1 = new ProfessorPas("47658245M", "random@professor.ly", "Manolo");
-        user2 = new ProfessorPas("47658246M", "random@professor.ly", "Lily");
-        user3 = new ProfessorPas("47656546M", "random@professor.ly", "Ramon");
+        user1 = new ProfessorPas("47658245M", "random@professor.ly", "Manolo","");
+        user2 = new ProfessorPas("47658246M", "random@professor.ly", "Lily","");
+        user3 = new ProfessorPas("47656546M", "random@professor.ly", "Ramon","");
         dataRes1 = new DateTime(2014, 05, 11, 12, 00);
         dataRes2 = new DateTime(2014, 06, 12, 10, 00);
         dataRes3 = new DateTime(2014, 07, 12, 10, 00);
@@ -132,7 +132,7 @@ public class ReservationDAOImplTest {
     public void testAddReservationNotExistUser() throws Exception {
         ProfessorPas nonExistUser = new ProfessorPas("4765665M", 
                                                      "random@professor.ly", 
-                                                     "Manolo");
+                                                     "Manolo","");
         reservation1.setrUser(nonExistUser);
         rDao.addReservation(reservation1);
     }
