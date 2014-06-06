@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import org.classbooker.entity.Reservation;
+import org.classbooker.presentation.view.AcceptReservationByTypeForm;
 import org.classbooker.presentation.view.ConfirmationForm;
 import org.classbooker.presentation.view.ExceptionInfo;
 import org.classbooker.presentation.view.ReservationByTypeInsertionForm;
@@ -56,10 +57,10 @@ public class SubmitMakeReservationByTypeAction implements ActionListener{
           
             reservationByTypeInsertionForm.parent.getContentPane().removeAll();
          
-//            ReservationByTypeInsertionForm form = new AcceptReservationByTypeInsertionForm(parent,reservation,services);
-//            reservationByTypeInsertionForm.parent.getContentPane().add(form,BorderLayout.CENTER);
+            AcceptReservationByTypeForm form = new AcceptReservationByTypeForm(parent,reservation,services);
+            reservationByTypeInsertionForm.parent.getContentPane().add(form,BorderLayout.CENTER);
      
-            reservationByTypeInsertionForm.parent.revalidate();
+//            reservationByTypeInsertionForm.parent.revalidate();
      
         }
         catch(Exception exc){ //AlreadyExistingBuildingException exc){

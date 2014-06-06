@@ -33,16 +33,16 @@ public class AcceptReservationByTypeForm extends JPanel{
     public JButton but1, but2;
     public JFrame parent;
     
-    public AcceptReservationByTypeForm(JFrame frame, Reservation reservation, ReservationMgrService services) {
+    public AcceptReservationByTypeForm(JFrame frame, Reservation res, ReservationMgrService services) {
         
-        this.reservation = reservation;
+        this.reservation = res;
         this.parent = frame;
         this.services = services;
         
         JLabel label = new JLabel();
         label.setText(" Aquesta es la reserva:");
         JLabel labelType = new JLabel();
-        labelType.setText(reservation.getRoom().getClass().getName());
+        labelType.setText(reservation.getRoom().getClass().getSimpleName());
         type = new JTextField();
         JLabel labelName = new JLabel();
         labelName.setText(reservation.getRoom().getBuilding().getBuildingName());
