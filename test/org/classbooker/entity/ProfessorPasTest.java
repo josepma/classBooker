@@ -23,7 +23,7 @@ public class ProfessorPasTest {
     @Test
     public void testCreateUser() {
         
-        User user = new StaffAdmin("123","email@udl.cat","manolito");
+        User user = new StaffAdmin("123","email@udl.cat","manolito","");
         assertEquals("123",user.getNif());
         assertEquals("email@udl.cat",user.getEmail());
         assertEquals("manolito",user.getName());

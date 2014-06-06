@@ -41,7 +41,7 @@ public class SubmitUserInsertionAction implements ActionListener{
        String nif = userInsertionForm.nif.getText();
        String userName = userInsertionForm.userName.getText();
        String email = userInsertionForm.email.getText();
-       User user = new ProfessorPas(nif,email,userName);
+       User user = new ProfessorPas(nif,email,userName,"");
        userInsertionForm.parent.getContentPane().removeAll();
       //userDao not set entitymanager(classbookintegration)
        UserDAO userdao = new UserDAOImpl("classBookerIntegration");

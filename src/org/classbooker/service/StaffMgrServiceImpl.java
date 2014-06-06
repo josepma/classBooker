@@ -173,7 +173,7 @@ public class StaffMgrServiceImpl implements StaffMgrService{
                 name.replaceAll(" ", "").isEmpty()){
             Logger.getLogger(ReservationMgrServiceImpl.class).log(Level.INFO, "Empty data user.");
         }else{
-            User user = new ProfessorPas(nif, mail, name);
+            User user = new ProfessorPas(nif, mail, name,"");
             lUser.add(user);
         }
     }

@@ -21,8 +21,8 @@ public class SpaceAdmin extends ReservationUser{
         super();
     }
 
-    public SpaceAdmin(String nif, String email, String name) {
-        super(nif, email, name);
+    public SpaceAdmin(String nif, String email, String name, String password) {
+        super(nif, email, name, password);
     }
     
     

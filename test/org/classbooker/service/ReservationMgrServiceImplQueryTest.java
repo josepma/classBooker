@@ -323,7 +323,7 @@ public class ReservationMgrServiceImplQueryTest {
     }
     
     private void makingSomeReservations(){
-        rUser = new ProfessorPas("12345678","Ralph@aus.com","Ralph");
+        rUser = new ProfessorPas("12345678","Ralph@aus.com","Ralph","");
         building = new Building("Rectorate Building");
         room = new MeetingRoom (building,"2.3",30);
         startDate = new DateTime(2014,5,9,12,0);

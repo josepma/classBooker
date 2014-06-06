@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package org.classbooker.util;
+package org.classbooker.service;
 
 import org.classbooker.entity.User;
 

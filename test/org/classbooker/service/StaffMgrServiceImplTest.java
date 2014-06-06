@@ -37,7 +37,7 @@ public class StaffMgrServiceImplTest {
     UserDAO uDao;
     StaffMgrServiceImpl staff;
     
-    final User u = new ProfessorPas("nif", "email", "name");
+    final User u = new ProfessorPas("nif", "email", "name","");
     
     public StaffMgrServiceImplTest() {
     }
