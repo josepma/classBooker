@@ -44,8 +44,6 @@ public class SubmitUserInsertionAction implements ActionListener{
        User user = new ProfessorPas(nif,email,userName,"");
        userInsertionForm.parent.getContentPane().removeAll();
       //userDao not set entitymanager(classbookintegration)
-       UserDAO userdao = new UserDAOImpl("classBookerIntegration");
-       services.setUserDao(userdao);
        
         try{
           services.addUser(user);
