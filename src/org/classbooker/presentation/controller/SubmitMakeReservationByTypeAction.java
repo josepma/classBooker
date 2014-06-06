@@ -9,6 +9,7 @@ package org.classbooker.presentation.controller;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JFrame;
 import org.classbooker.entity.Reservation;
 import org.classbooker.presentation.view.ConfirmationForm;
 import org.classbooker.presentation.view.ExceptionInfo;
@@ -25,8 +26,11 @@ import org.joda.time.format.DateTimeFormatter;
 public class SubmitMakeReservationByTypeAction implements ActionListener{
     ReservationByTypeInsertionForm reservationByTypeInsertionForm;
     ReservationMgrService services;
-    public SubmitMakeReservationByTypeAction(ReservationByTypeInsertionForm form){
+    public JFrame parent;
+    public SubmitMakeReservationByTypeAction(ReservationByTypeInsertionForm form, JFrame frame){
        reservationByTypeInsertionForm = form;
+       this.parent = frame;
+       
    }
     public void setServices(ReservationMgrService services){
        this.services = services;
@@ -45,10 +49,17 @@ public class SubmitMakeReservationByTypeAction implements ActionListener{
        reservationByTypeInsertionForm.parent.getContentPane().removeAll();
       
         try{
-//          Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date)
-          Reservation Reser = services.makeReservationByType(nif, type, buildingName, capacity, dateIni);
-         //ConfirmationForm confirm = new ConfirmationForm("Add Reservation");
-         //reservationByTypeInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
+//            Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date)
+            Reservation reservation = services.makeReservationByType(nif, type, buildingName, capacity, dateIni);
+//            ConfirmationForm confirm = new ConfirmationForm("Add Reservation");
+//            reservationByTypeInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
+          
+            reservationByTypeInsertionForm.parent.getContentPane().removeAll();
+         
+//            ReservationByTypeInsertionForm form = new AcceptReservationByTypeInsertionForm(parent,reservation,services);
+//            reservationByTypeInsertionForm.parent.getContentPane().add(form,BorderLayout.CENTER);
+     
+            reservationByTypeInsertionForm.parent.revalidate();
      
         }
         catch(Exception exc){ //AlreadyExistingBuildingException exc){
