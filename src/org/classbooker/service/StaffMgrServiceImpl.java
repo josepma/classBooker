@@ -62,11 +62,11 @@ public class StaffMgrServiceImpl implements StaffMgrService{
         String password = UUID.randomUUID().toString().substring(0,8);
         String codifiedPassword="";
         try {
-            codifiedPassword = encoder.codifySHA512(password);
+            codifiedPassword = encoder.codifySHA256(password);
         } catch (NoSuchAlgorithmException ex) {
             java.util.logging.Logger.getLogger(StaffMgrServiceImpl.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        System.out.println(codifiedPassword);
+        user.setPassword(codifiedPassword);
         u.addUser(user);
         sendMailWithPasswordToUser(user.getEmail(),password);
     }

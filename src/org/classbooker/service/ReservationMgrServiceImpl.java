@@ -119,7 +119,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
      * correct. This reservationMade should be accepted by the user before
      * inserting it into the database
      */
-    @Override
+
     public Reservation makeReservationBySpace(long roomId, String nif, DateTime initialTime) throws DAOException {
         Room room = spaceDao.getRoomById(roomId);
         User user = userDao.getUserByNif(nif);
