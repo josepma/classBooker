@@ -42,4 +42,32 @@
       <property name="eclipselink.ddl-generation.output-mode" value="database"/>
     </properties>
   </persistence-unit>
+  
+  <persistence-unit name="classBookerHosted">
+    <class>org.classbooker.entity.ReservationUser</class>
+    <class>org.classbooker.entity.MeetingRoom</class>
+    <class>org.classbooker.entity.Room</class>
+    <class>org.classbooker.entity.LaboratoryRoom</class>
+    <class>org.classbooker.entity.ClassRoom</class>
+    <class>org.classbooker.entity.StaffAdmin</class>
+    <class>org.classbooker.entity.Building</class>
+    <class>org.classbooker.entity.ProfessorPas</class>
+    <class>org.classbooker.entity.Reservation</class>
+    <class>org.classbooker.entity.User</class>
+    <class>org.classbooker.entity.SpaceAdmin</class>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/classBookerDB;create=true"/>
+      <property name="eclipselink.ddl-generation" value="create-tables"/>
+      <property name="javax.persistence.jdbc.user" value="dbuser"/>
+      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
+      <property name="javax.persistence.jdbc.password" value="dbuser"/>
+      <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+
+    </properties>
+  
+  </persistence-unit>
+  
+  
+  
+  
 </persistence>
