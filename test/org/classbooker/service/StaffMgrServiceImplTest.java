@@ -69,7 +69,7 @@ public class StaffMgrServiceImplTest {
         final Logger logger = Logger.getRootLogger();
         logger.addAppender(appender);
         
-        setExpectationsAddUser();
+        setExpectationsAddUserCsv();
         staff.addMassiveUser("users.csv");
         
         try{
@@ -151,6 +151,15 @@ public class StaffMgrServiceImplTest {
     private void setExpectationsAddUser() throws AlreadyExistingUserException{
         context.checking(new Expectations(){{ 
             allowing(uDao).addUser(u);
+            oneOf(uDao).getUserByNif(u.getNif());will(returnValue(u));
+         }});  
+    }
+    
+    private void setExpectationsAddUserCsv() throws AlreadyExistingUserException{
+        context.checking(new Expectations(){{ 
+            allowing(uDao).addUser(u);
+            User u2 = new ProfessorPas("8788787", "sisi@nono.puede", "angel", "");
+            allowing(uDao).addUser(u2);
             oneOf(uDao).getUserByNif(u.getNif());will(returnValue(u));
          }});  
     }
