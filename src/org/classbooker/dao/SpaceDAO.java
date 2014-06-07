@@ -60,6 +60,7 @@ public interface SpaceDAO {
      *
      * @param room old room
      * @throws NoneExistingRoomException If non exixting Room in DataBase
+     * @throws AlredyExistReservationException If exist reservations in the room
      */
     void removeRoom(Room room) throws  DAOException;
 

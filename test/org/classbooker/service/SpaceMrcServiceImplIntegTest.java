@@ -6,11 +6,20 @@
 
 package org.classbooker.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import org.classbooker.dao.SpaceDAOImpl;
+import org.classbooker.dao.exception.AlreadyExistingRoomException;
+import org.classbooker.dao.exception.AlredyExistReservationException;
+import org.classbooker.dao.exception.IncorrectTypeException;
+import org.classbooker.dao.exception.NonBuildingException;
+import org.classbooker.dao.exception.NoneExistingRoomException;
 import org.classbooker.entity.Building;
+import org.classbooker.entity.ClassRoom;
+import org.classbooker.entity.Reservation;
 import org.classbooker.entity.Room;
 import org.junit.After;
 import org.junit.Before;
@@ -25,6 +34,7 @@ public class SpaceMrcServiceImplIntegTest {
     SpaceMgrServiceImpl sms;
     SpaceDAOImpl space;
     EntityManager ema;
+    Building buildingFind;
     public SpaceMrcServiceImplIntegTest() {
     }
     
@@ -42,7 +52,9 @@ public class SpaceMrcServiceImplIntegTest {
     public void tearDown() throws Exception {
    
     }
-    //User story: AddSpace (Room)
+    
+    //User story: Add Space (Class)
+    
     
     @Test
     public void testAddRoom()throws Exception{
@@ -53,14 +65,67 @@ public class SpaceMrcServiceImplIntegTest {
         assertEquals(room.getNumber(),"2.08");
         sms.deleteRoom(id);
     }
+   
+    @Test(expected =IllegalArgumentException.class)
+    public void testAddRoomnegativeCapacity()throws Exception{
+        long id = sms.addRoom("2.08", "EPS", -40, "ClassRoom");
+    }
     
+    @Test(expected = NonBuildingException.class)
+    public void testAddRoomNoneExistingBuilding() throws Exception {
+        sms.addRoom("2.01", "prova", 30, "ClassRoom");
+    }
+     @Test(expected = IncorrectTypeException.class)
+     public void testAddRoomIncorrectTypeRoom()throws Exception{
+         sms.addRoom("2.01", "EPS", 30, "ComputerRoom");
+     }
+    
+    @Test(expected = AlreadyExistingRoomException.class)
+    public void testAddExistingRoom() throws Exception {
+        sms.addRoom("0.15", "EPS", 15, "ClassRoom");
+        
+    }
+    
+    
+    
+    
+    
+    
+    // User Story add Building
     @Test
     public void testAddBuilding() throws Exception { 
         Building FDE = new Building("FDE");
         sms.addBuilding("FDE"); 
         assertEquals(sms.getBuildingbyName("FDE"), FDE);
         sms.deleteBuilding("FDE");
+    }  
+    
+    
+    
+    
+    
+    
+    // User Story add Building
+    @Test
+    public void testRemoveRoom() throws Exception {
+        
+        long rom = sms.addRoom("2.10", "EPS", 30, "ClassRoom");
+        sms.deleteRoom(rom);  
+        assertNull(ema.find(Room.class, rom));
     }
+    
+    @Test(expected = NoneExistingRoomException.class)
+    public void testRemoveNoneExistingRoom() throws Exception {
+        buildingFind= ema.find(Building.class, "EPS");
+        Room room3 = new ClassRoom(buildingFind, "2.15", 30);
+        sms.deleteRoom(room3.getRoomId());
+    }
+   
+   @Test(expected = AlredyExistReservationException.class)
+    public void testRemoveRoomWithExistingReservation() throws Exception {
+        sms.deleteRoom(1);
+    } 
+    
    private EntityManager getEntityManager() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("classBookerIntegration");
         return emf.createEntityManager();

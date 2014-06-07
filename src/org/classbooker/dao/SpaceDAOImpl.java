@@ -317,10 +317,15 @@ public class SpaceDAOImpl implements SpaceDAO {
      * Remove a exisiting Room
      *
      * @param room old room
-     * @throws NoneExistingRoomException If non exixting Room in DataBase
+     * @throws NoneExistingRoomException If non existing Room in DataBase
+     * @throws AlredyExistReservationException If exist reservations in the room
      */
     @Override
     public void removeRoom(Room room) throws DAOException {
+        if (!room.getReservations().isEmpty()) {
+            throw new AlredyExistReservationException();
+        }
+        
         if (!roomExist(room)) {
             throw new NoneExistingRoomException();
         }

@@ -142,6 +142,15 @@ public class SpaceDAOImplTest {
         room2 = new ClassRoom(building, "2.08", 30);
         sdi.removeRoom(room2);
     }
+   @Test(expected = AlredyExistReservationException.class)
+    public void testRemoveRoomWithExistingReservation() throws Exception {
+        room2 = new ClassRoom(building, "2.19", 30);
+        long id = sdi.addRoom(room2);
+        List<Reservation> reservations = new ArrayList<Reservation>();
+        reservations.add(reserv);
+        room2.setReservations(reservations);
+        sdi.removeRoom(room2);
+    }
 
     @Test
     public void testGetRoomById() {
@@ -242,7 +251,7 @@ public class SpaceDAOImplTest {
         sdi.removeBuilding(building2);
         assertFalse(sdi.getAllBuildings().contains(building2));
     }
-
+    
 
     @Test
     public void testGetBuildingByName() throws Exception {

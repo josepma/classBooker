@@ -14,7 +14,9 @@ import org.classbooker.dao.SpaceDAO;
 import org.classbooker.dao.SpaceDAOImpl;
 import org.classbooker.dao.UserDAO;
 import org.classbooker.dao.exception.DAOException;
+import org.classbooker.dao.exception.IncorrectTypeException;
 import org.classbooker.dao.exception.NonBuildingException;
+import org.classbooker.dao.exception.NoneExistingRoomException;
 import org.classbooker.entity.Building;
 import org.classbooker.entity.Room;
 
@@ -57,7 +59,12 @@ public class SpaceMgrServiceImpl implements SpaceMgrService{
     
     @Override
     public long addRoom(String number, String buildingName, int capacity, String type) throws DAOException {
-       
+        if(capacity<0){
+            throw new IllegalArgumentException(" Negative capacity");
+        }
+         if (!"MeetingRoom".equals(type) && !"LaboratoryRoom".equals(type) && !"ClassRoom".equals(type)) {
+            throw new IncorrectTypeException();
+        }
         return spd.addRoom(number, buildingName, capacity, type);
     }
 
@@ -70,6 +77,8 @@ public class SpaceMgrServiceImpl implements SpaceMgrService{
     @Override
     public void deleteRoom(long id) throws DAOException {
         Room room= spd.getRoomById(id);
+        if (room==null)
+            throw new NoneExistingRoomException();
         spd.removeRoom(room);
     }
 
