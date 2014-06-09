@@ -12,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import org.classbooker.dao.SpaceDAOImpl;
+import org.classbooker.dao.exception.AlreadyExistingBuildingException;
 import org.classbooker.dao.exception.AlreadyExistingRoomException;
 import org.classbooker.dao.exception.AlredyExistReservationException;
 import org.classbooker.dao.exception.IncorrectTypeException;
@@ -22,9 +23,9 @@ import org.classbooker.entity.ClassRoom;
 import org.classbooker.entity.Reservation;
 import org.classbooker.entity.Room;
 import org.junit.After;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -100,12 +101,12 @@ public class SpaceMrcServiceImplIntegTest {
         sms.deleteBuilding("FDE");
     }  
     
+    @Test(expected = AlreadyExistingBuildingException.class)
+    public void testAddExistingBuilding() throws Exception{
+        sms.addBuilding("EPS");
+    }
     
     
-    
-    
-    
-    // User Story add Building
     @Test
     public void testRemoveRoom() throws Exception {
         
@@ -124,7 +125,18 @@ public class SpaceMrcServiceImplIntegTest {
    @Test(expected = AlredyExistReservationException.class)
     public void testRemoveRoomWithExistingReservation() throws Exception {
         sms.deleteRoom(1);
-    } 
+    }
+    
+    @Test
+    public void testRemoveBuilding() throws Exception{
+        sms.addBuilding("UDL");
+        sms.deleteBuilding("UDL");
+        assertNull(ema.find(Building.class, "UDL"));
+        assertNull(space.getAllRoomsOfOneBuilding("UDL"));
+    }
+    
+    
+    
     
    private EntityManager getEntityManager() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("classBookerIntegration");
