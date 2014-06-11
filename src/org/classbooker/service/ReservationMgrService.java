@@ -47,13 +47,12 @@ public interface ReservationMgrService {
      */
     public Reservation makeReservationBySpace(long roomld, String nif, DateTime initialTime) throws DAOException ;
     /**
-     * Makes a reservation by type of space.
+     * Finds an avaliable reservation acording to the specified features.
      * @param nif Nif of the user who makes the reservation.
      * @param type Type of room.
      * @param buildingName The building where we want to make the reservation.
      * @param capacity Capacity of the room.
      * @param date Date of the reservation.
-     * @throws IncorrectBuildingException If the building name is incorrect.
      * @return The reservation done.
      */
     Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws DAOException;
