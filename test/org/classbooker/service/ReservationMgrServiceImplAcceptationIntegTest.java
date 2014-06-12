@@ -18,6 +18,7 @@ import org.classbooker.dao.SpaceDAOImpl;
 import org.classbooker.dao.UserDAO;
 import org.classbooker.dao.UserDAOImpl;
 import org.classbooker.dao.exception.DAOException;
+import org.classbooker.dao.exception.IncorrectBuildingException;
 import org.classbooker.dao.exception.IncorrectRoomException;
 import org.classbooker.entity.Building;
 import org.classbooker.entity.ClassRoom;
@@ -112,6 +113,16 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
         assertTrue(suggestedRooms.isEmpty());
     }
 
+    @Test(expected=IncorrectBuildingException.class)
+    public void testSuggestionSpaceIncorrectBuilding() throws DAOException{
+        List<Room> suggestedRooms = rms.suggestionSpace("0.20", "INCORRECT", dateTime);
+    }
+    
+    @Test(expected=IncorrectRoomException.class)
+    public void testSuggestionSpaceIncorrectRoom() throws DAOException{
+        List<Room> suggestedRooms = rms.suggestionSpace("INCORRECT", "EPS", dateTime);
+    }
+    
     @Test
     public void testGetCurrentUserOfDemandedRoom() throws Exception {
 
@@ -124,7 +135,7 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
     }
 
     @Test
-    public void testGetCurrentUserOfIncorrectRoom() throws Exception {
+    public void testGetCurrentUserOfNotReservedRoom() throws Exception {
 
         dateTime = new DateTime(2014, 5, 31, 9, 0);
 
@@ -152,6 +163,16 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
         ReservationResult rr = rms.makeCompleteReservationBySpace(nif, "0.20", "EPS", dateTime);
         assertNull("Incorrect reservation result", rr.getReservation());
         assertSuggestedSpacesRequirements(rr.getSuggestions(), sDao.getRoomByNbAndBuilding("0.20", "EPS"));
+    }
+    
+    @Test(expected=IncorrectBuildingException.class)
+    public void testCompleteReservationIncorrectBuilding() throws DAOException{
+        ReservationResult rr = rms.makeCompleteReservationBySpace(nif, "0.20", "INCORRECT", dateTime);
+    }
+    
+    @Test(expected=IncorrectRoomException.class)
+    public void testCompleteReservationIncorrectRoom() throws DAOException{
+        ReservationResult rr = rms.makeCompleteReservationBySpace(nif, "INCORRECT", "EPS", dateTime);
     }
 
     @Test

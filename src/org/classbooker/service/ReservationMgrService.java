@@ -136,26 +136,30 @@ public interface ReservationMgrService {
     List<Room> suggestionSpace(String roomNb, String building, DateTime resDate) throws DAOException;
 
     /**
-     * Returns the user who have the reservation of a room in a specific date.
+     * Returns the user who have the reservation of a room in the specified date.
      * @param roomNb The room number.
      * @param building The building where the room is.
      * @param datetime The date and time of the reserve we are finding.
      * @return The user who have the reservation of that room.
-     * @throws org.classBooker.dao.exception.IncorrectBuildingException
-     * @throws org.classBooker.dao.exception.IncorrectRoomException
      */
     ReservationUser getCurrentUserOfDemandedRoom(String roomNb, String building, DateTime datetime);
 
     /**
      * Accepts a reservation.
      * @param reservation The reservation to accept.
-     * @throws IncorrectReservationException If the reservation is not correct.
-     * @throws IncorrectUserException If the user is not correct.
-     * @throws IncorrectRoomException If the room is not correct.
-     * @throws AlredyExistReservationException If the reservation is already done.
+     * @throws DAOException If the reservation contains any incorrect value or can not be accepted.
      */
     void acceptReservation(Reservation reservation) throws DAOException;
    
+    /**
+     * Returns a list with all non reserved the rooms which asserts the specified features.
+     * @param type The type of room.
+     * @param capacity The minimum capacity.
+     * @param building The building where the room must be.
+     * @param date The date when the room must be not reserved.
+     * @return A list of non reserved rooms which asserts the specified features.
+     * @throws DAOException If the type or building name are incorrect.
+     */
     List<Room> obtainAllRoomsWithSameFeatures(String type, int capacity, String building, DateTime date)throws DAOException;
     
     /**
