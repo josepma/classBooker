@@ -20,7 +20,6 @@ import org.classbooker.dao.exception.IncorrectRoomException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.logging.Level;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -141,7 +140,7 @@ public class ReservationDAOImpl implements ReservationDAO{
             em.getTransaction().commit();
             
             return resultList;
-        } catch (DAOException ex) {
+        } catch (IncorrectBuildingException ex) {
             return new ArrayList<>();
         }
     }

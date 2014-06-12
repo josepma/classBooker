@@ -12,18 +12,16 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import org.classbooker.presentation.view.ClassBookerFrame;
 import org.classbooker.presentation.view.MakeReservationBySpaceForm;
-import org.classbooker.presentation.view.MassiveUserInsertionForm;
 import org.classbooker.service.ReservationMgrService;
-import org.classbooker.service.SpaceMgrService;
 
 /**
  *
- * @author hellfish
+ * @author  Carles Mònico Bonell, Marc Solé Farré
  */
 public class MakeReservationBySpaceAction implements ActionListener{
     
-    private JFrame parent;
-    private ReservationMgrService reservationServ;
+    private final JFrame parent;
+    private final ReservationMgrService reservationServ;
 
     public MakeReservationBySpaceAction(ClassBookerFrame cbf, ReservationMgrService rms) {
         this.parent = cbf;
@@ -35,7 +33,7 @@ public class MakeReservationBySpaceAction implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         parent.getContentPane().removeAll();
          
-        MakeReservationBySpaceForm form = new MakeReservationBySpaceForm(parent,reservationServ);
+        MakeReservationBySpaceForm form = new MakeReservationBySpaceForm(reservationServ);
         parent.getContentPane().add(form,BorderLayout.CENTER);
      
         parent.revalidate();

@@ -8,13 +8,15 @@ package org.classbooker.presentation.view;
 import com.toedter.calendar.JCalendar;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -26,6 +28,9 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.classbooker.dao.exception.DAOException;
+import org.classbooker.dao.exception.IncorrectBuildingException;
+import org.classbooker.dao.exception.IncorrectRoomException;
 import org.classbooker.dao.exception.IncorrectTimeException;
 import org.classbooker.dao.exception.IncorrectUserException;
 import org.classbooker.entity.Room;
@@ -37,11 +42,11 @@ import org.joda.time.DateTime;
 
 /**
  *
- * @author hellfish
+ * @author  Carles Mònico Bonell, Marc Solé Farré
  */
 public class MakeReservationBySpaceForm extends JPanel {
 
-    private final JFrame parent;
+
     private final ReservationMgrService reservationServ;
 
     private final SpinnerNumberModel hoursList;
@@ -50,13 +55,12 @@ public class MakeReservationBySpaceForm extends JPanel {
     private final JLabel title, labelHours, labelBuilding, labelRoom;
     private final JButton submitRes;
     private final JSpinner hoursSpinner;
-    private JScrollPane suggestionsScroll;
-    private JList suggestionsRoomList;
+    private final JScrollPane suggestionsScroll;
+    private final JList suggestionsRoomList;
     private List<Room> suggestedListRooms;
 
-    public MakeReservationBySpaceForm(JFrame parent, ReservationMgrService reservationServ) {
+    public MakeReservationBySpaceForm(ReservationMgrService reservationServ) {
 
-        this.parent = parent;
         this.reservationServ = reservationServ;
 
         title = new JLabel();
@@ -89,8 +93,6 @@ public class MakeReservationBySpaceForm extends JPanel {
         suggestionsScroll = new JScrollPane(suggestionsRoomList);
         suggestionsRoomList.addListSelectionListener(new ListenerSuggestList());
 
-        //test init
-        //calendar.setDate(new Date(2015, 5, 26));
         buildingName.setText("EPS");
         roomNumber.setText("0.20");
         hoursList.setValue(9);
@@ -111,40 +113,73 @@ public class MakeReservationBySpaceForm extends JPanel {
 
                 User user = AuthenticationMgr.getLoggedUser();
 
-                if (user == null) {
-                    ReservationResult res = reservationServ.makeCompleteReservationBySpace("12457638", room, building, date);
+                if (user != null) {
+                    ReservationResult res = reservationServ.makeCompleteReservationBySpace(user.getNif(), room, building, date);
                     if (res.getReservation() != null) {
                         reservationServ.acceptReservation(res.getReservation());
-                        JOptionPane.showMessageDialog(null, "The reservation has been successful: \n" + res.getReservation(), "Info", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, 
+                                                      "The reservation has been successful: \n" 
+                                                      + res.getReservation(), 
+                                                      "Info", 
+                                                      JOptionPane.INFORMATION_MESSAGE);
                     } else {
 
                         suggestedListRooms = res.getSuggestions();
                         if (!suggestedListRooms.isEmpty()) {
-                            JOptionPane.showMessageDialog(null, "Space is not available, Select one of the suggestion list", "Info", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, 
+                                "Space is not available, Select one of the suggestion list", 
+                                "Info", 
+                                JOptionPane.INFORMATION_MESSAGE);
                             suggestionsRoomList.setListData(refineArrayRooms(suggestedListRooms));
                             suggestionsScroll.setVisible(true);
                             suggestionsScroll.getParent().validate();
                             suggestionsScroll.getParent().repaint();
                         } else {
-                            JOptionPane.showMessageDialog(null, "Space is not available", "Info", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, 
+                                    "Space is not available", 
+                                    "Info", 
+                                    JOptionPane.INFORMATION_MESSAGE);
                         }
 
                     }
 
                 } else {
-                    JOptionPane.showMessageDialog(null, "User is not authenticated", "Info", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, 
+                            "User is not authenticated", 
+                            "Info", 
+                            JOptionPane.WARNING_MESSAGE);
                 }
             } catch (IncorrectUserException ex) {
-                JOptionPane.showMessageDialog(null, "You do not have permission for this action", "Warning",
+                JOptionPane.showMessageDialog(null, 
+                        "You do not have permission for this action", 
+                        "Warning",
                         JOptionPane.WARNING_MESSAGE);
 
             } catch (IncorrectTimeException ex) {
-                JOptionPane.showMessageDialog(null, "The date is incorrect.\nThe data has to be after the current time", "Error",
+                JOptionPane.showMessageDialog(null, 
+                        "The date is incorrect.\nThe data has to be after the current time", 
+                        "Error",
                         JOptionPane.ERROR_MESSAGE);
 
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, ex.toString(), "Error",
+            } catch (IncorrectBuildingException ex) {
+                JOptionPane.showMessageDialog(null, 
+                        "The Building is incorrect.", 
+                        "Error",
                         JOptionPane.ERROR_MESSAGE);
+
+            } catch (IncorrectRoomException ex) {
+                JOptionPane.showMessageDialog(null, 
+                        "The Room is incorrect.", 
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+
+            } catch (HeadlessException ex) {
+                JOptionPane.showMessageDialog(null, 
+                        "The environment that does not support a keyboard, display, or mouse", 
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } catch (DAOException ex) {
+                Logger.getLogger(MakeReservationBySpaceForm.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 
