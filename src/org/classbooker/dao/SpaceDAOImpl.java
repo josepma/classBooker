@@ -63,10 +63,10 @@ public class SpaceDAOImpl implements SpaceDAO {
         
         Building building = getBuildingByName(room.getBuilding().getBuildingName());
         if (building == null) {
-            throw new NonBuildingException();
+            throw new NonBuildingException("Non building");
         }
         if (roomExist(room)) {
-            throw new AlreadyExistingRoomException();
+            throw new AlreadyExistingRoomException("Room Exist");
         }
         em.getTransaction().begin();
         em.persist(room);

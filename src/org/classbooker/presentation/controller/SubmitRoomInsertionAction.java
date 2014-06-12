@@ -53,7 +53,7 @@ public class SubmitRoomInsertionAction implements ActionListener {
         }
         catch(DAOException exc){ 
            exc.printStackTrace(); 
-           ExceptionInfo exception = new ExceptionInfo("Existing room");
+           ExceptionInfo exception = new ExceptionInfo(exc.getMessage());
            roomInsertionForm.parent.getContentPane().add(exception,BorderLayout.CENTER);
         }
         finally{
