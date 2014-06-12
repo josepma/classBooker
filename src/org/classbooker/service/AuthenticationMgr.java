@@ -21,6 +21,7 @@ public class AuthenticationMgr{
     
     private static UserDAO uDao = new UserDAOImpl("classBookerIntegration");   
     private static User loggedUser = null;
+    private static int tries=3;
 
     public static boolean login (String nif, String password) throws InexistentUserException, NoSuchAlgorithmException{
         User u = uDao.getUserByNif(nif);
@@ -29,15 +30,20 @@ public class AuthenticationMgr{
         }
         if(u.getPassword().equals(getSHA(password))){
             loggedUser = u;
+            tries=3;
             return true;
         }
+        tries=tries-1;
         return false;
         
     }
 
     public static boolean logout(){
-        loggedUser = null;
-        return true;
+        if(loggedUser!=null){
+            loggedUser = null;
+            return true;
+        }
+        return false;
     }
 
     public static String getSHA(String password) throws NoSuchAlgorithmException{
@@ -46,6 +52,10 @@ public class AuthenticationMgr{
 
     public static User getLoggedUser(){
         return loggedUser;
+    }
+    
+    public static int getTries(){
+        return tries;
     }
     
       

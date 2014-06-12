@@ -136,9 +136,11 @@ public class ClassBookerFrame extends JFrame {
         logItem1.addActionListener(new MakeLogInAction(this, authMgr));
 
         JMenuItem logItem2 = new JMenuItem("Log out");
+        logItem2.addActionListener(new MakeLogOutAction(this, authMgr));
         
         staffmenu.add(logItem1);
         staffmenu.add(logItem2);
+        
         menubar.add(staffmenu);
     }   
     

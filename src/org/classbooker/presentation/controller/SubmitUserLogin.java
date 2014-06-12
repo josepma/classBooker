@@ -12,8 +12,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.classbooker.dao.exception.InexistentUserException;
 import org.classbooker.presentation.view.ConfirmationForm;
+import org.classbooker.presentation.view.ExceptionInfo;
 import org.classbooker.presentation.view.LogInForm;
 import org.classbooker.service.AuthenticationMgr;
+
 import org.classbooker.util.Encoder;
 
 /**
@@ -43,12 +45,12 @@ public class SubmitUserLogin implements ActionListener{
                 ConfirmationForm confirm = new ConfirmationForm("User successfully logged in.");
                 form.parent.getContentPane().add(confirm,BorderLayout.CENTER);
             }else{
-                ConfirmationForm confirm = new ConfirmationForm("The password is not correct.");
-                form.parent.getContentPane().add(confirm,BorderLayout.CENTER);
+                ExceptionInfo error = new ExceptionInfo("The password is not correct.");
+                form.parent.getContentPane().add(error,BorderLayout.CENTER);
             }
         } catch (InexistentUserException ex) {
-            ConfirmationForm confirm = new ConfirmationForm("The username is not correct.");
-            form.parent.getContentPane().add(confirm,BorderLayout.CENTER);
+            ExceptionInfo error = new ExceptionInfo("The username is not correct.");
+            form.parent.getContentPane().add(error,BorderLayout.CENTER);
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(SubmitUserLogin.class.getName()).log(Level.SEVERE, null, ex);
         }
