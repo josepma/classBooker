@@ -111,13 +111,8 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
         return new ReservationResult(suggestedRooms);
     }
 
-    /**
-     * Returns a reservationMade for the roomId, the date initialTime and the
-     * user nif. For making correctly the reservationMade, we should check that
-     * the user and the room exist in database also the format of time should be
-     * correct. This reservationMade should be accepted by the user before
-     * inserting it into the database
-     */
+
+    
     public Reservation makeReservationBySpace(long roomId, String nif, DateTime initialTime) throws DAOException {
         Room room = spaceDao.getRoomById(roomId);
         User user = userDao.getUserByNif(nif);
@@ -130,10 +125,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
         return r;
     }
 
-    /**
-     * Delete an existing reservationMade if not found will throw
-     * IncorrectReservationException.
-     */
+    
     @Override
     public void deleteReservation(long id) throws DAOException {
         Reservation reser = reservationDao.getReservationById(id);
@@ -154,10 +146,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    /**
-     * Return a particular reservationMade by a concrete ReservationId If not
-     * exists, will throwIncorrectReservationException.
-     */
+   
     @Override
     public Reservation findReservationById(long id) throws IncorrectReservationException {
         Reservation reser = reservationDao.getReservationById(id);
@@ -179,10 +168,7 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
         return result;
     }
 
-    /**
-     * Return a particular reservation Made by a concrete space and a concrete
-     * date if exists some errors, it will throws exceptions
-     */
+    
     @Override
     public Reservation findReservationBySpaceAndDate(String buildingName, String roomNumber, DateTime date) throws DAOException {
         Building building = spaceDao.getBuildingByName(buildingName);
