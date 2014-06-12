@@ -165,6 +165,8 @@ public class ReservationMgrServiceImplAcceptationTest {
     public void testCompleteReservation() throws Exception {
         context.checking(new Expectations() {
             {
+                oneOf(sDao).getBuildingByName(building.getBuildingName());
+                will(returnValue(building));
                 oneOf(sDao).getRoomByNbAndBuilding(room.getNumber(), building.getBuildingName());
                 will(returnValue(room));
                 oneOf(sDao).getRoomById(room.getRoomId());
@@ -185,6 +187,8 @@ public class ReservationMgrServiceImplAcceptationTest {
     public void testCompleteReservationOfReservedRoom() throws Exception {
         context.checking(new Expectations() {
             {
+                oneOf(sDao).getBuildingByName(building.getBuildingName());
+                will(returnValue(building));
                 oneOf(sDao).getRoomByNbAndBuilding(room.getNumber(), building.getBuildingName());
                 will(returnValue(room));
                 oneOf(sDao).getRoomById(room.getRoomId());
@@ -265,7 +269,9 @@ public class ReservationMgrServiceImplAcceptationTest {
 
     private void checkSuggestionSpacesExpectations(final Room room, final List<Room> lRooms, final Reservation r) throws Exception {
         context.checking(new Expectations() {
-            {
+            {   
+                oneOf(sDao).getBuildingByName(building.getBuildingName());
+                will(returnValue(building));
                 oneOf(sDao).getRoomByNbAndBuilding(room.getNumber(), building.getBuildingName());
                 will(returnValue(room));
                 oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().getName(), room.getCapacity(), building.getBuildingName());
