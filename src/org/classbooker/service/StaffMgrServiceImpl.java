@@ -30,6 +30,7 @@ import org.classbooker.service.exception.InexistentFileException;
 import org.classbooker.service.exception.ServiceException;
 import org.classbooker.service.exception.UnexpectedFormatFileException;
 import org.classbooker.util.Encoder;
+import org.classbooker.util.SendMailTLS;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -212,7 +213,8 @@ public class StaffMgrServiceImpl implements StaffMgrService{
     }
 
     private void sendMailWithPasswordToUser(String email, String password) {
-        //TODO: Send the mail with the password to this email address.
+        SendMailTLS mailer = new SendMailTLS();
+        mailer.sendMail(email, password);
     }
 
     
