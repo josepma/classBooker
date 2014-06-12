@@ -23,6 +23,19 @@ public class AuthenticationMgr{
     private static User loggedUser = null;
     private static int tries=3;
 
+    /**
+     * It tries to log the user with the nif nif and the password password into 
+     * the system, if the user is not in the database throw an
+     * InexistentUserException, if the password don't matches the username, it 
+     * decrement the tries counter, and returns false, on the other hand if the
+     * password and the user name matches, it logs in the user.
+     * 
+     * @param nif
+     * @param password
+     * @return
+     * @throws InexistentUserException
+     * @throws NoSuchAlgorithmException 
+     */
     public static boolean login (String nif, String password) throws InexistentUserException, NoSuchAlgorithmException{
         User u = uDao.getUserByNif(nif);
         if(u==null){
@@ -38,6 +51,12 @@ public class AuthenticationMgr{
         
     }
 
+    /**
+     * If a user is logged in, this function logs out it, if there's no user
+     * logged in it returns false.
+     * 
+     * @return 
+     */
     public static boolean logout(){
         if(loggedUser!=null){
             loggedUser = null;
@@ -46,14 +65,25 @@ public class AuthenticationMgr{
         return false;
     }
 
-    public static String getSHA(String password) throws NoSuchAlgorithmException{
+    private static String getSHA(String password) throws NoSuchAlgorithmException{
         return Encoder.codifySHA256(password);
     }
 
+    /**
+     * It returns the user that is logged into the system, if therses no
+     * logged user in, returns null.
+     * 
+     * @return 
+     */
     public static User getLoggedUser(){
         return loggedUser;
     }
     
+    /**
+     * Return the restant number of tries to log in a user into the system.
+     * 
+     * @return 
+     */
     public static int getTries(){
         return tries;
     }
