@@ -74,9 +74,13 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
 
     @Override
     public List<Room> suggestionSpace(String roomNb, String building, DateTime date) throws DAOException {
+        Building b = spaceDao.getBuildingByName(building);
         Room room = spaceDao.getRoomByNbAndBuilding(roomNb, building);
+        if (b == null) {
+            throw new IncorrectBuildingException();
+        }
         if (room == null) {
-            return new ArrayList();
+            throw new IncorrectRoomException();
         }
         List<Room> suggestedRoomsByTypeAndCapacity = spaceDao.getAllRoomsByTypeAndCapacity(room.getClass().getName(), room.getCapacity(), building);
         List<Room> finalSuggestedRooms = getNonReservedRooms(suggestedRoomsByTypeAndCapacity, date);
@@ -101,8 +105,15 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
 
     @Override
     public ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate) throws DAOException {
+        Building b = spaceDao.getBuildingByName(buildingName);
         Room room = spaceDao.getRoomByNbAndBuilding(roomNb, buildingName);
-        if (room == null) return null;
+        if (b == null) {
+            throw new IncorrectBuildingException();
+        }
+        if (room == null) {
+            throw new IncorrectRoomException();
+        }
+
         Reservation reservationMade = makeReservationBySpace(room.getRoomId(), nif, resDate);
 
         if (reservationMade != null) {
@@ -120,7 +131,6 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
      * correct. This reservationMade should be accepted by the user before
      * inserting it into the database
      */
-
     public Reservation makeReservationBySpace(long roomId, String nif, DateTime initialTime) throws DAOException {
         Room room = spaceDao.getRoomById(roomId);
         User user = userDao.getUserByNif(nif);
@@ -255,9 +265,9 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
         }
         return nonReservedRooms;
     }
-    
+
     @Override
-    public List<Reservation> getReservationsByNif(String nif){
+    public List<Reservation> getReservationsByNif(String nif) {
         List<Reservation> lreser = reservationDao.getAllReservationByUserNif(nif);
         return lreser;
     }
@@ -272,11 +282,13 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
             String roomType)
             throws DAOException {
         if (validation(nif, startDate, endDate, buildingName, roomNb, capacity, roomType)) {
+            System.out.println("DINS VAL");
             return new ArrayList<>();
         }
         List<Reservation> lfreser = getReservationsByNif(nif);
 
         if (lfreser == null) {
+            System.out.println("DINS FRES");
             return new ArrayList<>();
         } else {
             lfreser = validateField(startDate, endDate, buildingName, roomNb, capacity, roomType, lfreser);

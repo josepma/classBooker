@@ -27,13 +27,13 @@ import org.joda.time.DateTime;
 public interface ReservationMgrService {
 
     /**
-     * Makes a complete reservation of a concrete space.
+     * Returns an avaliable reservation according to the specified features or a list of suggested rooms.
      * @param nif Nif of the user who is doing the reserve.
      * @param roomNb Number of the room which is going to be reserved.
      * @param buildingName Name of the building where the room is.
      * @param resDate Date of the reserve.
      * @return A ReservationResult encapsulating the Reservation done or a list of suggested rooms.
-     * @throws Exception If the roomNb or BuildingName doesn't match with a correct Room or Building.
+     * @throws DAOException If the room number or building name is not correct.
      */
     ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate)throws DAOException;
 
@@ -54,6 +54,7 @@ public interface ReservationMgrService {
      * @param capacity Capacity of the room.
      * @param date Date of the reservation.
      * @return The reservation done.
+     * @throws DAOException If the building name is not correct.
      */
     Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws DAOException;
 
@@ -130,9 +131,7 @@ public interface ReservationMgrService {
      * @param building Building where the already reserved room is.
      * @param resDate Date and time of the reserve.
      * @return A list of non reserved rooms similars to the given by parameters.
-     * @throws IncorrectTypeException If the room type is incorrect.
-     * @throws IncorrectBuildingException If the building is incorrect.
-     * @throws IncorrectRoomException If the Room number is incorrect.
+     * @throws DAOException If the room number or building name are incorrect.
      */
     List<Room> suggestionSpace(String roomNb, String building, DateTime resDate) throws DAOException;
 

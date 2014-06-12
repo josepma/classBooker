@@ -20,6 +20,14 @@ public class DisplayReservations extends JPanel {
 
     public DisplayReservations(List<Reservation> reservations) {
 
+        if(reservations.isEmpty()){
+            JLabel l = new JLabel("No reservations assert the specified features.");
+            l.setFont(new Font("Serif", Font.PLAIN, 20));
+            Color c = new Color(0, 153, 0);
+            l.setForeground(c);
+            this.add(l);
+            this.setVisible(true);
+        }
         for (Reservation r : reservations) {
             System.out.println("DINS DE MOSTRAR");
             JLabel l = new JLabel(r.toString());

@@ -99,9 +99,8 @@ public interface SpaceDAO {
      * Get building by name, if don't find it, return null     *
      * @param name building name
      * @return building 
-     * @throws NonBuildingException
      */
-    Building getBuildingByName(String name) throws DAOException;
+    Building getBuildingByName(String name);
 
     /**
      * Get a list of all buildings, And return list empty if don't have buildings in DataBase
