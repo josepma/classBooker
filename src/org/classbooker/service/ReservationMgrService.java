@@ -74,9 +74,9 @@ public interface ReservationMgrService {
     public List<Reservation> findReservationByNif(String nif);
 
     /**
-     * find one reservation by the reservation's id
-     * @param id the id of reservation
-     * @return an reservation found by the id of reservation 
+     * Find one reservation by the reservation's id
+     * @param id The id of reservation
+     * @return An reservation found by the id of reservation 
      * @throws IncorrectReservationException if the reservation does not exist
      */
     Reservation findReservationById(long id)throws DAOException;
@@ -90,12 +90,12 @@ public interface ReservationMgrService {
     public List<Reservation> findReservationByBuildingAndRoomNb(String buildingName, String roomNumber) throws DAOException;
 
     /**
-     * find a reservation according to the space and date introduced
-     * @param buildingName the building name of the reservation desired
-     * @param roomNumber the number of number of the reservation wanted
-     * @param date the date of the reservation made
-     * @return an reservation which contains the building, the room and the date introduced
-     * @throws DAOException if the building ,room or date are not correct
+     * Find a reservation according to the space and date introduced
+     * @param buildingName The building name of the reservation desired
+     * @param roomNumber The number of number of the reservation wanted
+     * @param date The date of the reservation made
+     * @return An reservation which contains the building, the room and the date introduced
+     * @throws DAOException If the building ,room or date are not correct
      */
      Reservation findReservationBySpaceAndDate(String buildingName, String roomNumber, DateTime date) throws DAOException ;
 
@@ -116,15 +116,15 @@ public interface ReservationMgrService {
     public List<Reservation> findReservationByType(String type, DateTime date);
 
     /**
-     * obtains a all reservations 
-     * @return a list of all reservations existed of DB
+     * Obtains a all reservations 
+     * @return A list of all reservations existed of DB
      */
     List<Reservation> getAllReservations();
 
     /**
-     * it will delete a reservation existed in db according to the id of reservation
+     * It will delete a reservation existed in db according to the id of reservation
      * @param id
-     * @throws DAOException if the reservation can not be found
+     * @throws DAOException If the reservation can not be found
      */
     void deleteReservation(long id) throws DAOException;
 
