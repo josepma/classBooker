@@ -27,13 +27,15 @@ public class ClassBookerFrame extends JFrame {
     private ReservationMgrService resService;
     private SpaceMgrService spaceService;
     private StaffMgrService staffService;
+    private AuthenticationMgr authMgr;
 
-    public ClassBookerFrame(ReservationMgrService resService, SpaceMgrService spaceService, StaffMgrService staffService) {
+    public ClassBookerFrame(ReservationMgrService resService, SpaceMgrService spaceService, StaffMgrService staffService, AuthenticationMgr authMgr) {
 
         super("ClassBooker space reservation application");
         this.resService = resService;
         this.spaceService = spaceService;
         this.staffService = staffService;
+        this.authMgr = authMgr;
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setLayout(new BorderLayout());
@@ -62,6 +64,7 @@ public class ClassBookerFrame extends JFrame {
         createSpacesMenu();
         createStaffMenu();
         createReservationsMenu();
+        createAuthenticatorMenu();
 
         this.setJMenuBar(menubar);
     }
@@ -125,4 +128,20 @@ public class ClassBookerFrame extends JFrame {
         menubar.add(reservationsmenu);
     }
 
+     private void createAuthenticatorMenu() {
+        JMenu staffmenu = new JMenu("Authentication");
+        staffmenu.add(new JSeparator());
+
+        JMenuItem logItem1 = new JMenuItem("Log In");
+        logItem1.addActionListener(new MakeLogInAction(this, authMgr));
+
+        JMenuItem logItem2 = new JMenuItem("Log out");
+        
+        staffmenu.add(logItem1);
+        staffmenu.add(logItem2);
+        menubar.add(staffmenu);
+    }   
+    
+    
+    
 }

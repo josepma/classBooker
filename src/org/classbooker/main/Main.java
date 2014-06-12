@@ -14,6 +14,7 @@ public final class Main {
     static ReservationMgrServiceImpl resService;
     static SpaceMgrServiceImpl spaceService;
     static StaffMgrServiceImpl staffService;
+    static AuthenticationMgr authMgr;
 
     static ReservationDAO resDao;
     static SpaceDAO spaceDao;
@@ -31,7 +32,7 @@ public final class Main {
 
         setUpEnvironment();
 
-        ClassBookerFrame classBooker = new ClassBookerFrame(resService, spaceService, staffService);
+        ClassBookerFrame classBooker = new ClassBookerFrame(resService, spaceService, staffService, authMgr);
 
     }
 
