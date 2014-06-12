@@ -55,7 +55,6 @@ public class GetUserReservationsAction implements ActionListener {
             userReservations = new ArrayList();
             Logger.getLogger(GetUserReservationsAction.class.getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println(userReservations.size());
         DisplayReservations dr = new DisplayReservations(userReservations);
         form.parent.getContentPane().add(dr, BorderLayout.CENTER);
         form.parent.revalidate();

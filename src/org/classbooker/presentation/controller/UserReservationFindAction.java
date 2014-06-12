@@ -18,11 +18,11 @@ import org.classbooker.service.ReservationMgrService;
  *
  * @author Albert
  */
-public class ReservationFindAction implements ActionListener {
+public class UserReservationFindAction implements ActionListener {
     JFrame parent;
     ReservationMgrService services;
 
-    public ReservationFindAction(JFrame frame, ReservationMgrService services) {
+    public UserReservationFindAction(JFrame frame, ReservationMgrService services) {
         parent = frame;
         this.services = services;
     }
