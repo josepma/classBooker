@@ -38,14 +38,15 @@ public interface ReservationMgrService {
     ReservationResult makeCompleteReservationBySpace(String nif, String roomNb, String buildingName, DateTime resDate)throws DAOException;
 
     /**
-     *
-     * @param roomld
-     * @param nif
-     * @param initialTime
-     * @return
-     * @throws Exception
+     * Returns a reservation made according to the features of space and date:the roomid, the user's nif and the datetime
+     * if exists the reservation will return null
+     * @param roomld The id of the room
+     * @param nif The user's nif
+     * @param initialTime The datetime which user wants make the reservation
+     * @return A reservation made according to the conditions of space and date
+     * @throws DAOException if the building ,room or date are not correct
      */
-    public Reservation makeReservationBySpace(long roomld, String nif, DateTime initialTime) throws DAOException ;
+    Reservation makeReservationBySpace(long roomld, String nif, DateTime initialTime) throws DAOException ;
     /**
      * Finds an avaliable reservation acording to the specified features.
      * @param nif Nif of the user who makes the reservation.
@@ -66,18 +67,19 @@ public interface ReservationMgrService {
         public Reservation modifyReservation(long id);
 
     /**
-     *
+     * 
      * @param nif
      * @return
      */
     public List<Reservation> findReservationByNif(String nif);
 
     /**
-     *
-     * @param id
-     * @return
+     * find one reservation by the reservation's id
+     * @param id the id of reservation
+     * @return an reservation found by the id of reservation 
+     * @throws IncorrectReservationException if the reservation does not exist
      */
-    public Reservation findReservationById(long id)throws DAOException; //???? És el id d'una reserva?
+    Reservation findReservationById(long id)throws DAOException;
 
     /**
      *
@@ -88,14 +90,14 @@ public interface ReservationMgrService {
     public List<Reservation> findReservationByBuildingAndRoomNb(String buildingName, String roomNumber) throws DAOException;
 
     /**
-     *
-     * @param buildingName
-     * @param roomNumber
-     * @param date
-     * @return
+     * find a reservation according to the space and date introduced
+     * @param buildingName the building name of the reservation desired
+     * @param roomNumber the number of number of the reservation wanted
+     * @param date the date of the reservation made
+     * @return an reservation which contains the building, the room and the date introduced
+     * @throws DAOException if the building ,room or date are not correct
      */
-   
-    public Reservation findReservationBySpaceAndDate(String buildingName, String roomNumber, DateTime date) throws DAOException ;
+     Reservation findReservationBySpaceAndDate(String buildingName, String roomNumber, DateTime date) throws DAOException ;
 
 
     /**
@@ -114,16 +116,17 @@ public interface ReservationMgrService {
     public List<Reservation> findReservationByType(String type, DateTime date);
 
     /**
-     *
-     * @return
+     * obtains a all reservations 
+     * @return a list of all reservations existed of DB
      */
-    public List<Reservation> getAllReservations();
+    List<Reservation> getAllReservations();
 
     /**
-     *
+     * it will delete a reservation existed in db according to the id of reservation
      * @param id
+     * @throws DAOException if the reservation can not be found
      */
-    public void deleteReservation(long id) throws DAOException;
+    void deleteReservation(long id) throws DAOException;
 
     /**
      * Suggests alternative similar rooms when the specified Room is reserved in the date given.
