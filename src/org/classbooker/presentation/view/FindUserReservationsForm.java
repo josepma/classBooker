@@ -53,9 +53,6 @@ public class FindUserReservationsForm extends JPanel {
         JLabel labelDateIni = new JLabel();
         labelDateIni.setText(" Initial Date (i.e. dd-mm-yyyy hh:mm) :");
         dateIni = new JTextField();
-        JLabel labelDateEnd = new JLabel();
-        labelDateEnd.setText(" Finish Date (i.e. dd-mm-yyyy hh:mm) :");
-        dateEnd = new JTextField();
         
         nif.setPreferredSize( new Dimension( 200, 24 ) );
         type.setPreferredSize( new Dimension( 200, 24 ) );
@@ -63,7 +60,6 @@ public class FindUserReservationsForm extends JPanel {
         roomNb.setPreferredSize( new Dimension( 200, 24 ) );
         capacity.setPreferredSize( new Dimension( 200, 24 ) );
         dateIni.setPreferredSize( new Dimension( 200, 24 ) );
-        dateEnd.setPreferredSize( new Dimension( 200, 24 ) );
         
         but = new JButton();
         but.setText("Submit");
@@ -89,11 +85,7 @@ public class FindUserReservationsForm extends JPanel {
         JPanel line5 = new JPanel();
         line5.add(labelDateIni);
         line5.add(dateIni);
-        lines.add(line5);
-        JPanel line7 = new JPanel();
-        line7.add(labelDateEnd);
-        line7.add(dateEnd);
-        lines.add(line7);
+        lines.add(line5);        
         JPanel line8 = new JPanel();
         line8.add(labelRoomNb);
         line8.add(roomNb);

@@ -6,6 +6,7 @@
 
 package org.classbooker.entity;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;

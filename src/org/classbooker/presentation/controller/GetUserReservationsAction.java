@@ -31,7 +31,7 @@ public class GetUserReservationsAction implements ActionListener {
     FindUserReservationsForm form;
     ReservationMgrService services;
     String nif, buildingName, roomNb, type;
-    DateTime dateIni, dateEnd;
+    DateTime dateIni;
     int capacity;
 
     public GetUserReservationsAction(FindUserReservationsForm form) {
@@ -50,7 +50,7 @@ public class GetUserReservationsAction implements ActionListener {
 
         List<Reservation> userReservations;
         try {
-            userReservations = services.getFilteredReservation(nif, dateIni, dateEnd, buildingName, roomNb, capacity, type);
+            userReservations = services.getFilteredReservation(nif, dateIni, null, buildingName, roomNb, capacity, type);
         } catch (DAOException ex) {
             userReservations = new ArrayList();
             Logger.getLogger(GetUserReservationsAction.class.getName()).log(Level.SEVERE, null, ex);
@@ -80,11 +80,6 @@ public class GetUserReservationsAction implements ActionListener {
         if (!form.dateIni.getText().isEmpty()) {
             DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm");
             dateIni = formatter.parseDateTime(form.dateIni.getText());
-        }
-        dateEnd = null;
-        if (!form.dateEnd.getText().isEmpty()) {
-            DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm");
-            dateEnd = formatter.parseDateTime(form.dateEnd.getText());
         }
         type = form.type.getText();
         if (form.type.getText().isEmpty()) {
