@@ -13,6 +13,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import org.classbooker.presentation.controller.MakeLogInAction;
+import org.classbooker.presentation.controller.SubmitUserLogin;
 import org.classbooker.service.AuthenticationMgr;
 
 /**
@@ -62,11 +64,12 @@ public class LogInForm extends JPanel{
         line3.add(but);
         lines.add(line3);
         
-        
-        
         this.add(lines);
 
-            
+        SubmitUserLogin action = new SubmitUserLogin(this);  
+        action.setServices(authMgr);
+        
+        but.addActionListener(action);
         
     }
     

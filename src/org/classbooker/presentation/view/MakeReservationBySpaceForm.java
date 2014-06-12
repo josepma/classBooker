@@ -109,7 +109,7 @@ public class MakeReservationBySpaceForm extends JPanel {
                 String building = buildingName.getText();
                 DateTime date = getInputDate();
 
-                User user = AuthenticationMgr.loggedUser;
+                User user = AuthenticationMgr.getLoggedUser();
 
                 if (user == null) {
                     ReservationResult res = reservationServ.makeCompleteReservationBySpace("12457638", room, building, date);
