@@ -39,7 +39,7 @@ public class ClassBookerFrame extends JFrame {
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.getContentPane().setLayout(new BorderLayout());
-        this.setSize(600, 600);
+        this.setSize(800, 800);
 
         createMenuBar();
         createContents();

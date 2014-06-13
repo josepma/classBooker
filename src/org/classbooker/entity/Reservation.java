@@ -109,8 +109,10 @@ public class Reservation {
 
     @Override
     public String toString() {
-        return "Reservation { Date: " + reservationDate.getTime().toString() + 
+        return "Reservation { Date: " + reservationDate.getTime().toString() +
+                ", Building Name: " + room.getBuilding().getBuildingName() +
                 ", Room number: " + room.getNumber() +
+                ", Room capacity: " + room.getCapacity() +
                 ", type: " + room.getClass().getSimpleName() +
                 ", User: " + rUser.getName() + "}";
     }
