@@ -8,6 +8,7 @@ package org.classbooker.service;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import org.classbooker.dao.SpaceDAO;
@@ -106,14 +107,14 @@ public class SpaceMgrServiceImpl implements SpaceMgrService{
             throw new IllegalArgumentException(" Negative capacity");
         }
          if (!"MeetingRoom".equals(type) && !"LaboratoryRoom".equals(type) && !"ClassRoom".equals(type)) {
-            throw new IncorrectTypeException();
+            throw new IncorrectTypeException("Incorrect Type, put MeetingRoom, LaboratoryRoom or ClassRoom");
         }
         return spd.addRoom(number, buildingName, capacity, type);
     }
 
     /**
      * Add a new building
-     *@param name the name of the building
+     * @param name the name of the building
      * @throws AlreadyExistingBuildingException
      * @throws AlreadyExistingRoomException
      */
@@ -185,6 +186,11 @@ public class SpaceMgrServiceImpl implements SpaceMgrService{
      */
     public EntityManager getEm() {
         return em;
+    }
+
+    @Override
+    public List<Building> getAllBuilding() {
+        return spd.getAllBuildings();
     }
     
     

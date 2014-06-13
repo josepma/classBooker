@@ -7,9 +7,7 @@
 package org.classbooker.service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -33,12 +31,12 @@ import org.junit.Test;
  *
  * @author saida
  */
-public class SpaceMrcServiceImplIntegTest {
+public class SpacemanagementAceptationTest {
     SpaceMgrServiceImpl sms;
     SpaceDAOImpl space;
     EntityManager ema;
     Building buildingFind;
-    public SpaceMrcServiceImplIntegTest() {
+    public SpacemanagementAceptationTest() {
     }
     
     @Before
@@ -55,16 +53,9 @@ public class SpaceMrcServiceImplIntegTest {
     public void tearDown() throws Exception {
    
     }
-
-    @Test
-    public void testAddRoom()throws Exception{
-        long id = sms.addRoom("2.08", "EPS", 40, "ClassRoom");
-        Room room =space.getRoomById(id);
-        assertEquals(room.getBuilding().getBuildingName(),"EPS");
-        assertEquals(room.getCapacity(),40);
-        assertEquals(room.getNumber(),"2.08");
-        sms.deleteRoom(id);
-    }
+    
+    //User story: Add Space (Class)
+    
    
     @Test(expected =IllegalArgumentException.class)
     public void testAddRoomnegativeCapacity()throws Exception{
@@ -85,7 +76,13 @@ public class SpaceMrcServiceImplIntegTest {
         sms.addRoom("0.15", "EPS", 15, "ClassRoom");
         
     }
-
+    
+    
+    
+    
+    
+    
+    // User Story add Building
     @Test
     public void testAddBuilding() throws Exception { 
         Building FDE = new Building("FDE");
@@ -100,7 +97,10 @@ public class SpaceMrcServiceImplIntegTest {
     }
     
     
-
+    
+    
+    
+    // User Story remove Room
     @Test
     public void testRemoveRoom() throws Exception {
         
@@ -121,7 +121,9 @@ public class SpaceMrcServiceImplIntegTest {
         sms.deleteRoom(1);
     }
     
-
+    
+    
+     // User Story remove Building
     @Test
     public void testRemoveBuilding() throws Exception{
         sms.addBuilding("UDL");
@@ -130,7 +132,8 @@ public class SpaceMrcServiceImplIntegTest {
         assertNull(space.getAllRoomsOfOneBuilding("UDL"));
     }
     
-     
+    
+    
     
    private EntityManager getEntityManager() {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("classBookerIntegration");

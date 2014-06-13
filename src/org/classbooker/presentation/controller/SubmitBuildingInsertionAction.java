@@ -29,7 +29,7 @@ public class SubmitBuildingInsertionAction implements ActionListener{
       
         try{
           services.addBuilding(buildingName); 
-          ConfirmationForm confirm = new ConfirmationForm("Building added");
+          ConfirmationForm confirm = new ConfirmationForm("Building "+buildingName+" added");
           buildingInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
      
         }

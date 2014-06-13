@@ -6,6 +6,7 @@
 
 package org.classbooker.service;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import org.classbooker.dao.SpaceDAO;
 import org.classbooker.dao.exception.DAOException;
@@ -112,5 +113,7 @@ public interface SpaceMgrService {
      * @param em Entity Manager
      */
     public void setEm(EntityManager em);
+
+    public List<Building> getAllBuilding();
     
 }

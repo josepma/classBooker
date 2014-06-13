@@ -47,7 +47,8 @@ public class SubmitRoomInsertionAction implements ActionListener {
         try{
           services.addRoom(roomNumber, buildingName, roomCapacity, roomType);
          
-          ConfirmationForm confirm = new ConfirmationForm("Room successfully added");
+          ConfirmationForm confirm = new ConfirmationForm
+                ("Room: Number" + roomNumber +" Building Name "+buildingName+" added correctly");
           roomInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
      
         }
