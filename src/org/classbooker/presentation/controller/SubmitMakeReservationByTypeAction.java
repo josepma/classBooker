@@ -10,6 +10,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import org.classbooker.entity.Reservation;
 import org.classbooker.presentation.view.AcceptReservationByTypeForm;
 import org.classbooker.presentation.view.ConfirmationForm;
@@ -42,9 +43,21 @@ public class SubmitMakeReservationByTypeAction implements ActionListener{
        String nif = reservationByTypeInsertionForm.nif.getText();
        String type = reservationByTypeInsertionForm.type.getText(); 
        String buildingName = reservationByTypeInsertionForm.buildingName.getText();
+       if("".equals(reservationByTypeInsertionForm.capacity.getText())){
+           JOptionPane.showMessageDialog(null, 
+                        "Please, Can you put a capacity?", 
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+       }
        int capacity = Integer.parseInt(reservationByTypeInsertionForm.capacity.getText());
 //       DateTime dateIni = reservationByTypeInsertionForm.dateIni.getText();
        DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm");
+       if("".equals(reservationByTypeInsertionForm.dateIni.getText())){
+           JOptionPane.showMessageDialog(null, 
+                        "Please, Can you put a Date?", 
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+       }
        DateTime dateIni = formatter.parseDateTime(reservationByTypeInsertionForm.dateIni.getText());
        
        reservationByTypeInsertionForm.parent.getContentPane().removeAll();
