@@ -82,10 +82,11 @@ public interface ReservationMgrService {
     Reservation findReservationById(long id)throws DAOException;
 
     /**
-     *
-     * @param buildingName
-     * @param roomNumber
-     * @return
+     * Find a list of reservations according to the building and room number introduced
+     * @param buildingName The building name of the reservation desired
+     * @param roomNumber The number of number of the reservation wanted
+     * @return A reservation found by the Building and Room Number of reservation
+     * @throws DAOException, in other words is an empty list
      */
     public List<Reservation> findReservationByBuildingAndRoomNb(String buildingName, String roomNumber) throws DAOException;
 
@@ -183,7 +184,7 @@ public interface ReservationMgrService {
      * @param capacity, this is the capacity of a Reservation
      * @param roomType, this is the room type of a Reservation
      * @return List of Reservations filtered by some fields customized. 
-     * @throws DAOException 
+     * @throws DAOException, in other words is an empty list
      */
     public List <Reservation> getFilteredReservation(String nif, 
                                                   DateTime startDate,
