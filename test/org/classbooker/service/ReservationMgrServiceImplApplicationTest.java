@@ -51,7 +51,7 @@ public class ReservationMgrServiceImplApplicationTest {
     final long roomId = 111;
     final DateTime date = new DateTime().plusDays(2).withMinuteOfHour(0);
     final DateTime dateBeforeNow = new DateTime(2014,3,2,12,0);
-    final DateTime dateIncorrectFormatOfMinutes = new DateTime(2015,3,2,12,12);
+    final DateTime dateIncorrectFormat = new DateTime(2015,3,2,12,12,12,12);
     final Building building = new Building("nameBuilding");
     final Room room = new ClassRoom(building, nif, 30);
     final ReservationUser professor = new ProfessorPas();
@@ -96,7 +96,23 @@ public class ReservationMgrServiceImplApplicationTest {
     @Test(expected = IncorrectTimeException.class)
     public void testIncorrectFormatOfMinute() throws Exception {
         checkUserAndRoomExpectations(room,professor); 
-        rmgr.makeReservationBySpace(roomId, nif, dateIncorrectFormatOfMinutes);
+        rmgr.makeReservationBySpace(roomId, nif, dateIncorrectFormat);
+        
+        
+    }
+    
+    @Test(expected = IncorrectTimeException.class)
+    public void testIncorrectFormatOfSecond() throws Exception {
+        checkUserAndRoomExpectations(room,professor); 
+        rmgr.makeReservationBySpace(roomId, nif, dateIncorrectFormat);
+        
+        
+    }
+    
+    @Test(expected = IncorrectTimeException.class)
+    public void testIncorrectFormatOfMiliSecond() throws Exception {
+        checkUserAndRoomExpectations(room,professor); 
+        rmgr.makeReservationBySpace(roomId, nif, dateIncorrectFormat);
         
         
     }
@@ -172,7 +188,7 @@ public class ReservationMgrServiceImplApplicationTest {
     @Test(expected = IncorrectTimeException.class)
     public void testCannotFindReservationByDateIncorrectFormatOfMinutes() throws Exception{
         checkFindReservationByBuildingRoomDateExpectations(building,room,null);
-        rmgr.findReservationBySpaceAndDate(building.getBuildingName(), room.getNumber(), dateIncorrectFormatOfMinutes);
+        rmgr.findReservationBySpaceAndDate(building.getBuildingName(), room.getNumber(), dateIncorrectFormat);
     }
     
     @Test

@@ -39,7 +39,7 @@ public class ReservationMgrServiceImplApplicationIntegTest {
     
     DateTime correctDate = new DateTime(2014,7,11,9,0);
     DateTime dateBeforeNow = new DateTime(2014,3,2,12,0);
-    DateTime dateIncorrectFormatOfMinutes = new DateTime(2015,3,2,12,12);
+    DateTime dateIncorrectFormat = new DateTime(2015,3,2,12,12,12,12);
  
     
     @Before
@@ -77,7 +77,21 @@ public class ReservationMgrServiceImplApplicationIntegTest {
     
     @Test(expected = IncorrectTimeException.class)
     public void testIncorrectFormatOfMinute() throws Exception {
-       rmgr.makeReservationBySpace(2,"55555", dateIncorrectFormatOfMinutes);
+       rmgr.makeReservationBySpace(2,"55555", dateIncorrectFormat);
+        
+        
+    }
+
+    @Test(expected = IncorrectTimeException.class)
+    public void testIncorrectFormatOfSecond() throws Exception {
+       rmgr.makeReservationBySpace(2,"55555", dateIncorrectFormat);
+        
+        
+    }
+
+    @Test(expected = IncorrectTimeException.class)
+    public void testIncorrectFormatOfMiliSecond() throws Exception {
+       rmgr.makeReservationBySpace(2,"55555", dateIncorrectFormat);
         
         
     }
@@ -156,9 +170,9 @@ public class ReservationMgrServiceImplApplicationIntegTest {
     }
     
     @Test(expected = IncorrectTimeException.class)
-    public void testCannotFindReservationByDateIncorrectFormatOfMinutes() throws Exception{
+    public void testCannotFindReservationByDateIncorrectFormat() throws Exception{
        
-         rmgr.findReservationBySpaceAndDate("Rectorate Building","2.0",dateIncorrectFormatOfMinutes);
+         rmgr.findReservationBySpaceAndDate("Rectorate Building","2.0",dateIncorrectFormat);
     }
     
     

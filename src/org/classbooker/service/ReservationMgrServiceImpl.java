@@ -279,11 +279,14 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
     }
 
     private void checkDate(DateTime datetime) throws DAOException {
-        if (datetime.isBeforeNow() || datetime.getMinuteOfHour() != 0) {
+        if (datetime == null || datetime.isBeforeNow() || incorrectFormatDateTime(datetime)) {
             throw new IncorrectTimeException("incorrect date time format");
         }
     }
-
+    
+     private boolean incorrectFormatDateTime(DateTime datetime) {
+        return datetime.getMinuteOfHour()!=0 && datetime.getSecondOfMinute()!=0 && datetime.getMillisOfSecond()!=0;
+    }
     private Reservation makeReservation(DateTime datetime, User user, Room room) throws DAOException {
         if (alreadyExistingReservation(datetime, room)) {
             return null;
@@ -458,4 +461,6 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
         }
         return room;
     }
+
+   
 }

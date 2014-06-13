@@ -14,7 +14,6 @@ import javax.swing.JTextField;
 import org.classbooker.service.*;
 import org.classbooker.presentation.controller.*;
 import java.awt.Dimension;
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 
 /**
