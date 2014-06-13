@@ -49,7 +49,7 @@ public class SubmitUserLogin implements ActionListener{
                 form.parent.getContentPane().add(error,BorderLayout.CENTER);
             }
         } catch (InexistentUserException ex) {
-            ExceptionInfo error = new ExceptionInfo("The username is not correct.");
+            ExceptionInfo error = new ExceptionInfo("The nif is not correct.");
             form.parent.getContentPane().add(error,BorderLayout.CENTER);
         } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(SubmitUserLogin.class.getName()).log(Level.SEVERE, null, ex);
