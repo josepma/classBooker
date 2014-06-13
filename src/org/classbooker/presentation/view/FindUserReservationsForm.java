@@ -62,7 +62,7 @@ public class FindUserReservationsForm extends JPanel {
         dateIni.setPreferredSize( new Dimension( 200, 24 ) );
         
         but = new JButton();
-        but.setText("Submit");
+        but.setText("Find");
         
         JPanel lines = new JPanel();
         lines.setLayout(new BoxLayout(lines, BoxLayout.Y_AXIS));
