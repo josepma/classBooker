@@ -305,7 +305,8 @@ public class ReservationMgrServiceImpl implements ReservationMgrService {
             DateTime endDate, List<Reservation> lfreser) {
         List<Reservation> result = new ArrayList<>();
         for (Reservation res : lfreser) {
-            if ((res.getReservationDate().isEqual(startDate))) {
+            if ((res.getReservationDate().isEqual(startDate)) && 
+                    startDate.isBefore(endDate)) {
                 result.add(res);
             }
         }
