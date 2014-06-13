@@ -12,10 +12,13 @@ import java.awt.event.ActionListener;
 import org.classbooker.dao.UserDAO;
 import org.classbooker.dao.UserDAOImpl;
 import org.classbooker.entity.ProfessorPas;
+import org.classbooker.entity.StaffAdmin;
 import org.classbooker.entity.User;
 import org.classbooker.presentation.view.ConfirmationForm;
 import org.classbooker.presentation.view.ExceptionInfo;
 import org.classbooker.presentation.view.MassiveUserInsertionForm;
+import org.classbooker.service.AuthenticationMgr;
+import static org.classbooker.service.AuthenticationMgr.getLoggedUser;
 import org.classbooker.service.StaffMgrService;
 
 /**
@@ -25,7 +28,7 @@ import org.classbooker.service.StaffMgrService;
 public class SubmitMassiveUserInsertionAction implements ActionListener{
     MassiveUserInsertionForm massiveUserInsertionForm;
     StaffMgrService services;
-    
+    AuthenticationMgr authentication;
    public SubmitMassiveUserInsertionAction(MassiveUserInsertionForm form){
        massiveUserInsertionForm = form;
    } 
@@ -36,11 +39,26 @@ public class SubmitMassiveUserInsertionAction implements ActionListener{
    }
    
    public void actionPerformed(ActionEvent e){
-   
-       String fileName = massiveUserInsertionForm.fileName.getText();
-       
+       User loggedUser = getLoggedUser();
+      
        massiveUserInsertionForm.parent.getContentPane().removeAll();
-      //userDao not set entitymanager(classbookintegration)
+       if(loggedUser == null){
+          ExceptionInfo exception = new ExceptionInfo("You have to be logged as Staff Administrator to use this service");
+          massiveUserInsertionForm.parent.getContentPane().add(exception,BorderLayout.CENTER);
+          massiveUserInsertionForm.parent.revalidate();  
+       }
+       else if(loggedUser instanceof StaffAdmin){
+           addMassiveUserProcess();
+       }
+       else{
+          ExceptionInfo exception = new ExceptionInfo("Logged User is not StaffAdmin");
+          massiveUserInsertionForm.parent.getContentPane().add(exception,BorderLayout.CENTER); 
+          massiveUserInsertionForm.parent.revalidate();  
+       }
+   }
+
+    private void addMassiveUserProcess() {
+       String fileName = massiveUserInsertionForm.fileName.getText();
        
         try{
           services.addMassiveUser(fileName);
@@ -58,5 +76,5 @@ public class SubmitMassiveUserInsertionAction implements ActionListener{
         finally{
             massiveUserInsertionForm.parent.revalidate();                        
         }
-   }
+    }
 }

@@ -16,7 +16,7 @@ public class ConfirmationForm extends JPanel{
  
     public ConfirmationForm(String text){
      JLabel l=new JLabel(text);
-      l.setFont(new Font("Serif",Font.PLAIN,48));
+      l.setFont(new Font("Serif",Font.PLAIN,32));
       Color c = new Color(0,153,0);
       l.setForeground(c);
       this.add(l);
