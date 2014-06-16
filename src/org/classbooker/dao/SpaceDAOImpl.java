@@ -18,10 +18,14 @@ import org.classbooker.dao.exception.AlreadyExistingBuildingException;
 import org.classbooker.dao.exception.AlreadyExistingRoomException;
 import org.classbooker.dao.exception.AlredyExistReservationException;
 import org.classbooker.dao.exception.DAOException;
+import org.classbooker.dao.exception.IncorrectRoomException;
 import org.classbooker.dao.exception.IncorrectTypeException;
 import org.classbooker.dao.exception.NonBuildingException;
 import org.classbooker.dao.exception.NoneExistingRoomException;
 import org.classbooker.entity.Building;
+import org.classbooker.entity.ClassRoom;
+import org.classbooker.entity.LaboratoryRoom;
+import org.classbooker.entity.MeetingRoom;
 import org.classbooker.entity.Room;
 
 /**
@@ -68,6 +72,11 @@ public class SpaceDAOImpl implements SpaceDAO {
         if (roomExist(room)) {
             throw new AlreadyExistingRoomException("Room Exist");
         }
+         if(room.getCapacity()<0){
+            throw new IncorrectRoomException(" Negative capacity");
+        }
+        
+         
         em.getTransaction().begin();
         em.persist(room);
         building.getRooms().add(room);
@@ -92,6 +101,11 @@ public class SpaceDAOImpl implements SpaceDAO {
     public long addRoom(String number, String buildingName, int capacity, String type) throws DAOException{
      Room newRoom = null; 
         Building building = new Building(buildingName);
+         if (!"MeetingRoom".equals(type) && !"LaboratoryRoom".equals(type) && !"ClassRoom".equals(type)) {
+            
+             throw new IncorrectTypeException("Incorrect Type, put MeetingRoom, LaboratoryRoom or ClassRoom");
+            
+        }
         try {
 
             Constructor classType = Class.forName("org.classbooker.entity." + type)

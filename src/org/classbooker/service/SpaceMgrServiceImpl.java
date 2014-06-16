@@ -103,12 +103,7 @@ public class SpaceMgrServiceImpl implements SpaceMgrService{
      */
     @Override
     public long addRoom(String number, String buildingName, int capacity, String type) throws DAOException {
-        if(capacity<0){
-            throw new IllegalArgumentException(" Negative capacity");
-        }
-         if (!"MeetingRoom".equals(type) && !"LaboratoryRoom".equals(type) && !"ClassRoom".equals(type)) {
-            throw new IncorrectTypeException("Incorrect Type, put MeetingRoom, LaboratoryRoom or ClassRoom");
-        }
+       
         return spd.addRoom(number, buildingName, capacity, type);
     }
 
