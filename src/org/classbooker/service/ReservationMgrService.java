@@ -190,7 +190,8 @@ public interface ReservationMgrService {
      * @param capacity, this is the capacity of a Reservation
      * @param roomType, this is the room type of a Reservation
      * @return List of Reservations filtered by some fields customized. 
-     * @throws DAOException, in other words is an empty list
+     *         if it can't perform filtering,returns an empty list. 
+     * 
      */
     public List <Reservation> getFilteredReservation(String nif, 
                                                   DateTime startDate,

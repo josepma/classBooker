@@ -43,9 +43,26 @@ public class SubmitMakeReservationByTypeAction implements ActionListener{
    }
     public void actionPerformed(ActionEvent e){
    
-       
+       if("".equals(reservationByTypeInsertionForm.nif.getText())){
+           JOptionPane.showMessageDialog(null, 
+                        "Please, Can you put user nif?", 
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+       }
        String nif = reservationByTypeInsertionForm.nif.getText();
-       String type = reservationByTypeInsertionForm.type.getText(); 
+       if("".equals(reservationByTypeInsertionForm.type.getText())){
+           JOptionPane.showMessageDialog(null, 
+                        "Please, Can you put the type of room?", 
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+       }
+       String type = reservationByTypeInsertionForm.type.getText();
+       if("".equals(reservationByTypeInsertionForm.buildingName.getText())){
+           JOptionPane.showMessageDialog(null, 
+                        "Please, Can you put building name?", 
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+       }
        String buildingName = reservationByTypeInsertionForm.buildingName.getText();
        if("".equals(reservationByTypeInsertionForm.capacity.getText())){
            JOptionPane.showMessageDialog(null, 
@@ -54,7 +71,6 @@ public class SubmitMakeReservationByTypeAction implements ActionListener{
                         JOptionPane.WARNING_MESSAGE);
        }
        int capacity = Integer.parseInt(reservationByTypeInsertionForm.capacity.getText());
-//       DateTime dateIni = reservationByTypeInsertionForm.dateIni.getText();
        DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm");
        if("".equals(reservationByTypeInsertionForm.dateIni.getText())){
            JOptionPane.showMessageDialog(null, 
