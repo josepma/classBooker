@@ -11,6 +11,7 @@ import org.classbooker.dao.UserDAO;
 import org.classbooker.dao.exception.AlreadyExistingBuildingException;
 import org.classbooker.dao.exception.AlreadyExistingRoomException;
 import org.classbooker.dao.exception.DAOException;
+import org.classbooker.dao.exception.IncorrectRoomException;
 import org.classbooker.dao.exception.IncorrectTypeException;
 import org.classbooker.dao.exception.NonBuildingException;
 import org.classbooker.entity.Building;
@@ -18,6 +19,7 @@ import org.classbooker.entity.ClassRoom;
 import org.classbooker.entity.Room;
 import org.jmock.Expectations;
 import static org.jmock.Expectations.returnValue;
+import static org.jmock.Expectations.throwException;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
@@ -57,9 +59,11 @@ public class SpaceMgrServiceImplTest {
         assertEquals(spdao.getRoomByNbAndBuilding("2.65", "EPS"),room);  
     }
 
-    @Test(expected =IllegalArgumentException.class)
+    @Test(expected =IncorrectRoomException.class)
     public void testAddRoomnegativeCapacity()throws Exception{
-        setExpectationsAddRoom();
+        context.checking(new Expectations(){{ 
+            oneOf(spdao).addRoom("2.08", "EPS", -40, "ClassRoom"); will(throwException(new IncorrectRoomException()));       
+         }});
         long id = space.addRoom("2.08", "EPS", -40, "ClassRoom");
     }
     
@@ -73,8 +77,11 @@ public class SpaceMgrServiceImplTest {
     }
      @Test(expected = IncorrectTypeException.class)
      public void testAddRoomIncorrectTypeRoom()throws Exception{
-         setExpectationsAddRoom();
-         space.addRoom("2.01", "EPS", 30, "ComputerRoom");
+       context.checking(new Expectations(){{ 
+            oneOf(spdao).addRoom("2.01", "EPS", 45, "ComputerRoom");will(throwException(new IncorrectTypeException()));
+           
+         }});  
+         space.addRoom("2.01", "EPS", 45, "ComputerRoom");
      }
     
     @Test(expected = AlreadyExistingRoomException.class)

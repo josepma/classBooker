@@ -17,6 +17,7 @@ import org.classbooker.dao.SpaceDAOImpl;
 import org.classbooker.dao.exception.AlreadyExistingBuildingException;
 import org.classbooker.dao.exception.AlreadyExistingRoomException;
 import org.classbooker.dao.exception.AlredyExistReservationException;
+import org.classbooker.dao.exception.IncorrectRoomException;
 import org.classbooker.dao.exception.IncorrectTypeException;
 import org.classbooker.dao.exception.NonBuildingException;
 import org.classbooker.dao.exception.NoneExistingRoomException;
@@ -66,7 +67,7 @@ public class SpaceMrcServiceImplIntegTest {
         sms.deleteRoom(id);
     }
    
-    @Test(expected =IllegalArgumentException.class)
+    @Test(expected =IncorrectRoomException.class)
     public void testAddRoomnegativeCapacity()throws Exception{
         long id = sms.addRoom("2.08", "EPS", -40, "ClassRoom");
     }

@@ -98,12 +98,10 @@ public class SpaceMgrServiceImpl implements SpaceMgrService{
      * @param capacity People capacity in the room
      * @param type The type room (MetingRoom, LaboratoryRoom or ClassRoom)
      * @return id new room
-     * @throws AlreadyExistingRoomException
      * @throws NonBuildingException
      */
     @Override
-    public long addRoom(String number, String buildingName, int capacity, String type) throws DAOException {
-       
+    public long addRoom(String number, String buildingName, int capacity, String type) throws DAOException {       
         return spd.addRoom(number, buildingName, capacity, type);
     }
 
