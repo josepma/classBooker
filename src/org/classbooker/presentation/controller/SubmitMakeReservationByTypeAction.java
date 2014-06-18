@@ -11,6 +11,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import org.classbooker.dao.exception.DAOException;
+import org.classbooker.dao.exception.IncorrectBuildingException;
+import org.classbooker.dao.exception.IncorrectCapacityException;
+import org.classbooker.dao.exception.IncorrectTypeException;
 import org.classbooker.entity.Reservation;
 import org.classbooker.presentation.view.AcceptReservationByTypeForm;
 import org.classbooker.presentation.view.ConfirmationForm;
@@ -76,7 +80,25 @@ public class SubmitMakeReservationByTypeAction implements ActionListener{
             reservationByTypeInsertionForm.parent.revalidate();
      
         }
-        catch(Exception exc){ //AlreadyExistingBuildingException exc){
+        catch(IncorrectBuildingException exc){ 
+           JOptionPane.showMessageDialog(null, 
+                        "The Name of Building is incorrect. Please, write again", 
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+        }
+        catch(IncorrectCapacityException exc){ 
+           JOptionPane.showMessageDialog(null, 
+                        "The Capacity is incorrect. Please, write again", 
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+        }
+        catch(IncorrectTypeException exc){ 
+           JOptionPane.showMessageDialog(null, 
+                        "The Type of the room is incorrect. Please, write again", 
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+        }
+        catch(DAOException exc){ //AlreadyExistingBuildingException exc){
            exc.printStackTrace(); 
            ExceptionInfo exception = new ExceptionInfo("Something is going wrong! Ups!");
            reservationByTypeInsertionForm.parent.getContentPane().add(exception,BorderLayout.CENTER);
