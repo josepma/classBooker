@@ -97,10 +97,9 @@ public class SubmitMassiveUserInsertionAction implements ActionListener{
           if(message.equals("The file contains Repeated Users ")){
               repeatedUserWarning();
           }
-          else{
               System.out.println("ok,inserted");
               confirmitionAddMassiveUser();
-          }
+          
         }
         catch(UnexpectedFormatFileException ex){
             JOptionPane.showMessageDialog(null, 
@@ -151,10 +150,10 @@ public class SubmitMassiveUserInsertionAction implements ActionListener{
 
     private void repeatedUserWarning() {
        JOptionPane.showMessageDialog(null, 
-                        "Repeated User in the file", 
+                        "This file contains repeated User,but the process will continue", 
                         "Warning",
                         JOptionPane.WARNING_MESSAGE);
-       massiveUserInsertionForm.parent.revalidate();    
+          
     }
 
     private void confirmitionAddMassiveUser() {
