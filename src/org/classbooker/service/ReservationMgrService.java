@@ -54,8 +54,14 @@ public interface ReservationMgrService {
      * @param buildingName The building where we want to make the reservation.
      * @param capacity Capacity of the room.
      * @param date Date of the reservation.
-     * @return The reservation done.
-     * @throws DAOException If the building name is not correct.
+     * @return A possible reservation according to the specified features or null if no rooms which assert the specifications are avaliable.
+     * @throws DAOException
+     *         IncorrectBuildingException If the building name is not correct.
+     *         IncorrectTypeException If the type is not correct.
+     *         IncorrectUserException If the nif is not correct.
+     *         IncorrectCapacityException If the capacity is 0 or lower.
+     *         IncorrectDateException If the date is before now or null. 
+     *         
      */
     Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws DAOException;
 
@@ -184,7 +190,8 @@ public interface ReservationMgrService {
      * @param capacity, this is the capacity of a Reservation
      * @param roomType, this is the room type of a Reservation
      * @return List of Reservations filtered by some fields customized. 
-     * @throws DAOException, in other words is an empty list
+     *         if it can't perform filtering,returns an empty list. 
+     * 
      */
     public List <Reservation> getFilteredReservation(String nif, 
                                                   DateTime startDate,

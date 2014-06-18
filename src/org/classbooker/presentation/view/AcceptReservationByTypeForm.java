@@ -44,20 +44,20 @@ public class AcceptReservationByTypeForm extends JPanel{
         JLabel label = new JLabel();
         label.setText(" This is the reservation that suggest the system:");
         JLabel labelType = new JLabel();
-        labelType.setText(reservation.getRoom().getClass().getSimpleName().toString());
+        labelType.setText("Type Room: "+reservation.getRoom().getClass().getSimpleName().toString());
         type = new JTextField();
         JLabel labelName = new JLabel();
-        labelName.setText(reservation.getRoom().getBuilding().getBuildingName());
+        labelName.setText("Building: "+reservation.getRoom().getBuilding().getBuildingName());
         buildingName = new JTextField();
         JLabel labelRoom = new JLabel();
-        labelRoom.setText(Long.toString(reservation.getRoom().getRoomId()));
+        labelRoom.setText("Room Number: "+Long.toString(reservation.getRoom().getRoomId()));
         roomId= new JTextField();
         JLabel labelCap = new JLabel();
-        labelCap.setText(Integer.toString(reservation.getRoom().getCapacity()));
+        labelCap.setText("Capacity Room: "+Integer.toString(reservation.getRoom().getCapacity()));
         capacity = new JTextField();
         JLabel labelDate = new JLabel();
         String dtf = reservation.getReservationDate().toString();
-        labelDate.setText(dtf);
+        labelDate.setText("Date: "+dtf);
         dateIni = new JTextField();
         
         //type.setPreferredSize( new Dimension( 200, 24 ) );

@@ -223,7 +223,7 @@ public class ReservationMgrServiceImplAcceptationTest {
     @Test
     public void testMakeReservationByType() throws Exception {
         checkReservationByTypeExpectations(lRooms, null, rUser);
-        Reservation r = rms.makeReservationByType(nif, room.getClass().getName(), building.getBuildingName(),
+        Reservation r = rms.makeReservationByType(nif, room.getClass().getSimpleName(), building.getBuildingName(),
                 capacity, dateTime);
         assertReservation(r);
     }
@@ -231,21 +231,24 @@ public class ReservationMgrServiceImplAcceptationTest {
     @Test
     public void testMakeReservationByTypeNoEmptyRooms() throws Exception {
         checkReservationByTypeExpectations(lRooms, reservation, rUser);
-        Reservation r = rms.makeReservationByType(nif, room.getClass().getName(), building.getBuildingName(),
+        Reservation r = rms.makeReservationByType(nif, room.getClass().getSimpleName(), building.getBuildingName(),
                 capacity, dateTime);
         assertNull(r);
 
     }
 
-    @Test
+    @Test(expected=IncorrectUserException.class)
     public void testMakeReservationByTypeNoReservationUser() throws Exception {
-        User staffAdm = new StaffAdmin();
+        final User staffAdm = new StaffAdmin();
 
-        checkReservationByTypeExpectations(lRooms, reservation, staffAdm);
-        Reservation r = rms.makeReservationByType(nif, room.getClass().getName(), building.getBuildingName(),
+        context.checking(new Expectations() {
+            {
+                allowing(uDao).getUserByNif(nif);
+                will(returnValue(staffAdm));
+            }
+        });
+        Reservation r = rms.makeReservationByType(nif, room.getClass().getSimpleName(), building.getBuildingName(),
                 capacity, dateTime);
-        assertNull(r);
-        assertFalse(staffAdm instanceof ReservationUser);
 
     }
 
@@ -254,11 +257,15 @@ public class ReservationMgrServiceImplAcceptationTest {
 
         context.checking(new Expectations() {
             {
-                oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().getName(), capacity, building.getBuildingName());
+                allowing(uDao).getUserByNif(nif);
+                will(returnValue(rUser));
+                allowing(sDao).getBuildingByName(building.getBuildingName());
+                will(returnValue(building));
+                oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().getSimpleName(), capacity, building.getBuildingName());
                 will(returnValue(new ArrayList()));
             }
         });
-        Reservation r = rms.makeReservationByType(nif, room.getClass().getName(), building.getBuildingName(),
+        Reservation r = rms.makeReservationByType(nif, room.getClass().getSimpleName(), building.getBuildingName(),
                 capacity, dateTime);
         assertNull(r);
     }
@@ -266,12 +273,14 @@ public class ReservationMgrServiceImplAcceptationTest {
     private void checkReservationByTypeExpectations(final List<Room> rooms, final Reservation res, final User user) throws Exception{
         context.checking(new Expectations() {
             {
-                oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().getName(), capacity, building.getBuildingName());
+                oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().getSimpleName(), capacity, building.getBuildingName());
                 will(returnValue(rooms));
                 oneOf(rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());
                 will(returnValue(res));
                 allowing(uDao).getUserByNif(nif);
                 will(returnValue(user));
+                allowing(sDao).getBuildingByName(building.getBuildingName());
+                will(returnValue(building));
             }
         });
     }
@@ -289,7 +298,7 @@ public class ReservationMgrServiceImplAcceptationTest {
                 will(returnValue(building));
                 oneOf(sDao).getRoomByNbAndBuilding(room.getNumber(), building.getBuildingName());
                 will(returnValue(room));
-                oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().getName(), room.getCapacity(), building.getBuildingName());
+                oneOf(sDao).getAllRoomsByTypeAndCapacity(room.getClass().getSimpleName(), room.getCapacity(), building.getBuildingName());
                 will(returnValue(lRooms));
                 allowing(rDao).getReservationByDateRoomBulding(dateTime, room.getNumber(), building.getBuildingName());
                 will(returnValue(r));

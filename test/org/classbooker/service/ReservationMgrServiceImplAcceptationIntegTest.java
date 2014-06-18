@@ -5,7 +5,6 @@
  */
 package org.classbooker.service;
 
-import org.classbooker.service.ReservationMgrServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -20,6 +19,7 @@ import org.classbooker.dao.UserDAOImpl;
 import org.classbooker.dao.exception.DAOException;
 import org.classbooker.dao.exception.IncorrectBuildingException;
 import org.classbooker.dao.exception.IncorrectRoomException;
+import org.classbooker.dao.exception.IncorrectUserException;
 import org.classbooker.entity.Building;
 import org.classbooker.entity.ClassRoom;
 import org.classbooker.entity.ProfessorPas;
@@ -28,14 +28,15 @@ import org.classbooker.entity.ReservationUser;
 import org.classbooker.entity.Room;
 import org.classbooker.entity.StaffAdmin;
 import org.classbooker.entity.User;
+import org.classbooker.service.ReservationMgrServiceImpl;
 import org.classbooker.util.ReservationResult;
 import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.AfterClass;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -193,10 +194,10 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
 
     }
 
-    @Test
+    @Test(expected=IncorrectUserException.class)
     public void testMakeReservationByTypeNoReservationUser() throws Exception {
         User staffAdm = new StaffAdmin("454654", "name@hotmail.com", "StaffName","");
-        dateTime = new DateTime(2014, 5, 26, 10, 0);
+        dateTime = new DateTime(2015, 5, 26, 10, 0);
 
         Reservation r = rms.makeReservationByType(staffAdm.getNif(), "ClassRoom", "EPS",
                 20, dateTime);
@@ -208,7 +209,7 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
     @Test
     public void testMakeReservationByTypeNoSameTypeRooms() throws Exception {
 
-        dateTime = new DateTime(2014, 5, 26, 9, 0);
+        dateTime = new DateTime(2015, 5, 26, 9, 0);
         Reservation r = rms.makeReservationByType(nif, "MeetingRoom", "EPS",
                 20, dateTime);
 
