@@ -60,7 +60,7 @@ public interface ReservationMgrService {
      *         IncorrectTypeException If the type is not correct.
      *         IncorrectUserException If the nif is not correct.
      *         IncorrectCapacityException If the capacity is 0 or lower.
-     *         IncorrectDateException If the date is before now or null. 
+     *         IncorrectTimeException If the date is before now or null. 
      *         
      */
     Reservation makeReservationByType(String nif, String type, String buildingName, int capacity, DateTime date) throws DAOException;

@@ -18,7 +18,10 @@ import org.classbooker.dao.UserDAO;
 import org.classbooker.dao.UserDAOImpl;
 import org.classbooker.dao.exception.DAOException;
 import org.classbooker.dao.exception.IncorrectBuildingException;
+import org.classbooker.dao.exception.IncorrectCapacityException;
 import org.classbooker.dao.exception.IncorrectRoomException;
+import org.classbooker.dao.exception.IncorrectTimeException;
+import org.classbooker.dao.exception.IncorrectTypeException;
 import org.classbooker.dao.exception.IncorrectUserException;
 import org.classbooker.entity.Building;
 import org.classbooker.entity.ClassRoom;
@@ -82,7 +85,6 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
 
     @After
     public void tearDown() throws DAOException {
-
     }
 
     @Test
@@ -114,16 +116,16 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
         assertTrue(suggestedRooms.isEmpty());
     }
 
-    @Test(expected=IncorrectBuildingException.class)
-    public void testSuggestionSpaceIncorrectBuilding() throws DAOException{
+    @Test(expected = IncorrectBuildingException.class)
+    public void testSuggestionSpaceIncorrectBuilding() throws DAOException {
         List<Room> suggestedRooms = rms.suggestionSpace("0.20", "INCORRECT", dateTime);
     }
-    
-    @Test(expected=IncorrectRoomException.class)
-    public void testSuggestionSpaceIncorrectRoom() throws DAOException{
+
+    @Test(expected = IncorrectRoomException.class)
+    public void testSuggestionSpaceIncorrectRoom() throws DAOException {
         List<Room> suggestedRooms = rms.suggestionSpace("INCORRECT", "EPS", dateTime);
     }
-    
+
     @Test
     public void testGetCurrentUserOfDemandedRoom() throws Exception {
 
@@ -165,14 +167,14 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
         assertNull("Incorrect reservation result", rr.getReservation());
         assertSuggestedSpacesRequirements(rr.getSuggestions(), sDao.getRoomByNbAndBuilding("0.20", "EPS"));
     }
-    
-    @Test(expected=IncorrectBuildingException.class)
-    public void testCompleteReservationIncorrectBuilding() throws DAOException{
+
+    @Test(expected = IncorrectBuildingException.class)
+    public void testCompleteReservationIncorrectBuilding() throws DAOException {
         ReservationResult rr = rms.makeCompleteReservationBySpace(nif, "0.20", "INCORRECT", dateTime);
     }
-    
-    @Test(expected=IncorrectRoomException.class)
-    public void testCompleteReservationIncorrectRoom() throws DAOException{
+
+    @Test(expected = IncorrectRoomException.class)
+    public void testCompleteReservationIncorrectRoom() throws DAOException {
         ReservationResult rr = rms.makeCompleteReservationBySpace(nif, "INCORRECT", "EPS", dateTime);
     }
 
@@ -194,9 +196,42 @@ public class ReservationMgrServiceImplAcceptationIntegTest {
 
     }
 
-    @Test(expected=IncorrectUserException.class)
+    @Test(expected = IncorrectTypeException.class)
+    public void testMakeReservationByTypeNoType() throws Exception {
+        dateTime = new DateTime(2015, 5, 26, 11, 0);
+
+        Reservation r = rms.makeReservationByType(nif, "X", "EPS", 20, dateTime);
+        assertNull(r);
+    }
+
+    @Test(expected = IncorrectBuildingException.class)
+    public void testMakeReservationByTypeNoBuilding() throws Exception {
+        dateTime = new DateTime(2015, 5, 26, 11, 0);
+        Building b = new Building("X");
+
+        Reservation r = rms.makeReservationByType(nif, "LaboratoryRoom", b.getBuildingName(), 20, dateTime);
+        assertNull(r);
+    }
+
+    @Test(expected = IncorrectCapacityException.class)
+    public void testMakeReservationByTypeNoCapacity() throws Exception {
+        dateTime = new DateTime(2015, 5, 26, 11, 0);
+
+        Reservation r = rms.makeReservationByType(nif, "LaboratoryRoom", "EPS", -1, dateTime);
+        assertNull(r);
+    }
+
+    @Test(expected = IncorrectTimeException.class)
+    public void testMakeReservationByTypeNoDate() throws Exception {
+        dateTime = new DateTime(2013, 5, 26, 11, 0);
+
+        Reservation r = rms.makeReservationByType(nif, "LaboratoryRoom", "EPS", 20, dateTime);
+        assertNull(r);
+    }
+
+    @Test(expected = IncorrectUserException.class)
     public void testMakeReservationByTypeNoReservationUser() throws Exception {
-        User staffAdm = new StaffAdmin("454654", "name@hotmail.com", "StaffName","");
+        User staffAdm = new StaffAdmin("454654", "name@hotmail.com", "StaffName", "");
         dateTime = new DateTime(2015, 5, 26, 10, 0);
 
         Reservation r = rms.makeReservationByType(staffAdm.getNif(), "ClassRoom", "EPS",
