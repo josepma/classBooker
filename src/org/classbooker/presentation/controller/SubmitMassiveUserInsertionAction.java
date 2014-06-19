@@ -70,8 +70,7 @@ public class SubmitMassiveUserInsertionAction implements ActionListener{
                } catch (ServiceException ex) {
                    Logger.getLogger(SubmitMassiveUserInsertionAction.class);
                }
-           }
-          
+           } 
        }
        else{
            JOptionPane.showMessageDialog(null, 
@@ -114,11 +113,6 @@ public class SubmitMassiveUserInsertionAction implements ActionListener{
                         "Warning",
                         JOptionPane.WARNING_MESSAGE);  
         }
-   /*     catch(){ //AlreadyExistingBuildingException exc){
-           exc.printStackTrace(); 
-           ExceptionInfo exception = new ExceptionInfo("Add Massive User Failed");
-           massiveUserInsertionForm.parent.getContentPane().add(exception,BorderLayout.CENTER);
-        }*/
         finally{
             massiveUserInsertionForm.parent.revalidate();                        
         }

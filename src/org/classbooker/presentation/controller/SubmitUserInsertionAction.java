@@ -10,6 +10,8 @@ package org.classbooker.presentation.controller;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
+import org.classbooker.dao.exception.AlreadyExistingUserException;
 import org.classbooker.entity.ProfessorPas;
 import org.classbooker.entity.StaffAdmin;
 import org.classbooker.entity.User;
@@ -25,6 +27,7 @@ public class SubmitUserInsertionAction implements ActionListener{
     UserInsertionForm userInsertionForm;
     StaffMgrService services;
     AuthenticationMgr authentication;
+   
    public SubmitUserInsertionAction(UserInsertionForm form){
        userInsertionForm = form;
    } 
@@ -37,43 +40,101 @@ public class SubmitUserInsertionAction implements ActionListener{
    public void actionPerformed(ActionEvent e){
        User loggedUser = getLoggedUser();
        
-       userInsertionForm.parent.getContentPane().removeAll();
+    //   userInsertionForm.parent.getContentPane().removeAll();
        if(loggedUser == null){
-          ExceptionInfo exception = new ExceptionInfo("You have to be logged as Staff Administrator to use this service");
-          userInsertionForm.parent.getContentPane().add(exception,BorderLayout.CENTER);
-          userInsertionForm.parent.revalidate();  
+           mustLoggedAsStaffAdminMessage();
        }
        else if(loggedUser instanceof StaffAdmin){
-           addUserProcess();
+           if(checkEmptyFields()){
+              userInsertionForm.parent.revalidate();  
+            }
+           else{
+              addUserProcess();
+           }
        }
        else{
-          ExceptionInfo exception = new ExceptionInfo("Logged User is not StaffAdmin");
-          userInsertionForm.parent.getContentPane().add(exception,BorderLayout.CENTER); 
-          userInsertionForm.parent.revalidate();  
+           loggedUserIsNotStaffAdmin();
        }
    }   
 
+   
+   
     private void addUserProcess() {
           String nif = userInsertionForm.nif.getText();
           String userName = userInsertionForm.userName.getText();
           String email = userInsertionForm.email.getText();
           User user = new ProfessorPas(nif,email,userName,"");
           
-         try{
+        try{
+          
           services.addUser(user);
-          System.out.println("ok,inserted");
-        //  services.deleteUser(user);
           ConfirmationForm confirm = new ConfirmationForm("User successfully added");
+          userInsertionForm.parent.getContentPane().removeAll();
           userInsertionForm.parent.getContentPane().add(confirm,BorderLayout.CENTER);
-     
+              
         }
-        catch(Exception exc){ //AlreadyExistingBuildingException exc){
-           exc.printStackTrace(); 
-           ExceptionInfo exception = new ExceptionInfo("Existing User");
-           userInsertionForm.parent.getContentPane().add(exception,BorderLayout.CENTER);
+        catch(AlreadyExistingUserException exc){ //AlreadyExistingBuildingException exc){
+           JOptionPane.showMessageDialog(null, 
+                        "Already Existing this user", 
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);  
          }
         finally{
             userInsertionForm.parent.revalidate();                        
         }
+    }
+
+    private boolean checkEmptyFields() {
+        return checkNifField() || checkUserNameField()  || checkEmailField();
+        
+    }
+
+    private void mustLoggedAsStaffAdminMessage() {
+        JOptionPane.showMessageDialog(null, 
+                        "Please, You have to be logged as Staff Administrator to use this service", 
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+          userInsertionForm.parent.revalidate();  
+    }
+
+    private void loggedUserIsNotStaffAdmin() {
+        JOptionPane.showMessageDialog(null, 
+                        "Logged User is not Staff Administrator", 
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+          userInsertionForm.parent.revalidate();   
+    }
+
+    private boolean checkNifField() {
+        if("".equals(userInsertionForm.nif.getText())){
+           JOptionPane.showMessageDialog(null, 
+                        "Please, The field Nif can not be empty, introduce again!", 
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+           return true;
+        }
+        return false;
+    }
+
+    private boolean checkUserNameField() {
+        if("".equals(userInsertionForm.userName.getText())){
+           JOptionPane.showMessageDialog(null, 
+                        "Please, The field User can not be empty, introduce again!", 
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+           return true;
+        }
+        return false;
+    }
+
+    private boolean checkEmailField() {
+        if("".equals(userInsertionForm.email.getText())){
+           JOptionPane.showMessageDialog(null, 
+                        "Please, The field Email can not be empty, introduce again!", 
+                        "Warning",
+                        JOptionPane.WARNING_MESSAGE);
+           return true;
+        }
+        return false;
     }
 }
