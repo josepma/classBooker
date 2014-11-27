@@ -68,7 +68,7 @@ public final class Main {
 
     private static EntityManager getEntityManager() throws Exception {
         EntityManagerFactory emf
-                = Persistence.createEntityManagerFactory("classBookerIntegration");
+                = Persistence.createEntityManagerFactory("classBooker");
                     //Three different persistence units can be used:
                     //"classBooker": local DB with embedded DERBY DBMS kept in memory.
                     //"classBookerHosted": local DB with hosted DERBY DBMS. You can see
