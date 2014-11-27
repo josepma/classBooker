@@ -42,22 +42,22 @@ public class AcceptReservationByTypeForm extends JPanel{
         this.services = services;
         
         JLabel label = new JLabel();
-        label.setText(" This is the reservation that suggest the system:");
+        label.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" THIS IS THE RESERVATION THAT SUGGEST THE SYSTEM:"));
         JLabel labelType = new JLabel();
-        labelType.setText("Type Room: "+reservation.getRoom().getClass().getSimpleName().toString());
+        labelType.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("TYPE ROOM: ")+reservation.getRoom().getClass().getSimpleName().toString());
         type = new JTextField();
         JLabel labelName = new JLabel();
-        labelName.setText("Building: "+reservation.getRoom().getBuilding().getBuildingName());
+        labelName.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("BUILDING: ")+reservation.getRoom().getBuilding().getBuildingName());
         buildingName = new JTextField();
         JLabel labelRoom = new JLabel();
-        labelRoom.setText("Room Number: "+Long.toString(reservation.getRoom().getRoomId()));
+        labelRoom.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("ROOM NUMBER: ")+Long.toString(reservation.getRoom().getRoomId()));
         roomId= new JTextField();
         JLabel labelCap = new JLabel();
-        labelCap.setText("Capacity Room: "+Integer.toString(reservation.getRoom().getCapacity()));
+        labelCap.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("CAPACITY ROOM: ")+Integer.toString(reservation.getRoom().getCapacity()));
         capacity = new JTextField();
         JLabel labelDate = new JLabel();
         String dtf = reservation.getReservationDate().toString();
-        labelDate.setText("Date: "+dtf);
+        labelDate.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("DATE: ")+dtf);
         dateIni = new JTextField();
         
         //type.setPreferredSize( new Dimension( 200, 24 ) );
@@ -66,7 +66,7 @@ public class AcceptReservationByTypeForm extends JPanel{
         //dateIni.setPreferredSize( new Dimension( 200, 24 ) );
         
         but1 = new JButton();
-        but1.setText("Do it!");
+        but1.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("DO IT!"));
         //but2 = new JButton();
         //but2.setText("No");
         

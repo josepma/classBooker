@@ -28,14 +28,14 @@ public class BuildingInsertionForm extends JPanel {
         this.parent = frame;
 
         JLabel labelName = new JLabel();
-        labelName.setText(" Building name :");
+        labelName.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" BUILDING NAME :"));
         buildingName = new JTextField();
 
 
         buildingName.setPreferredSize( new Dimension( 200, 24 ) );
         
         but = new JButton();
-        but.setText("Submit");
+        but.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("SUBMIT"));
 
         this.add(labelName);
         this.add(buildingName);

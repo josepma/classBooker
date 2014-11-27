@@ -37,9 +37,9 @@ public class UserInsertionForm extends JPanel {
         JLabel labelNif = new JLabel();
         JLabel labelName = new JLabel();
         JLabel labelEmail = new JLabel();
-        labelNif.setText(" NIF :");
-        labelName.setText(" User name :");
-        labelEmail.setText(" Email :");
+        labelNif.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" NIF :"));
+        labelName.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" USER NAME :"));
+        labelEmail.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" EMAIL :"));
         nif = new JTextField();
         userName = new JTextField();
         email = new JTextField();
@@ -50,7 +50,7 @@ public class UserInsertionForm extends JPanel {
         email.setPreferredSize( new Dimension( 200, 24 ) );
         
         but = new JButton();
-        but.setText("Submit");
+        but.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("SUBMIT"));
         
         
         JPanel lines = new JPanel(); 

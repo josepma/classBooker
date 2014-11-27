@@ -64,37 +64,37 @@ public class MakeReservationBySpaceForm extends JPanel {
         this.reservationServ = reservationServ;
 
         title = new JLabel();
-        title.setText(" Add Reservation By Space ");
+        title.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" ADD RESERVATION BY SPACE "));
         title.setFont(new Font("Ubuntu", 0, 24));
         title.setHorizontalAlignment(SwingConstants.CENTER);
 
         labelHours = new JLabel();
-        labelHours.setText(" Hour :");
+        labelHours.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" HOUR :"));
         hoursList = new SpinnerNumberModel(1, 1, 24, 1);
         hoursSpinner = new JSpinner(hoursList);
 
         calendar = new JCalendar(Calendar.getInstance());
 
         labelBuilding = new JLabel();
-        labelBuilding.setText(" Building name:");
+        labelBuilding.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" BUILDING NAME:"));
         buildingName = new JTextField();
         buildingName.setPreferredSize(new Dimension(200, 24));
 
         labelRoom = new JLabel();
-        labelRoom.setText(" Room Number: ");
+        labelRoom.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" ROOM NUMBER: "));
         roomNumber = new JTextField();
         roomNumber.setPreferredSize(new Dimension(200, 24));
 
-        submitRes = new JButton("Reservar");
-        submitRes.setText("Reservar");
+        submitRes = new JButton(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("RESERVAR"));
+        submitRes.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("RESERVAR"));
         submitRes.addActionListener(new ListenerMakeReservation());
 
         suggestionsRoomList = new JList<Room>();
         suggestionsScroll = new JScrollPane(suggestionsRoomList);
         suggestionsRoomList.addListSelectionListener(new ListenerSuggestList());
 
-        buildingName.setText("EPS");
-        roomNumber.setText("0.20");
+        buildingName.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("EPS"));
+        roomNumber.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("0.20"));
         hoursList.setValue(9);
 
         //
@@ -118,17 +118,17 @@ public class MakeReservationBySpaceForm extends JPanel {
                     if (res.getReservation() != null) {
                         reservationServ.acceptReservation(res.getReservation());
                         JOptionPane.showMessageDialog(null, 
-                                                      "The reservation has been successful: \n" 
+                                                      java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("THE RESERVATION HAS BEEN SUCCESSFUL: \n") 
                                                       + res.getReservation(), 
-                                                      "Info", 
+                                                      java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("INFO"), 
                                                       JOptionPane.INFORMATION_MESSAGE);
                     } else {
 
                         suggestedListRooms = res.getSuggestions();
                         if (!suggestedListRooms.isEmpty()) {
                             JOptionPane.showMessageDialog(null, 
-                                "Space is not available, Select one of the suggestion list", 
-                                "Info", 
+                                java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("SPACE IS NOT AVAILABLE, SELECT ONE OF THE SUGGESTION LIST"), 
+                                java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("INFO"), 
                                 JOptionPane.INFORMATION_MESSAGE);
                             suggestionsRoomList.setListData(refineArrayRooms(suggestedListRooms));
                             suggestionsScroll.setVisible(true);
@@ -136,8 +136,8 @@ public class MakeReservationBySpaceForm extends JPanel {
                             suggestionsScroll.getParent().repaint();
                         } else {
                             JOptionPane.showMessageDialog(null, 
-                                    "Space is not available", 
-                                    "Info", 
+                                    java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("SPACE IS NOT AVAILABLE"), 
+                                    java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("INFO"), 
                                     JOptionPane.INFORMATION_MESSAGE);
                         }
 
@@ -145,38 +145,38 @@ public class MakeReservationBySpaceForm extends JPanel {
 
                 } else {
                     JOptionPane.showMessageDialog(null, 
-                            "User is not authenticated", 
-                            "Info", 
+                            java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("USER IS NOT AUTHENTICATED"), 
+                            java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("INFO"), 
                             JOptionPane.WARNING_MESSAGE);
                 }
             } catch (IncorrectUserException ex) {
                 JOptionPane.showMessageDialog(null, 
-                        "You do not have permission for this action", 
-                        "Warning",
+                        java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("YOU DO NOT HAVE PERMISSION FOR THIS ACTION"), 
+                        java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("WARNING"),
                         JOptionPane.WARNING_MESSAGE);
 
             } catch (IncorrectTimeException ex) {
                 JOptionPane.showMessageDialog(null, 
-                        "The date is incorrect.\nThe data has to be after the current time", 
-                        "Error",
+                        java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("THE DATE IS INCORRECT.\n THE DATA HAS TO BE AFTER THE CURRENT TIME"), 
+                        java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("ERROR"),
                         JOptionPane.ERROR_MESSAGE);
 
             } catch (IncorrectBuildingException ex) {
                 JOptionPane.showMessageDialog(null, 
-                        "The Building is incorrect.", 
-                        "Error",
+                        java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("THE BUILDING IS INCORRECT."), 
+                        java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("ERROR"),
                         JOptionPane.ERROR_MESSAGE);
 
             } catch (IncorrectRoomException ex) {
                 JOptionPane.showMessageDialog(null, 
-                        "The Room is incorrect.", 
-                        "Error",
+                        java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("THE ROOM IS INCORRECT."), 
+                        java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("ERROR"),
                         JOptionPane.ERROR_MESSAGE);
 
             } catch (HeadlessException ex) {
                 JOptionPane.showMessageDialog(null, 
-                        "The environment that does not support a keyboard, display, or mouse", 
-                        "Error",
+                        java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("THE ENVIRONMENT THAT DOES NOT SUPPORT A KEYBOARD, DISPLAY, OR MOUSE"), 
+                        java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("ERROR"),
                         JOptionPane.ERROR_MESSAGE);
             } catch (DAOException ex) {
                 Logger.getLogger(MakeReservationBySpaceForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -188,7 +188,7 @@ public class MakeReservationBySpaceForm extends JPanel {
             String[] refineRooms = new String[rooms.size()];
             int i = 0;
             for (Room room : rooms) {
-                refineRooms[i] = "Number:" + room.getNumber() + " Building:" + room.getBuilding().getBuildingName();
+                refineRooms[i] = java.text.MessageFormat.format(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("NUMBER:{0} BUILDING:{1}"), new Object[] {room.getNumber(), room.getBuilding().getBuildingName()});
                 i++;
             }
 

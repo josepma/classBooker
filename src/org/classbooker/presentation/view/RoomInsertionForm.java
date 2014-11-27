@@ -40,10 +40,10 @@ public class RoomInsertionForm extends JPanel {
         JLabel labelName2 = new JLabel();
         JLabel labelName3 = new JLabel();
         JLabel labelName4 = new JLabel();
-        labelName.setText(" Room number :");
-        labelName2.setText(" Building Name :");
-        labelName3.setText(" Room capacity :");
-         labelName4.setText(" Room type :");
+        labelName.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" ROOM NUMBER :"));
+        labelName2.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" BUILDING NAME :"));
+        labelName3.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" ROOM CAPACITY :"));
+         labelName4.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" ROOM TYPE :"));
         roomNumber = new JTextField();
         buildingName = new JTextField();
         roomCapacity = new JTextField();
@@ -54,7 +54,7 @@ public class RoomInsertionForm extends JPanel {
         roomType.setPreferredSize( new Dimension( 200, 24 ) );
         
         but = new JButton();
-        but.setText("Submit");
+        but.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("SUBMIT"));
 
         JPanel lines = new JPanel(); 
         lines.setLayout(new BoxLayout(lines, BoxLayout.Y_AXIS));

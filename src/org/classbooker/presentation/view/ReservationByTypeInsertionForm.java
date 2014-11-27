@@ -38,19 +38,19 @@ public class ReservationByTypeInsertionForm extends JPanel {
         this.parent = frame;
 
         JLabel labelNif = new JLabel();
-        labelNif.setText(" User nif :");
+        labelNif.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" USER NIF :"));
         nif = new JTextField();
         JLabel labelType = new JLabel();
-        labelType.setText(" Type Room :");
+        labelType.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" TYPE ROOM :"));
         type = new JTextField();
         JLabel labelName = new JLabel();
-        labelName.setText(" Building name :");
+        labelName.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" BUILDING NAME :"));
         buildingName = new JTextField();
         JLabel labelCap = new JLabel();
-        labelCap.setText(" Capacity :");
+        labelCap.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" CAPACITY :"));
         capacity = new JTextField();
         JLabel labelDate = new JLabel();
-        labelDate.setText(" Date (i.e. dd-mm-yyyy hh:mm) :");
+        labelDate.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" DATE (I.E. DD-MM-YYYY HH:MM) :"));
         dateIni = new JTextField();
         
         nif.setPreferredSize( new Dimension( 200, 24 ) );
@@ -60,7 +60,7 @@ public class ReservationByTypeInsertionForm extends JPanel {
         dateIni.setPreferredSize( new Dimension( 200, 24 ) );
         
         but = new JButton();
-        but.setText("Submit");
+        but.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("SUBMIT"));
         
         JPanel lines = new JPanel();
         lines.setLayout(new BoxLayout(lines, BoxLayout.Y_AXIS));
