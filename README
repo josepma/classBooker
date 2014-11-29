@@ -56,3 +56,17 @@ Three different persistence units can be used:
                               This DB should be restored at the end.
   
 --------------------------------------------------------------------------------  
+I18N
+
+In order to run the application with a different language. (The default language
+is Engilsh). You have to pass a variable to the JVM when the program starts
+with the language and the country. The two variables are user.language and 
+user.country.
+Example:
+    -Duser.language=ca -Duser.country=ES
+
+The structure of the files is a NetBeans project, so is highly recomended to
+open the project with the NetBeans and run it with it.
+
+Regards.
+--------------------------------------------------------------------------------
