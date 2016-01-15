@@ -21,7 +21,7 @@ public class DisplayReservations extends JPanel {
     public DisplayReservations(List<Reservation> reservations) {
 
         if(reservations.isEmpty()){
-            JLabel l = new JLabel("No reservations assert the specified features.");
+            JLabel l = new JLabel(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("NO RESERVATIONS ASSERT THE SPECIFIED FEATURES."));
             l.setFont(new Font("Serif", Font.PLAIN, 20));
             Color c = new Color(0, 153, 0);
             l.setForeground(c);

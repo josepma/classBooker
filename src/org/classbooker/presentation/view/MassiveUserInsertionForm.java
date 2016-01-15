@@ -33,14 +33,14 @@ public class MassiveUserInsertionForm extends JPanel {
         this.parent = frame;
 
         JLabel labelFileName = new JLabel();
-        labelFileName.setText(" File name :");
+        labelFileName.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" FILE NAME :"));
         fileName = new JTextField();
 
 
         fileName.setPreferredSize( new Dimension( 200, 24 ) );
         
         but = new JButton();
-        but.setText("Submit");
+        but.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("SUBMIT"));
  
         this.add(labelFileName);  
         this.add(fileName);

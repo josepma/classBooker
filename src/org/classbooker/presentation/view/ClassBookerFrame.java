@@ -52,7 +52,7 @@ public class ClassBookerFrame extends JFrame {
 
         content = new JPanel();
 
-        content.add(new JLabel("Welcome to ClassBooker"));
+        content.add(new JLabel(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("WELCOME TO CLASSBOOKER")));
 
         this.getContentPane().add(content, BorderLayout.CENTER);
 
@@ -70,10 +70,10 @@ public class ClassBookerFrame extends JFrame {
     }
 
     private void createSpacesMenu() {
-        JMenu spacemenu = new JMenu("Spaces");
+        JMenu spacemenu = new JMenu(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("SPACES"));
         spacemenu.add(new JSeparator());
 
-        JMenuItem spaceItem1 = new JMenuItem("New building");
+        JMenuItem spaceItem1 = new JMenuItem(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("NEW BUILDING"));
         spaceItem1.addActionListener(new BuildingInsertionAction(this, spaceService));
         //We associate the "New building" button of the menu to the 
         // BuildingInsertionAction controller action.
@@ -81,10 +81,10 @@ public class ClassBookerFrame extends JFrame {
         //view (e.g., this ClassBookerFrame class) and the controller (BuildingInsertionAction).
         //However, the overall design would be a bit more complicated (but more reusable).
 
-        JMenuItem spaceItem2 = new JMenuItem("New room");
+        JMenuItem spaceItem2 = new JMenuItem(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("NEW ROOM"));
         spaceItem2.addActionListener(new RoomInsertionAction(this, spaceService));
 
-        JMenuItem spaceItem3 = new JMenuItem("List buildings");
+        JMenuItem spaceItem3 = new JMenuItem(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("LIST BUILDINGS"));
         //spaceItem3.addActionListener(new BuildingListAction(this, spaceService));
 
         spacemenu.add(spaceItem1);
@@ -95,13 +95,13 @@ public class ClassBookerFrame extends JFrame {
     }
 
     private void createStaffMenu() {
-        JMenu staffmenu = new JMenu("Staff");
+        JMenu staffmenu = new JMenu(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("STAFF"));
         staffmenu.add(new JSeparator());
 
-        JMenuItem staffItem1 = new JMenuItem("Add user");
+        JMenuItem staffItem1 = new JMenuItem(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("ADD USER"));
         staffItem1.addActionListener(new UserInsertionAction(this, staffService));
 
-        JMenuItem staffItem2 = new JMenuItem("Add masive users");
+        JMenuItem staffItem2 = new JMenuItem(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("ADD MASIVE USERS"));
         staffItem2.addActionListener(new MassiveUserInsertionAction(this, staffService));
 
         staffmenu.add(staffItem1);
@@ -110,16 +110,16 @@ public class ClassBookerFrame extends JFrame {
     }
 
     private void createReservationsMenu() {
-        JMenu reservationsmenu = new JMenu("Reservations");
+        JMenu reservationsmenu = new JMenu(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("RESERVATIONS"));
         reservationsmenu.add(new JSeparator());
 
         
-        JMenuItem reservationItem1 = new JMenuItem("Find user reservations");
+        JMenuItem reservationItem1 = new JMenuItem(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("FIND USER RESERVATIONS"));
         reservationItem1.addActionListener(new UserReservationFindAction(this, resService));
-        JMenuItem reservationItem2 = new JMenuItem("Make Reservation by space");
+        JMenuItem reservationItem2 = new JMenuItem(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("MAKE RESERVATION BY SPACE"));
         reservationItem2.addActionListener(new MakeReservationBySpaceAction(this,resService));
         
-        JMenuItem reservationItem3 = new JMenuItem("Make reservation by type");
+        JMenuItem reservationItem3 = new JMenuItem(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("MAKE RESERVATION BY TYPE"));
         reservationItem3.addActionListener(new MakeReservationByTypeAction(this, resService));
         
         reservationsmenu.add(reservationItem1);
@@ -129,13 +129,13 @@ public class ClassBookerFrame extends JFrame {
     }
 
      private void createAuthenticatorMenu() {
-        JMenu staffmenu = new JMenu("Authentication");
+        JMenu staffmenu = new JMenu(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("AUTHENTICATION"));
         staffmenu.add(new JSeparator());
 
-        JMenuItem logItem1 = new JMenuItem("Log In");
+        JMenuItem logItem1 = new JMenuItem(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("LOG IN"));
         logItem1.addActionListener(new MakeLogInAction(this, authMgr));
 
-        JMenuItem logItem2 = new JMenuItem("Log out");
+        JMenuItem logItem2 = new JMenuItem(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("LOG OUT"));
         logItem2.addActionListener(new MakeLogOutAction(this, authMgr));
         
         staffmenu.add(logItem1);

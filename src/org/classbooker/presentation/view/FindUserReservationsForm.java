@@ -36,22 +36,22 @@ public class FindUserReservationsForm extends JPanel {
         this.parent = frame;
 
         JLabel labelNif = new JLabel();
-        labelNif.setText(" User nif (mandatory) :");
+        labelNif.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" USER NIF (MANDATORY) :"));
         nif = new JTextField();
         JLabel labelType = new JLabel();
-        labelType.setText(" Type Room :");
+        labelType.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" TYPE ROOM :"));
         type = new JTextField();
         JLabel labelName = new JLabel();
-        labelName.setText(" Building name :");
+        labelName.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" BUILDING NAME :"));
         buildingName = new JTextField();
         JLabel labelRoomNb = new JLabel();
-        labelRoomNb.setText(" Room number :");
+        labelRoomNb.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" ROOM NUMBER :"));
         roomNb = new JTextField();
         JLabel labelCap = new JLabel();
-        labelCap.setText(" Capacity :");
+        labelCap.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" CAPACITY :"));
         capacity = new JTextField();
         JLabel labelDateIni = new JLabel();
-        labelDateIni.setText(" Initial Date (i.e. dd-mm-yyyy hh:mm) :");
+        labelDateIni.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString(" INITIAL DATE (I.E. DD-MM-YYYY HH:MM) :"));
         dateIni = new JTextField();
         
         nif.setPreferredSize( new Dimension( 200, 24 ) );
@@ -62,7 +62,7 @@ public class FindUserReservationsForm extends JPanel {
         dateIni.setPreferredSize( new Dimension( 200, 24 ) );
         
         but = new JButton();
-        but.setText("Find");
+        but.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("FIND"));
         
         JPanel lines = new JPanel();
         lines.setLayout(new BoxLayout(lines, BoxLayout.Y_AXIS));

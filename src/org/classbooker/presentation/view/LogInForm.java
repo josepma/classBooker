@@ -37,8 +37,8 @@ public class LogInForm extends JPanel{
 
         JLabel labelName = new JLabel();
         JLabel labelName2 = new JLabel();
-        labelName.setText("Nif:");
-        labelName2.setText("Password:");
+        labelName.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("NIF:"));
+        labelName2.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("PASSWORD:"));
         
         nif = new JTextField();
         password = new JTextField();
@@ -47,7 +47,7 @@ public class LogInForm extends JPanel{
         password.setPreferredSize(new Dimension(200,24));
         
         but = new JButton();
-        but.setText("Submit");        
+        but.setText(java.util.ResourceBundle.getBundle("org/classbooker/util/Bundle").getString("SUBMIT"));        
         
 
         JPanel lines = new JPanel(); 
